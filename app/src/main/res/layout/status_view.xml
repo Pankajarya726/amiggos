@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/img_status_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/amiggos_bg" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_status_logo">
+
+
+            <com.an.customfontview.CustomTextView
+                android:id="@+id/txt_status_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status : "
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                app:textFontPath="font/eras_bold.ttf" />
+
+
+            <com.cbr.gradienttextview.GradientTextView
+                android:id="@+id/txt_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pending"
+                android:textSize="18dp"
+                app:textFontPath="font/eras_bold.ttf" />
+
+
+        </LinearLayout>
+
+        <com.an.customfontview.CustomTextView
+            app:textFontPath="font/eras.ttf"
+
+            android:id="@+id/txt_status_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="waiting for admin approval"
+            android:textSize="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+        <com.an.customfontview.CustomTextView
+            android:id="@+id/txt_status_desciption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginRight="25dp"
+            android:gravity="center"
+            android:text="we are reviewing you documents! whenever your status changes, we will notify you via notification."
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_status_title"
+            app:textFontPath="font/eras.ttf" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+</layout>

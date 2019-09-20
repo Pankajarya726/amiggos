@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleTextColor="@android:color/black">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|left"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                app:fontFamily="@font/eras" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <com.an.customfontview.CustomTextView
+                    android:id="@+id/maintitle"
+                    android:layout_width="match_parent"
+
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp"
+                    android:gravity="center"
+                    android:text="key pointers to be a great amiggo tap each box to agree"
+                    android:textColor="@android:color/black"
+                    android:textSize="18dp"
+                    app:textFontPath="font/eras.ttf"/>
+
+                <com.an.customfontview.CustomTextView
+                    android:id="@+id/mainsubtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="18dp"
+                    app:textFontPath="font/eras.ttf"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_open_minded"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/btn_bg">
+
+                    <ImageView
+                        android:id="@+id/img_openminded"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/open_minded" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.50" />
+
+                    <com.an.customfontview.CustomTextView
+                        android:id="@+id/txt_open_minded_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginBottom="3dp"
+                        android:text="Be open minded"
+                        android:textColor="@android:color/black"
+                        android:textSize="18dp"
+                        app:layout_constraintBottom_toTopOf="@+id/guideline_one"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/img_openminded"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="1.0"
+                        app:textFontPath="font/eras_bold.ttf" />
+
+                    <com.an.customfontview.CustomTextView
+                        android:id="@+id/txt_open_minded_description"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginBottom="15dp"
+                        android:text="and treat everybody with respect"
+                        android:textColor="@android:color/black"
+                        android:textSize="15dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/img_openminded"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_open_minded_title"
+                        app:layout_constraintVertical_bias="0.0"
+                        app:textFontPath="font/eras.ttf" />
+
+                    <CheckBox
+                        android:clickable="false"
+                        android:id="@+id/checkbox_open_minded"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:button="@android:color/transparent"
+                        android:background="@drawable/radio_btn_bg"
+                        android:layout_marginRight="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_turn_up"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/btn_bg">
+
+                    <CheckBox
+                        android:id="@+id/checkbox_turn_up"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:clickable="false"
+                        android:button="@android:color/transparent"
+                        android:background="@drawable/radio_btn_bg"
+                        android:layout_marginRight="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/img_turnt_up"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/turnt_up" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guidelin_two"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.50" />
+
+                    <com.an.customfontview.CustomTextView
+                        android:id="@+id/txt_turnt_up_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginBottom="3dp"
+                        android:text="Turnt Up!"
+                        android:textColor="@android:color/black"
+                        android:textSize="18dp"
+                        app:layout_constraintBottom_toTopOf="@+id/guidelin_two"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/img_turnt_up"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="1.0"
+                        app:textFontPath="font/eras_bold.ttf" />
+
+                    <com.an.customfontview.CustomTextView
+                        android:id="@+id/txt_turnt_up_description"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginBottom="15dp"
+                        android:text="by meeting new friends and visiting new venues"
+                        android:textColor="@android:color/black"
+                        android:textSize="15dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/img_turnt_up"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_turnt_up_title"
+                        app:layout_constraintVertical_bias="0.0"
+                        app:textFontPath="font/eras.ttf" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_spread"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/btn_bg">
+
+                    <CheckBox
+                        android:id="@+id/checkbox_spread"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:button="@android:color/transparent"
+                        android:background="@drawable/radio_btn_bg"
+                        android:layout_marginRight="8dp"
+                        android:clickable="false"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/img_spread"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/spread" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline_three"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.50" />
+
+                    <com.an.customfontview.CustomTextView
+                        android:id="@+id/txt_spread_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginBottom="3dp"
+                        android:text="Turnt Up!"
+                        android:textColor="@android:color/black"
+                        android:textSize="18dp"
+                        app:layout_constraintBottom_toTopOf="@+id/guideline_three"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/img_spread"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="1.0"
+                        app:textFontPath="font/eras_bold.ttf" />
+
+                    <com.an.customfontview.CustomTextView
+                        android:id="@+id/txt_spread_description"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginBottom="15dp"
+                        android:text="by meeting new friends and visiting new venues"
+                        android:textColor="@android:color/black"
+                        android:textSize="15dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/img_spread"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_spread_title"
+                        app:layout_constraintVertical_bias="0.0"
+                        app:textFontPath="font/eras.ttf" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </LinearLayout>
+        </ScrollView>
+
+
+    </LinearLayout>
+
+</layout>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+        <tangxiaolv.com.library.EffectiveShapeView
+            android:id="@+id/user_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="30dp"
+            android:contentDescription="@string/nav_header_desc"
+            android:paddingTop="@dimen/nav_header_vertical_spacing"
+            android:src="@drawable/attachid"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shape="circle"
+            app:srcCompat="@drawable/spread" />
+
+        <ImageView
+            android:id="@+id/img_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_view_profile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/txt_name"
+            app:srcCompat="@drawable/share" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.56" />
+
+        <com.cbr.gradienttextview.GradientTextView
+            android:id="@+id/txt_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="3dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textSize="18dp"
+            app:fontFamily="@font/eras_bold"
+            app:gt_color_list="@array/rainbow"
+            app:gt_gradient_angle="90"
+            app:gt_gradient_direction="right"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2"
+            app:layout_constraintEnd_toStartOf="@+id/img_share"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/user_image" />
+
+        <com.an.customfontview.CustomTextView
+            android:id="@+id/txt_view_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            android:textSize="15dp"
+            app:layout_constraintEnd_toStartOf="@+id/img_share"
+            app:layout_constraintStart_toEndOf="@+id/user_image"
+            app:layout_constraintTop_toBottomOf="@+id/txt_name"
+            app:textFontPath="font/eras.ttf" />
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"></View>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_home"
+                android:layout_width="match_parent"
+                android:fontFamily="@font/eras"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                 />
+
+
+            <com.an.customfontview.CustomTextView
+                android:id="@+id/txt_mypreference"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                app:textFontPath="font/eras.ttf" />
+
+
+            <com.an.customfontview.CustomTextView
+                android:id="@+id/txt_partydetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                app:textFontPath="font/eras.ttf" />
+
+            <com.an.customfontview.CustomTextView
+                android:id="@+id/txt_realfriends"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                app:textFontPath="font/eras.ttf" />
+
+            <com.an.customfontview.CustomTextView
+                android:id="@+id/txt_checkincodes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                app:textFontPath="font/eras.ttf" />
+
+            <com.an.customfontview.CustomTextView
+                android:id="@+id/txt_settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                app:textFontPath="font/eras.ttf" />
+
+            <com.an.customfontview.CustomTextView
+                android:id="@+id/txt_helpcenter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                app:textFontPath="font/eras.ttf" />
+
+            <com.an.customfontview.CustomTextView
+                android:id="@+id/txt_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                app:textFontPath="font/eras.ttf" />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Amiggos</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+    <string name="check_internet">Please check internet connection!</string>
+    <string name="real_friends_venues_memories">Real Friends. Venues. Memories</string>
+    <string name="facebook_app_id">225489334673858</string>
+    <string name="fb_login_protocol_scheme">fb225489334673858</string>
+
+    //sandbox- d8c5f41fdb0b41ca8cf66380b5bae63c
+    //live - 897a7a7fdde5493d9be0a303e75f0d93
+    <string name="client_id">d8c5f41fdb0b41ca8cf66380b5bae63c</string>
+    <string name="callback_url">https://instagram.com/</string>
+    <string name="base_url">https://api.instagram.com/</string>
+    <string name="redirect_url">http://www.amiggos.com/</string>
+    <string name="allow_location_permission">Allow location permission for amiggos</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCBAPM9f4Xzl_Bmv-pqaYi_UAbn5JISYU4</string>
+
+</resources>

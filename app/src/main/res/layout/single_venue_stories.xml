@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_margin="5dp"
+    android:background="@drawable/mystorieshape">
+
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/amiggos"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.an.customfontview.CustomTextView
+        android:id="@+id/txt_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/right_rounded_bg"
+        android:paddingLeft="3dp"
+        android:paddingTop="3dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="3dp"
+        android:text="18"
+        android:textColor="@android:color/black"
+        android:textSize="12dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:textFontPath="font/eras.ttf" />
+
+    <com.an.customfontview.CustomTextView
+        android:id="@+id/txt_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/left_rounded_bg"
+        android:paddingLeft="8dp"
+        android:paddingTop="3dp"
+        android:paddingRight="3dp"
+        android:paddingBottom="3dp"
+        android:text="bar"
+        android:textColor="@android:color/black"
+        android:textSize="12dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:textFontPath="font/eras.ttf" />
+
+    <com.an.customfontview.CustomTextView
+        android:id="@+id/txt_lounge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/left_rounded_bg"
+        android:paddingLeft="8dp"
+        android:paddingTop="3dp"
+        android:paddingRight="3dp"
+        android:paddingBottom="3dp"
+        android:text="Cocktail Lounge"
+        android:textColor="@android:color/black"
+        android:textSize="12dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_bar"
+        app:textFontPath="font/eras.ttf" />
+
+    <com.an.customfontview.CustomTextView
+        android:id="@+id/txt_event"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/left_rounded_bg"
+        android:paddingLeft="8dp"
+        android:paddingTop="3dp"
+        android:paddingRight="3dp"
+        android:paddingBottom="3dp"
+        android:text="event center"
+        android:textColor="@android:color/black"
+        android:textSize="12dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_lounge"
+        app:textFontPath="font/eras.ttf" />
+
+    <com.an.customfontview.CustomTextView
+        android:id="@+id/txt_language"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/right_rounded_bg"
+        android:paddingLeft="3dp"
+        android:paddingTop="3dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="3dp"
+        android:text="Spanish"
+        android:textColor="@android:color/black"
+        android:textSize="12dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_age"
+        app:textFontPath="font/eras.ttf" />
+
+    <com.an.customfontview.CustomTextView
+        android:id="@+id/txt_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/right_rounded_bg"
+        android:paddingLeft="3dp"
+        android:paddingTop="3dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="3dp"
+        android:text="Rock"
+        android:textColor="@android:color/black"
+        android:textSize="12dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_language"
+        app:textFontPath="font/eras.ttf" />
+
+    <com.an.customfontview.CustomTextView
+        android:id="@+id/txt_country"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/right_rounded_bg"
+        android:paddingLeft="3dp"
+        android:paddingTop="3dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="3dp"
+        android:text="Country"
+        android:textColor="@android:color/black"
+        android:textSize="12dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_type"
+        app:textFontPath="font/eras.ttf" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_rounded"
+        android:orientation="vertical"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:id="@+id/headerlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:orientation="horizontal"
+            android:textSize="13dp"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/club_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:lines="1"
+                android:maxLines="1"
+                android:text="Tekzee technologies"
+                android:textColor="@android:color/white"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/distance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:lines="1"
+                android:maxLines="1"
+                android:textSize="10dp"
+                android:text="Tekzee technologies"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:maxLines="2"
+            android:text="Tekzee technologies"
+            android:textColor="@android:color/white"
+            android:textSize="10dp" />
+
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

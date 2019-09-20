@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg"
+        android:orientation="vertical">
+
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/txt_referal_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/logo" />
+
+        <com.an.customfontview.CustomTextView
+            android:id="@+id/txt_referal_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Referal Code"
+            android:textColor="@android:color/black"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.39999998"
+            app:textFontPath="font/eras.ttf" />
+
+        <com.an.customfontview.CustomEditText
+            android:id="@+id/edt_referal_code"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/btn_bg_grey"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="textPersonName"
+            android:padding="15dp"
+            android:textColor="@android:color/black"
+            android:textSize="15dp"
+            app:editFontPath="font/eras.ttf"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_referal_title" />
+
+        <com.cbr.gradienttextview.GradientTextView
+            android:id="@+id/btn_submit_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="25dp"
+            android:background="@drawable/btn_bg"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text="Submit code"
+            android:textStyle="bold"
+            android:visibility="visible"
+            app:fontFamily="@font/eras_bold"
+            app:gt_color_list="@array/rainbow"
+            app:gt_gradient_angle="90"
+            app:gt_gradient_direction="right"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edt_referal_code" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#eeeeee"
+            app:layout_constraintBottom_toTopOf="@+id/txt_dont_have_referal_code" />
+
+        <com.an.customfontview.CustomTextView
+            android:id="@+id/txt_dont_have_referal_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/lock"
+            android:drawablePadding="8dp"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text="I Dont have a code"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:textFontPath="font/eras_bold.ttf" />
+
+        <CheckBox
+            android:id="@+id/check_box_venue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:button="@drawable/custom_checkbox"
+            android:fontFamily="@font/eras"
+            android:paddingLeft="10dp"
+            android:text="I own a venue"
+            android:textSize="18dp"
+            app:layout_constraintStart_toStartOf="@+id/btn_submit_code"
+            app:layout_constraintTop_toBottomOf="@+id/btn_submit_code" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
