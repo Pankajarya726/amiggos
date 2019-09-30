@@ -2,6 +2,7 @@ package com.tekzee.amiggos.ui.home
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -32,6 +33,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.JsonObject
 import com.google.maps.android.ui.IconGenerator
+import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.HomeActivityBinding
@@ -41,8 +43,14 @@ import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
 import com.tekzee.amiggos.ui.home.model.NearestClub
 import com.tekzee.amiggos.ui.home.model.StoriesData
+import com.tekzee.amiggos.ui.invitefriend.InitGeoLocationUpdate
+import com.tekzee.amiggos.ui.invitefriend.InviteFriendActivity
+import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
+import com.tekzee.amiggos.ui.mypreferences.MyPreferences
+import com.tekzee.amiggos.ui.onlinefriends.OnlineFriendActivity
+import com.tekzee.amiggos.ui.partydetails.PartyDetailsActivity
+import com.tekzee.amiggos.ui.turningup.TurningUpActivity
 import com.tekzee.mallortaxi.base.BaseActivity
-import com.tekzee.mallortaxi.util.InitGeoLocationUpdate
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.SimpleCallback
 import com.tekzee.mallortaxi.util.Utility
@@ -55,14 +63,6 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     OnMapReadyCallback, HomeVenueAdapter.HomeVenueItemClick {
 
 
-    private val filter_music: String? =""
-    private val filter_venue_type: String? =""
-    private val age_filter_till: String? = ""
-    private val age_filter_from: String? = ""
-    private val distance_filter_to: String? = ""
-    private val distance_filter_from: String? = ""
-    private val music: String? = ""
-    private val age_group: String? = ""
     private var myStoriesAdapter: HomeMyStoriesAdapter? = null
     private var venueAdapter: HomeVenueAdapter? = null
     lateinit var binding: HomeActivityBinding
@@ -82,6 +82,11 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
 
+    override fun onResume() {
+        super.onResume()
+        startLocationUpdate()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.home_activity)
@@ -89,14 +94,53 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         homeActivityPresenterImplementation = HomeActivityPresenterImplementation(this, this)
         setupView()
-        initMap()
-        callGetMyStories(false)
-        startLocationUpdate()
         setUpMap()
+        setupClickListener()
+        callGetMyStories(false)
+    }
+
+    private fun setupClickListener() {
+
+        binding.imgGo.setOnClickListener {
+            if (!checkFriedRequestSent()) {
+                val intent = Intent(this, TurningUpActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
+        binding.imgFavorite.setOnClickListener {
+            checkFriedRequestSent()
+
+        }
+
+        binding.imgActive.setOnClickListener {
+            if (!checkFriedRequestSent()) {
+                val intent = Intent(this, OnlineFriendActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
+
+    }
+
+    private fun checkFriedRequestSent(): Boolean {
+        if (sharedPreference!!.getValueInt(ConstantLib.INVITE_FRIEND) > 0) {
+            val intent = Intent(this, InviteFriendActivity::class.java)
+            startActivity(intent)
+            return true
+        } else {
+            return false
+        }
+
     }
 
 
     private fun setUpMap() {
+
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+
 
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -163,9 +207,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun initMap() {
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+
     }
 
     private fun callGetMyStories(requestDatFromServer: Boolean) {
@@ -186,15 +228,15 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
             input.addProperty("latitude", lastLocation!!.latitude)
             input.addProperty("longitude", lastLocation!!.longitude)
-            input.addProperty("age_group", age_group)
-            input.addProperty("music", music)
+            input.addProperty("age_group", sharedPreference!!.getValueString(ConstantLib.AGE_GROUP_SELECTED))
+            input.addProperty("music", sharedPreference!!.getValueString(ConstantLib.MUSIC_SELETED))
             input.addProperty("location", myStoriesPageNo)
             input.addProperty("map_type", "1")
             input.addProperty("club_type", "1")
-            input.addProperty("distance_filter_from", distance_filter_from)
-            input.addProperty("distance_filter_to", distance_filter_to)
-            input.addProperty("age_filter_from", age_filter_from)
-            input.addProperty("age_filter_till", age_filter_till)
+            input.addProperty("distance_filter_from", sharedPreference!!.getValueString(ConstantLib.DISTANCE_FILTER_FROM_SELECTED))
+            input.addProperty("distance_filter_to", sharedPreference!!.getValueString(ConstantLib.DISTANCE_FILTER_TO_SELECTED))
+            input.addProperty("age_filter_from", sharedPreference!!.getValueString(ConstantLib.AGE_FILTER_FROM_SELECTED))
+            input.addProperty("age_filter_till", sharedPreference!!.getValueString(ConstantLib.AGE_FILTER_TILL_SELECTED))
             homeActivityPresenterImplementation!!.doGetDashboardMapApi(
                 input,
                 Utility.createHeaders(sharedPreference)
@@ -212,10 +254,10 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             input.addProperty("latitude", lastLocation!!.latitude)
             input.addProperty("longitude", lastLocation!!.longitude)
             input.addProperty("club_type", "1")
-            input.addProperty("distance_filter_from", distance_filter_from)
-            input.addProperty("distance_filter_to", distance_filter_to)
-            input.addProperty("filter_venue_type", filter_venue_type)
-            input.addProperty("filter_music", filter_music)
+            input.addProperty("distance_filter_from", sharedPreference!!.getValueString(ConstantLib.DISTANCE_FILTER_FROM_SELECTED))
+            input.addProperty("distance_filter_to", sharedPreference!!.getValueString(ConstantLib.DISTANCE_FILTER_TO_SELECTED))
+            input.addProperty("filter_venue_type", sharedPreference!!.getValueString(ConstantLib.VENUE_TYPE_SELECTED))
+            input.addProperty("filter_music", sharedPreference!!.getValueString(ConstantLib.MUSIC_SELETED))
             homeActivityPresenterImplementation!!.doGetVenueApi(
                 input,
                 Utility.createHeaders(sharedPreference),
@@ -227,12 +269,9 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun setupView() {
-
+        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-
-
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         val toggle = ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
@@ -240,10 +279,15 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         toggle.isDrawerIndicatorEnabled = false
         toggle.setHomeAsUpIndicator(R.drawable.menu)
         drawer.addDrawerListener(toggle)
-        toggle.setToolbarNavigationClickListener { drawer.openDrawer(GravityCompat.START) }
+        toggle.setToolbarNavigationClickListener {
+            if (!checkFriedRequestSent()) {
+                drawer.openDrawer(GravityCompat.START)
+            }
+
+        }
         toggle.syncState()
         navigationView.setNavigationItemSelectedListener(this)
-        setupviewData(navigationView)
+        setupviewData(navigationView,drawer)
         setupRecyclerMyStoriesView()
         setupRecyclerVenueView()
 
@@ -268,7 +312,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun setupRecyclerVenueView() {
         val venueRecyclerView: RecyclerView = findViewById(R.id.venue_recyclerview)
-        val layoutManager = GridLayoutManager(this, 2,GridLayoutManager.VERTICAL, false)
+        val layoutManager = GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false)
         venueRecyclerView.layoutManager = layoutManager
         venueAdapter = HomeVenueAdapter(
             mContext = this,
@@ -284,7 +328,10 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
 
-    private fun setupviewData(navigationView: NavigationView) {
+    private fun setupviewData(
+        navigationView: NavigationView,
+        drawer: DrawerLayout
+    ) {
         val view = navigationView.getHeaderView(0)
         val name = view.findViewById(R.id.txt_name) as TextView
         name.text = sharedPreference!!.getValueString(ConstantLib.USER_NAME)
@@ -293,6 +340,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         binding.title.text = getString(R.string.app_name)
         val userImage = view.findViewById(R.id.user_image) as ImageView
         Glide.with(this).load(sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE))
+            .placeholder(R.drawable.user)
             .into(userImage)
 
         val txt_home = view.findViewById(R.id.txt_home) as TextView
@@ -303,6 +351,9 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val txt_settings = view.findViewById(R.id.txt_settings) as TextView
         val txt_helpcenter = view.findViewById(R.id.txt_helpcenter) as TextView
         val txt_logout = view.findViewById(R.id.txt_logout) as TextView
+//        val txt_venue = view.findViewById(R.id.txt_venue) as GradientTextView
+//        val txt_map = view.findViewById(R.id.txt_map) as GradientTextView
+
 
         txt_home.text = languageData!!.klHome
         txt_mypreference.text = languageData!!.klMyPrefrence
@@ -312,14 +363,49 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         txt_settings.text = languageData!!.klSetting
         txt_helpcenter.text = languageData!!.klHelpCenter
         txt_logout.text = languageData!!.klLogout
+//        txt_map.text = languageData!!.klMaptitle
+//        txt_venue.text = languageData!!.klVenues
+
+
+        txt_mypreference.setOnClickListener{
+            drawer.closeDrawer(GravityCompat.START)
+            val intent = Intent(this,MyPreferences::class.java)
+            startActivity(intent)
+
+        }
+
+        txt_partydetails.setOnClickListener{
+            drawer.closeDrawer(GravityCompat.START)
+            val intent = Intent(this,PartyDetailsActivity::class.java)
+            startActivity(intent)
+
+        }
+
+        txt_logout.setOnClickListener{
+            drawer.closeDrawer(GravityCompat.START)
+            val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+            pDialog.titleText = "Are you sure you want to logout"
+            pDialog.setCancelable(false)
+            pDialog.setCancelButton(languageData!!.klCancel) {
+                pDialog.dismiss()
+            }
+            pDialog.setConfirmButton(languageData!!.klOk) {
+                pDialog.dismiss()
+                sharedPreference!!.clearSharedPreference()
+                val intent = Intent(this,MainSplashActivity::class.java)
+                startActivity(intent)
+                finishAffinity()
+            }
+            pDialog.show()
+        }
+
+
+
     }
 
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-        drawer.closeDrawer(GravityCompat.START)
         return true
     }
 
@@ -341,21 +427,20 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
 
     override fun onLoadMoreData() {
+
         myStoriesListData.add(mLoadingData)
         myStoriesAdapter?.notifyDataSetChanged()
         callGetMyStories(true)
     }
 
 
-
     override fun validateError(message: String) {
-        showLogoutPopup(applicationContext,languageData!!,message)
         InitGeoLocationUpdate.stopLocationUpdate(this)
     }
 
     override fun onMyStoriesFailure(message: String) {
         myStoriesAdapter!!.setLoadingStatus(true)
-        showLogoutPopup(applicationContext,languageData!!,message)
+        //  Utility.showLogoutPopup(this,languageData!!,message)
     }
 
     override fun onMyStoriesInfiniteSuccess(responseData: GetMyStoriesResponse) {
@@ -377,7 +462,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         iconGen.setBackground(resources.getDrawable(R.drawable.map_profile))
         for (itemData in responseData!!.data.users) {
             val markerOptions: MarkerOptions = MarkerOptions().icon(
-                BitmapDescriptorFactory.fromBitmap(createCustomMarker(this,itemData.profile))
+                BitmapDescriptorFactory.fromBitmap(createCustomMarker(this, itemData.profile))
             ).position(LatLng(itemData.latitude.toDouble(), itemData.longitude.toDouble()))
             mMap.addMarker(markerOptions)
         }
@@ -385,9 +470,9 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         mMap.moveCamera(
             CameraUpdateFactory.newLatLngZoom(
                 LatLng(
-                    responseData.data.users[1].latitude.toDouble(),
-                    responseData.data.users[1].longitude.toDouble()
-                ), 16.0f
+                    lastLocation!!.latitude,
+                    lastLocation!!.longitude
+                ), 12.0f
             )
         )
     }
@@ -398,7 +483,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val marker: View = layoutInflater.inflate(R.layout.custom_marker, null);
         val imageview: ImageView = marker.findViewById(R.id.marker_image) as ImageView
 
-        Glide.with(context).load("http://graph.facebook.com/248014002453879/picture?type=large").into(imageview)
+        Glide.with(context).load(profile).placeholder(R.drawable.user).into(imageview)
 
 
         val displayMetrics = DisplayMetrics()
@@ -414,8 +499,6 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         );
         var canvas = Canvas(bitmap)
         marker.draw(canvas)
-
-
         return bitmap
     }
 
@@ -433,35 +516,34 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         venueListData.removeAt(venueListData.size - 1)
         venueListData.addAll(responseData!!.data.nearest_clubs)
         venueAdapter?.notifyDataSetChanged()
+
     }
 
 
     override fun onVenueFailure(message: String) {
         venueAdapter!!.setLoadingStatus(true)
-        showLogoutPopup(applicationContext,languageData!!,message)
+        Utility.showLogoutPopup(this, languageData!!, message)
+
+    }
+
+    override fun onDashboardMapFailure(message: String) {
+        InitGeoLocationUpdate.stopLocationUpdate(this)
+        Utility.showLogoutPopup(this, languageData!!, message)
 
     }
 
     override fun itemVenueClickCallback(position: Int) {
 
-    }
+        if (!checkFriedRequestSent()) {
 
+        }
+    }
 
 
     override fun itemClickCallback(position: Int) {
+        if (!checkFriedRequestSent()) {
 
-    }
-
-
-    fun showLogoutPopup(context: Context,languageData: LanguageData,message: String) {
-
-        SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
-            .setTitleText(message)
-            .setConfirmText(languageData.klOk)
-            .setConfirmClickListener {sDialog ->
-                sDialog.dismissWithAnimation()
-            }
-            .show()
+        }
     }
 
 

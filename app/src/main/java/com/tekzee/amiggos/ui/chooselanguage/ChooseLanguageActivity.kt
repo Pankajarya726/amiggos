@@ -101,9 +101,6 @@ class ChooseLanguageActivity: BaseActivity(),ChooseLanguagePresenter.ChooseLangu
             }
         })
         binding.languageRecyclerview.adapter = languageAdapter
-
-
-
     }
 
     private fun callLanguageApi() {

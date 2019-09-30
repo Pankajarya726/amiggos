@@ -3,6 +3,7 @@ package com.tekzee.amiggos.ui.agegroup
 import android.content.Context
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
+import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.mallortaxi.base.model.CommonResponse
 import com.tekzee.mallortaxi.network.ApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -28,8 +29,8 @@ class AgeGroupActivityPresenterImplementation(private var mainView: AgeGroupActi
                     val responseCode = response.code()
                     when (responseCode) {
                         200 -> {
-                            val responseData: CommonResponse? = response.body()
-                            if (responseData!!.success ==1) {
+                            val responseData: AgeGroupResponse? = response.body()
+                            if (responseData!!.status) {
                                 mainView.onAgeGroupApiSuccess(responseData)
                             } else {
                                 mainView.validateError(responseData.message.toString())

@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.facebook.*
+import com.facebook.login.LoginBehavior
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -30,11 +31,11 @@ import com.tekzee.amiggos.databinding.LoginActivityBinding
 import com.tekzee.amiggos.ui.agreement.LicenceAgreementActivity
 import com.tekzee.amiggos.ui.chooselanguage.ChooseLanguageActivity
 import com.tekzee.amiggos.ui.home.HomeActivity
+import com.tekzee.amiggos.ui.invitefriend.InitGeoLocationUpdate
 import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.pages.WebViewActivity
 import com.tekzee.amiggos.ui.referalcode.ReferalCodeActivity
 import com.tekzee.mallortaxi.base.BaseActivity
-import com.tekzee.mallortaxi.util.InitGeoLocationUpdate
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.SimpleCallback
 import com.tekzee.mallortaxi.util.Utility
@@ -99,19 +100,18 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
         binding.txtDontPost.text = languageData!!.klDontPostMedia
 
 
-        binding.radioAgree.isChecked =
-            sharedPreferences!!.getValueBoolean(ConstantLib.ISAGREE, false)
+            if(sharedPreferences!!.getValueBoolean(ConstantLib.ISAGREE, false)){
+                binding.radioAgree.setBackgroundResource(R.drawable.check)
+            }else{
+                binding.radioAgree.setBackgroundResource(R.drawable.uncheck)
+            }
     }
 
     private fun setupInstagramLogin() {
 
         AuthManager.getInstance().login(this, object : AuthManager.LoginCallback {
             override fun onSuccess() {
-
-
                 getInstagramUserInfo()
-
-
             }
 
             override fun onError(e: InstagramAuthException) {
@@ -132,20 +132,21 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
         AuthManager.getInstance().getUserInfoAsync(object : AuthManager.Callback<UserInfo> {
             override fun onSuccess(userInfo: UserInfo) {
                 Logger.d(userInfo)
-//                callLoginApi(
-//                    userInfo.photoUrl,
-//                    userInfo.id,
-//                    "F",
-//                    "M",
-//                    userInfo.fullName,
-//                    "",
-//                    userInfo.id,
-//                    sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString(),
-//                    Utility.getCurrentLanguageCode(sharedPreferences),
-//                    "",
-//                    "",
-//                    ""
-//                )
+                AuthManager.getInstance().logout()
+                callLoginApi(
+                    userInfo.photoUrl,
+                    userInfo.id,
+                    "I",
+                    "M",
+                    userInfo.fullName,
+                    "",
+                    userInfo.id,
+                    sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString(),
+                    Utility.getCurrentLanguageCode(sharedPreferences),
+                    "",
+                    "",
+                    sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString()
+                )
 
             }
 
@@ -197,6 +198,14 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
             val intent = Intent(this, LicenceAgreementActivity::class.java)
             startActivityForResult(intent, CHECK_LICENCE_AGREEMENT)
         }
+
+        binding.radioAgree.setOnClickListener{
+            sharedPreferences!!.save(ConstantLib.OPENMIDED_CHECKBOX, false)
+            sharedPreferences!!.save(ConstantLib.SPREAD_CHECKBOX, false)
+            sharedPreferences!!.save(ConstantLib.TURNTUP_CHECKBOX, false)
+            val intent = Intent(this, LicenceAgreementActivity::class.java)
+            startActivityForResult(intent, CHECK_LICENCE_AGREEMENT)
+        }
     }
 
     private fun showTermsAndConditionPopup() {
@@ -211,7 +220,6 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
     }
 
     private fun setupFacebookLogin() {
-
 
         this.callbackManager = CallbackManager.Factory.create();
         binding.btnFb.setPermissions(
@@ -228,7 +236,7 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
                 ) { jsonResponse, _ ->
                     LoginManager.getInstance().logOut()
                     callLoginApi(
-                        "http://graph.facebook.com/" + jsonResponse.getString("id") + "/picture?type=large",
+                        "https://graph.facebook.com/" + jsonResponse.getString("id") + "/picture?type=large",
                         accessToken.token.toString(),
                         "F",
                         "",
@@ -307,11 +315,16 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
 
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleSignInResult(task)
+                handleSignInResult(task)
         } else if (requestCode == CHECK_LICENCE_AGREEMENT) {
             iAgreeFlag = data!!.getBooleanExtra(ConstantLib.LICENCE_AGREEMENT_COMPLETED, false)
             sharedPreferences!!.save(ConstantLib.ISAGREE, iAgreeFlag)
-            binding.radioAgree.isChecked = iAgreeFlag
+            if(iAgreeFlag){
+                binding.radioAgree.setBackgroundResource(R.drawable.check)
+            }else{
+                binding.radioAgree.setBackgroundResource(R.drawable.uncheck)
+            }
+
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -319,23 +332,25 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
     private fun handleSignInResult(task: Task<GoogleSignInAccount>?) {
 
         try {
-            var account: GoogleSignInAccount? = task!!.result
-            // Signed in successfully, show authenticated UI.
-            Logger.d(account!!.displayName + "-" + account.id + "-" + account.displayName + "-" + account.email)
-            callLoginApi(
-                account.photoUrl.toString(),
-                account.idToken.toString(),
-                "G",
-                "",
-                account.displayName.toString(),
-                "",
-                account.id.toString(),
-                sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString(),
-                Utility.getCurrentLanguageCode(sharedPreferences),
-                "",
-                account.email.toString(),
-                sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString()
-            )
+
+                val account: GoogleSignInAccount? = task!!.getResult(ApiException::class.java)
+                // Signed in successfully, show authenticated UI.
+                Logger.d(account!!.displayName + "-" + account.id + "-" + account.displayName + "-" + account.email)
+                callLoginApi(
+                    account.photoUrl.toString(),
+                    account.idToken.toString(),
+                    "G",
+                    "",
+                    account.displayName.toString(),
+                    "",
+                    account.id.toString(),
+                    sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString(),
+                    Utility.getCurrentLanguageCode(sharedPreferences),
+                    "",
+                    account.email.toString(),
+                    sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString()
+                )
+
 
 
         } catch (e: ApiException) {
@@ -368,7 +383,7 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
 
 
     fun checkAgrementStatus(): Boolean {
-        return  sharedPreferences!!.getValueBoolean(ConstantLib.ISAGREE, false)
+        return sharedPreferences!!.getValueBoolean(ConstantLib.ISAGREE, false)
     }
 
 
@@ -382,13 +397,12 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
         sharedPreferences!!.save(ConstantLib.ACCESS_TOKEN, responseData.data[0].access_token)
         sharedPreferences!!.save(ConstantLib.PROFILE_IMAGE, responseData.data[0].profile)
         sharedPreferences!!.save(ConstantLib.ISAGREE, false)
+        sharedPreferences!!.save(ConstantLib.INVITE_FRIEND,responseData.data[0].invite_friend_count.toInt())
 
         if (responseData.data[0].is_profile == 1) {
             showHomeController()
         } else {
-
             showNextController()
-
         }
 
 
@@ -397,10 +411,11 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
     private fun showNextController() {
         val intent = Intent(this, ReferalCodeActivity::class.java)
         startActivity(intent)
+        finishAffinity()
     }
 
     private fun showHomeController() {
-        val intent = Intent(this,HomeActivity::class.java)
+        val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
         finishAffinity()
     }
@@ -501,7 +516,7 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
                 }
             }
         } else {
-            // Toast.makeText(applicationContext,"Unable to fetch your location ,Please try again", Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext,"Unable to fetch your location ,Please try again", Toast.LENGTH_LONG).show()
             startLocationUpdate()
         }
     }

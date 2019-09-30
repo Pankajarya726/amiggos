@@ -24,128 +24,142 @@
                 android:orientation="vertical"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-                <ScrollView
-                    android:id="@+id/scrollview"
-                    android:scrollbars="none"
-                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/mystories_recyclerview"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <LinearLayout
-                        android:orientation="vertical"
+
+                <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/mystories_recyclerview"
+                    android:orientation="vertical">
+
+                    <ScrollView
+
+                        android:id="@+id/scrollview"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent"
+                        android:scrollbars="none"
+                        >
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/mystories_recyclerview"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-
-                        <com.cbr.gradienttextview.GradientTextView
-                            android:id="@+id/txt_map"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="MAP"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@drawable/underline"
-                            android:gravity="center"
-                            android:maxLines="1"
-                            android:textSize="18dp"
-                            app:fontFamily="@font/eras_bold"
-                            app:gt_color_list="@array/rainbow"
-                            app:gt_gradient_angle="90"
-                            app:gt_gradient_direction="right"
-                            />
-
-
-                        <fragment
-                            android:id="@+id/map"
-                            android:name="com.google.android.gms.maps.SupportMapFragment"
-                            android:layout_width="match_parent"
-                            android:layout_height="150dp"
-                            android:layout_marginTop="8dp" />
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:orientation="vertical"
+                      >
 
                             <com.cbr.gradienttextview.GradientTextView
-                                android:id="@+id/txt_venue"
+                                android:id="@+id/txt_map"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
+                                android:layout_marginTop="8dp"
                                 android:layout_marginBottom="5dp"
                                 android:background="@drawable/underline"
                                 android:gravity="center"
                                 android:maxLines="1"
-                                android:text="VENUES"
+                                android:text="MAP"
                                 android:textSize="18dp"
+
                                 app:fontFamily="@font/eras_bold"
                                 app:gt_color_list="@array/rainbow"
                                 app:gt_gradient_angle="90"
-                                app:gt_gradient_direction="right"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:gt_gradient_direction="right" />
 
-                            <ImageView
-                                android:id="@+id/img_favorite"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginEnd="8dp"
-                                android:layout_marginRight="8dp"
-                                android:layout_marginBottom="3dp"
-                                app:layout_constraintBottom_toBottomOf="parent"
+
+                            <fragment
+                                android:id="@+id/map"
+                                android:name="com.google.android.gms.maps.SupportMapFragment"
+                                android:layout_width="match_parent"
+                                android:layout_height="250dp"
+                                android:layout_marginTop="8dp" />
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <com.cbr.gradienttextview.GradientTextView
+                                    android:id="@+id/txt_venue"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="15dp"
+                                    android:layout_marginBottom="15dp"
+                                    android:background="@drawable/underline"
+                                    android:gravity="center"
+                                    android:maxLines="1"
+                                    android:text="VENUES"
+                                    android:textSize="18dp"
+                                    app:fontFamily="@font/eras_bold"
+                                    app:gt_color_list="@array/rainbow"
+                                    app:gt_gradient_angle="90"
+                                    app:gt_gradient_direction="right"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <ImageView
+                                    android:id="@+id/img_favorite"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:layout_marginRight="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:srcCompat="@drawable/favorite" />
+
+                                <ImageView
+                                    android:id="@+id/img_go"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginBottom="8dp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toStartOf="@+id/img_favorite"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:srcCompat="@drawable/turning" />
+
+                                <ImageView
+                                    android:id="@+id/img_active"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:layout_marginRight="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toStartOf="@+id/img_go"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:srcCompat="@drawable/active" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/venue_recyclerview"
+                                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="60dp"
                                 app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:srcCompat="@drawable/favorite" />
-
-                            <ImageView
-                                android:id="@+id/img_go"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginEnd="10dp"
-                                android:layout_marginRight="10dp"
-                                android:layout_marginBottom="3dp"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toStartOf="@+id/img_favorite"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:srcCompat="@drawable/turning" />
-
-                            <ImageView
-                                android:id="@+id/img_active"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginEnd="8dp"
-                                android:layout_marginRight="8dp"
-                                android:layout_marginBottom="3dp"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toStartOf="@+id/img_go"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:srcCompat="@drawable/active" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
+                                app:layout_scrollFlags="scroll|enterAlways" />
 
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/venue_recyclerview"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                        </LinearLayout>
 
-                    </LinearLayout>
+                    </ScrollView>
 
+                </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-                </ScrollView>
 
                 <LinearLayout
                     android:id="@+id/bottom_layout"

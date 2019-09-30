@@ -8,21 +8,23 @@
     android:background="@drawable/mystorieshape">
 
 
-    <ImageView
+    <tangxiaolv.com.library.EffectiveShapeView
         android:id="@+id/imageView6"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scaleType="fitXY"
         android:src="@drawable/amiggos"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:shape="round_rectangle" />
 
     <com.an.customfontview.CustomTextView
         android:id="@+id/txt_age"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/right_rounded_bg"
         android:paddingLeft="3dp"
         android:paddingTop="3dp"
@@ -41,7 +43,7 @@
         android:id="@+id/txt_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/left_rounded_bg"
         android:paddingLeft="8dp"
         android:paddingTop="3dp"

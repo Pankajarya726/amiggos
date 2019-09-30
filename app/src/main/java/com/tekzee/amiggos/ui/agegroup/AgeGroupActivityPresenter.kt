@@ -1,6 +1,7 @@
 package com.tekzee.amiggos.ui.agegroup
 
 import com.google.gson.JsonObject
+import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.mallortaxi.base.BaseMainView
 import com.tekzee.mallortaxi.base.model.CommonResponse
 
@@ -15,6 +16,6 @@ class AgeGroupActivityPresenter {
     }
 
     interface AgeGroupMainView: BaseMainView{
-        fun onAgeGroupApiSuccess(responseData: CommonResponse)
+        fun onAgeGroupApiSuccess(responseData: AgeGroupResponse)
     }
 }

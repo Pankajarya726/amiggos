@@ -4,10 +4,12 @@
     <color name="colorPrimaryDark">#9F7228</color>
     <color name="colorAccent">#a17226</color>
     <color name="colorStart">#D4A40C</color>
-    <color name="colorEnd">#835203</color>
+    <color name="colorEnd">#9F7228</color>
     <color name="facebook">#304a83</color>
     <color name="instagram">#832e81</color>
+    <color name="white">#FFFFFF</color>
     <color name="google">#f82c2d</color>
+    <color name="black">#000000</color>
 
 
 

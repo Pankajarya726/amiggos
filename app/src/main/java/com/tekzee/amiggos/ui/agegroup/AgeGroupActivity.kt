@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.databinding.AgeGroupActivityBinding
+import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.home.HomeActivity
 import com.tekzee.mallortaxi.base.BaseActivity
 import com.tekzee.mallortaxi.base.model.CommonResponse
@@ -38,10 +39,12 @@ class AgeGroupActivity:BaseActivity(), AgeGroupActivityPresenter.AgeGroupMainVie
             binding.checkBoxEighteen.isChecked = true
             binding.checkboxTwentyone.isChecked = false
             binding.checkboxTwentyone.isEnabled = false
+            binding.imgTwentyOne.isEnabled = false
         }else if(sharedPreference!!.getValueString(ConstantLib.USER_AGE)!!.toInt()>21){
             binding.checkBoxEighteen.isChecked = false
             binding.checkboxTwentyone.isChecked = false
             binding.checkboxTwentyone.isEnabled = true
+            binding.imgTwentyOne.isEnabled = false
         }
     }
 
@@ -70,7 +73,7 @@ class AgeGroupActivity:BaseActivity(), AgeGroupActivityPresenter.AgeGroupMainVie
         Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
     }
 
-    override fun onAgeGroupApiSuccess(responseData: CommonResponse) {
+    override fun onAgeGroupApiSuccess(responseData: AgeGroupResponse) {
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
         finishAffinity()

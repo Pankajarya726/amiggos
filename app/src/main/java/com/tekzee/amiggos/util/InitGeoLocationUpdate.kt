@@ -1,4 +1,5 @@
-package com.tekzee.mallortaxi.util
+package com.tekzee.amiggos.ui.invitefriend
+
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -13,6 +14,7 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
+import com.tekzee.mallortaxi.util.SimpleCallback
 
 class InitGeoLocationUpdate {
     companion object {
@@ -42,7 +44,7 @@ class InitGeoLocationUpdate {
 
                     locationLatLngCallback.callback(mCurrentLatLng)
 
-                   Log.d("TAG", "Current Location Latitude: " + mCurrentLatLng.latitude + " Longitude: " +
+                    Log.d("TAG", "Current Location Latitude: " + mCurrentLatLng.latitude + " Longitude: " +
                             mCurrentLatLng.longitude)
                 }
             }
@@ -84,9 +86,9 @@ class InitGeoLocationUpdate {
 
             task.addOnSuccessListener(context as Activity) {
                 if (ActivityCompat.checkSelfPermission(context,
-                                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
                     getFusedLocationClient(context)!!.requestLocationUpdates(locationRequest,
-                            locationCallback, Looper.myLooper());
+                        locationCallback, Looper.myLooper());
             }.addOnFailureListener {
                 if (it is ResolvableApiException) {
                     // Location settings are not satisfied, but this can be fixed
@@ -95,7 +97,7 @@ class InitGeoLocationUpdate {
                         // Show the dialog by calling startResolutionForResult(),
                         // and check the result in onActivityResult().
                         it.startResolutionForResult(context as Activity,
-                                REQUEST_CHECK_SETTINGS)
+                            REQUEST_CHECK_SETTINGS)
                     } catch (sendEx: IntentSender.SendIntentException) {
                         // Ignore the error.
                     }

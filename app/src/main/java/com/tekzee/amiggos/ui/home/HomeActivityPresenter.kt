@@ -3,6 +3,7 @@ package com.tekzee.amiggos.ui.home
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
+import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
 import com.tekzee.mallortaxi.base.BaseMainView
 
 class HomeActivityPresenter {
@@ -23,6 +24,8 @@ class HomeActivityPresenter {
             createHeaders: HashMap<String, String?>,
             isfirsttime: Boolean
         )
+
+
         fun onStop()
 
     }
@@ -36,6 +39,8 @@ class HomeActivityPresenter {
         fun onVenueResponse(responseData: com.tekzee.amiggos.ui.home.model.VenueResponse?)
         fun onMyStoriesFailure(message: String)
         fun onVenueFailure(message: String)
+        fun onDashboardMapFailure(message: String)
+
 
     }
 }

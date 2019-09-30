@@ -3,12 +3,10 @@ package com.tekzee.mallortaxi.util
 import android.content.Context
 import android.content.pm.PackageManager
 import android.util.Base64
-import android.util.Log
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.mallortaxiclient.constant.ConstantLib
-import java.security.AccessControlContext
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.regex.Pattern
@@ -130,6 +128,14 @@ class Utility {
                     sDialog.dismissWithAnimation()
                 }
                 .show()
+        }
+
+        fun checkNullorEmptyData(data: String?): String {
+            return if(data == null && data!!.isBlank()){
+                ""
+            }else{
+                data
+            }
         }
 
 

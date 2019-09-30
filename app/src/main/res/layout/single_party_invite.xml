@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_shape"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="8dp"
+                android:contentDescription="@string/nav_header_desc"
+                android:paddingTop="@dimen/nav_header_vertical_spacing"
+                android:src="@drawable/attachid"
+                app:civ_border_color="@color/colorPrimary"
+                app:civ_border_width="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/spread" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+                <com.an.customfontview.CustomTextView
+                    android:id="@+id/i_txt_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="Friend 1"
+                    android:textColor="@android:color/black"
+                    android:textSize="15dp"
+                    app:textFontPath="font/eras_bold.ttf"
+                     />
+
+                <com.cbr.gradienttextview.GradientTextView
+                    android:id="@+id/i_txt_clubname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="Terms and Services"
+                    android:textSize="14dp"
+                    app:fontFamily="@font/eras_bold"
+                    app:gt_color_list="@array/rainbow"
+                    app:gt_gradient_angle="90"
+                    app:gt_gradient_direction="right"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/i_agree"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="3dp"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <com.an.customfontview.CustomTextView
+                android:id="@+id/i_txt_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:drawableLeft="@drawable/cal"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/eras"
+                android:gravity="center|left"
+                android:text="date"
+                android:textColor="@android:color/black" />
+
+            <com.an.customfontview.CustomTextView
+                android:id="@+id/i_txt_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/clock"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/eras"
+                android:gravity="center|left"
+                android:text="time"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="3dp"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <com.an.customfontview.CustomTextView
+                android:id="@+id/i_txt_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:drawableLeft="@drawable/group"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/eras"
+                android:gravity="center|left"
+                android:text="list"
+                android:textColor="@android:color/black" />
+
+            <com.an.customfontview.CustomTextView
+                android:id="@+id/i_txt_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/address"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/eras"
+                android:gravity="left"
+                android:layout_gravity="center_vertical"
+                android:maxLines="4"
+                android:text="list"
+                android:textColor="@android:color/black" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="3dp"
+            android:weightSum="2">
+
+
+            <com.cbr.gradienttextview.GradientTextView
+                android:id="@+id/btn_join"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_bg"
+                android:gravity="center"
+                android:padding="15dp"
+                android:text="Join"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:visibility="visible"
+                app:fontFamily="@font/eras_bold"
+                app:gt_color_list="@array/rainbow"
+                app:gt_gradient_angle="90"
+                app:gt_gradient_direction="right"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edt_referal_code" />
+
+            <com.cbr.gradienttextview.GradientTextView
+                android:id="@+id/btn_decline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_bg"
+                android:gravity="center"
+                android:padding="15dp"
+                android:text="Decline"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:visibility="visible"
+                app:fontFamily="@font/eras_bold"
+                app:gt_color_list="@array/rainbow"
+                app:gt_gradient_angle="90"
+                app:gt_gradient_direction="right"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edt_referal_code" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</layout>

@@ -5,14 +5,22 @@ import com.google.gson.JsonObject
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger.addLogAdapter
 import com.tekzee.amiggos.BuildConfig
+import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
+import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
 import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
+import com.tekzee.amiggos.ui.mypreferences.model.MyPreferenceResponse
+import com.tekzee.amiggos.ui.mypreferences.model.PreferenceSavedResponse
+import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendResponse
+import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesResponse
+import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
 import com.tekzee.amiggos.ui.referalcode.model.ReferalCodeResponse
 import com.tekzee.amiggos.ui.referalcode.model.VenueResponse
+import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
 import com.tekzee.mallortaxi.base.model.CommonResponse
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
@@ -101,6 +109,13 @@ class ApiClient {
         return apiService.doLoginApi(input, createHeaders)
     }
 
+    fun callTurningUpApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<TurningUpResponse>> {
+        return apiService.callTurningUpApi(input, createHeaders)
+    }
+
     fun doCallReferalApi(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
@@ -118,10 +133,17 @@ class ApiClient {
     fun doCallAgeGroupApi(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
-    ): Observable<Response<CommonResponse>> {
+    ): Observable<Response<AgeGroupResponse>> {
         return apiService.doCallAgeGroupApi(input, createHeaders)
     }
 
+
+    fun doCallOnlineFriendApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<OnlineFriendResponse>> {
+        return apiService.doCallOnlineFriendApi(input, createHeaders)
+    }
 
     fun doGetMyStories(
         input: JsonObject,
@@ -136,6 +158,49 @@ class ApiClient {
     ): Observable<Response<DashboardReponse>> {
         return apiService.doGetDashboardMapApi(input, createHeaders)
     }
+
+    fun doUpdateFriendCount(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<UpdateFriendCountResponse>> {
+        return apiService.doUpdateFriendCount(input, createHeaders)
+    }
+
+    fun doCallGetSettings(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<MyPreferenceResponse>> {
+        return apiService.doCallGetSettings(input, createHeaders)
+    }
+
+    fun doCallPartyInviteApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<PartyInvitesResponse>> {
+        return apiService.doCallPartyInviteApi(input, createHeaders)
+    }
+
+    fun docallPastPartyApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<PastPartyResponse>> {
+        return apiService.docallPastPartyApi(input, createHeaders)
+    }
+
+    fun doCallUpcomingPartyApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<PastPartyResponse>> {
+        return apiService.doCallUpcomingPartyApi(input, createHeaders)
+    }
+
+    fun docallSaveSettings(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<PreferenceSavedResponse>> {
+        return apiService.docallSaveSettings(input, createHeaders)
+    }
+
     fun doGetVenueApi(
         input: JsonObject,
         createHeaders: HashMap<String, String?>

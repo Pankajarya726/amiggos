@@ -1,43 +1,50 @@
 {
   "project_info": {
-    "project_number": "585360124061",
-    "firebase_url": "https://amiggos-b6c1e.firebaseio.com",
-    "project_id": "amiggos-b6c1e",
-    "storage_bucket": "amiggos-b6c1e.appspot.com"
+    "project_number": "350203036410",
+    "firebase_url": "https://amiggos-1551344645945.firebaseio.com",
+    "project_id": "amiggos-1551344645945",
+    "storage_bucket": "amiggos-1551344645945.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:585360124061:android:f1e4055cd4d8a7ddf98c74",
+        "mobilesdk_app_id": "1:350203036410:android:9d8b408af3d8350b517f43",
         "android_client_info": {
           "package_name": "com.tekzee.amiggos"
         }
       },
       "oauth_client": [
         {
-          "client_id": "585360124061-72avb4b9sj39q4a06117fdo1hpt4ndi1.apps.googleusercontent.com",
+          "client_id": "350203036410-m4jamkgagu10s010jfco2tijtgoi5dam.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.tekzee.amiggos",
-            "certificate_hash": "3943b87290566f6abd8bb66665eef4a8ba04d3f0"
+            "certificate_hash": "92d9ed996dae6456055c3123f13b4af34684ecdd"
           }
         },
         {
-          "client_id": "585360124061-h5ih48lmamchj7q4131fke0krmtbdebn.apps.googleusercontent.com",
+          "client_id": "350203036410-1n1m8vvq3ecmrpi89tck8n55q8sa9vvq.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyChPiTIGAGt-rrevGjJP5bN5gQ5W53bpgk"
+          "current_key": "AIzaSyAkurmx-lYNyTLmNovIpRulGpedBgWxzdE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "585360124061-h5ih48lmamchj7q4131fke0krmtbdebn.apps.googleusercontent.com",
+              "client_id": "350203036410-1n1m8vvq3ecmrpi89tck8n55q8sa9vvq.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "350203036410-0jp4ce96ds5o9kepb76hrplk83k7g033.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.amiggosuser.app"
+              }
             }
           ]
         }

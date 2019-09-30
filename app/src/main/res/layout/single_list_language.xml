@@ -21,7 +21,8 @@
             app:srcCompat="@drawable/active" />
 
         <com.an.customfontview.CustomTextView
-            app:textFontPath="font/eras.ttf"
+
+            android:fontFamily="font/eras.ttf"
             android:id="@+id/txt_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

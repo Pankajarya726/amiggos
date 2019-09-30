@@ -20,6 +20,7 @@ import com.tekzee.mallortaxiclient.constant.ConstantLib
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
@@ -60,9 +61,9 @@ class AttachIdActivity:BaseActivity(), AttachIdActivityPresenter.AttachIdMainVie
         binding.btnSave.text = languageData!!.klSAVE
 
         dob =
-            "${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.MONTH)+1}/${calendar.get(
+            "${calendar.get(
                 Calendar.YEAR
-            )}"
+            )}-${calendar.get(Calendar.MONTH)+1}-${calendar.get(Calendar.DAY_OF_MONTH)}"
         binding.calendarView.setOnDateChangeListener { _, year, month, date ->
             dob = "$date/${month+1}/$year"
         }
@@ -80,8 +81,8 @@ class AttachIdActivity:BaseActivity(), AttachIdActivityPresenter.AttachIdMainVie
                 Toast.makeText(applicationContext,"Please select profile picture",Toast.LENGTH_LONG).show()
             }else{
                 val requestFile = RequestBody.create(
-                    MediaType.parse("image/*"),
-                    file
+                    "image/*".toMediaTypeOrNull(),
+                    file!!
                 )
                 val fileMultipartBody = MultipartBody.Part.createFormData("image", file!!.name, requestFile)
                 val useridRequestBody = RequestBody.create(

@@ -2,6 +2,12 @@
 <resources>
     <array name="rainbow">
         <item>@color/colorStart</item>
+        <item>@color/colorStart</item>
+        <item>@color/colorStart</item>
+        <item>@color/colorEnd</item>
+        <item>@color/colorEnd</item>
+        <item>@color/colorEnd</item>
+        <item>@color/colorEnd</item>
         <item>@color/colorEnd</item>
     </array>
 </resources>

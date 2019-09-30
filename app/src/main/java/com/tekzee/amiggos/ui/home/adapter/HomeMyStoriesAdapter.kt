@@ -51,14 +51,13 @@ class HomeMyStoriesAdapter(val mContext: Context, mRecyclerView: RecyclerView, v
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind() {
             Glide.with(itemView.context).load(mDataList!![adapterPosition].imageUrl).into(itemView.user_image)
-//            Glide.with(itemView.context).load("http://graph.facebook.com/248014002453879/picture?type=large").into(itemView.user_image)
             itemView.s_text_name.text = mDataList!![adapterPosition].name
 
-//            itemView.setOnClickListener {
-//                mItemClickCallback?.let {
-//                    mItemClickCallback.ItemClickCallback(adapterPosition)
-//                }
-//            }
+            itemView.setOnClickListener {
+                mItemClickCallback?.let {
+                    mItemClickCallback.itemClickCallback(adapterPosition)
+                }
+            }
         }
     }
 
