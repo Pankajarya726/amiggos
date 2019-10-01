@@ -3,6 +3,7 @@ package com.tekzee.amiggos.ui.partydetails.fragment.partyinvite
 import android.content.Context
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
+import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesResponse
 import com.tekzee.mallortaxi.network.ApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -72,7 +73,7 @@ class PartyInvitesPresenterImplementation(private var mainView: PartyInvitesPres
                     mainView.hideProgressbar()
                     when (response.code()) {
                         200 -> {
-                            val responseData: PartyInvitesResponse? = response.body()
+                            val responseData: CommonResponse? = response.body()
                             if (responseData!!.status) {
                                 mainView.onJoinPartyInvitesSuccess(responseData)
                             } else {
@@ -106,7 +107,7 @@ class PartyInvitesPresenterImplementation(private var mainView: PartyInvitesPres
                     mainView.hideProgressbar()
                     when (response.code()) {
                         200 -> {
-                            val responseData: PartyInvitesResponse? = response.body()
+                            val responseData: CommonResponse? = response.body()
                             if (responseData!!.status) {
                                 mainView.onDeclinePartyInvitesSuccess(responseData)
                             } else {

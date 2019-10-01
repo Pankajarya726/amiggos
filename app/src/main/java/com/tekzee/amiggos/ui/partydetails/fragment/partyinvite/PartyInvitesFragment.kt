@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
+import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.CommonFragmentLayoutBinding
 import com.tekzee.amiggos.ui.guestlist.GuestListActivity
@@ -21,7 +22,6 @@ import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
-import kotlinx.android.synthetic.main.invite_friend_activity.*
 
 class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMainView {
 
@@ -112,12 +112,12 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMai
         adapter.notifyDataSetChanged()
     }
 
-    override fun onJoinPartyInvitesSuccess(responseData: PartyInvitesResponse?) {
+    override fun onJoinPartyInvitesSuccess(responseData: CommonResponse?) {
         callPartyInviteApi()
         Toast.makeText(activity,responseData!!.message,Toast.LENGTH_LONG).show()
     }
 
-    override fun onDeclinePartyInvitesSuccess(responseData: PartyInvitesResponse?) {
+    override fun onDeclinePartyInvitesSuccess(responseData: CommonResponse?) {
         callPartyInviteApi()
         Toast.makeText(activity,responseData!!.message,Toast.LENGTH_LONG).show()
     }

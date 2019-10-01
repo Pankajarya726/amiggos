@@ -1,11 +1,11 @@
 package com.tekzee.mallortaxi.network
 
-import com.facebook.common.Common
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger.addLogAdapter
 import com.tekzee.amiggos.BuildConfig
+import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
@@ -26,7 +26,6 @@ import com.tekzee.amiggos.ui.referalcode.model.VenueResponse
 import com.tekzee.amiggos.ui.settings.model.SettingsResponse
 import com.tekzee.amiggos.ui.settings.model.UpdateSettingsResponse
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
-import com.tekzee.mallortaxi.base.model.CommonResponse
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MultipartBody
@@ -217,14 +216,14 @@ class ApiClient {
     fun doCallJoinPartyInvites(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
-    ): Observable<Response<PartyInvitesResponse>> {
+    ): Observable<Response<CommonResponse>> {
         return apiService.doCallJoinPartyInvites(input, createHeaders)
     }
 
     fun doCallDeclinePartyInvites(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
-    ): Observable<Response<PartyInvitesResponse>> {
+    ): Observable<Response<CommonResponse>> {
         return apiService.doCallDeclinePartyInvites(input, createHeaders)
     }
 

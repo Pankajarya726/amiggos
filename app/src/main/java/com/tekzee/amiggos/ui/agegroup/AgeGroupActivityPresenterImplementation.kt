@@ -4,7 +4,6 @@ import android.content.Context
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
-import com.tekzee.mallortaxi.base.model.CommonResponse
 import com.tekzee.mallortaxi.network.ApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

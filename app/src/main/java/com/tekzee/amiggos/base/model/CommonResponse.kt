@@ -1,1 +1,11 @@
-package com.tekzee.mallortaxi.base.modeldata class CommonResponse(    val message: String?,    val success: Int?)
+package com.tekzee.amiggos.base.model
+
+
+import com.google.gson.annotations.SerializedName
+
+data class CommonResponse(
+    @SerializedName("message")
+    val message: String = "",
+    @SerializedName("status")
+    val status: Boolean = false
+)

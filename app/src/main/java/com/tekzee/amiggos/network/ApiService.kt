@@ -1,7 +1,7 @@
 package com.tekzee.mallortaxi.network
 
-import com.facebook.common.Common
 import com.google.gson.JsonObject
+import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
@@ -22,13 +22,11 @@ import com.tekzee.amiggos.ui.referalcode.model.VenueResponse
 import com.tekzee.amiggos.ui.settings.model.SettingsResponse
 import com.tekzee.amiggos.ui.settings.model.UpdateSettingsResponse
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
-import com.tekzee.mallortaxi.base.model.CommonResponse
 import io.reactivex.Observable
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
-import java.io.File
 
 interface ApiService {
 
@@ -155,7 +153,7 @@ interface ApiService {
     fun doCallJoinPartyInvites(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<PartyInvitesResponse>>
+    ): Observable<Response<CommonResponse>>
 
 
 
@@ -163,7 +161,7 @@ interface ApiService {
     fun doCallDeclinePartyInvites(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<PartyInvitesResponse>>
+    ): Observable<Response<CommonResponse>>
 
 
     @POST("user/userPastParties")
