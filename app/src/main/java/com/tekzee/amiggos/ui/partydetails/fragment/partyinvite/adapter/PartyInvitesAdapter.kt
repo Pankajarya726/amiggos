@@ -1,7 +1,6 @@
 package com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.adapter
 
 import android.content.Context
-import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,14 +10,13 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.interfaces.PartyInviteInterface
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesData
-import kotlinx.android.synthetic.main.single_list_language.view.*
 import kotlinx.android.synthetic.main.single_party_invite.view.*
 
 
 class PartyInvitesAdapter(
     private val items: ArrayList<PartyInvitesData>,
     private val languageData: LanguageData?,
-    partyinterface: PartyInviteInterface
+    private  val partyinterface: PartyInviteInterface
 ): RecyclerView.Adapter<PartyInvitesAdapter.PartyInvitesViewHolder>() {
 
     private var context: Context? = null
@@ -44,6 +42,17 @@ class PartyInvitesAdapter(
         holder.bindingdata.btn_decline.text = languageData.klDecline
         holder.bindingdata.i_txt_list.text = languageData.klGuestList
         Glide.with(context!!).load(items[position].profile).placeholder(R.drawable.user).into(holder.bindingdata.user_image)
+
+        holder.bindingdata.btn_join.setOnClickListener{
+            partyinterface.onItemClicked(items[position],1)   //1- Join,2-Decline
+        }
+
+        holder.bindingdata.btn_decline.setOnClickListener{
+            partyinterface.onItemClicked(items[position],2)
+        }
+        holder.bindingdata.i_txt_list.setOnClickListener{
+            partyinterface.onItemClicked(items[position],3)
+        }
 
     }
 

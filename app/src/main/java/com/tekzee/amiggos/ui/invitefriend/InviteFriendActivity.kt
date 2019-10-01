@@ -101,7 +101,7 @@ class InviteFriendActivity : BaseActivity(), InviteFriendActivityPresenter.Invit
                     android.R.anim.fade_in,
                     android.R.anim.fade_out
                 ) //Optional - default: No animation overrides
-                .showPickerForResult(InviteFriendActivity.CONTACT_PICKER_REQUEST)
+                .showPickerForResult(CONTACT_PICKER_REQUEST)
         }.onDeclined { e ->
             if (e.hasDenied()) {
                 AlertDialog.Builder(this)
@@ -151,14 +151,14 @@ class InviteFriendActivity : BaseActivity(), InviteFriendActivityPresenter.Invit
 
     private fun setupViewNames() {
         binding.txtITitile.text = languageData!!.klINViteFRiends
-        binding.txtMessage.text = languageData!!.klnewInvitemsg1 + sharedPreference!!.getValueInt(ConstantLib.INVITE_FRIEND).toString()
+        binding.txtMessage.text = languageData!!.klnewInvitemsg1 +" "+ sharedPreference!!.getValueInt(ConstantLib.INVITE_FRIEND).toString()
         binding.txtMessageTwo.text = languageData!!.klnewInvitemsg2
         binding.btnInviteFriend.text = languageData!!.klINViteFRiends
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == InviteFriendActivity.CONTACT_PICKER_REQUEST) {
+        if (requestCode == CONTACT_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 val results: ArrayList<ContactResult> = MultiContactPicker.obtainResult(data)
                 if (results.size < sharedPreference!!.getValueInt(ConstantLib.INVITE_FRIEND)) {
@@ -177,27 +177,30 @@ class InviteFriendActivity : BaseActivity(), InviteFriendActivityPresenter.Invit
                         checkFriendRequest()
                     }
                     pDialog.show()
+                }else{
+
+                    Observable.fromIterable(results).subscribe(object : Observer<ContactResult> {
+                        override fun onComplete() {
+                            callUpdateInviteFriendCount(results.size)
+                        }
+
+                        override fun onSubscribe(d: Disposable) {
+
+                        }
+
+                        override fun onNext(t: ContactResult) {
+                            sendMessageToNumber(t.phoneNumbers[0].number)
+                        }
+
+                        override fun onError(e: Throwable) {
+                            Logger.d("onError")
+                        }
+
+                    })
                 }
 
 
-                Observable.fromIterable(results).subscribe(object : Observer<ContactResult> {
-                    override fun onComplete() {
-                        callUpdateInviteFriendCount(results.size)
-                    }
 
-                    override fun onSubscribe(d: Disposable) {
-
-                    }
-
-                    override fun onNext(t: ContactResult) {
-                        sendMessageToNumber(t.phoneNumbers[0].number)
-                    }
-
-                    override fun onError(e: Throwable) {
-                        Logger.d("onError")
-                    }
-
-                })
             } else if (resultCode == RESULT_CANCELED) {
                 System.out.println("User closed the picker without selecting items.");
             }

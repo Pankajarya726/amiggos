@@ -10,14 +10,13 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.interfaces.PastPartyInterface
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyData
-import kotlinx.android.synthetic.main.single_party_invite.view.*
 import kotlinx.android.synthetic.main.single_past_party.view.*
 
 
 class PastPartyAdapter(
     private val items: ArrayList<PastPartyData>,
     private val languageData: LanguageData?,
-    partyinterface: PastPartyInterface
+    private  val pastPartyInterface: PastPartyInterface
 ): RecyclerView.Adapter<PastPartyAdapter.PartyInvitesViewHolder>() {
 
     private var context: Context? = null
@@ -39,6 +38,9 @@ class PastPartyAdapter(
         holder.bindingdata.p_txt_time.text = items[position].startTime
         holder.bindingdata.p_txt_list.text = languageData!!.klGuestList
         Glide.with(context!!).load(items[position].venueHomeImage).placeholder(R.drawable.user).into(holder.bindingdata.p_user_image)
+        holder.bindingdata.p_txt_list.setOnClickListener{
+            pastPartyInterface.onItemClicked(items[position],1)
+        }
 
     }
 

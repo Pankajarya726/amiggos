@@ -1,5 +1,6 @@
 package com.tekzee.mallortaxi.network
 
+import com.facebook.common.Common
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.orhanobut.logger.AndroidLogAdapter
@@ -8,6 +9,7 @@ import com.tekzee.amiggos.BuildConfig
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
+import com.tekzee.amiggos.ui.guestlist.model.GuestListResponse
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
 import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
@@ -20,6 +22,8 @@ import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvite
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
 import com.tekzee.amiggos.ui.referalcode.model.ReferalCodeResponse
 import com.tekzee.amiggos.ui.referalcode.model.VenueResponse
+import com.tekzee.amiggos.ui.settings.model.SettingsResponse
+import com.tekzee.amiggos.ui.settings.model.UpdateSettingsResponse
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
 import com.tekzee.mallortaxi.base.model.CommonResponse
 import io.reactivex.Observable
@@ -102,6 +106,20 @@ class ApiClient {
         return apiService.doCallLanguageApi(createHeaders)
     }
 
+    fun doCallSettingsApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<SettingsResponse>> {
+        return apiService.doCallSettingsApi(input,createHeaders)
+    }
+
+    fun doUpdateSettings(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<UpdateSettingsResponse>> {
+        return apiService.doUpdateSettings(input,createHeaders)
+    }
+
     fun doLoginApi(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
@@ -178,6 +196,28 @@ class ApiClient {
         createHeaders: HashMap<String, String?>
     ): Observable<Response<PartyInvitesResponse>> {
         return apiService.doCallPartyInviteApi(input, createHeaders)
+    }
+
+
+    fun doCallGuestListApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<GuestListResponse>> {
+        return apiService.doCallGuestListApi(input, createHeaders)
+    }
+
+    fun doCallJoinPartyInvites(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<PartyInvitesResponse>> {
+        return apiService.doCallJoinPartyInvites(input, createHeaders)
+    }
+
+    fun doCallDeclinePartyInvites(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<PartyInvitesResponse>> {
+        return apiService.doCallDeclinePartyInvites(input, createHeaders)
     }
 
     fun docallPastPartyApi(

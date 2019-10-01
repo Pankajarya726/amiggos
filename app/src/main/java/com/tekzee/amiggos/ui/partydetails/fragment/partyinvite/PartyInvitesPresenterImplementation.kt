@@ -57,4 +57,71 @@ class PartyInvitesPresenterImplementation(private var mainView: PartyInvitesPres
         }
 
     }
+
+    override fun doCallJoinPartyInvites(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ) {
+
+        mainView.showProgressbar()
+        if (mainView.checkInternet()) {
+            disposable = ApiClient.instance.doCallJoinPartyInvites(input, createHeaders)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    mainView.hideProgressbar()
+                    when (response.code()) {
+                        200 -> {
+                            val responseData: PartyInvitesResponse? = response.body()
+                            if (responseData!!.status) {
+                                mainView.onJoinPartyInvitesSuccess(responseData)
+                            } else {
+                                mainView.validateError(responseData.message)
+                            }
+                        }
+                    }
+                }, { error ->
+                    mainView.hideProgressbar()
+                    mainView.validateError(error.message.toString())
+                })
+        } else {
+            mainView.hideProgressbar()
+            mainView.validateError(context!!.getString(R.string.check_internet))
+        }
+
+    }
+
+
+    override fun doCallDeclinePartyInvites(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ) {
+
+        mainView.showProgressbar()
+        if (mainView.checkInternet()) {
+            disposable = ApiClient.instance.doCallDeclinePartyInvites(input, createHeaders)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    mainView.hideProgressbar()
+                    when (response.code()) {
+                        200 -> {
+                            val responseData: PartyInvitesResponse? = response.body()
+                            if (responseData!!.status) {
+                                mainView.onDeclinePartyInvitesSuccess(responseData)
+                            } else {
+                                mainView.validateError(responseData.message)
+                            }
+                        }
+                    }
+                }, { error ->
+                    mainView.hideProgressbar()
+                    mainView.validateError(error.message.toString())
+                })
+        } else {
+            mainView.hideProgressbar()
+            mainView.validateError(context!!.getString(R.string.check_internet))
+        }
+
+    }
 }

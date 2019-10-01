@@ -1,5 +1,6 @@
 package com.tekzee.amiggos.ui.partydetails.fragment.upcommingparty
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +12,7 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.CommonFragmentLayoutBinding
-import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesData
-import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.PastPartyPresenterImplementation
+import com.tekzee.amiggos.ui.guestlist.GuestListActivity
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.adapter.PastPartyAdapter
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.interfaces.PastPartyInterface
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyData
@@ -62,8 +62,17 @@ class UpcommingPartyFragment: BaseFragment(), UpcommingPartyPresenter.UpcomingPa
         binding.commonRecyclerview.setHasFixedSize(true)
         binding.commonRecyclerview.layoutManager = LinearLayoutManager(activity)
         adapter = PastPartyAdapter(items,languageData, object : PastPartyInterface {
-            override fun onItemClicked(partyinvitesData: PartyInvitesData) {
-
+            override fun onItemClicked(
+                pastPartyData: PastPartyData,
+                type: Int
+            ) {
+                when(type){
+                    1->{
+                        val intent = Intent(activity, GuestListActivity::class.java)
+                        intent.putExtra(ConstantLib.BOOKING_ID,pastPartyData.bookingId.toString())
+                        startActivity(intent)
+                    }
+                }
             }
 
         })

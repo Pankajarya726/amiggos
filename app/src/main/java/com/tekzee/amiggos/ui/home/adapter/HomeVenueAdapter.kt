@@ -78,7 +78,7 @@ class HomeVenueAdapter(
                 }
             }
 
-            Glide.with(itemView.context).load(mDataList!![adapterPosition].image).into(itemView.findViewById(R.id.imageView6))
+            Glide.with(itemView.context).load(mDataList!![adapterPosition].image).placeholder(R.drawable.user).into(itemView.findViewById(R.id.imageView6))
 
             val txtAge = itemView.findViewById(R.id.txt_age) as TextView
             if (mDataList!![adapterPosition].agelimit.isEmpty()) {

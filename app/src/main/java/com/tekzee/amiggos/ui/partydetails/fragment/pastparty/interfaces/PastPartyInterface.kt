@@ -1,7 +1,10 @@
 package com.tekzee.amiggos.ui.partydetails.fragment.pastparty.interfaces
 
-import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesData
+import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyData
 
 interface PastPartyInterface {
-    fun onItemClicked(partyinvitesData: PartyInvitesData)
+    fun onItemClicked(
+        partyinvitesData: PastPartyData,
+        i: Int
+    )
 }

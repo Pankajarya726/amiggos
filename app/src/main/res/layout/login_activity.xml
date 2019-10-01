@@ -1,304 +1,325 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-         <RelativeLayout
-            android:layout_gravity="center"
+
+
+    <RelativeLayout
+        android:background="@drawable/bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg"
+            android:layout_above="@+id/bottom_layout"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_marginTop="20dp"
+
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+
+                    android:id="@+id/login_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/txt_login_title"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="15dp"
+                    android:src="@drawable/ic_splash" />
+
+                <com.an.customfontview.CustomTextView
+                    app:textFontPath="font/eras.ttf"
+                    android:id="@+id/txt_login_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/layout_facebook"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="Login by using social media"
+                    android:textColor="@android:color/black"
+                    android:textSize="18dp"
+                    />
+
+                <FrameLayout
+                    android:id="@+id/layout_facebook"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/layout_instagram"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginRight="25dp"
+                    android:background="@drawable/bg_facebook"
+                    android:elevation="5dp">
+
+                    <com.facebook.login.widget.LoginButton
+                        android:id="@+id/btn_fb"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/fblayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center">
+
+                        <com.an.customfontview.CustomTextView
+                            android:id="@+id/btn_facebook"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:textSize="18dp"
+                            android:layout_marginRight="8dp"
+                            android:background="@android:color/transparent"
+                            android:text="Facebook"
+                            android:textAllCaps="false"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:textFontPath="font/eras.ttf" />
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="7dp"
+                            android:layout_marginEnd="7dp"
+                            android:layout_marginRight="7dp"
+                            android:layout_marginBottom="7dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/btn_facebook"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/fb" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/layout_instagram"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/layout_google"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="25dp"
+                    android:background="@drawable/bg_instagram"
+                    android:elevation="5dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.an.customfontview.CustomTextView
+                            app:textFontPath="font/eras.ttf"
+                            android:id="@+id/btn_instagram"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:text="Instagram"
+                            android:textSize="18dp"
+                            android:textAllCaps="false"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            />
+
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="7dp"
+                            android:layout_marginEnd="7dp"
+                            android:layout_marginRight="7dp"
+                            android:layout_marginBottom="7dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/btn_instagram"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/instagram" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/layout_google"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/layout_terms_condition"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="25dp"
+                    android:background="@drawable/bg_google"
+                    android:elevation="5dp">
+
+                    <com.google.android.gms.common.SignInButton
+                        android:id="@+id/sign_in_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_instagram"
+                        android:visibility="gone" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/layout_terms_condition">
+
+
+                        <com.an.customfontview.CustomTextView
+                            app:textFontPath="font/eras.ttf"
+                            android:id="@+id/btn_google"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:drawablePadding="25dp"
+                            android:text="Google"
+                            android:textSize="18dp"
+                            android:textAllCaps="false"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            />
+
+                        <ImageView
+                            android:id="@+id/imageView4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="7dp"
+                            android:layout_marginEnd="7dp"
+                            android:layout_marginRight="7dp"
+                            android:layout_marginBottom="7dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/btn_google"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/google" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </FrameLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_terms_condition"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_above="@+id/bottom_layout"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="25dp"
+                    >
+
+                    <ImageView
+                        android:id="@+id/radio_agree"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/radio_btn_bg"
+                        android:button="@android:color/transparent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.an.customfontview.CustomTextView
+                        app:textFontPath="font/eras.ttf"
+                        android:id="@+id/i_agree"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginLeft="3dp"
+                        android:text="I am agree to the "
+                        android:textColor="@android:color/black"
+                        android:textSize="14dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/radio_agree"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+
+                    <com.cbr.gradienttextview.GradientTextView
+                        android:id="@+id/terms_services"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:gt_color_list="@array/rainbow"
+                        app:gt_gradient_direction="right"
+                        app:gt_gradient_angle="90"
+                        app:fontFamily="@font/eras_bold"
+                        android:text=" Terms and Services"
+                        android:textSize="14dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/i_agree"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/login_logo"
-                android:layout_width="wrap_content"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#c3c3c3" />
+
+            <com.an.customfontview.CustomTextView
+                android:id="@+id/txt_select_language"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/txt_login_title"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                android:layout_marginBottom="15dp"
-                android:src="@drawable/ic_splash" />
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="25dp"
+                android:background="@drawable/btn_bg"
+                android:drawableRight="@drawable/drop_down"
+                android:drawablePadding="15dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:padding="15dp"
+                android:paddingLeft="12dp"
+                android:textSize="18dp"
+                android:text="Select your language"
+                android:textAllCaps="false"
+                android:textColor="@android:color/black"
+                app:textFontPath="font/eras.ttf" />
 
             <com.an.customfontview.CustomTextView
                 app:textFontPath="font/eras.ttf"
-                android:id="@+id/txt_login_title"
+                android:id="@+id/txt_dont_post"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/layout_facebook"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:text="Login by using social media"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="20dp"
+                android:drawableLeft="@drawable/lock"
+                android:gravity="center|left"
+                android:padding="8dp"
+                android:drawablePadding="8dp"
+                android:text="we dont post anything to social media"
                 android:textColor="@android:color/black"
-                android:textSize="18dp"
                 />
+        </LinearLayout>
 
-            <FrameLayout
-                android:id="@+id/layout_facebook"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/layout_instagram"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginRight="25dp"
-                android:background="@drawable/bg_facebook"
-                android:elevation="5dp">
-
-                <com.facebook.login.widget.LoginButton
-                    android:id="@+id/btn_fb"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:visibility="gone" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/fblayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="center">
-
-                    <com.an.customfontview.CustomTextView
-                        android:id="@+id/btn_facebook"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:textSize="18dp"
-                        android:layout_marginRight="8dp"
-                        android:background="@android:color/transparent"
-                        android:text="Facebook"
-                        android:textAllCaps="false"
-                        android:textColor="@android:color/white"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:textFontPath="font/eras.ttf" />
-
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="7dp"
-                        android:layout_marginEnd="7dp"
-                        android:layout_marginRight="7dp"
-                        android:layout_marginBottom="7dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/btn_facebook"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/fb" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/layout_instagram"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/layout_google"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="25dp"
-                android:background="@drawable/bg_instagram"
-                android:elevation="5dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.an.customfontview.CustomTextView
-                        app:textFontPath="font/eras.ttf"
-                        android:id="@+id/btn_instagram"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
-                        android:text="Instagram"
-                        android:textSize="18dp"
-                        android:textAllCaps="false"
-                        android:textColor="@android:color/white"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        />
-
-                    <ImageView
-                        android:id="@+id/imageView3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="7dp"
-                        android:layout_marginEnd="7dp"
-                        android:layout_marginRight="7dp"
-                        android:layout_marginBottom="7dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/btn_instagram"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/instragram" />
+    </RelativeLayout>
 
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/layout_google"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/layout_terms_condition"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="25dp"
-                android:background="@drawable/bg_google"
-                android:elevation="5dp">
-
-                <com.google.android.gms.common.SignInButton
-                    android:id="@+id/sign_in_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_instagram"
-                    android:visibility="gone" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/layout_terms_condition">
-
-
-                    <com.an.customfontview.CustomTextView
-                        app:textFontPath="font/eras.ttf"
-                        android:id="@+id/btn_google"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:drawablePadding="25dp"
-                        android:text="Google"
-                        android:textSize="18dp"
-                        android:textAllCaps="false"
-                        android:textColor="@android:color/white"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        />
-
-                    <ImageView
-                        android:id="@+id/imageView4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="7dp"
-                        android:layout_marginEnd="7dp"
-                        android:layout_marginRight="7dp"
-                        android:layout_marginBottom="7dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/btn_google"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/google" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </FrameLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_terms_condition"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/bottom_layout"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="25dp"
-                android:layout_marginBottom="50dp">
-
-                <ImageView
-                    android:id="@+id/radio_agree"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/radio_btn_bg"
-                    android:button="@android:color/transparent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.an.customfontview.CustomTextView
-                    app:textFontPath="font/eras.ttf"
-                    android:id="@+id/i_agree"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginLeft="3dp"
-                    android:text="I am agree to the "
-                    android:textColor="@android:color/black"
-                    android:textSize="14dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/radio_agree"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
-
-                <com.cbr.gradienttextview.GradientTextView
-                    android:id="@+id/terms_services"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:gt_color_list="@array/rainbow"
-                    app:gt_gradient_direction="right"
-                    app:gt_gradient_angle="90"
-                    app:fontFamily="@font/eras_bold"
-                    android:text=" Terms and Services"
-                    android:textSize="14dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/i_agree"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <LinearLayout
-                android:id="@+id/bottom_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_gravity="bottom"
-                android:orientation="vertical">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#c3c3c3" />
-
-                <com.an.customfontview.CustomTextView
-                    android:id="@+id/txt_select_language"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginRight="25dp"
-                    android:background="@drawable/btn_bg"
-                    android:drawableRight="@drawable/ic_dropdown"
-                    android:drawablePadding="15dp"
-                    android:gravity="center"
-                    android:textStyle="bold"
-                    android:padding="15dp"
-                    android:paddingLeft="12dp"
-                    android:textSize="18dp"
-                    android:text="Select your language"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/black"
-                    app:textFontPath="font/eras.ttf" />
-
-                <com.an.customfontview.CustomTextView
-                    app:textFontPath="font/eras.ttf"
-                    android:id="@+id/txt_dont_post"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginBottom="20dp"
-                    android:drawableLeft="@drawable/lock"
-                    android:gravity="center|left"
-                    android:padding="8dp"
-                    android:drawablePadding="8dp"
-                    android:text="we dont post anything to social media"
-                    android:textColor="@android:color/black"
-                    />
-            </LinearLayout>
-
-
-        </RelativeLayout>
 
 
 

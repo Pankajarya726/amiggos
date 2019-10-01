@@ -1,15 +1,18 @@
 package com.tekzee.amiggos.ui.partydetails.fragment.partyinvite
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.CommonFragmentLayoutBinding
+import com.tekzee.amiggos.ui.guestlist.GuestListActivity
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.adapter.PartyInvitesAdapter
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.interfaces.PartyInviteInterface
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesData
@@ -18,6 +21,7 @@ import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
+import kotlinx.android.synthetic.main.invite_friend_activity.*
 
 class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMainView {
 
@@ -56,8 +60,24 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMai
         binding.commonRecyclerview.setHasFixedSize(true)
         binding.commonRecyclerview.layoutManager = LinearLayoutManager(activity)
         adapter = PartyInvitesAdapter(items,languageData, object : PartyInviteInterface {
-            override fun onItemClicked(partyinvitesData: PartyInvitesData) {
+            override fun onItemClicked(
+                partyinvitesData: PartyInvitesData,
+                type: Int
+            ) {
+                when(type){
 
+                    1 -> {
+                        callJoinPartyInviteApi(partyinvitesData)
+                    }
+                    2 ->{
+                        callDeclinePartyInvites(partyinvitesData)
+                    }
+                    3 ->{
+                        val intent = Intent(activity,GuestListActivity::class.java)
+                        intent.putExtra(ConstantLib.BOOKING_ID,partyinvitesData.bookingId.toString())
+                        startActivity(intent)
+                    }
+                }
             }
 
         })
@@ -65,6 +85,20 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMai
 
     }
 
+    private fun callJoinPartyInviteApi(partyinvitesData: PartyInvitesData) {
+        val input: JsonObject = JsonObject()
+        input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
+        input.addProperty("booking_id", partyinvitesData.bookingId)
+        partyInvitesPresenterImplementation!!.doCallJoinPartyInvites(input,Utility.createHeaders(sharedPreference))
+    }
+
+
+    private fun callDeclinePartyInvites(partyinvitesData: PartyInvitesData) {
+        val input: JsonObject = JsonObject()
+        input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
+        input.addProperty("booking_id", partyinvitesData.bookingId)
+        partyInvitesPresenterImplementation!!.doCallDeclinePartyInvites(input,Utility.createHeaders(sharedPreference))
+    }
 
 
     override fun validateError(message: String) {
@@ -77,5 +111,17 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMai
         items.addAll(responseData!!.data)
         adapter.notifyDataSetChanged()
     }
+
+    override fun onJoinPartyInvitesSuccess(responseData: PartyInvitesResponse?) {
+        callPartyInviteApi()
+        Toast.makeText(activity,responseData!!.message,Toast.LENGTH_LONG).show()
+    }
+
+    override fun onDeclinePartyInvitesSuccess(responseData: PartyInvitesResponse?) {
+        callPartyInviteApi()
+        Toast.makeText(activity,responseData!!.message,Toast.LENGTH_LONG).show()
+    }
+
+
 
 }

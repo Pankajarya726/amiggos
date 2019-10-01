@@ -49,6 +49,7 @@ import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
 import com.tekzee.amiggos.ui.mypreferences.MyPreferences
 import com.tekzee.amiggos.ui.onlinefriends.OnlineFriendActivity
 import com.tekzee.amiggos.ui.partydetails.PartyDetailsActivity
+import com.tekzee.amiggos.ui.settings.SettingsActivity
 import com.tekzee.amiggos.ui.turningup.TurningUpActivity
 import com.tekzee.mallortaxi.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
@@ -190,6 +191,8 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         InitGeoLocationUpdate.locationInit(this, object : SimpleCallback<LatLng> {
             override fun callback(mCurrentLatLng: LatLng) {
                 lastLocation = mCurrentLatLng
+                venuePageNo = 0
+                callVenueApi(false)
                 callDashboardApi()
             }
         })
@@ -378,8 +381,14 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             drawer.closeDrawer(GravityCompat.START)
             val intent = Intent(this,PartyDetailsActivity::class.java)
             startActivity(intent)
-
         }
+
+        txt_settings.setOnClickListener{
+            drawer.closeDrawer(GravityCompat.START)
+            val intent = Intent(this,SettingsActivity::class.java)
+            startActivity(intent)
+        }
+
 
         txt_logout.setOnClickListener{
             drawer.closeDrawer(GravityCompat.START)
@@ -452,7 +461,6 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun onDashboardMapResponse(responseData: DashboardReponse?) {
-        callVenueApi(false)
         setupMarkersOnMap(responseData)
         InitGeoLocationUpdate.stopLocationUpdate(this)
     }

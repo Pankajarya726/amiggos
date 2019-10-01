@@ -28,6 +28,7 @@ class WebViewActivity: AppCompatActivity(){
         binding.webview.settings.javaScriptEnabled = true
         binding.webview.loadUrl(ConstantLib.PAGEURL)
 
+
     }
 
     private fun setupToolBar() {

@@ -5,6 +5,7 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
+import com.tekzee.amiggos.ui.guestlist.model.GuestListResponse
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
 import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
@@ -17,6 +18,8 @@ import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvite
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
 import com.tekzee.amiggos.ui.referalcode.model.ReferalCodeResponse
 import com.tekzee.amiggos.ui.referalcode.model.VenueResponse
+import com.tekzee.amiggos.ui.settings.model.SettingsResponse
+import com.tekzee.amiggos.ui.settings.model.UpdateSettingsResponse
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
 import com.tekzee.mallortaxi.base.model.CommonResponse
 import io.reactivex.Observable
@@ -62,6 +65,20 @@ interface ApiService {
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<ReferalCodeResponse>>
+
+
+    @POST("user/getSettingDetails")
+    fun doCallSettingsApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<SettingsResponse>>
+
+
+    @POST("user/updateSettingValue")
+    fun doUpdateSettings(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<UpdateSettingsResponse>>
 
     @POST("user/isVenueCheckUncheck")
     fun doCallCheckVenueApi(
@@ -112,6 +129,30 @@ interface ApiService {
 
     @POST("user/userPartyInvites")
     fun doCallPartyInviteApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<PartyInvitesResponse>>
+
+
+
+    @POST("user/getGuestList")
+    fun doCallGuestListApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<GuestListResponse>>
+
+
+
+    @POST("user/acceptPartyInvitaion")
+    fun doCallJoinPartyInvites(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<PartyInvitesResponse>>
+
+
+
+    @POST("user/rejectPartyInvitaion")
+    fun doCallDeclinePartyInvites(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<PartyInvitesResponse>>
