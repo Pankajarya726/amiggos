@@ -6,6 +6,7 @@ import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
 import com.tekzee.amiggos.ui.guestlist.model.GuestListResponse
+import com.tekzee.amiggos.ui.helpcenter.model.HelpCenterResponse
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
 import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
@@ -72,6 +73,13 @@ interface ApiService {
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<SettingsResponse>>
+
+
+    @POST("user/getHelpCenter")
+    fun doCallHelpCenterApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<HelpCenterResponse>>
 
 
     @POST("user/updateSettingValue")

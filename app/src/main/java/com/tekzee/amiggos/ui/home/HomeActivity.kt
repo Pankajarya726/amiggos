@@ -37,6 +37,7 @@ import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.HomeActivityBinding
+import com.tekzee.amiggos.ui.helpcenter.HelpCenterActivity
 import com.tekzee.amiggos.ui.home.adapter.HomeMyStoriesAdapter
 import com.tekzee.amiggos.ui.home.adapter.HomeVenueAdapter
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
@@ -386,6 +387,12 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         txt_settings.setOnClickListener{
             drawer.closeDrawer(GravityCompat.START)
             val intent = Intent(this,SettingsActivity::class.java)
+            startActivity(intent)
+        }
+
+        txt_helpcenter.setOnClickListener{
+            drawer.closeDrawer(GravityCompat.START)
+            val intent = Intent(this,HelpCenterActivity::class.java)
             startActivity(intent)
         }
 

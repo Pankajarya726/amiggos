@@ -10,6 +10,7 @@ import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
 import com.tekzee.amiggos.ui.guestlist.model.GuestListResponse
+import com.tekzee.amiggos.ui.helpcenter.model.HelpCenterResponse
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
 import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
@@ -111,6 +112,13 @@ class ApiClient {
         createHeaders: HashMap<String, String?>
     ): Observable<Response<SettingsResponse>> {
         return apiService.doCallSettingsApi(input,createHeaders)
+    }
+
+    fun doCallHelpCenterApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<HelpCenterResponse>> {
+        return apiService.doCallHelpCenterApi(input,createHeaders)
     }
 
     fun doUpdateSettings(
