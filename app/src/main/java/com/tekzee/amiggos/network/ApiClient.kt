@@ -9,6 +9,7 @@ import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
+import com.tekzee.amiggos.ui.friendprofile.model.FriendProfileResponse
 import com.tekzee.amiggos.ui.guestlist.model.GuestListResponse
 import com.tekzee.amiggos.ui.helpcenter.model.HelpCenterResponse
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
@@ -18,9 +19,13 @@ import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
 import com.tekzee.amiggos.ui.mypreferences.model.MyPreferenceResponse
 import com.tekzee.amiggos.ui.mypreferences.model.PreferenceSavedResponse
+import com.tekzee.amiggos.ui.notification.model.NotificationResponse
 import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
+import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationData
+import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponse
+import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendResponse
 import com.tekzee.amiggos.ui.referalcode.model.ReferalCodeResponse
 import com.tekzee.amiggos.ui.referalcode.model.VenueResponse
 import com.tekzee.amiggos.ui.settings.model.SettingsResponse
@@ -170,6 +175,13 @@ class ApiClient {
         return apiService.doCallOnlineFriendApi(input, createHeaders)
     }
 
+    fun doCallRealFriendApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<RealFriendResponse>> {
+        return apiService.doCallRealFriendApi(input, createHeaders)
+    }
+
     fun doGetMyStories(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
@@ -206,11 +218,94 @@ class ApiClient {
     }
 
 
+    fun doCallInvitationApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<InvitationResponse>> {
+        return apiService.doCallInvitationApi(input, createHeaders)
+    }
+
+
+    fun doAcceptInvitationApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.doAcceptInvitationApi(input, createHeaders)
+    }
+
+    fun doSendFriendRequest(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.doSendFriendRequest(input, createHeaders)
+    }
+
+
+    fun callunFriend(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.callunFriend(input, createHeaders)
+    }
+
+    fun callUnBlock(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.callUnBlock(input, createHeaders)
+    }
+
+
+    fun doCallClearNotification(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.doCallClearNotification(input, createHeaders)
+    }
+
+
+    fun callBlock(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.callBlock(input, createHeaders)
+    }
+
+    fun callReport(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.callUnBlock(input, createHeaders)
+    }
+
+
+    fun doRejectInvitationApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.doRejectInvitationApi(input, createHeaders)
+    }
+
+
     fun doCallGuestListApi(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<GuestListResponse>> {
         return apiService.doCallGuestListApi(input, createHeaders)
+    }
+
+    fun doCallGetFriendProfileApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<FriendProfileResponse>> {
+        return apiService.doCallGetFriendProfileApi(input, createHeaders)
+    }
+
+    fun doCallGetNotification(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<NotificationResponse>> {
+        return apiService.doCallGetNotification(input, createHeaders)
     }
 
     fun doCallJoinPartyInvites(

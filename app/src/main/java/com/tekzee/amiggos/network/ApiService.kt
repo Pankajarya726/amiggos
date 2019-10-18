@@ -5,6 +5,7 @@ import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
+import com.tekzee.amiggos.ui.friendprofile.model.FriendProfileResponse
 import com.tekzee.amiggos.ui.guestlist.model.GuestListResponse
 import com.tekzee.amiggos.ui.helpcenter.model.HelpCenterResponse
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
@@ -14,9 +15,13 @@ import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
 import com.tekzee.amiggos.ui.mypreferences.model.MyPreferenceResponse
 import com.tekzee.amiggos.ui.mypreferences.model.PreferenceSavedResponse
+import com.tekzee.amiggos.ui.notification.model.NotificationResponse
 import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
+import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationData
+import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponse
+import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendResponse
 import com.tekzee.amiggos.ui.referalcode.model.ReferalCodeResponse
 import com.tekzee.amiggos.ui.referalcode.model.VenueResponse
 import com.tekzee.amiggos.ui.settings.model.SettingsResponse
@@ -112,6 +117,12 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<OnlineFriendResponse>>
 
+    @POST("user/userFreindsList")
+    fun doCallRealFriendApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<RealFriendResponse>>
+
     @POST("user/dashboard_map")
     fun doGetDashboardMapApi(
         @Body input: JsonObject,
@@ -141,11 +152,116 @@ interface ApiService {
 
 
 
+    @POST("user/getRequestList")
+    fun doCallInvitationApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<InvitationResponse>>
+
+
+
+    @POST("user/acceptFriendRequest")
+    fun doAcceptInvitationApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
+
+
+
+    @POST("user/sendFriendRequest")
+    fun doSendFriendRequest(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
+
+
+
+    @POST("user/unFriendUser")
+    fun callunFriend(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
+
+
+
+
+    @POST("user/unblockFriend")
+    fun callUnBlock(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
+
+
+
+
+
+
+
+
+    @POST("user/clearNotification")
+    fun doCallClearNotification(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
+
+
+
+
+
+    @POST("user/blockFriend")
+    fun callBlock(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
+
+
+
+
+    @POST("user/unFriendUser")
+    fun callReport(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
+
+
+
+    @POST("user/declineFriendRequest")
+    fun doRejectInvitationApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
+
+
     @POST("user/getGuestList")
     fun doCallGuestListApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<GuestListResponse>>
+
+
+
+    @POST("user/getFriendsProfile")
+    fun doCallGetFriendProfileApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<FriendProfileResponse>>
+
+
+
+
+    @POST("user/getAllNotification")
+    fun doCallGetNotification(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<NotificationResponse>>
 
 
 

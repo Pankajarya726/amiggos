@@ -93,7 +93,7 @@ class HomeActivityPresenterImplementation(private var mainView: HomeActivityPres
         createHeaders: HashMap<String, String?>,
         requestDatFromServer: Boolean
     ) {
-        mainView.showProgressbar()
+//        mainView.showProgressbar()
         if (mainView.checkInternet()) {
             disposable = ApiClient.instance.doGetMyStories(input,createHeaders)
                 .subscribeOn(Schedulers.io())
@@ -115,11 +115,11 @@ class HomeActivityPresenterImplementation(private var mainView: HomeActivityPres
                         }
                     }
                 }, { error ->
-                    mainView.hideProgressbar()
+//                    mainView.hideProgressbar()
                     mainView.onMyStoriesFailure(error.message.toString())
                 })
         } else {
-            mainView.hideProgressbar()
+//            mainView.hideProgressbar()
             mainView.validateError(context!!.getString(R.string.check_internet))
         }
     }

@@ -19,7 +19,7 @@ import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
-import okhttp3.MediaType
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -27,7 +27,9 @@ import java.io.File
 import java.util.*
 
 
-class AttachIdActivity:BaseActivity(), AttachIdActivityPresenter.AttachIdMainView {
+class AttachIdActivity : BaseActivity(), AttachIdActivityPresenter.AttachIdMainView,
+    DatePickerDialog.OnDateSetListener {
+
 
 
     lateinit var binding: AttachidActivityBinding
@@ -35,7 +37,8 @@ class AttachIdActivity:BaseActivity(), AttachIdActivityPresenter.AttachIdMainVie
     private var languageData: LanguageData? = null
     private var attachIdPresenterImplementation: AttachIdPresenterImplementation? = null
     private var file: File? = null
-    private var dob: String =""
+    private var dob: String = ""
+    private var userid: String ="";
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,55 +46,83 @@ class AttachIdActivity:BaseActivity(), AttachIdActivityPresenter.AttachIdMainVie
         binding = DataBindingUtil.setContentView(this, R.layout.attachid_activity)
         sharedPreferences = SharedPreference(this)
         languageData = sharedPreferences!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        attachIdPresenterImplementation = AttachIdPresenterImplementation(this,this)
+        attachIdPresenterImplementation = AttachIdPresenterImplementation(this, this)
+
+        if(intent.getStringExtra(ConstantLib.FROM).equals(ConstantLib.NOTIFICAION)){
+            userid = intent.getStringExtra(ConstantLib.USER_DATA)
+        }else{
+            userid = sharedPreferences!!.getValueInt(ConstantLib.USER_ID).toString()
+        }
+
+
         setupToolBar()
         setupClickListener()
         initViewData()
     }
 
+    override fun onDateSet(view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
+        dob = "$dayOfMonth/${monthOfYear + 1}/$year"
+        binding.txtSelectDate.text = dob
+    }
+
     private fun initViewData() {
-        var calendar = Calendar.getInstance()
-        calendar.add(Calendar.YEAR,-18)
-        binding.calendarView.setDate(calendar.timeInMillis,true,true)
-        binding.calendarView.maxDate = calendar.timeInMillis
 
         binding.txtHeading.text = languageData!!.klTakePicOfID.split("\\n")[0]
         binding.txtSubtitle.text = languageData!!.klTakePicOfID.split("\\n")[1]
         binding.txtSelectDate.text = languageData!!.klSelectYourBirthDate
         binding.btnSave.text = languageData!!.klSAVE
 
-        dob =
-            "${calendar.get(
-                Calendar.YEAR
-            )}-${calendar.get(Calendar.MONTH)+1}-${calendar.get(Calendar.DAY_OF_MONTH)}"
-        binding.calendarView.setOnDateChangeListener { _, year, month, date ->
-            dob = "$date/${month+1}/$year"
-        }
+
     }
 
     private fun setupClickListener() {
-        binding.imgUser.setOnClickListener{
+        binding.imgUser.setOnClickListener {
             CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .start(this)
         }
 
-        binding.btnSave.setOnClickListener{
-            if(file == null){
-                Toast.makeText(applicationContext,"Please select profile picture",Toast.LENGTH_LONG).show()
-            }else{
+        binding.txtSelectDate.setOnClickListener {
+
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.YEAR, -18)
+            val dpd = DatePickerDialog.newInstance(
+                this,
+                calendar.get(Calendar.YEAR), // Initial year selection
+                calendar.get(Calendar.MONTH), // Initial month selection
+                calendar.get(Calendar.DAY_OF_MONTH) // Inital day selection
+            )
+            dpd.maxDate = calendar
+            dpd.show(supportFragmentManager,"Datepickerdialog")
+        }
+
+        binding.btnSave.setOnClickListener {
+            if (file == null) {
+                Toast.makeText(
+                    applicationContext,
+                    "Please select profile picture",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
                 val requestFile = RequestBody.create(
                     "image/*".toMediaTypeOrNull(),
                     file!!
                 )
-                val fileMultipartBody = MultipartBody.Part.createFormData("image", file!!.name, requestFile)
+                val fileMultipartBody =
+                    MultipartBody.Part.createFormData("image", file!!.name, requestFile)
                 val useridRequestBody = RequestBody.create(
-                    MultipartBody.FORM, sharedPreferences!!.getValueInt(ConstantLib.USER_ID).toString()
+                    MultipartBody.FORM,
+                   userid
                 )
                 val dobRequestBody = RequestBody.create(
                     MultipartBody.FORM, dob
                 )
-                attachIdPresenterImplementation!!.doCallAttachIdApi(fileMultipartBody,useridRequestBody,dobRequestBody,Utility.createHeaders(sharedPreferences))
+                attachIdPresenterImplementation!!.doCallAttachIdApi(
+                    fileMultipartBody,
+                    useridRequestBody,
+                    dobRequestBody,
+                    Utility.createHeaders(sharedPreferences)
+                )
             }
 
         }
@@ -116,7 +147,7 @@ class AttachIdActivity:BaseActivity(), AttachIdActivityPresenter.AttachIdMainVie
 
 
     override fun validateError(message: String) {
-        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
 
@@ -136,7 +167,7 @@ class AttachIdActivity:BaseActivity(), AttachIdActivityPresenter.AttachIdMainVie
     }
 
     override fun onAttachIdSuccess(responseData: AttachIdResponse?) {
-        val intent = Intent(this,StatusViewActivity::class.java)
+        val intent = Intent(this, StatusViewActivity::class.java)
         startActivity(intent)
         finishAffinity()
     }

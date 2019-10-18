@@ -1,7 +1,7 @@
 package com.tekzee.amiggos.ui.onlinefriends
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonObject
 import com.jakewharton.rxbinding2.widget.RxTextView
-import com.jakewharton.rxbinding2.widget.textChanges
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.OnlineFriendActivityBinding
+import com.tekzee.amiggos.ui.friendprofile.FriendProfile
 import com.tekzee.amiggos.ui.onlinefriends.adapter.OnlineFriendAdapter
 import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendData
 import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendResponse
@@ -21,14 +21,7 @@ import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
-import io.reactivex.ObservableSource
-import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Action
-import io.reactivex.functions.Consumer
-import io.reactivex.functions.Function
-import io.reactivex.functions.Predicate
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -143,8 +136,12 @@ class OnlineFriendActivity : BaseActivity(), OnlineFriendPresenter.OnlineFriendM
         callOnlineFriendApi(true, "")
     }
 
-    override fun itemClickCallback(position: Int) {
-
+    override fun itemClickCallback(
+        adapterPosition: Int
+    ) {
+        val intent = Intent(applicationContext,FriendProfile::class.java)
+        intent.putExtra(ConstantLib.FRIEND_ID,mydataList[adapterPosition].userid.toString())
+        startActivity(intent)
     }
 
     override fun validateError(message: String) {

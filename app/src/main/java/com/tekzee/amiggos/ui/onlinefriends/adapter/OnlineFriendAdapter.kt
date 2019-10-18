@@ -10,7 +10,6 @@ import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendData
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
-import kotlinx.android.synthetic.main.single_list_stories.view.*
 import kotlinx.android.synthetic.main.single_online_friend.view.*
 
 
@@ -64,7 +63,9 @@ class OnlineFriendAdapter(
     }
 
     interface HomeItemClick {
-        fun itemClickCallback(position: Int)
+        fun itemClickCallback(
+            position: Int
+        )
     }
 
     fun setLoadingStatus(status: Boolean) {

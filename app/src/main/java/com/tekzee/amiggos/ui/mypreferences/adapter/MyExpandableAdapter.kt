@@ -126,7 +126,6 @@ class MyExpandableAdapter(
             thumb2.setValue(childDataItem.filter_to.toInt())
 
 
-
             range_slider.setOnThumbValueChangeListener { multiSlider, thumb, thumbIndex, value ->
                 if (thumbIndex == 0) {
                     valueslider.text = "From " + value + " Till " + childDataItem.filter_to
@@ -175,9 +174,6 @@ class MyExpandableAdapter(
                     }
                 }
                 notifyItemChanged(flatPosition)
-
-
-
 
             }
 

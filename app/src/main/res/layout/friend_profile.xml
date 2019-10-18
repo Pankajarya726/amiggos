@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleTextColor="@android:color/black">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|left"
+                    android:textColor="@android:color/black"
+                    android:textSize="18dp"
+                    app:fontFamily="@font/eras"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/img_option"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:id="@+id/img_option"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="18dp"
+                    android:layout_marginRight="18dp"
+                    android:src="@drawable/menu"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <ScrollView
+            android:layout_below="@+id/toolbar"
+            android:layout_above="@+id/add_real_friend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="vertical">
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/profile_bg">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/fp_img_profile"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_centerInParent="true"
+                        android:contentDescription="@string/nav_header_desc"
+                        android:paddingTop="@dimen/nav_header_vertical_spacing"
+                        android:src="@drawable/attachid"
+                        app:civ_border_color="@color/colorPrimary"
+                        app:civ_border_width="2dp"
+                        app:srcCompat="@drawable/spread" />
+                </RelativeLayout>
+
+                <com.an.customfontview.CustomTextView
+                    android:id="@+id/fp_txt_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:fontFamily="@font/eras_bold"
+                    android:gravity="center"
+                    android:text="Brian"
+                    android:textColor="@android:color/black"
+                    android:textSize="15dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <com.an.customfontview.CustomTextView
+                            android:id="@+id/fp_txt_title_age"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:fontFamily="@font/eras_bold"
+                            android:text="Location :"
+                            android:textColor="@android:color/black"
+                            android:textSize="13dp" />
+
+                        <com.cbr.gradienttextview.GradientTextView
+                            android:id="@+id/fp_txt_description_age"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text=" Terms and Services"
+                            android:textSize="13dp"
+                            app:fontFamily="@font/eras_bold"
+                            app:gt_color_list="@array/rainbow"
+                            app:gt_gradient_angle="90"
+                            app:gt_gradient_direction="right" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <com.an.customfontview.CustomTextView
+                            android:id="@+id/fp_txt_title_location"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/eras_bold"
+                            android:text="Age :"
+                            android:textColor="@android:color/black"
+                            android:textSize="13dp" />
+
+                        <com.cbr.gradienttextview.GradientTextView
+                            android:id="@+id/fp_txt_description_location"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text=" Terms and Services"
+                            android:textSize="13dp"
+                            app:fontFamily="@font/eras_bold"
+                            app:gt_color_list="@array/rainbow"
+                            app:gt_gradient_angle="90"
+                            app:gt_gradient_direction="right" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <com.an.customfontview.CustomTextView
+                    android:id="@+id/fp_chat"
+                    android:fontFamily="@font/eras"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/btn_bg_less"
+                    android:drawableLeft="@drawable/chat_one"
+                    android:drawablePadding="10dp"
+                    android:gravity="center|left"
+                    android:padding="12dp"
+                    android:text="Chat"
+                    android:textColor="@android:color/black"
+                    android:textSize="15dp" />
+
+
+                <com.an.customfontview.CustomTextView
+                    android:id="@+id/fp_our_memories"
+                    android:fontFamily="@font/eras"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/btn_bg_less"
+                    android:drawableLeft="@drawable/our_memories_icon"
+                    android:drawablePadding="10dp"
+                    android:gravity="center|left"
+                    android:padding="12dp"
+                    android:text="Our Memories"
+                    android:textColor="@android:color/black"
+                    android:textSize="15dp" />
+            </LinearLayout>
+        </ScrollView>
+
+
+
+
+        <com.cbr.gradienttextview.GradientTextView
+
+            android:id="@+id/add_real_friend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_bg_less"
+            android:gravity="center"
+            android:padding="12dp"
+            android:text="Add Real Friend"
+            android:textAllCaps="true"
+            android:textSize="15dp"
+            app:fontFamily="@font/eras_bold"
+            app:gt_color_list="@array/rainbow"
+            app:gt_gradient_angle="90"
+            android:visibility="gone"
+            app:gt_gradient_direction="right" />
+
+        <LinearLayout
+            android:layout_margin="8dp"
+            android:id="@+id/layout_accept_reject"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:background="@drawable/btn_bg_less"
+            android:orientation="horizontal">
+
+            <com.cbr.gradienttextview.GradientTextView
+
+                android:id="@+id/fp_accept"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+
+                android:gravity="center"
+                android:padding="12dp"
+                android:text="Accepted"
+                android:textAllCaps="true"
+                android:textSize="15dp"
+                app:fontFamily="@font/eras_bold"
+                app:gt_color_list="@array/rainbow"
+                app:gt_gradient_angle="90"
+                android:visibility="visible"
+                app:gt_gradient_direction="right" />
+
+            <com.cbr.gradienttextview.GradientTextView
+
+                android:id="@+id/fp_reject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+
+               android:gravity="center"
+                android:padding="12dp"
+                android:text="Rejected"
+                android:textAllCaps="true"
+                android:textSize="15dp"
+                android:layout_alignParentBottom="true"
+                app:fontFamily="@font/eras_bold"
+                app:gt_color_list="@array/rainbow"
+                app:gt_gradient_angle="90"
+                android:visibility="visible"
+                app:gt_gradient_direction="right" />
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</layout>

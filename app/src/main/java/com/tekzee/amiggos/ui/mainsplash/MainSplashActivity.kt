@@ -2,6 +2,7 @@ package com.tekzee.amiggos.ui.mainsplash
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.JsonObject
@@ -52,7 +53,7 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
 
 
     override fun validateError(message: String) {
-
+        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
     }
 
     private fun callValidateAppVersionApi() {
@@ -147,6 +148,7 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
     private fun showSplashScreen() {
         sharedPreferences!!.save(ConstantLib.ISAGREE, false)
         val intent = Intent(applicationContext, SplashActivity::class.java)
+        intent.putExtra(ConstantLib.FROM,"")
         startActivity(intent)
         finish()
     }

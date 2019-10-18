@@ -41,6 +41,7 @@ class ReferalCodeActivity:BaseActivity(), ReferalCodePresenter.ReferalCodeMainVi
     private fun setupClickListerner() {
         binding.txtDontHaveReferalCode.setOnClickListener{
             val intent = Intent(this,AttachIdActivity::class.java)
+            intent.putExtra(ConstantLib.FROM,"")
             startActivity(intent)
         }
 
@@ -85,6 +86,7 @@ class ReferalCodeActivity:BaseActivity(), ReferalCodePresenter.ReferalCodeMainVi
 
     override fun onCallReferalApiSuccess(responseData: ReferalCodeResponse?) {
         val intent = Intent(this,AttachIdActivity::class.java)
+        intent.putExtra(ConstantLib.FROM,"")
         startActivity(intent)
     }
 

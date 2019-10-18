@@ -32,7 +32,7 @@ class AgeGroupActivityPresenterImplementation(private var mainView: AgeGroupActi
                             if (responseData!!.status) {
                                 mainView.onAgeGroupApiSuccess(responseData)
                             } else {
-                                mainView.validateError(responseData.message.toString())
+                                mainView.validateError(responseData.message)
                             }
                         }
                     }

@@ -3,7 +3,6 @@ package com.tekzee.amiggos.ui.home
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
@@ -16,8 +15,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -26,20 +23,27 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bumptech.glide.Glide
-import com.google.android.gms.maps.*
+import com.github.florent37.runtimepermission.PermissionResult
+import com.github.florent37.runtimepermission.kotlin.askPermission
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.JsonObject
 import com.google.maps.android.ui.IconGenerator
-import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.HomeActivityBinding
+import com.tekzee.amiggos.ui.friendprofile.FriendProfile
 import com.tekzee.amiggos.ui.helpcenter.HelpCenterActivity
 import com.tekzee.amiggos.ui.home.adapter.HomeMyStoriesAdapter
 import com.tekzee.amiggos.ui.home.adapter.HomeVenueAdapter
+import com.tekzee.amiggos.ui.home.adapter.PaginationScrollListener
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
 import com.tekzee.amiggos.ui.home.model.NearestClub
@@ -48,8 +52,10 @@ import com.tekzee.amiggos.ui.invitefriend.InitGeoLocationUpdate
 import com.tekzee.amiggos.ui.invitefriend.InviteFriendActivity
 import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
 import com.tekzee.amiggos.ui.mypreferences.MyPreferences
+import com.tekzee.amiggos.ui.notification.NotificationActivity
 import com.tekzee.amiggos.ui.onlinefriends.OnlineFriendActivity
 import com.tekzee.amiggos.ui.partydetails.PartyDetailsActivity
+import com.tekzee.amiggos.ui.realfriends.RealFriendsActivity
 import com.tekzee.amiggos.ui.settings.SettingsActivity
 import com.tekzee.amiggos.ui.turningup.TurningUpActivity
 import com.tekzee.mallortaxi.base.BaseActivity
@@ -61,32 +67,53 @@ import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 
 class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener,
     HomeActivityPresenter.HomeActivityMainView,
-    InfiniteScrollRecyclerView.RecyclerViewAdapterCallback, HomeMyStoriesAdapter.HomeItemClick,
-    OnMapReadyCallback, HomeVenueAdapter.HomeVenueItemClick {
 
+    OnMapReadyCallback, HomeVenueAdapter.HomeVenueItemClick,
+    InfiniteScrollRecyclerView.RecyclerViewAdapterCallback {
 
-    private var myStoriesAdapter: HomeMyStoriesAdapter? = null
-    private var venueAdapter: HomeVenueAdapter? = null
     lateinit var binding: HomeActivityBinding
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
     private var homeActivityPresenterImplementation: HomeActivityPresenterImplementation? = null
-    private var myStoriesPageNo = 0
-    private var venuePageNo = 0
+
+    //adapters
+    private var myStoriesAdapter: HomeMyStoriesAdapter? = null
+    private var venueAdapter: HomeVenueAdapter? = null
+
+    //data lists
     private var myStoriesListData = ArrayList<StoriesData>()
     private var venueListData = ArrayList<NearestClub>()
-    private val mLoadingData = StoriesData(loadingStatus = true)
+
     private lateinit var mMap: GoogleMap
     private var lastLocation: LatLng? = null
 
+
+
+    //loadmore item for mystories
+//    private var myStoriesPageNo = 0
+    private var venuePageNo = 0
+
+    private var isLoading = false;
+    private var isLastPage = false;
+
+    private var currentPage = 0;
+
+
+
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
+        private const val TOTAL_PAGES = 3;
     }
 
+    override fun onStart() {
+        super.onStart()
+        setUpMap()
+    }
 
     override fun onResume() {
         super.onResume()
-        startLocationUpdate()
+
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,10 +123,16 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         homeActivityPresenterImplementation = HomeActivityPresenterImplementation(this, this)
         setupView()
-        setUpMap()
         setupClickListener()
+
+        setupRecyclerMyStoriesView()
         callGetMyStories(false)
+
     }
+
+
+
+
 
     private fun setupClickListener() {
 
@@ -122,6 +155,13 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
         }
 
+        binding.imgFavorite.setOnClickListener {
+            if (!checkFriedRequestSent()) {
+                val intent = Intent(this,RealFriendsActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
 
     }
 
@@ -137,64 +177,58 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
 
-    private fun setUpMap() {
 
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
-
-
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                )
-            ) {
-                showExplanationDialog()
-            } else {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    LOCATION_PERMISSION_REQUEST_CODE
-                )
-            }
-            return
-        } else {
-            callDashboardApi()
+    private fun checkForLocationPermissionFirst() {
+        askPermission(Manifest.permission.ACCESS_FINE_LOCATION) {
+            startLocationUpdate()
+        }.onDeclined {
+                e -> showExplanationDialog(e)
         }
 
     }
 
-    private fun showExplanationDialog() {
+
+    private fun setUpMap() {
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+        checkForLocationPermissionFirst()
+    }
+
+    private fun showExplanationDialog(e: PermissionResult) {
         val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
         pDialog.titleText = getString(R.string.allow_location_permission)
         pDialog.setCancelable(false)
         pDialog.setCancelButton(languageData!!.klCancel) {
             pDialog.dismiss()
+            if(e.hasForeverDenied()) {
+                e.goToSettings()
+            }else{
+                checkForLocationPermissionFirst()
+            }
         }
         pDialog.setConfirmButton(languageData!!.klOk) {
             pDialog.dismiss()
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
+            if(e.hasForeverDenied()) {
+                e.goToSettings()
+            }else{
+                checkForLocationPermissionFirst()
+            }
         }
         pDialog.show()
     }
 
     private fun startLocationUpdate() {
-
         InitGeoLocationUpdate.locationInit(this, object : SimpleCallback<LatLng> {
             override fun callback(mCurrentLatLng: LatLng) {
                 lastLocation = mCurrentLatLng
-                venuePageNo = 0
-                callVenueApi(false)
-                callDashboardApi()
+                if(lastLocation!= null){
+                    venuePageNo = 0
+                    callVenueApi(false)
+                    callDashboardApi()
+                }else{
+                    startLocationUpdate()
+                }
             }
         })
     }
@@ -202,23 +236,24 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onMapReady(googleMap: GoogleMap?) {
         mMap = googleMap!!
+
+        mMap.setOnMarkerClickListener {
+            marker -> callFriendProfileIntent(marker)
+        }
     }
 
-
-    private fun updateCamera(latitude: Double, longitude: Double) {
-        val cu: CameraUpdate = CameraUpdateFactory.newLatLngZoom(LatLng(latitude, longitude), 15.0f)
-        mMap.animateCamera(cu)
-    }
-
-    private fun initMap() {
-
+    private fun callFriendProfileIntent(marker: Marker): Boolean {
+        val intent = Intent(applicationContext, FriendProfile::class.java)
+        intent.putExtra(ConstantLib.FRIEND_ID,marker.tag.toString())
+        startActivity(intent)
+        return true
     }
 
     private fun callGetMyStories(requestDatFromServer: Boolean) {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("is_dashboard", "1")
-        input.addProperty("page_no", myStoriesPageNo)
+        input.addProperty("page_no", currentPage)
         homeActivityPresenterImplementation!!.doGetMyStories(
             input,
             Utility.createHeaders(sharedPreference),
@@ -234,7 +269,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             input.addProperty("longitude", lastLocation!!.longitude)
             input.addProperty("age_group", sharedPreference!!.getValueString(ConstantLib.AGE_GROUP_SELECTED))
             input.addProperty("music", sharedPreference!!.getValueString(ConstantLib.MUSIC_SELETED))
-            input.addProperty("location", myStoriesPageNo)
+            input.addProperty("location", "")
             input.addProperty("map_type", "1")
             input.addProperty("club_type", "1")
             input.addProperty("distance_filter_from", sharedPreference!!.getValueString(ConstantLib.DISTANCE_FILTER_FROM_SELECTED))
@@ -281,7 +316,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
         )
         toggle.isDrawerIndicatorEnabled = false
-        toggle.setHomeAsUpIndicator(R.drawable.menu)
+        toggle.setHomeAsUpIndicator(R.drawable.menu_handburger)
         drawer.addDrawerListener(toggle)
         toggle.setToolbarNavigationClickListener {
             if (!checkFriedRequestSent()) {
@@ -292,26 +327,43 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         toggle.syncState()
         navigationView.setNavigationItemSelectedListener(this)
         setupviewData(navigationView,drawer)
-        setupRecyclerMyStoriesView()
-        setupRecyclerVenueView()
+//        setupRecyclerMyStoriesView()
+        //setupRecyclerVenueView()
 
     }
 
 
     private fun setupRecyclerMyStoriesView() {
-        val myStoriesRecyclerView: RecyclerView = findViewById(R.id.mystories_recyclerview)
-        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        myStoriesRecyclerView.layoutManager = layoutManager
-        myStoriesAdapter = HomeMyStoriesAdapter(
-            mContext = this,
-            mRecyclerView = myStoriesRecyclerView,
-            mLayoutManager = layoutManager,
-            mRecyclerViewAdapterCallback = this,
-            mDataList = myStoriesListData,
-            mItemClickCallback = this
-        )
-        myStoriesRecyclerView.adapter = myStoriesAdapter
-        myStoriesAdapter?.setLoadingStatus(true)
+        binding.mystoriesRecyclerview.setHasFixedSize(true)
+        val linearLayoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false)
+        binding.mystoriesRecyclerview.layoutManager = linearLayoutManager
+        myStoriesAdapter = HomeMyStoriesAdapter(myStoriesListData)
+        binding.mystoriesRecyclerview.adapter = myStoriesAdapter
+
+
+        binding.mystoriesRecyclerview.addOnScrollListener(object: PaginationScrollListener(linearLayoutManager){
+            override fun loadMoreItems() {
+                isLoading = true
+                currentPage += 1
+                callGetMyStories(true)
+            }
+
+            override fun getTotalPageCount(): Int {
+                return TOTAL_PAGES
+            }
+
+            override fun isLastPage(): Boolean {
+                return isLastPage
+            }
+
+            override fun isLoading(): Boolean {
+                return isLoading
+            }
+
+        })
+
+
+
     }
 
     private fun setupRecyclerVenueView() {
@@ -342,6 +394,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val viewProfile = view.findViewById(R.id.txt_view_profile) as TextView
         viewProfile.text = languageData!!.klViewProfilebtn
         binding.title.text = getString(R.string.app_name)
+
         val userImage = view.findViewById(R.id.user_image) as ImageView
         Glide.with(this).load(sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE))
             .placeholder(R.drawable.user)
@@ -355,8 +408,8 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val txt_settings = view.findViewById(R.id.txt_settings) as TextView
         val txt_helpcenter = view.findViewById(R.id.txt_helpcenter) as TextView
         val txt_logout = view.findViewById(R.id.txt_logout) as TextView
-//        val txt_venue = view.findViewById(R.id.txt_venue) as GradientTextView
-//        val txt_map = view.findViewById(R.id.txt_map) as GradientTextView
+        val txt_venue = findViewById<TextView>(R.id.txt_venue)
+        val txt_map = findViewById<TextView>(R.id.txt_map)
 
 
         txt_home.text = languageData!!.klHome
@@ -367,10 +420,32 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         txt_settings.text = languageData!!.klSetting
         txt_helpcenter.text = languageData!!.klHelpCenter
         txt_logout.text = languageData!!.klLogout
-//        txt_map.text = languageData!!.klMaptitle
-//        txt_venue.text = languageData!!.klVenues
+        txt_map.text = languageData!!.klMaptitle
+        txt_venue.text = languageData!!.klVenues
 
 
+
+        binding.imgNotification.setOnClickListener{
+            drawer.closeDrawer(GravityCompat.START)
+            val intent = Intent(this,NotificationActivity::class.java)
+            startActivity(intent)
+
+        }
+
+
+        txt_venue.setOnClickListener{
+            drawer.closeDrawer(GravityCompat.START)
+            val intent = Intent(this,MyPreferences::class.java)
+            startActivity(intent)
+
+        }
+
+        txt_realfriends.setOnClickListener{
+            drawer.closeDrawer(GravityCompat.START)
+            val intent = Intent(this,RealFriendsActivity::class.java)
+            startActivity(intent)
+
+        }
         txt_mypreference.setOnClickListener{
             drawer.closeDrawer(GravityCompat.START)
             val intent = Intent(this,MyPreferences::class.java)
@@ -435,18 +510,11 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
 
-    override fun onMyStoriesSuccess(responseData: GetMyStoriesResponse) {
-        myStoriesPageNo++
-        myStoriesListData = responseData.data
-        setupRecyclerMyStoriesView()
-    }
+
 
 
     override fun onLoadMoreData() {
 
-        myStoriesListData.add(mLoadingData)
-        myStoriesAdapter?.notifyDataSetChanged()
-        callGetMyStories(true)
     }
 
 
@@ -455,21 +523,45 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun onMyStoriesFailure(message: String) {
-        myStoriesAdapter!!.setLoadingStatus(true)
-        //  Utility.showLogoutPopup(this,languageData!!,message)
+          Utility.showLogoutPopup(this,languageData!!,message)
+    }
+
+    override fun onMyStoriesSuccess(responseData: GetMyStoriesResponse) {
+        myStoriesListData.clear()
+        myStoriesAdapter!!.notifyDataSetChanged()
+        myStoriesListData.addAll(responseData.data)
+        if (currentPage <= TOTAL_PAGES){
+            myStoriesAdapter!!.addLoadingFooter()
+        }else{
+            isLastPage = true
+        }
+        myStoriesAdapter!!.notifyDataSetChanged()
     }
 
     override fun onMyStoriesInfiniteSuccess(responseData: GetMyStoriesResponse) {
-        myStoriesPageNo++
-        myStoriesAdapter?.setLoadingStatus(true)
-        myStoriesListData.removeAt(myStoriesListData.size - 1)
+        myStoriesAdapter!!.removeLoadingFooter()
+        isLoading = false
         myStoriesListData.addAll(responseData.data)
-        myStoriesAdapter?.notifyDataSetChanged()
+        myStoriesAdapter!!.notifyDataSetChanged()
+
+        if (currentPage != TOTAL_PAGES){
+            if(responseData.data.size == 0){
+                isLastPage = true
+            }else{
+                myStoriesAdapter!!.addLoadingFooter()
+            }
+        }else{
+            isLastPage = true
+        }
+
+
+
     }
 
     override fun onDashboardMapResponse(responseData: DashboardReponse?) {
         setupMarkersOnMap(responseData)
         InitGeoLocationUpdate.stopLocationUpdate(this)
+        binding.badge.setText(responseData!!.data.notification_count.toString())
     }
 
     private fun setupMarkersOnMap(responseData: DashboardReponse?) {
@@ -477,7 +569,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         iconGen.setBackground(resources.getDrawable(R.drawable.map_profile))
         for (itemData in responseData!!.data.users) {
             val markerOptions: MarkerOptions = MarkerOptions().icon(
-                BitmapDescriptorFactory.fromBitmap(createCustomMarker(this, itemData.profile))
+                BitmapDescriptorFactory.fromBitmap(createCustomMarker(this, itemData.profile,itemData.userid.toString()))
             ).position(LatLng(itemData.latitude.toDouble(), itemData.longitude.toDouble()))
             mMap.addMarker(markerOptions)
         }
@@ -492,7 +584,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         )
     }
 
-    fun createCustomMarker(context: Context, profile: String): Bitmap? {
+    fun createCustomMarker(context: Context, profile: String,friendId: String): Bitmap? {
 
         val layoutInflater: LayoutInflater = LayoutInflater.from(context)
         val marker: View = layoutInflater.inflate(R.layout.custom_marker, null);
@@ -507,13 +599,14 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         marker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
         marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
         marker.buildDrawingCache();
-        var bitmap = Bitmap.createBitmap(
+        val bitmap = Bitmap.createBitmap(
             marker.measuredWidth,
             marker.measuredHeight,
             Bitmap.Config.ARGB_8888
-        );
-        var canvas = Canvas(bitmap)
+        )
+        val canvas = Canvas(bitmap)
         marker.draw(canvas)
+        marker.setTag(friendId)
         return bitmap
     }
 
@@ -536,8 +629,8 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
 
     override fun onVenueFailure(message: String) {
-        venueAdapter!!.setLoadingStatus(true)
-        Utility.showLogoutPopup(this, languageData!!, message)
+//        venueAdapter!!.setLoadingStatus(true)
+        //Utility.showLogoutPopup(this, languageData!!, message)
 
     }
 
@@ -555,11 +648,6 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
 
-    override fun itemClickCallback(position: Int) {
-        if (!checkFriedRequestSent()) {
-
-        }
-    }
 
 
 }

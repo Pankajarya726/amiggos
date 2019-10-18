@@ -63,6 +63,10 @@ class MyPreferences :BaseActivity(), MyPreferencesPresenter.MyPreferencesMainVie
             getSelectedMusic()
             callSaveSettings()
         }
+
+        binding.txtCancel.setOnClickListener{
+            finish()
+        }
     }
 
     private fun callSaveSettings() {
@@ -137,6 +141,8 @@ class MyPreferences :BaseActivity(), MyPreferencesPresenter.MyPreferencesMainVie
                     for(languageData in listItem.items){
                         if(languageData.isSet == "1"){
                             languageSelected = languageData.id.toString()
+                        }else{
+                            languageSelected = "0"
                         }
                     }
                     Logger.d("languageSelected--->"+languageSelected)
@@ -154,7 +160,7 @@ class MyPreferences :BaseActivity(), MyPreferencesPresenter.MyPreferencesMainVie
         supportActionBar?.setDisplayShowTitleEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        binding.title.text = languageData!!.klSetting
+        binding.title.text = languageData!!.klMyPrefrence
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

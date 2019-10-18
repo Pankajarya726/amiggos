@@ -175,6 +175,7 @@
                 android:gravity="left"
                 android:lines="1"
                 android:maxLines="1"
+                android:fontFamily="@font/eras"
                 android:text="Tekzee technologies"
                 android:textColor="@android:color/white"
                 android:textSize="12dp" />
@@ -188,12 +189,13 @@
                 android:lines="1"
                 android:maxLines="1"
                 android:textSize="10dp"
+                android:fontFamily="@font/eras"
                 android:text="Tekzee technologies"
                 android:textColor="@android:color/white" />
 
         </LinearLayout>
 
-        <TextView
+        <com.an.customfontview.CustomTextView
             android:id="@+id/address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -203,6 +205,7 @@
             android:maxLines="2"
             android:text="Tekzee technologies"
             android:textColor="@android:color/white"
+            android:fontFamily="@font/eras"
             android:textSize="10dp" />
 
 

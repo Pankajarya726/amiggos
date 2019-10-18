@@ -9,6 +9,11 @@ import androidx.databinding.DataBindingUtil
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.databinding.WebviewActivityBinding
 import com.tekzee.mallortaxiclient.constant.ConstantLib
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import com.orhanobut.logger.Logger
+import java.net.URL
 
 
 class WebViewActivity: AppCompatActivity(){
@@ -26,9 +31,8 @@ class WebViewActivity: AppCompatActivity(){
     @SuppressLint("SetJavaScriptEnabled")
     private fun setupWebView() {
         binding.webview.settings.javaScriptEnabled = true
-        binding.webview.loadUrl(ConstantLib.PAGEURL)
-
-
+        Logger.d(ConstantLib.PAGEURL);
+        binding.webview.loadUrl(intent.getStringExtra(ConstantLib.PAGEURL))
     }
 
     private fun setupToolBar() {

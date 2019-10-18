@@ -131,13 +131,12 @@ dependencies {
     implementation 'com.library.tangxiaolv:effectiveshapeview:1.0.1'
     implementation 'de.hdodenhof:circleimageview:3.0.1'
 
-    //circular image view
-    implementation 'com.applandeo:material-calendar-view:1.6.0'
+
 
     //infinite scrolling
     implementation 'com.github.tuonbondol:Android-RecyclerView-Infinitescroll:2.0.0'
 
-    implementation 'com.google.maps.android:android-maps-utils:0.5'
+    implementation 'com.google.maps.android:android-maps-utils:0.6.1'
 
     //multiple contact picker
     implementation 'com.github.broakenmedia:MultiContactPicker:1.8.5'
@@ -151,6 +150,18 @@ dependencies {
 
     //range slider
     implementation 'io.apptik.widget:multislider:1.3'
+
+    //calendar picker
+    implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
+
+    //ios bottom dialog
+    implementation 'com.github.fccaikai:BottomMenuTutorial:1.1.0'
+
+    //badges android
+    implementation 'com.nex3z:notification-badge:1.0.2'
+
+
+
 
 
 }

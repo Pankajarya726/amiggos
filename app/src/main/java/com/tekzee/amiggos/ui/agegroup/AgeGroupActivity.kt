@@ -31,30 +31,36 @@ class AgeGroupActivity:BaseActivity(), AgeGroupActivityPresenter.AgeGroupMainVie
     }
 
     private fun setupDataView() {
+
+
         if(sharedPreference!!.getValueString(ConstantLib.USER_AGE)!!.toInt() < 18 ){
-            binding.checkBoxEighteen.isChecked = false
-            binding.checkboxTwentyone.isChecked = false
+            binding.imgEighteen.setBackgroundResource(R.drawable.plus_unchecked_18)
+            binding.imgTwentyOne.setBackgroundResource(R.drawable.plus_unchecked_21)
+            binding.imgEighteen.isEnabled = false
+            binding.imgTwentyOne.isEnabled = false
         }else if(sharedPreference!!.getValueString(ConstantLib.USER_AGE)!!.toInt() in 19..20){
-            binding.checkBoxEighteen.isChecked = true
-            binding.checkboxTwentyone.isChecked = false
-            binding.checkboxTwentyone.isEnabled = false
+            binding.imgEighteen.setBackgroundResource(R.drawable.plus_18_disabled)
+            binding.imgTwentyOne.setBackgroundResource(R.drawable.plus_unchecked_21)
+            binding.imgEighteen.isEnabled = true
             binding.imgTwentyOne.isEnabled = false
+
         }else if(sharedPreference!!.getValueString(ConstantLib.USER_AGE)!!.toInt()>21){
-            binding.checkBoxEighteen.isChecked = false
-            binding.checkboxTwentyone.isChecked = false
-            binding.checkboxTwentyone.isEnabled = true
-            binding.imgTwentyOne.isEnabled = false
+
+            binding.imgEighteen.setBackgroundResource(R.drawable.plus_18_disabled)
+            binding.imgTwentyOne.setBackgroundResource(R.drawable.plus_21_disabled)
+            binding.imgEighteen.isEnabled = true
+            binding.imgTwentyOne.isEnabled = true
         }
     }
 
     private fun setupClickListener() {
         binding.imgEighteen.setOnClickListener{
-            binding.checkBoxEighteen.isChecked = true
+            binding.imgEighteen.setBackgroundResource(R.drawable.plus_18)
             doCallAgeGroupApi("1")
         }
 
         binding.imgTwentyOne.setOnClickListener{
-            binding.checkboxTwentyone.isChecked = true
+            binding.imgEighteen.setBackgroundResource(R.drawable.plus_21)
             doCallAgeGroupApi("2")
         }
     }

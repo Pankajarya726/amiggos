@@ -30,11 +30,11 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+<!--        <androidx.core.widget.NestedScrollView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent">-->
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -44,39 +44,33 @@
                     android:id="@+id/img_user"
                     android:layout_width="96dp"
                     android:layout_height="96dp"
+                    android:layout_gravity="center"
                     android:layout_marginTop="30dp"
                     android:src="@drawable/attachid"
-                    app:shape="circle"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:shape="circle" />
 
                 <com.an.customfontview.CustomTextView
-                    android:gravity="center"
                     android:id="@+id/txt_heading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginTop="12dp"
+                    android:fontFamily="@font/eras_bold"
+                    android:gravity="center"
                     android:text="Take a picture of your id"
                     android:textColor="@android:color/black"
-                    android:textSize="18dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/img_user"
-                    app:textFontPath="font/eras_bold.ttf" />
+                    android:textSize="18dp" />
 
                 <com.an.customfontview.CustomTextView
                     android:id="@+id/txt_subtitle"
-                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginTop="8dp"
+                    android:gravity="center"
                     android:text="Sorry no millitary id accepted"
                     android:textColor="@android:color/black"
                     android:textSize="15dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txt_heading"
                     app:textFontPath="font/eras.ttf" />
 
                 <CalendarView
@@ -84,14 +78,35 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txt_subtitle" />
+
+
+                <com.an.customfontview.CustomTextView
+                    android:id="@+id/txt_select_date"
+                    android:layout_width="match_parent"
+                    android:padding="10dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/btn_bg"
+                    android:text="Select you date of birth"
+                    android:textSize="15dp"
+                    android:layout_marginTop="20dp"
+                    android:drawableRight="@drawable/cal"
+                    android:drawablePadding="15dp"
+
+                    app:textFontPath="font/eras.ttf" />
+
 
                 <com.cbr.gradienttextview.GradientTextView
                     android:id="@+id/btn_save"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_margin="25dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginLeft="25dp"
@@ -107,27 +122,12 @@
                     app:fontFamily="@font/eras_bold"
                     app:gt_color_list="@array/rainbow"
                     app:gt_gradient_angle="90"
-                    app:gt_gradient_direction="right"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txt_select_date" />
-
-                <com.an.customfontview.CustomTextView
-                    android:id="@+id/txt_select_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Select you date of birth"
-                    android:textSize="15dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/calendarView"
-                    app:textFontPath="font/eras.ttf" />
+                    app:gt_gradient_direction="right" />
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </ScrollView>
+
+            </LinearLayout>
+<!--        </androidx.core.widget.NestedScrollView>-->
     </LinearLayout>
 
 

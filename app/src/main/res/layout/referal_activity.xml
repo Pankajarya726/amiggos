@@ -94,7 +94,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:textFontPath="font/eras_bold.ttf" />
+            android:fontFamily="@font/eras_bold" />
 
         <CheckBox
             android:id="@+id/check_box_venue"

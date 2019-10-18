@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.telephony.SmsManager
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -189,7 +190,10 @@ class InviteFriendActivity : BaseActivity(), InviteFriendActivityPresenter.Invit
                         }
 
                         override fun onNext(t: ContactResult) {
-                            sendMessageToNumber(t.phoneNumbers[0].number)
+                            if(t.phoneNumbers[0]!=null){
+                                sendMessageToNumber(t.phoneNumbers[0].number)
+                            }
+
                         }
 
                         override fun onError(e: Throwable) {
@@ -208,25 +212,27 @@ class InviteFriendActivity : BaseActivity(), InviteFriendActivityPresenter.Invit
     }
 
     private fun sendMessageToNumber(phoneNumbers: String) {
+        if(phoneNumbers.isNotEmpty()){
+            try {
+                val sms: SmsManager = SmsManager.getDefault()
+                sms.sendTextMessage(
+                    phoneNumbers,
+                    null,
+                    "Hi Himanshu This is testing message from amiggos",
+                    null,
+                    null
+                ); // adding
+            } catch (e: Exception) {
+                e.printStackTrace();
+            }
+            }
 
-        try {
-            val sms: SmsManager = SmsManager.getDefault()
-            sms.sendTextMessage(
-                phoneNumbers,
-                null,
-                "Hi Himanshu This is testing message from amiggos",
-                null,
-                null
-            ); // adding
-        } catch (e: Exception) {
-            e.printStackTrace();
-        }
 
     }
 
 
     override fun validateError(message: String) {
-
+        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
     }
 
     override fun onUpdateFriendCountSuccess(responseData: UpdateFriendCountResponse?) {

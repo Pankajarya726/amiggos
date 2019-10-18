@@ -2,6 +2,7 @@ package com.tekzee.amiggos.ui.guestlist
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -89,14 +90,14 @@ class GuestListActivity: BaseActivity(), GuestListPresenter.GuestListMainView {
 
 
     override fun validateError(message: String) {
-
+        Toast.makeText(applicationContext,message,Toast.LENGTH_SHORT).show()
     }
 
     override fun onGuestListSuccess(responseData: GuestListResponse?) {
         items.clear()
-        adapter!!.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
         items.addAll(responseData!!.data)
-        adapter!!.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
     }
 
 
