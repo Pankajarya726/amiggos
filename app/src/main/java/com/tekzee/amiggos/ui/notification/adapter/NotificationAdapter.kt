@@ -58,6 +58,13 @@ class NotificationAdapter(
                     mItemClickCallback.itemClickCallback(adapterPosition)
                 }
             }
+
+            itemView.setOnLongClickListener(object: View.OnLongClickListener{
+                override fun onLongClick(p0: View?): Boolean {
+                    mItemClickCallback!!.onItemLongClickListener(adapterPosition)
+                    return true
+                }
+            })
         }
     }
 
@@ -65,6 +72,7 @@ class NotificationAdapter(
         fun itemClickCallback(
             position: Int
         )
+        fun onItemLongClickListener(position: Int)
     }
 
     fun setLoadingStatus(status: Boolean) {
@@ -75,5 +83,11 @@ class NotificationAdapter(
         mDataList.removeAt(position)
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, mDataList.size);
+    }
+
+
+    fun removeAt(position: Int) {
+        mDataList.removeAt(position)
+        notifyItemRemoved(position)
     }
 }

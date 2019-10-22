@@ -29,6 +29,8 @@ object ConstantLib {
     const val REJECTION_MESSAGE = "rejection_message"
     const val INVITE_FRIEND_COUNT = "invite_friend_count"
     const val INVITE_FRIEND = "invite_friend"
+    const val IS_INVITE_FRIEND = "is_invite_friend"
+    const val INVITE_MESSAGE = "invite_message"
 
     const val LANGUAGE_CODE= "language_code"
     const val LANGUAGE_NAME= "language_name"

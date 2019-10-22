@@ -398,6 +398,8 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
         sharedPreferences!!.save(ConstantLib.PROFILE_IMAGE, responseData.data[0].profile)
         sharedPreferences!!.save(ConstantLib.ISAGREE, false)
         sharedPreferences!!.save(ConstantLib.INVITE_FRIEND,responseData.data[0].invite_friend_count.toInt())
+        sharedPreferences!!.save(ConstantLib.IS_INVITE_FRIEND,responseData.data[0].is_freind_invities)
+        sharedPreferences!!.save(ConstantLib.INVITE_MESSAGE,responseData.data[0].invite_message)
 
         if (responseData.data[0].is_profile == 1) {
             showHomeController()

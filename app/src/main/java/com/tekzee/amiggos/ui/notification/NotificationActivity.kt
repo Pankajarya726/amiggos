@@ -1,15 +1,12 @@
 package com.tekzee.amiggos.ui.notification
 
 import android.content.Intent
-import android.graphics.*
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.ItemTouchHelper.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.pedant.SweetAlert.SweetAlertDialog
@@ -32,10 +29,11 @@ import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 
-class NotificationActivity: BaseActivity(), NotificationPresenter.NotificationMainView,
+
+class NotificationActivity : BaseActivity(), NotificationPresenter.NotificationMainView,
     InfiniteScrollRecyclerView.RecyclerViewAdapterCallback, NotificationAdapter.HomeItemClick {
 
-
+    private var position: Int? = null
     private lateinit var binding: NotificationActivityBinding
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
@@ -45,13 +43,13 @@ class NotificationActivity: BaseActivity(), NotificationPresenter.NotificationMa
     private var pageNo = 0
     private val mLoadingData = NotificationData(loadingStatus = true)
     var notificationRecyclerView: RecyclerView? = null
-    var p:Paint  = Paint()
+    var p: Paint = Paint()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.notification_activity)
         sharedPreference = SharedPreference(this)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        notificationPresenterImplementation = NotificationPresenterImplementation(this,this)
+        notificationPresenterImplementation = NotificationPresenterImplementation(this, this)
         callGetNotificationApi(false)
         setupToolBar()
         setupRecyclerView()
@@ -59,15 +57,15 @@ class NotificationActivity: BaseActivity(), NotificationPresenter.NotificationMa
     }
 
     private fun setupClickListener() {
-        binding.clearall.setOnClickListener{
-           clearAllNotificationConfirmation()
+        binding.clearall.setOnClickListener {
+            clearAllNotificationConfirmation()
         }
     }
 
-    private fun callClearAllNotificationApi() {
+    private fun callClearAllNotificationApi(toString: String) {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
-        input.addProperty("notification_id  ", "")
+        input.addProperty("notification_id", toString)
         notificationPresenterImplementation!!.doCallClearNotification(
             input,
             Utility.createHeaders(sharedPreference)
@@ -106,7 +104,7 @@ class NotificationActivity: BaseActivity(), NotificationPresenter.NotificationMa
 
 
     private fun setupRecyclerView() {
-        notificationRecyclerView= findViewById(R.id.notification_recyclerview)
+        notificationRecyclerView = findViewById(R.id.notification_recyclerview)
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         notificationRecyclerView!!.layoutManager = layoutManager
         adapter = NotificationAdapter(
@@ -120,62 +118,8 @@ class NotificationActivity: BaseActivity(), NotificationPresenter.NotificationMa
         notificationRecyclerView!!.adapter = adapter
         adapter?.setLoadingStatus(true)
 
-        enableSwipe()
     }
 
-    private fun enableSwipe() {
-
-        var simpleCallback: SimpleCallback = object : SimpleCallback(0, ItemTouchHelper.LEFT){
-
-
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-               var position = viewHolder.adapterPosition
-                if(direction == ItemTouchHelper.LEFT){
-                    var deleteData = mydataList.get(position)
-                    var deletePosition = position
-                    adapter!!.removeItem(position)
-                }
-            }
-
-            override fun onChildDraw(
-                c: Canvas,
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                dX: Float,
-                dY: Float,
-                actionState: Int,
-                isCurrentlyActive: Boolean
-            ) {
-                val icon: Bitmap
-                if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
-                    val itemView : View = viewHolder.itemView
-                    val height =itemView.getBottom().toFloat() - itemView.getTop().toFloat()
-                    val width = height/3
-                    if(dX >0){
-                        p.setColor(Color.parseColor("#388E3C"));
-                        val background:RectF  = RectF(itemView.getLeft().toFloat(), itemView.getTop().toFloat(), dX,itemView.getBottom().toFloat());
-                        c.drawRect(background,p);
-                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.plus_21);
-                        val icon_dest:RectF = RectF(itemView.getLeft().toFloat() + width ,itemView.getTop().toFloat() + width,itemView.getLeft().toFloat()+ 2*width,itemView.getBottom().toFloat() - width)
-                        c.drawBitmap(icon,null,icon_dest,p);
-                    }
-                }
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-            }
-
-        }
-
-        var itemTouchHelper = ItemTouchHelper(simpleCallback)
-        itemTouchHelper.attachToRecyclerView(notificationRecyclerView)
-    }
 
     override fun onGetNotificationSuccess(responseData: NotificationResponse?) {
         pageNo++
@@ -185,7 +129,7 @@ class NotificationActivity: BaseActivity(), NotificationPresenter.NotificationMa
 
 
     override fun validateError(message: String) {
-        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
     override fun onNotificationInfiniteSuccess(responseData: NotificationResponse?) {
@@ -210,38 +154,39 @@ class NotificationActivity: BaseActivity(), NotificationPresenter.NotificationMa
 
     override fun itemClickCallback(position: Int) {
         val gson = Gson()
-        val userFriendData: UserFriendData = gson.fromJson(mydataList.get(position).data,UserFriendData::class.java)
-        when(mydataList.get(position).notificationKey){
+        val userFriendData: UserFriendData =
+            gson.fromJson(mydataList.get(position).data, UserFriendData::class.java)
+        when (mydataList.get(position).notificationKey) {
 
-            1->{
+            1 -> {
                 gotoDocRejected(userFriendData.userid.toString())
             }
-            2->{
+            2 -> {
 
                 gotToFriendProfile(userFriendData.friendId.toString())
             }
-            3->{
+            3 -> {
                 gotToFriendProfile(userFriendData.friendId.toString())
             }
-            4 ->{
+            4 -> {
                 //yet to be implemented
             }
-            5->{
+            5 -> {
                 gotoSendPartyInvitation()
             }
-            6->{
+            6 -> {
                 gotoDocRejected(userFriendData.userid.toString())
             }
-            7->{
+            7 -> {
                 //yet to be implemented
             }
-            8->{
+            8 -> {
                 gotoSendPartyInvitation()
             }
-            9->{
-             //nothing to be implemented
+            9 -> {
+                //nothing to be implemented
             }
-            10->{
+            10 -> {
                 gotoBookingScreen()
             }
         }
@@ -253,22 +198,22 @@ class NotificationActivity: BaseActivity(), NotificationPresenter.NotificationMa
 
 
     private fun gotoDocRejected(userid: String) {
-        val intent = Intent(applicationContext,AttachIdActivity::class.java)
-        intent.putExtra(ConstantLib.FROM,ConstantLib.NOTIFICAION)
-        intent.putExtra(ConstantLib.USER_DATA,userid)
+        val intent = Intent(applicationContext, AttachIdActivity::class.java)
+        intent.putExtra(ConstantLib.FROM, ConstantLib.NOTIFICAION)
+        intent.putExtra(ConstantLib.USER_DATA, userid)
         startActivity(intent)
     }
 
     private fun gotoSendPartyInvitation() {
 
-            val intent = Intent(applicationContext,PartyDetailsActivity::class.java)
-            startActivity(intent)
+        val intent = Intent(applicationContext, PartyDetailsActivity::class.java)
+        startActivity(intent)
 
     }
 
     private fun gotToFriendProfile(friendId: String) {
-        val intent  = Intent(applicationContext,FriendProfile::class.java)
-        intent.putExtra(ConstantLib.FRIEND_ID,friendId)
+        val intent = Intent(applicationContext, FriendProfile::class.java)
+        intent.putExtra(ConstantLib.FRIEND_ID, friendId)
         startActivity(intent)
     }
 
@@ -280,7 +225,7 @@ class NotificationActivity: BaseActivity(), NotificationPresenter.NotificationMa
     }
 
 
-    fun clearAllNotificationConfirmation(){
+    fun clearAllNotificationConfirmation() {
         val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
         pDialog.titleText = "Are you sure you want to clear all notification"
         pDialog.setCancelable(false)
@@ -289,9 +234,31 @@ class NotificationActivity: BaseActivity(), NotificationPresenter.NotificationMa
         }
         pDialog.setConfirmButton(languageData!!.klOk) {
             pDialog.dismiss()
-            callClearAllNotificationApi()
+            callClearAllNotificationApi("")
         }
         pDialog.show()
     }
+
+
+    fun deleteNotificationConfirmation() {
+        val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+        pDialog.titleText = "Are you sure you want to delete notification"
+        pDialog.setCancelable(false)
+        pDialog.setCancelButton(languageData!!.klCancel) {
+            pDialog.dismiss()
+        }
+        pDialog.setConfirmButton(languageData!!.klOk) {
+            pDialog.dismiss()
+            callClearAllNotificationApi(mydataList.get(position!!).id.toString())
+        }
+        pDialog.show()
+    }
+
+
+    override fun onItemLongClickListener(pos: Int) {
+        position = pos
+        deleteNotificationConfirmation()
+    }
+
 
 }

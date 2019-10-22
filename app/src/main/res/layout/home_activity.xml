@@ -273,6 +273,7 @@
             android:layout_gravity="start"
             android:background="@drawable/bg"
             android:fitsSystemWindows="true"
+            android:visibility="gone"
             app:headerLayout="@layout/nav_header_main" />
 
     </androidx.drawerlayout.widget.DrawerLayout>

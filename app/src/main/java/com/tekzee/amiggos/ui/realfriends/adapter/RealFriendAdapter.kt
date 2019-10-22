@@ -12,6 +12,9 @@ import com.tekzee.amiggos.ui.realfriends.realfriendfragment.RealFriend
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendData
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import kotlinx.android.synthetic.main.single_online_friend.view.*
+import kotlinx.android.synthetic.main.single_online_friend.view.profile_image
+import kotlinx.android.synthetic.main.single_online_friend.view.txt_name
+import kotlinx.android.synthetic.main.single_real_friend.view.*
 
 
 class RealFriendAdapter(

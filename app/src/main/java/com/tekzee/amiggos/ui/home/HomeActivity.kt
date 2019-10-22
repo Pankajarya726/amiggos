@@ -51,7 +51,9 @@ import com.tekzee.amiggos.ui.home.model.StoriesData
 import com.tekzee.amiggos.ui.invitefriend.InitGeoLocationUpdate
 import com.tekzee.amiggos.ui.invitefriend.InviteFriendActivity
 import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
+import com.tekzee.amiggos.ui.mybooking.MyBookingActivity
 import com.tekzee.amiggos.ui.mypreferences.MyPreferences
+import com.tekzee.amiggos.ui.myprofile.MyProfileActivity
 import com.tekzee.amiggos.ui.notification.NotificationActivity
 import com.tekzee.amiggos.ui.onlinefriends.OnlineFriendActivity
 import com.tekzee.amiggos.ui.partydetails.PartyDetailsActivity
@@ -136,6 +138,8 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun setupClickListener() {
 
+
+
         binding.imgGo.setOnClickListener {
             if (!checkFriedRequestSent()) {
                 val intent = Intent(this, TurningUpActivity::class.java)
@@ -166,7 +170,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun checkFriedRequestSent(): Boolean {
-        if (sharedPreference!!.getValueInt(ConstantLib.INVITE_FRIEND) > 0) {
+        if (sharedPreference!!.getValueInt(ConstantLib.IS_INVITE_FRIEND) == 0) {
             val intent = Intent(this, InviteFriendActivity::class.java)
             startActivity(intent)
             return true
@@ -390,6 +394,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     ) {
         val view = navigationView.getHeaderView(0)
         val name = view.findViewById(R.id.txt_name) as TextView
+        val img_share = view.findViewById(R.id.img_share) as ImageView
         name.text = sharedPreference!!.getValueString(ConstantLib.USER_NAME)
         val viewProfile = view.findViewById(R.id.txt_view_profile) as TextView
         viewProfile.text = languageData!!.klViewProfilebtn
@@ -424,18 +429,39 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         txt_venue.text = languageData!!.klVenues
 
 
+        img_share.setOnClickListener{
+            shareIntent()
+        }
+
 
         binding.imgNotification.setOnClickListener{
-            drawer.closeDrawer(GravityCompat.START)
-            val intent = Intent(this,NotificationActivity::class.java)
-            startActivity(intent)
 
+            if (!checkFriedRequestSent()) {
+                drawer.closeDrawer(GravityCompat.START)
+                val intent = Intent(this,NotificationActivity::class.java)
+                startActivity(intent)
+            }
+
+        }
+
+
+        viewProfile.setOnClickListener{
+            val intent = Intent(this,MyProfileActivity::class.java)
+            startActivity(intent)
         }
 
 
         txt_venue.setOnClickListener{
             drawer.closeDrawer(GravityCompat.START)
             val intent = Intent(this,MyPreferences::class.java)
+            startActivity(intent)
+
+        }
+
+
+        txt_checkincodes.setOnClickListener{
+            drawer.closeDrawer(GravityCompat.START)
+            val intent = Intent(this,MyBookingActivity::class.java)
             startActivity(intent)
 
         }
@@ -648,6 +674,15 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
 
-
+    fun shareIntent(){
+        val sendIntent = Intent()
+        sendIntent.action = Intent.ACTION_SEND
+        sendIntent.putExtra(
+            Intent.EXTRA_TEXT,
+            sharedPreference!!.getValueString(ConstantLib.INVITE_MESSAGE)
+        )
+        sendIntent.type = "text/plain"
+        startActivity(sendIntent)
+    }
 
 }

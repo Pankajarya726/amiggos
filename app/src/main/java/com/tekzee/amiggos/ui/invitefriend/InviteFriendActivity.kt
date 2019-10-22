@@ -236,7 +236,7 @@ class InviteFriendActivity : BaseActivity(), InviteFriendActivityPresenter.Invit
     }
 
     override fun onUpdateFriendCountSuccess(responseData: UpdateFriendCountResponse?) {
-        sharedPreference!!.save(ConstantLib.INVITE_FRIEND,0)
+        sharedPreference!!.save(ConstantLib.IS_INVITE_FRIEND,1)
        finish()
     }
 

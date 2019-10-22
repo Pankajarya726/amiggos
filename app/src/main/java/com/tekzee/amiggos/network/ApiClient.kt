@@ -17,8 +17,10 @@ import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
 import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
 import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
+import com.tekzee.amiggos.ui.mybooking.model.MyBookingResponse
 import com.tekzee.amiggos.ui.mypreferences.model.MyPreferenceResponse
 import com.tekzee.amiggos.ui.mypreferences.model.PreferenceSavedResponse
+import com.tekzee.amiggos.ui.myprofile.model.MyProfileResponse
 import com.tekzee.amiggos.ui.notification.model.NotificationResponse
 import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesResponse
@@ -261,6 +263,22 @@ class ApiClient {
         createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>> {
         return apiService.doCallClearNotification(input, createHeaders)
+    }
+
+
+    fun doMyBookingApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<MyBookingResponse>> {
+        return apiService.doMyBookingApi(input, createHeaders)
+    }
+
+
+    fun doMyProfile(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<MyProfileResponse>> {
+        return apiService.doMyProfile(input, createHeaders)
     }
 
 
