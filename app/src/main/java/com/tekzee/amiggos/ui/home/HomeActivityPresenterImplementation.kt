@@ -25,7 +25,7 @@ class HomeActivityPresenterImplementation(private var mainView: HomeActivityPres
         isfirsttime: Boolean
     ) {
 
-        mainView.showProgressbar()
+//        mainView.showProgressbar()
         if (mainView.checkInternet()) {
             disposable = ApiClient.instance.doGetVenueApi(input,createHeaders)
                 .subscribeOn(Schedulers.io())
@@ -47,11 +47,11 @@ class HomeActivityPresenterImplementation(private var mainView: HomeActivityPres
                         }
                     }
                 }, { error ->
-                    mainView.hideProgressbar()
+//                    mainView.hideProgressbar()
                     mainView.onVenueFailure(error.message.toString())
                 })
         } else {
-            mainView.hideProgressbar()
+//            mainView.hideProgressbar()
             mainView.validateError(context!!.getString(R.string.check_internet))
         }
 

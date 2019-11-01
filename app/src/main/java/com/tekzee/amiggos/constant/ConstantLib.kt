@@ -2,6 +2,11 @@ package com.tekzee.mallortaxiclient.constant
 
 object ConstantLib {
     const val DRIVER_ID = "driver_id"
+    const val PACKAGE_DATE = "package_date"
+    const val CALENDAR_DATA = "calendar_data"
+    const val IMAGE_DATA = "image_data"
+    const val VENUE_DATA = "venue_data"
+    const val CLUB_ID = "club_id"
     const val NOTIFICAION = "notificaion"
     const val USER_DATA = "user_data"
     const val FROM = "from"

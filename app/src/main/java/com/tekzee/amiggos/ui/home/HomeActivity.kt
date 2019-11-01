@@ -43,6 +43,7 @@ import com.tekzee.amiggos.ui.friendprofile.FriendProfile
 import com.tekzee.amiggos.ui.helpcenter.HelpCenterActivity
 import com.tekzee.amiggos.ui.home.adapter.HomeMyStoriesAdapter
 import com.tekzee.amiggos.ui.home.adapter.HomeVenueAdapter
+import com.tekzee.amiggos.ui.home.adapter.NestedScrollPagination
 import com.tekzee.amiggos.ui.home.adapter.PaginationScrollListener
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
@@ -65,13 +66,11 @@ import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.SimpleCallback
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
-import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 
 class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener,
     HomeActivityPresenter.HomeActivityMainView,
-
-    OnMapReadyCallback, HomeVenueAdapter.HomeVenueItemClick,
-    InfiniteScrollRecyclerView.RecyclerViewAdapterCallback {
+    OnMapReadyCallback
+     {
 
     lateinit var binding: HomeActivityBinding
     private var sharedPreference: SharedPreference? = null
@@ -91,32 +90,29 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
 
 
-    //loadmore item for mystories
-//    private var myStoriesPageNo = 0
-    private var venuePageNo = 0
 
-    private var isLoading = false;
-    private var isLastPage = false;
+    private var isLoading = false
+    private var isLastPage = false
+    private var currentPage = 0
 
-    private var currentPage = 0;
+
+    private var isLoadingVenue = false
+    private var isLastpageVenue = false
+    private var currentPageVenue = 0
+
 
 
 
     companion object {
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1
-        private const val TOTAL_PAGES = 3;
+        private const val TOTAL_PAGES =5
+        private const val TOTAL_PAGES_VENUE = 5
     }
 
     override fun onStart() {
         super.onStart()
-        setUpMap()
-    }
-
-    override fun onResume() {
-        super.onResume()
-
 
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,12 +122,16 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         homeActivityPresenterImplementation = HomeActivityPresenterImplementation(this, this)
         setupView()
         setupClickListener()
-
+        setupRecyclerVenueView()
         setupRecyclerMyStoriesView()
-        callGetMyStories(false)
 
     }
 
+
+         override fun onResume() {
+             super.onResume()
+             setUpMap()
+         }
 
 
 
@@ -227,8 +227,17 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             override fun callback(mCurrentLatLng: LatLng) {
                 lastLocation = mCurrentLatLng
                 if(lastLocation!= null){
-                    venuePageNo = 0
+
+                    isLoading = false
+                    isLastPage = false
+                    currentPageVenue = 0
                     callVenueApi(false)
+
+                    isLoadingVenue = false
+                    isLastpageVenue = false
+                    currentPage = 0
+                    callGetMyStories(false)
+
                     callDashboardApi()
                 }else{
                     startLocationUpdate()
@@ -293,7 +302,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         if (lastLocation != null) {
             val input: JsonObject = JsonObject()
             input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
-            input.addProperty("page_no", venuePageNo)
+            input.addProperty("page_no", currentPageVenue)
             input.addProperty("latitude", lastLocation!!.latitude)
             input.addProperty("longitude", lastLocation!!.longitude)
             input.addProperty("club_type", "1")
@@ -372,18 +381,33 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun setupRecyclerVenueView() {
         val venueRecyclerView: RecyclerView = findViewById(R.id.venue_recyclerview)
+        venueRecyclerView.setHasFixedSize(true)
         val layoutManager = GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false)
         venueRecyclerView.layoutManager = layoutManager
-        venueAdapter = HomeVenueAdapter(
-            mContext = this,
-            mRecyclerView = venueRecyclerView,
-            mLayoutManager = layoutManager,
-            mRecyclerViewAdapterCallback = this,
-            mDataList = venueListData,
-            mItemClickCallback = this
-        )
+        venueAdapter = HomeVenueAdapter(venueListData)
         venueRecyclerView.adapter = venueAdapter
-        venueAdapter?.setLoadingStatus(true)
+
+        binding.scrollview.setOnScrollChangeListener(object: NestedScrollPagination(layoutManager){
+            override fun loadMoreItems() {
+                isLoadingVenue = true
+                currentPageVenue += 1
+                callVenueApi(true)
+            }
+
+            override fun getTotalPageCount(): Int {
+                return TOTAL_PAGES_VENUE
+            }
+
+            override fun isLastPage(): Boolean {
+                return isLastpageVenue
+            }
+
+            override fun isLoading(): Boolean {
+                return isLoadingVenue
+            }
+
+        })
+
 
     }
 
@@ -538,57 +562,14 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
 
 
-
-    override fun onLoadMoreData() {
-
-    }
-
-
     override fun validateError(message: String) {
         InitGeoLocationUpdate.stopLocationUpdate(this)
     }
 
-    override fun onMyStoriesFailure(message: String) {
-          Utility.showLogoutPopup(this,languageData!!,message)
-    }
-
-    override fun onMyStoriesSuccess(responseData: GetMyStoriesResponse) {
-        myStoriesListData.clear()
-        myStoriesAdapter!!.notifyDataSetChanged()
-        myStoriesListData.addAll(responseData.data)
-        if (currentPage <= TOTAL_PAGES){
-            myStoriesAdapter!!.addLoadingFooter()
-        }else{
-            isLastPage = true
-        }
-        myStoriesAdapter!!.notifyDataSetChanged()
-    }
-
-    override fun onMyStoriesInfiniteSuccess(responseData: GetMyStoriesResponse) {
-        myStoriesAdapter!!.removeLoadingFooter()
-        isLoading = false
-        myStoriesListData.addAll(responseData.data)
-        myStoriesAdapter!!.notifyDataSetChanged()
-
-        if (currentPage != TOTAL_PAGES){
-            if(responseData.data.size == 0){
-                isLastPage = true
-            }else{
-                myStoriesAdapter!!.addLoadingFooter()
-            }
-        }else{
-            isLastPage = true
-        }
 
 
 
-    }
 
-    override fun onDashboardMapResponse(responseData: DashboardReponse?) {
-        setupMarkersOnMap(responseData)
-        InitGeoLocationUpdate.stopLocationUpdate(this)
-        binding.badge.setText(responseData!!.data.notification_count.toString())
-    }
 
     private fun setupMarkersOnMap(responseData: DashboardReponse?) {
         val iconGen: IconGenerator = IconGenerator(this)
@@ -609,7 +590,6 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             )
         )
     }
-
     fun createCustomMarker(context: Context, profile: String,friendId: String): Bitmap? {
 
         val layoutInflater: LayoutInflater = LayoutInflater.from(context)
@@ -637,41 +617,20 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
 
-    override fun onVenueResponse(responseData: com.tekzee.amiggos.ui.home.model.VenueResponse?) {
-        venuePageNo++
-        venueListData = responseData!!.data.nearest_clubs
-        setupRecyclerVenueView()
-    }
 
-
-    override fun onVenueResponseInfiniteSuccess(responseData: com.tekzee.amiggos.ui.home.model.VenueResponse?) {
-        venuePageNo++
-        venueAdapter?.setLoadingStatus(true)
-        venueListData.removeAt(venueListData.size - 1)
-        venueListData.addAll(responseData!!.data.nearest_clubs)
-        venueAdapter?.notifyDataSetChanged()
-
-    }
-
-
-    override fun onVenueFailure(message: String) {
-//        venueAdapter!!.setLoadingStatus(true)
-        //Utility.showLogoutPopup(this, languageData!!, message)
-
-    }
-
+    //dashboard responses
+    override fun onDashboardMapResponse(responseData: DashboardReponse?) {
+             setupMarkersOnMap(responseData)
+             InitGeoLocationUpdate.stopLocationUpdate(this)
+             binding.badge.setText(responseData!!.data.notification_count.toString())
+         }
     override fun onDashboardMapFailure(message: String) {
         InitGeoLocationUpdate.stopLocationUpdate(this)
         Utility.showLogoutPopup(this, languageData!!, message)
 
     }
 
-    override fun itemVenueClickCallback(position: Int) {
 
-        if (!checkFriedRequestSent()) {
-
-        }
-    }
 
 
     fun shareIntent(){
@@ -683,6 +642,78 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         )
         sendIntent.type = "text/plain"
         startActivity(sendIntent)
+    }
+
+
+    //venue responses
+    override fun onVenueResponse(responseData: com.tekzee.amiggos.ui.home.model.VenueResponse?) {
+
+        venueListData.clear()
+        venueAdapter!!.notifyDataSetChanged()
+        venueListData.addAll(responseData!!.data.nearest_clubs)
+        if (currentPageVenue <= TOTAL_PAGES_VENUE){
+            venueAdapter!!.addLoadingFooter()
+        }else{
+            isLastpageVenue = true
+        }
+        venueAdapter!!.notifyDataSetChanged()
+    }
+    override fun onVenueResponseInfiniteSuccess(responseData: com.tekzee.amiggos.ui.home.model.VenueResponse?) {
+        venueAdapter!!.removeLoadingFooter()
+        isLoadingVenue = false
+        venueListData.addAll(responseData!!.data.nearest_clubs)
+        venueAdapter!!.notifyDataSetChanged()
+
+        if (currentPageVenue != TOTAL_PAGES_VENUE){
+            if(responseData.data.nearest_clubs.size == 0){
+                isLastpageVenue = true
+            }else{
+                venueAdapter!!.addLoadingFooter()
+            }
+        }else{
+            isLastpageVenue = true
+        }
+
+
+    }
+    override fun onVenueFailure(message: String) {
+        Utility.showLogoutPopup(this,languageData!!,message)
+    }
+
+
+    //mystories response
+    override fun onMyStoriesSuccess(responseData: GetMyStoriesResponse) {
+        myStoriesListData.clear()
+        myStoriesAdapter!!.notifyDataSetChanged()
+        myStoriesListData.addAll(responseData.data)
+        if (currentPage <= TOTAL_PAGES){
+            myStoriesAdapter!!.addLoadingFooter()
+        }else{
+            isLastPage = true
+        }
+        myStoriesAdapter!!.notifyDataSetChanged()
+    }
+    override fun onMyStoriesInfiniteSuccess(responseData: GetMyStoriesResponse) {
+        myStoriesAdapter!!.removeLoadingFooter()
+        isLoading = false
+        myStoriesListData.addAll(responseData.data)
+        myStoriesAdapter!!.notifyDataSetChanged()
+
+        if (currentPage != TOTAL_PAGES){
+            if(responseData.data.size == 0){
+                isLastPage = true
+            }else{
+                myStoriesAdapter!!.addLoadingFooter()
+            }
+        }else{
+            isLastPage = true
+        }
+
+
+
+    }
+    override fun onMyStoriesFailure(message: String) {
+        Utility.showLogoutPopup(this,languageData!!,message)
     }
 
 }

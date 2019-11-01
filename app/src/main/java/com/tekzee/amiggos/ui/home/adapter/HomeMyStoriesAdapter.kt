@@ -4,8 +4,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.home.model.StoriesData
+import kotlinx.android.synthetic.main.infinite_loading_progress_bar_layout.view.*
 import kotlinx.android.synthetic.main.single_list_stories.view.*
 
 class HomeMyStoriesAdapter(var mDataList: ArrayList<StoriesData>?)
@@ -20,7 +22,7 @@ class HomeMyStoriesAdapter(var mDataList: ArrayList<StoriesData>?)
         if (viewType == holderRow) {
             return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.single_list_stories, parent, false))
         }
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.infinite_loading_progress_bar_layout, parent, false))
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.infinite_loading_progress_bar, parent, false))
     }
 
     override fun getItemCount(): Int = mDataList!!.size
@@ -34,8 +36,13 @@ class HomeMyStoriesAdapter(var mDataList: ArrayList<StoriesData>?)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
+
         if (holder.itemViewType == holderRow) {
             holder.bind()
+            Logger.d("Inside holderRow")
+        }else{
+            Logger.d("Inside Progressbar")
+            holder.bindProgressBar()
         }
     }
 
@@ -43,17 +50,17 @@ class HomeMyStoriesAdapter(var mDataList: ArrayList<StoriesData>?)
         fun bind() {
             Glide.with(itemView.context).load(mDataList!![adapterPosition].imageUrl).placeholder(R.drawable.user).into(itemView.user_image)
             itemView.s_text_name.text = mDataList!![adapterPosition].name
+        }
 
-//            itemView.setOnClickListener {
-//                mItemClickCallback?.let {
-//                    mItemClickCallback.itemClickCallback(adapterPosition)
-//                }
-//            }
+        fun bindProgressBar() {
+            itemView.progress_bar.visibility = View.VISIBLE
         }
     }
 
 
+
     fun add(r: StoriesData) {
+        r.loadingStatus = true
         mDataList!!.add(r)
         notifyItemInserted(mDataList!!.size - 1)
     }

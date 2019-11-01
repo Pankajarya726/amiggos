@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:padding="4dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:contentDescription="@string/nav_header_desc"
+            android:paddingTop="@dimen/nav_header_vertical_spacing"
+            android:src="@drawable/attachid"
+            app:civ_border_color="@color/colorPrimary"
+            app:civ_border_width="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/spread" />
+
+
+        <RelativeLayout
+            android:id="@+id/seatlayout"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="3dp"
+            android:background="@drawable/stroke_bg"
+            android:padding="2dp"
+            app:layout_constraintEnd_toEndOf="@+id/user_image"
+            app:layout_constraintTop_toTopOf="@+id/user_image">
+
+            <com.an.customfontview.CustomTextView
+                android:id="@+id/txt_seat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:background="@drawable/bg_circularwithstroke_new"
+                android:fontFamily="@font/eras"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="8dp" />
+        </RelativeLayout>
+
+        <com.an.customfontview.CustomTextView
+            android:id="@+id/txt_package_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginBottom="3dp"
+            android:fontFamily="@font/eras_bold"
+            android:text="TextView"
+            android:textColor="@android:color/black"
+            android:textSize="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/user_image" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="3dp"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.an.customfontview.CustomTextView
+                android:id="@+id/price"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="10dp"
+                android:padding="3dp"
+                android:fontFamily="@font/eras"
+                android:gravity="left"
+                android:layout_weight="2"/>
+
+            <com.an.customfontview.CustomTextView
+                android:id="@+id/time"
+                android:padding="3dp"
+                android:fontFamily="@font/eras"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="10dp"
+                android:gravity="right|center"
+                android:layout_weight="1"/>
+
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

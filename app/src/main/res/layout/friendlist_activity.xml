@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleTextColor="@android:color/black">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.an.customfontview.CustomTextView
+                    android:id="@+id/title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="18dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/img_notification"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:textFontPath="font/eras.ttf" />
+
+                <ImageView
+                    android:id="@+id/img_share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:src="@drawable/share"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+
+        <EditText
+            android:layout_below="@+id/toolbar"
+            android:id="@+id/edt_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/btn_bg"
+            android:drawablePadding="10dp"
+            android:gravity="left"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:paddingLeft="12dp"
+            android:textSize="18dp"
+            android:hint="Search Friend"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="@color/colorPrimary"
+            android:fontFamily="@font/eras" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+           android:layout_below="@+id/edt_search"
+            android:layout_above="@+id/btn_save"
+            android:layout_marginTop="8dp"
+            android:id="@+id/friend_list_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+
+        <com.cbr.gradienttextview.GradientTextView
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/language_recyclerview"
+            android:layout_margin="15dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/btn_bg"
+            android:gravity="center"
+            android:padding="15dp"
+            app:fontFamily="@font/eras_bold"
+            app:gt_color_list="@array/rainbow"
+            app:gt_gradient_angle="90"
+            app:gt_gradient_direction="right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </RelativeLayout>
+
+</layout>

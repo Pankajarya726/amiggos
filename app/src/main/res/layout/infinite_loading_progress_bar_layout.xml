@@ -2,7 +2,9 @@
 <androidx.core.widget.ContentLoadingProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
     style="?android:attr/progressBarStyleLarge"
     android:layout_width="match_parent"
-    android:layout_height="42dp"
+    android:layout_height="wrap_content"
     android:gravity="center"
+    android:id="@+id/progress_bar"
+    android:layout_gravity="center|left"
     android:padding="2dp"
     android:visibility="visible" />

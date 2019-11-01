@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <RelativeLayout
+        android:id="@+id/mainlayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@drawable/stroke_bg"
+        android:padding="4dp">
+
+        <com.an.customfontview.CustomTextView
+            android:id="@+id/txt_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/bg_circularwithstroke"
+            android:fontFamily="@font/eras"
+            android:gravity="center"
+            android:text="Monday"
+            android:textSize="13dp"
+            android:textColor="@android:color/white" />
+    </RelativeLayout>
+
+</layout>

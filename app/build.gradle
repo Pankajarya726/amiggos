@@ -18,7 +18,7 @@ android {
     buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "com.tekzee.amiggos"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
 
@@ -160,8 +160,18 @@ dependencies {
     //badges android
     implementation 'com.nex3z:notification-badge:1.0.2'
 
+    //360 image
+    implementation 'pl.rjuszczyk:panorama-view:0.0.7'
 
+    //image slider
+    implementation 'com.github.smarteist:autoimageslider:1.3.2-appcompat'
+    implementation 'com.bogdwellers:pinchtozoom:0.1'
 
+    //video player
+    implementation 'com.github.khizar1556.MKVideoPlayer:mkvideoplayer:0.1.5'
+
+    //calendarview
+    implementation 'com.applandeo:material-calendar-view:1.7.0'
 
 
 }

@@ -20,6 +20,7 @@ import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.tekzee.amiggos.ui.bookingdetail.BookingDetailsActivity
+import com.tekzee.amiggos.ui.bookingqrcode.GetBookingQrCodeActivity
 
 
 class MyBookingActivity : BaseActivity(), MyBookingPresenter.MyBookingMainView {
@@ -72,8 +73,9 @@ class MyBookingActivity : BaseActivity(), MyBookingPresenter.MyBookingMainView {
         binding.bookingRecyclerview.addItemDecoration(dividerItemDecoration)
         adapter = MyBookingAdapter(data,object : BookingClicked {
             override fun onBookingClicked(position: Int, selectedData: MyBookingData) {
-                val intent = Intent(applicationContext, BookingDetailsActivity::class.java)
-                intent.putExtra(ConstantLib.USER_DATA,selectedData)
+                val intent = Intent(applicationContext, GetBookingQrCodeActivity::class.java)
+                intent.putExtra(ConstantLib.BOOKING_ID,selectedData.id.toString())
+                intent.putExtra(ConstantLib.FROM,"Booking")
                 startActivity(intent)
             }
 

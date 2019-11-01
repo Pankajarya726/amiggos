@@ -4,7 +4,12 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
+import com.tekzee.amiggos.ui.bookingqrcode.model.BookinQrCodeResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
+import com.tekzee.amiggos.ui.choosepackage.model.PackageBookResponse
+import com.tekzee.amiggos.ui.choosepackage.model.PackageResponse
+import com.tekzee.amiggos.ui.chooseweek.model.ChooseWeekResponse
+import com.tekzee.amiggos.ui.friendlist.model.FriendListResponse
 import com.tekzee.amiggos.ui.friendprofile.model.FriendProfileResponse
 import com.tekzee.amiggos.ui.guestlist.model.GuestListResponse
 import com.tekzee.amiggos.ui.helpcenter.model.HelpCenterResponse
@@ -21,7 +26,6 @@ import com.tekzee.amiggos.ui.notification.model.NotificationResponse
 import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
-import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationData
 import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponse
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendResponse
 import com.tekzee.amiggos.ui.referalcode.model.ReferalCodeResponse
@@ -29,6 +33,7 @@ import com.tekzee.amiggos.ui.referalcode.model.VenueResponse
 import com.tekzee.amiggos.ui.settings.model.SettingsResponse
 import com.tekzee.amiggos.ui.settings.model.UpdateSettingsResponse
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
+import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailResponse
 import io.reactivex.Observable
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -64,6 +69,13 @@ interface ApiService {
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<TurningUpResponse>>
+
+
+    @POST("user/getVenueDetails")
+    fun callVenueDetailsApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<VenueDetailResponse>>
 
 
     @POST("user/insertReferralCode")
@@ -137,6 +149,45 @@ interface ApiService {
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<UpdateFriendCountResponse>>
+
+
+    @POST("user/getBookingQrCode")
+    fun doGetBookingQrCode(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<BookinQrCodeResponse>>
+
+
+    @POST("user/getClubCalendar")
+    fun doCallWeekApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<ChooseWeekResponse>>
+
+
+    @POST("user/getPakageList")
+    fun doCallPackageApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<PackageResponse>>
+
+    @POST("user/bookPackage")
+    fun doBookPackage(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<PackageBookResponse>>
+
+    @POST("user/getFriendsForPartyInvite")
+    fun doGetFriendList(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<FriendListResponse>>
+
+    @POST("user/sendPartyInvite")
+    fun doInviteFriend(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
 
 
     @POST("user/getSetting")

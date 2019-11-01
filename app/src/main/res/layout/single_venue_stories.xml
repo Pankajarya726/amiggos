@@ -148,6 +148,7 @@
         app:textFontPath="font/eras.ttf" />
 
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_rounded"
@@ -172,10 +173,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/eras"
                 android:gravity="left"
                 android:lines="1"
                 android:maxLines="1"
-                android:fontFamily="@font/eras"
                 android:text="Tekzee technologies"
                 android:textColor="@android:color/white"
                 android:textSize="12dp" />
@@ -185,13 +186,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/eras"
                 android:gravity="right"
                 android:lines="1"
                 android:maxLines="1"
-                android:textSize="10dp"
-                android:fontFamily="@font/eras"
                 android:text="Tekzee technologies"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:textSize="10dp" />
 
         </LinearLayout>
 
@@ -201,15 +202,26 @@
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
             android:layout_weight="1"
+            android:fontFamily="@font/eras"
             android:gravity="left"
             android:maxLines="2"
             android:text="Tekzee technologies"
             android:textColor="@android:color/white"
-            android:fontFamily="@font/eras"
             android:textSize="10dp" />
 
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/img_bottle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView6"
+        app:layout_constraintVertical_bias="0.89"
+        app:srcCompat="@drawable/bottle" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

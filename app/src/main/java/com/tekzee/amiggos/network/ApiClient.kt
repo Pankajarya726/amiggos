@@ -1,5 +1,6 @@
 package com.tekzee.mallortaxi.network
 
+import com.facebook.common.Common
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.orhanobut.logger.AndroidLogAdapter
@@ -8,7 +9,12 @@ import com.tekzee.amiggos.BuildConfig
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
+import com.tekzee.amiggos.ui.bookingqrcode.model.BookinQrCodeResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
+import com.tekzee.amiggos.ui.choosepackage.model.PackageBookResponse
+import com.tekzee.amiggos.ui.choosepackage.model.PackageResponse
+import com.tekzee.amiggos.ui.chooseweek.model.ChooseWeekResponse
+import com.tekzee.amiggos.ui.friendlist.model.FriendListResponse
 import com.tekzee.amiggos.ui.friendprofile.model.FriendProfileResponse
 import com.tekzee.amiggos.ui.guestlist.model.GuestListResponse
 import com.tekzee.amiggos.ui.helpcenter.model.HelpCenterResponse
@@ -25,7 +31,6 @@ import com.tekzee.amiggos.ui.notification.model.NotificationResponse
 import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
-import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationData
 import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponse
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendResponse
 import com.tekzee.amiggos.ui.referalcode.model.ReferalCodeResponse
@@ -33,6 +38,7 @@ import com.tekzee.amiggos.ui.referalcode.model.VenueResponse
 import com.tekzee.amiggos.ui.settings.model.SettingsResponse
 import com.tekzee.amiggos.ui.settings.model.UpdateSettingsResponse
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
+import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailResponse
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MultipartBody
@@ -148,6 +154,13 @@ class ApiClient {
         return apiService.callTurningUpApi(input, createHeaders)
     }
 
+    fun callVenueDetailsApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<VenueDetailResponse>> {
+        return apiService.callVenueDetailsApi(input, createHeaders)
+    }
+
     fun doCallReferalApi(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
@@ -203,6 +216,45 @@ class ApiClient {
         createHeaders: HashMap<String, String?>
     ): Observable<Response<UpdateFriendCountResponse>> {
         return apiService.doUpdateFriendCount(input, createHeaders)
+    }
+    fun doGetBookingQrCode(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<BookinQrCodeResponse>> {
+        return apiService.doGetBookingQrCode(input, createHeaders)
+    }
+
+    fun doCallWeekApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<ChooseWeekResponse>> {
+        return apiService.doCallWeekApi(input, createHeaders)
+    }
+
+    fun doCallPackageApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<PackageResponse>> {
+        return apiService.doCallPackageApi(input, createHeaders)
+    }
+    fun doBookPackage(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<PackageBookResponse>> {
+        return apiService.doBookPackage(input, createHeaders)
+    }
+    fun doGetFriendList(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<FriendListResponse>> {
+        return apiService.doGetFriendList(input, createHeaders)
+    }
+
+    fun doInviteFriend(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.doInviteFriend(input, createHeaders)
     }
 
     fun doCallGetSettings(

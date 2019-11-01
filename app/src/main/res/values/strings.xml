@@ -27,4 +27,12 @@
     <string name="allow_location_permission">Allow location permission for amiggos</string>
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCBAPM9f4Xzl_Bmv-pqaYi_UAbn5JISYU4</string>
 
+
+    <string name="material_calendar_monday">Mo</string>
+    <string name="material_calendar_tuesday">Tu</string>
+    <string name="material_calendar_wednesday">We</string>
+    <string name="material_calendar_thursday">Th</string>
+    <string name="material_calendar_friday">Fr</string>
+    <string name="material_calendar_saturday">Sa</string>
+    <string name="material_calendar_sunday">Su</string>
 </resources>
