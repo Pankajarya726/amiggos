@@ -1,7 +1,9 @@
 package com.tekzee.amiggos.ui.guestlist
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
@@ -10,6 +12,7 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.GuestListActivityBinding
+import com.tekzee.amiggos.ui.friendlist.FriendListActivity
 import com.tekzee.amiggos.ui.guestlist.adapter.GuestListAdapter
 import com.tekzee.amiggos.ui.guestlist.interfaces.GuestListInterface
 import com.tekzee.amiggos.ui.guestlist.model.GuestListData
@@ -64,7 +67,19 @@ class GuestListActivity: BaseActivity(), GuestListPresenter.GuestListMainView {
 
     private fun setupViewName() {
 //        binding.txtLanguageTitle.text = languageData!!.klChooseLanguage
-//        binding.btnSave.text = languageData!!.klSAVE
+        if(intent.getIntExtra(ConstantLib.IS_PARTY_OWNER,0)==1){
+            binding.btnSave.visibility = View.VISIBLE
+        }else{
+            binding.btnSave.visibility = View.GONE
+        }
+        binding.btnSave.text = languageData!!.klInviteMore
+
+
+        binding.btnSave.setOnClickListener{
+            val intentActivity = Intent(applicationContext, FriendListActivity::class.java)
+            intentActivity.putExtra(ConstantLib.BOOKING_ID,intent.getStringExtra(ConstantLib.BOOKING_ID))
+            startActivity(intentActivity)
+        }
     }
 
 

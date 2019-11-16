@@ -1,6 +1,8 @@
 package com.tekzee.mallortaxi.base
 
 import android.app.Application
+import android.content.Context
+import androidx.multidex.MultiDex
 import com.orhanobut.logger.Logger
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.facebook.FacebookSdk
@@ -17,6 +19,11 @@ class ApplicationController: Application() {
         FacebookSdk.setIsDebugEnabled(true)
         FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS)
 
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
     }
 
 

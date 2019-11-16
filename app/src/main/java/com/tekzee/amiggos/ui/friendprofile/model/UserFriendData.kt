@@ -9,5 +9,9 @@ data class UserFriendData(
     @SerializedName("notification_key")
     val notificationKey: Int = 0,
     @SerializedName("userid")
-    val userid: Int = 0
+    val userid: Int = 0,
+    @SerializedName("our_story_id")
+    val our_story_id: Int = 0,
+    @SerializedName("creator_id")
+    val creator_id: Int = 0
 )

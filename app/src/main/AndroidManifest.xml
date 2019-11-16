@@ -9,9 +9,16 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 
     <application
@@ -36,12 +43,43 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".ui.postmemories.service.FileUploadService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+
+        <service
+            android:name=".ui.ourmemories.service.FileOurMemoryUploadService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+
         <activity
             android:name=".ui.splash.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ui.chat.MessageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".ui.login.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ui.chat.myfriendchatlist.MyFriendChatActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+      <activity
+            android:name=".ui.searchamiggos.SearchActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+      <activity
+            android:name=".ui.groupfriends.GroupFriendActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -56,7 +94,27 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
+            android:name=".ui.postmemories.PostMemories"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ui.camera.postimagecaptured.PostImageCapturedActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
             android:name=".ui.mybooking.MyBookingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+         <activity
+            android:name=".ui.ourmemories.OurMemoriesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+          <activity
+            android:name=".ui.storieview.StorieViewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -80,6 +138,12 @@
 
         <activity
             android:name=".ui.bookingqrcode.GetBookingQrCodeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+
+        <activity
+            android:name=".ui.viewfriends.ViewFriendsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -212,7 +276,16 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".ui.mymemories.MyMemoriesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".ui.onlinefriends.OnlineFriendActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ui.camera.CameraPreview"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -252,6 +325,11 @@
             android:name="com.nikola.jakshic.instagramauth.RedirectUri"
             android:value="@string/redirect_url" />
 
+        <service
+            android:name=".services.UpdateUserLocationToServer"
+            android:enabled="true"
+            android:exported="false">
+        </service>
 
         <service android:name=".services.FirebasePushNotificationService">
             <intent-filter>

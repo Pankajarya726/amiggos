@@ -7,4 +7,6 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="bottom_lib_dialog_cancel_text">18dp</dimen>
+    <dimen name="speech_bubble_corners">12dp</dimen>
+    <dimen name="speech_bubble_tail">8dp</dimen>
 </resources>

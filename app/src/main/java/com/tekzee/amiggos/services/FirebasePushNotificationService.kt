@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -14,6 +13,7 @@ import com.google.firebase.messaging.RemoteMessage
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.agegroup.AgeGroupActivity
+import com.tekzee.amiggos.ui.home.HomeActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import org.json.JSONObject
@@ -38,38 +38,11 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
         if (remoteMessage.data.isNotEmpty()) {
             Logger.d("Message data payload: " + remoteMessage.data)
             handleNotifications(remoteMessage)
-
         }
-
-
     }
-
-//
-//    private fun showNotification(title: String?, body: String?, activity: Activity) {
-//        val intent = Intent(this, activity::class.java)
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//        val pendingIntent = PendingIntent.getActivity(
-//            this, 0, intent,
-//            PendingIntent.FLAG_ONE_SHOT
-//        )
-//
-//        val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-//        val notificationBuilder = NotificationCompat.Builder(this)
-//            .setSmallIcon(R.mipmap.ic_launcher)
-//            .setContentTitle(title)
-//            .setContentText(body)
-//            .setAutoCancel(true)
-//            .setSound(soundUri)
-//            .setContentIntent(pendingIntent)
-//
-//        val notificationManager =
-//            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//        notificationManager.notify(0, notificationBuilder.build())
-//    }
-
     private fun handleNotifications(remoteMessage: RemoteMessage?) {
 
-        val jsonData = JSONObject(remoteMessage!!.data)
+        val jsonData = JSONObject(remoteMessage!!.data as Map<String, String>)
         val userid = if (jsonData.has("user_id")) {
             jsonData.getString("user_id")
         } else {
@@ -141,7 +114,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
 
         sharedPreferences!!.save(ConstantLib.REJECTION_MESSAGE, rejectionMessage!!)
 
-        /* doc_verification  : 1
+        /*    doc_verification  : 1
              doc_reject  : 6
              friend_request    : 2 ( friend_id (s) , user_id (r))
              friend_req_accept : 3 { friend_id (a), user_id (s) }
@@ -196,10 +169,38 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
             "10" -> {
                 gotoBookingScreen()
             }
+            "60" ->{
+                showChatNotification(title,body)
+            }
 
         }
 
 
+    }
+
+    private fun showChatNotification(title: String, body: String) {
+        createNotificationChannel()
+
+        val intent = Intent(this, HomeActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
+        var builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setContentTitle(body)
+            .setContentText(title)
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText(title))
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+
+        with(NotificationManagerCompat.from(this)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(System.currentTimeMillis().toInt(), builder.build())
+        }
     }
 
     private fun gotoBookingScreen() {

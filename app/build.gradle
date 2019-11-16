@@ -18,10 +18,9 @@ android {
     buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "com.tekzee.amiggos"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
-
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
@@ -77,8 +76,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.12'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.0'
 
     // RxBindig
@@ -125,7 +124,8 @@ dependencies {
     implementation 'com.github.f0ris.sweetalert:library:1.6.2'
 
     //image picker and cropper
-    api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+    //api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+    api project(':cropper')
 
     //circular image view
     implementation 'com.library.tangxiaolv:effectiveshapeview:1.0.1'
@@ -173,5 +173,11 @@ dependencies {
     //calendarview
     implementation 'com.applandeo:material-calendar-view:1.7.0'
 
+    //whatapps story view
+    implementation 'com.github.bolaware:momentz:v1.0'
 
+    //firebase
+    implementation 'com.google.firebase:firebase-core:17.2.1'
+    implementation 'com.google.firebase:firebase-auth:19.1.0'
+    implementation 'com.google.firebase:firebase-database:19.2.0'
 }

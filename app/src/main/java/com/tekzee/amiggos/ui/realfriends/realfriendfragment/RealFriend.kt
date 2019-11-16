@@ -137,6 +137,7 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
     override fun itemClickCallback(position: Int) {
         val intent = Intent(activity, FriendProfile::class.java)
         intent.putExtra(ConstantLib.FRIEND_ID,mydataList[position].userid.toString())
+        intent.putExtra(ConstantLib.OURSTORYID,mydataList[position].isRelateOurMemory.ourStoryId.toString())
         startActivity(intent)
     }
 

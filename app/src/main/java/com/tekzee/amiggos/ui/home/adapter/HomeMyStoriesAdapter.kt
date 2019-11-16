@@ -1,4 +1,5 @@
 package com.tekzee.amiggos.ui.home.adapter
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -6,11 +7,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
+import com.tekzee.amiggos.ui.home.StorieClickListener
 import com.tekzee.amiggos.ui.home.model.StoriesData
+import com.tekzee.amiggos.ui.storieview.StorieViewActivity
+import com.tekzee.mallortaxiclient.constant.ConstantLib
 import kotlinx.android.synthetic.main.infinite_loading_progress_bar_layout.view.*
 import kotlinx.android.synthetic.main.single_list_stories.view.*
 
-class HomeMyStoriesAdapter(var mDataList: ArrayList<StoriesData>?)
+
+
+class HomeMyStoriesAdapter(
+    var mDataList: ArrayList<StoriesData>?,
+    var listener: StorieClickListener
+)
     : RecyclerView.Adapter<HomeMyStoriesAdapter.ViewHolder>(){
 
     private val holderLoading: Int = 0
@@ -50,6 +59,20 @@ class HomeMyStoriesAdapter(var mDataList: ArrayList<StoriesData>?)
         fun bind() {
             Glide.with(itemView.context).load(mDataList!![adapterPosition].imageUrl).placeholder(R.drawable.user).into(itemView.user_image)
             itemView.s_text_name.text = mDataList!![adapterPosition].name
+
+            itemView.user_image.setOnClickListener{
+                if(adapterPosition == 0 && mDataList!![adapterPosition].content.isEmpty()){
+                    listener.onStorieClick(mDataList!![adapterPosition])
+                }else{
+                    val intent =Intent(itemView.context, StorieViewActivity::class.java)
+                    intent.putExtra(ConstantLib.CONTENT,mDataList!![adapterPosition])
+                    intent.putExtra(ConstantLib.PROFILE_IMAGE,mDataList!![adapterPosition].imageUrl)
+                    intent.putExtra(ConstantLib.USER_ID,mDataList!![adapterPosition].userid.toString())
+                    intent.putExtra(ConstantLib.USER_NAME,mDataList!![adapterPosition].name)
+                    itemView.context.startActivity(intent)
+                }
+
+            }
         }
 
         fun bindProgressBar() {

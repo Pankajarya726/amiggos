@@ -3,6 +3,7 @@ package com.tekzee.amiggos.ui.friendprofile
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.ui.friendprofile.model.FriendProfileResponse
+import com.tekzee.amiggos.ui.notification.model.StorieResponse
 import com.tekzee.mallortaxi.base.BaseMainView
 
 class FriendProfilePresenter {
@@ -39,12 +40,19 @@ class FriendProfilePresenter {
             createHeaders: HashMap<String, String?>
         )
 
+
         fun callReport(
             input: JsonObject,
             createHeaders: HashMap<String, String?>
         )
 
         fun callBlock(
+            input: JsonObject,
+            createHeaders: HashMap<String, String?>
+        )
+
+        fun doCallStorieViewApi(
+            notificationId: String,
             input: JsonObject,
             createHeaders: HashMap<String, String?>
         )
@@ -60,6 +68,10 @@ class FriendProfilePresenter {
         fun onUnBlockSuccess(responseData: CommonResponse?)
         fun onCallReportSuccess(responseData: CommonResponse?)
         fun onBlockSuccess(responseData: CommonResponse?)
+        fun onStorieSuccess(
+            responseData: StorieResponse,
+            notificationId: String
+        )
 
     }
 }

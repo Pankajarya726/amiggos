@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:id="@+id/message_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#DFDDDD"
+        tools:context=".ui.filter.FilterActivity">
+
+        <RelativeLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/white"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+            <ImageView
+                android:id="@+id/toolbar_icon_navigation"
+                android:layout_width="22dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/back"
+                android:padding="1dp"
+                tools:ignore="VectorDrawableCompat" />
+
+
+
+            <com.an.customfontview.CustomTextView
+                android:fontFamily="@font/eras"
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/toolbar_icon_navigation"
+                android:textColor="@android:color/black"
+                android:textSize="15sp" />
+
+        </RelativeLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewData"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/rlFooter"
+            android:layout_below="@+id/toolbar"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp" />
+
+
+        <RelativeLayout
+            android:id="@+id/rlFooter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_toLeftOf="@+id/ivsend"
+                android:background="@drawable/bg_rouded_shape">
+
+
+                <com.an.customfontview.CustomEditText
+                    android:fontFamily="@font/eras"
+                    android:id="@+id/etChat"
+                    android:imeOptions="actionGo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:maxLines="1"
+                    android:layout_toLeftOf="@+id/ivMood"
+                    android:background="@android:color/transparent"
+                    android:hint="Enter text here"
+                    android:padding="10dp"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:id="@+id/ivMood"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp" />
+
+            </RelativeLayout>
+
+
+            <ImageView
+                android:id="@+id/ivsend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/send" />
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+</layout>

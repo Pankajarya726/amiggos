@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true">
+
+        <com.an.customfontview.CustomTextView
+            android:id="@+id/show_message_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/layoutprofile"
+            android:layout_marginRight="8dp"
+            android:autoLink="all"
+            android:background="@drawable/chat_color"
+            android:gravity="left|center"
+            android:padding="8dp"
+            android:text="sdf"
+            android:fontFamily="@font/eras"
+            android:textColor="@android:color/black"
+            android:textColorLink="@android:color/white"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:id="@+id/layoutprofile"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_sender"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+
+                android:layout_marginEnd="8dp"
+                app:civ_border_color="@color/colorPrimary"
+                app:civ_border_width="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/user" />
+
+            <com.an.customfontview.CustomTextView
+                android:id="@+id/txt_sender_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/eras"
+                android:maxLines="2"
+                android:text="fasdf"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                android:textSize="10dp"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/show_message_right"
+                app:layout_constraintTop_toBottomOf="@+id/img_sender" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

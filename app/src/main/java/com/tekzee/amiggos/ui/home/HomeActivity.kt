@@ -34,25 +34,27 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.JsonObject
 import com.google.maps.android.ui.IconGenerator
 import com.tekzee.amiggos.R
+import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.HomeActivityBinding
+import com.tekzee.amiggos.ui.camera.CameraPreview
+import com.tekzee.amiggos.ui.chat.myfriendchatlist.MyFriendChatActivity
 import com.tekzee.amiggos.ui.friendprofile.FriendProfile
 import com.tekzee.amiggos.ui.helpcenter.HelpCenterActivity
 import com.tekzee.amiggos.ui.home.adapter.HomeMyStoriesAdapter
 import com.tekzee.amiggos.ui.home.adapter.HomeVenueAdapter
 import com.tekzee.amiggos.ui.home.adapter.NestedScrollPagination
 import com.tekzee.amiggos.ui.home.adapter.PaginationScrollListener
-import com.tekzee.amiggos.ui.home.model.DashboardReponse
-import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
-import com.tekzee.amiggos.ui.home.model.NearestClub
-import com.tekzee.amiggos.ui.home.model.StoriesData
+import com.tekzee.amiggos.ui.home.model.*
 import com.tekzee.amiggos.ui.invitefriend.InitGeoLocationUpdate
 import com.tekzee.amiggos.ui.invitefriend.InviteFriendActivity
 import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
 import com.tekzee.amiggos.ui.mybooking.MyBookingActivity
+import com.tekzee.amiggos.ui.mymemories.MyMemoriesActivity
 import com.tekzee.amiggos.ui.mypreferences.MyPreferences
 import com.tekzee.amiggos.ui.myprofile.MyProfileActivity
 import com.tekzee.amiggos.ui.notification.NotificationActivity
@@ -69,8 +71,7 @@ import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener,
     HomeActivityPresenter.HomeActivityMainView,
-    OnMapReadyCallback
-     {
+    OnMapReadyCallback {
 
     lateinit var binding: HomeActivityBinding
     private var sharedPreference: SharedPreference? = null
@@ -89,8 +90,6 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private var lastLocation: LatLng? = null
 
 
-
-
     private var isLoading = false
     private var isLastPage = false
     private var currentPage = 0
@@ -101,15 +100,21 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private var currentPageVenue = 0
 
 
-
-
     companion object {
-        private const val TOTAL_PAGES =5
+        private const val TOTAL_PAGES = 5
         private const val TOTAL_PAGES_VENUE = 5
     }
 
     override fun onStart() {
         super.onStart()
+
+//        Intent(this, UpdateUserLocationToServer::class.java).also {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                startForegroundService(it)
+//                return
+//            }
+//            startService(it)
+//        }
 
     }
 
@@ -128,16 +133,32 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
 
-         override fun onResume() {
-             super.onResume()
-             setUpMap()
-         }
-
-
+    override fun onResume() {
+        super.onResume()
+        setUpMap()
+    }
 
 
     private fun setupClickListener() {
 
+
+        binding.imgChat.setOnClickListener {
+            val intent = Intent(applicationContext, MyFriendChatActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.imgCamera.setOnClickListener {
+            val intent = Intent(applicationContext, CameraPreview::class.java)
+            intent.putExtra(ConstantLib.PROFILE_IMAGE,sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE))
+            intent.putExtra(ConstantLib.FROM_ACTIVITY,"HOMEACTIVITY")
+            startActivity(intent)
+        }
+
+
+        binding.imgStories.setOnClickListener {
+            val intent = Intent(applicationContext, MyMemoriesActivity::class.java)
+            startActivity(intent)
+        }
 
 
         binding.imgGo.setOnClickListener {
@@ -161,7 +182,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         binding.imgFavorite.setOnClickListener {
             if (!checkFriedRequestSent()) {
-                val intent = Intent(this,RealFriendsActivity::class.java)
+                val intent = Intent(this, RealFriendsActivity::class.java)
                 startActivity(intent)
             }
         }
@@ -181,12 +202,11 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
 
-
     private fun checkForLocationPermissionFirst() {
         askPermission(Manifest.permission.ACCESS_FINE_LOCATION) {
             startLocationUpdate()
-        }.onDeclined {
-                e -> showExplanationDialog(e)
+        }.onDeclined { e ->
+            showExplanationDialog(e)
         }
 
     }
@@ -205,17 +225,17 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         pDialog.setCancelable(false)
         pDialog.setCancelButton(languageData!!.klCancel) {
             pDialog.dismiss()
-            if(e.hasForeverDenied()) {
+            if (e.hasForeverDenied()) {
                 e.goToSettings()
-            }else{
+            } else {
                 checkForLocationPermissionFirst()
             }
         }
         pDialog.setConfirmButton(languageData!!.klOk) {
             pDialog.dismiss()
-            if(e.hasForeverDenied()) {
+            if (e.hasForeverDenied()) {
                 e.goToSettings()
-            }else{
+            } else {
                 checkForLocationPermissionFirst()
             }
         }
@@ -226,7 +246,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         InitGeoLocationUpdate.locationInit(this, object : SimpleCallback<LatLng> {
             override fun callback(mCurrentLatLng: LatLng) {
                 lastLocation = mCurrentLatLng
-                if(lastLocation!= null){
+                if (lastLocation != null) {
 
                     isLoading = false
                     isLastPage = false
@@ -239,25 +259,35 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     callGetMyStories(false)
 
                     callDashboardApi()
-                }else{
+
+                    callgetNearByUserCount()
+                } else {
                     startLocationUpdate()
                 }
             }
         })
     }
 
+    private fun callgetNearByUserCount() {
+        var input = JsonObject()
+        input.addProperty("userid",sharedPreference!!.getValueInt(ConstantLib.USER_ID).toString())
+        input.addProperty("latitude",lastLocation!!.latitude)
+        input.addProperty("longitude",lastLocation!!.longitude)
+        homeActivityPresenterImplementation!!.getNearByUserCount(input, Utility.createHeaders(sharedPreference))
+    }
+
 
     override fun onMapReady(googleMap: GoogleMap?) {
         mMap = googleMap!!
 
-        mMap.setOnMarkerClickListener {
-            marker -> callFriendProfileIntent(marker)
+        mMap.setOnMarkerClickListener { marker ->
+            callFriendProfileIntent(marker)
         }
     }
 
     private fun callFriendProfileIntent(marker: Marker): Boolean {
         val intent = Intent(applicationContext, FriendProfile::class.java)
-        intent.putExtra(ConstantLib.FRIEND_ID,marker.tag.toString())
+        intent.putExtra(ConstantLib.FRIEND_ID, marker.tag.toString())
         startActivity(intent)
         return true
     }
@@ -280,15 +310,30 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
             input.addProperty("latitude", lastLocation!!.latitude)
             input.addProperty("longitude", lastLocation!!.longitude)
-            input.addProperty("age_group", sharedPreference!!.getValueString(ConstantLib.AGE_GROUP_SELECTED))
+            input.addProperty(
+                "age_group",
+                sharedPreference!!.getValueString(ConstantLib.AGE_GROUP_SELECTED)
+            )
             input.addProperty("music", sharedPreference!!.getValueString(ConstantLib.MUSIC_SELETED))
             input.addProperty("location", "")
             input.addProperty("map_type", "1")
             input.addProperty("club_type", "1")
-            input.addProperty("distance_filter_from", sharedPreference!!.getValueString(ConstantLib.DISTANCE_FILTER_FROM_SELECTED))
-            input.addProperty("distance_filter_to", sharedPreference!!.getValueString(ConstantLib.DISTANCE_FILTER_TO_SELECTED))
-            input.addProperty("age_filter_from", sharedPreference!!.getValueString(ConstantLib.AGE_FILTER_FROM_SELECTED))
-            input.addProperty("age_filter_till", sharedPreference!!.getValueString(ConstantLib.AGE_FILTER_TILL_SELECTED))
+            input.addProperty(
+                "distance_filter_from",
+                sharedPreference!!.getValueString(ConstantLib.DISTANCE_FILTER_FROM_SELECTED)
+            )
+            input.addProperty(
+                "distance_filter_to",
+                sharedPreference!!.getValueString(ConstantLib.DISTANCE_FILTER_TO_SELECTED)
+            )
+            input.addProperty(
+                "age_filter_from",
+                sharedPreference!!.getValueString(ConstantLib.AGE_FILTER_FROM_SELECTED)
+            )
+            input.addProperty(
+                "age_filter_till",
+                sharedPreference!!.getValueString(ConstantLib.AGE_FILTER_TILL_SELECTED)
+            )
             homeActivityPresenterImplementation!!.doGetDashboardMapApi(
                 input,
                 Utility.createHeaders(sharedPreference)
@@ -306,10 +351,22 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             input.addProperty("latitude", lastLocation!!.latitude)
             input.addProperty("longitude", lastLocation!!.longitude)
             input.addProperty("club_type", "1")
-            input.addProperty("distance_filter_from", sharedPreference!!.getValueString(ConstantLib.DISTANCE_FILTER_FROM_SELECTED))
-            input.addProperty("distance_filter_to", sharedPreference!!.getValueString(ConstantLib.DISTANCE_FILTER_TO_SELECTED))
-            input.addProperty("filter_venue_type", sharedPreference!!.getValueString(ConstantLib.VENUE_TYPE_SELECTED))
-            input.addProperty("filter_music", sharedPreference!!.getValueString(ConstantLib.MUSIC_SELETED))
+            input.addProperty(
+                "distance_filter_from",
+                sharedPreference!!.getValueString(ConstantLib.DISTANCE_FILTER_FROM_SELECTED)
+            )
+            input.addProperty(
+                "distance_filter_to",
+                sharedPreference!!.getValueString(ConstantLib.DISTANCE_FILTER_TO_SELECTED)
+            )
+            input.addProperty(
+                "filter_venue_type",
+                sharedPreference!!.getValueString(ConstantLib.VENUE_TYPE_SELECTED)
+            )
+            input.addProperty(
+                "filter_music",
+                sharedPreference!!.getValueString(ConstantLib.MUSIC_SELETED)
+            )
             homeActivityPresenterImplementation!!.doGetVenueApi(
                 input,
                 Utility.createHeaders(sharedPreference),
@@ -339,7 +396,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
         toggle.syncState()
         navigationView.setNavigationItemSelectedListener(this)
-        setupviewData(navigationView,drawer)
+        setupviewData(navigationView, drawer)
 //        setupRecyclerMyStoriesView()
         //setupRecyclerVenueView()
 
@@ -348,13 +405,31 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun setupRecyclerMyStoriesView() {
         binding.mystoriesRecyclerview.setHasFixedSize(true)
-        val linearLayoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false)
+        val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.mystoriesRecyclerview.layoutManager = linearLayoutManager
-        myStoriesAdapter = HomeMyStoriesAdapter(myStoriesListData)
+        myStoriesAdapter = HomeMyStoriesAdapter(myStoriesListData, object : StorieClickListener {
+            override fun onStorieClick(storiesData: StoriesData) {
+                val pDialog = SweetAlertDialog(this@HomeActivity, SweetAlertDialog.WARNING_TYPE)
+                pDialog.titleText = languageData!!.klAddStoryAlert
+                pDialog.setCancelable(false)
+                pDialog.setCancelButton(languageData!!.klCancel) {
+                    pDialog.dismiss()
+                }
+                pDialog.setConfirmButton(languageData!!.kllblAddStoryTitle) {
+                    pDialog.dismiss()
+                    val intent = Intent(applicationContext, CameraPreview::class.java)
+                    intent.putExtra(ConstantLib.FROM_ACTIVITY,"HOMEACTIVITY")
+                    intent.putExtra(ConstantLib.PROFILE_IMAGE,storiesData.imageUrl)
+                    startActivity(intent)
+                }
+                pDialog.show()
+            }
+        })
         binding.mystoriesRecyclerview.adapter = myStoriesAdapter
 
 
-        binding.mystoriesRecyclerview.addOnScrollListener(object: PaginationScrollListener(linearLayoutManager){
+        binding.mystoriesRecyclerview.addOnScrollListener(object :
+            PaginationScrollListener(linearLayoutManager) {
             override fun loadMoreItems() {
                 isLoading = true
                 currentPage += 1
@@ -376,7 +451,6 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         })
 
 
-
     }
 
     private fun setupRecyclerVenueView() {
@@ -387,7 +461,8 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         venueAdapter = HomeVenueAdapter(venueListData)
         venueRecyclerView.adapter = venueAdapter
 
-        binding.scrollview.setOnScrollChangeListener(object: NestedScrollPagination(layoutManager){
+        binding.scrollview.setOnScrollChangeListener(object :
+            NestedScrollPagination(layoutManager) {
             override fun loadMoreItems() {
                 isLoadingVenue = true
                 currentPageVenue += 1
@@ -453,76 +528,76 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         txt_venue.text = languageData!!.klVenues
 
 
-        img_share.setOnClickListener{
+        img_share.setOnClickListener {
             shareIntent()
         }
 
 
-        binding.imgNotification.setOnClickListener{
+        binding.imgNotification.setOnClickListener {
 
             if (!checkFriedRequestSent()) {
                 drawer.closeDrawer(GravityCompat.START)
-                val intent = Intent(this,NotificationActivity::class.java)
+                val intent = Intent(this, NotificationActivity::class.java)
                 startActivity(intent)
             }
 
         }
 
 
-        viewProfile.setOnClickListener{
-            val intent = Intent(this,MyProfileActivity::class.java)
+        viewProfile.setOnClickListener {
+            val intent = Intent(this, MyProfileActivity::class.java)
             startActivity(intent)
         }
 
 
-        txt_venue.setOnClickListener{
+        txt_venue.setOnClickListener {
             drawer.closeDrawer(GravityCompat.START)
-            val intent = Intent(this,MyPreferences::class.java)
+            val intent = Intent(this, MyPreferences::class.java)
             startActivity(intent)
 
         }
 
 
-        txt_checkincodes.setOnClickListener{
+        txt_checkincodes.setOnClickListener {
             drawer.closeDrawer(GravityCompat.START)
-            val intent = Intent(this,MyBookingActivity::class.java)
+            val intent = Intent(this, MyBookingActivity::class.java)
             startActivity(intent)
 
         }
 
-        txt_realfriends.setOnClickListener{
+        txt_realfriends.setOnClickListener {
             drawer.closeDrawer(GravityCompat.START)
-            val intent = Intent(this,RealFriendsActivity::class.java)
+            val intent = Intent(this, RealFriendsActivity::class.java)
             startActivity(intent)
 
         }
-        txt_mypreference.setOnClickListener{
+        txt_mypreference.setOnClickListener {
             drawer.closeDrawer(GravityCompat.START)
-            val intent = Intent(this,MyPreferences::class.java)
+            val intent = Intent(this, MyPreferences::class.java)
             startActivity(intent)
 
         }
 
-        txt_partydetails.setOnClickListener{
+        txt_partydetails.setOnClickListener {
             drawer.closeDrawer(GravityCompat.START)
-            val intent = Intent(this,PartyDetailsActivity::class.java)
+            val intent = Intent(this, PartyDetailsActivity::class.java)
             startActivity(intent)
         }
 
-        txt_settings.setOnClickListener{
+        txt_settings.setOnClickListener {
             drawer.closeDrawer(GravityCompat.START)
-            val intent = Intent(this,SettingsActivity::class.java)
+            val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
 
-        txt_helpcenter.setOnClickListener{
+        txt_helpcenter.setOnClickListener {
             drawer.closeDrawer(GravityCompat.START)
-            val intent = Intent(this,HelpCenterActivity::class.java)
+            val intent = Intent(this, HelpCenterActivity::class.java)
             startActivity(intent)
         }
 
 
-        txt_logout.setOnClickListener{
+        txt_logout.setOnClickListener {
             drawer.closeDrawer(GravityCompat.START)
             val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
             pDialog.titleText = "Are you sure you want to logout"
@@ -532,14 +607,14 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
             pDialog.setConfirmButton(languageData!!.klOk) {
                 pDialog.dismiss()
+                FirebaseAuth.getInstance().signOut()
                 sharedPreference!!.clearSharedPreference()
-                val intent = Intent(this,MainSplashActivity::class.java)
+                val intent = Intent(this, MainSplashActivity::class.java)
                 startActivity(intent)
                 finishAffinity()
             }
             pDialog.show()
         }
-
 
 
     }
@@ -560,15 +635,9 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
 
-
-
     override fun validateError(message: String) {
         InitGeoLocationUpdate.stopLocationUpdate(this)
     }
-
-
-
-
 
 
     private fun setupMarkersOnMap(responseData: DashboardReponse?) {
@@ -576,7 +645,13 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         iconGen.setBackground(resources.getDrawable(R.drawable.map_profile))
         for (itemData in responseData!!.data.users) {
             val markerOptions: MarkerOptions = MarkerOptions().icon(
-                BitmapDescriptorFactory.fromBitmap(createCustomMarker(this, itemData.profile,itemData.userid.toString()))
+                BitmapDescriptorFactory.fromBitmap(
+                    createCustomMarker(
+                        this,
+                        itemData.profile,
+                        itemData.userid.toString()
+                    )
+                )
             ).position(LatLng(itemData.latitude.toDouble(), itemData.longitude.toDouble()))
             mMap.addMarker(markerOptions)
         }
@@ -590,7 +665,8 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             )
         )
     }
-    fun createCustomMarker(context: Context, profile: String,friendId: String): Bitmap? {
+
+    fun createCustomMarker(context: Context, profile: String, friendId: String): Bitmap? {
 
         val layoutInflater: LayoutInflater = LayoutInflater.from(context)
         val marker: View = layoutInflater.inflate(R.layout.custom_marker, null);
@@ -617,13 +693,13 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
 
-
     //dashboard responses
     override fun onDashboardMapResponse(responseData: DashboardReponse?) {
-             setupMarkersOnMap(responseData)
-             InitGeoLocationUpdate.stopLocationUpdate(this)
-             binding.badge.setText(responseData!!.data.notification_count.toString())
-         }
+        setupMarkersOnMap(responseData)
+        InitGeoLocationUpdate.stopLocationUpdate(this)
+        binding.badge.setText(responseData!!.data.notification_count.toString())
+    }
+
     override fun onDashboardMapFailure(message: String) {
         InitGeoLocationUpdate.stopLocationUpdate(this)
         Utility.showLogoutPopup(this, languageData!!, message)
@@ -631,9 +707,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
 
-
-
-    fun shareIntent(){
+    fun shareIntent() {
         val sendIntent = Intent()
         sendIntent.action = Intent.ACTION_SEND
         sendIntent.putExtra(
@@ -651,33 +725,36 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         venueListData.clear()
         venueAdapter!!.notifyDataSetChanged()
         venueListData.addAll(responseData!!.data.nearest_clubs)
-        if (currentPageVenue <= TOTAL_PAGES_VENUE){
-            venueAdapter!!.addLoadingFooter()
-        }else{
+        if (currentPageVenue <= TOTAL_PAGES_VENUE) {
+            if (venueListData.size > 0)
+                venueAdapter!!.addLoadingFooter()
+        } else {
             isLastpageVenue = true
         }
         venueAdapter!!.notifyDataSetChanged()
     }
+
     override fun onVenueResponseInfiniteSuccess(responseData: com.tekzee.amiggos.ui.home.model.VenueResponse?) {
         venueAdapter!!.removeLoadingFooter()
         isLoadingVenue = false
         venueListData.addAll(responseData!!.data.nearest_clubs)
         venueAdapter!!.notifyDataSetChanged()
 
-        if (currentPageVenue != TOTAL_PAGES_VENUE){
-            if(responseData.data.nearest_clubs.size == 0){
+        if (currentPageVenue != TOTAL_PAGES_VENUE) {
+            if (responseData.data.nearest_clubs.size == 0) {
                 isLastpageVenue = true
-            }else{
+            } else {
                 venueAdapter!!.addLoadingFooter()
             }
-        }else{
+        } else {
             isLastpageVenue = true
         }
 
 
     }
+
     override fun onVenueFailure(message: String) {
-        Utility.showLogoutPopup(this,languageData!!,message)
+        Utility.showLogoutPopup(this, languageData!!, message)
     }
 
 
@@ -686,34 +763,46 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         myStoriesListData.clear()
         myStoriesAdapter!!.notifyDataSetChanged()
         myStoriesListData.addAll(responseData.data)
-        if (currentPage <= TOTAL_PAGES){
+        if (currentPage <= TOTAL_PAGES) {
             myStoriesAdapter!!.addLoadingFooter()
-        }else{
+        } else {
             isLastPage = true
         }
         myStoriesAdapter!!.notifyDataSetChanged()
     }
+
     override fun onMyStoriesInfiniteSuccess(responseData: GetMyStoriesResponse) {
         myStoriesAdapter!!.removeLoadingFooter()
         isLoading = false
         myStoriesListData.addAll(responseData.data)
         myStoriesAdapter!!.notifyDataSetChanged()
 
-        if (currentPage != TOTAL_PAGES){
-            if(responseData.data.size == 0){
+        if (currentPage != TOTAL_PAGES) {
+            if (responseData.data.size == 0) {
                 isLastPage = true
-            }else{
+            } else {
                 myStoriesAdapter!!.addLoadingFooter()
             }
-        }else{
+        } else {
             isLastPage = true
         }
 
 
+    }
+
+    override fun onMyStoriesFailure(message: String) {
+        Utility.showLogoutPopup(this, languageData!!, message)
+    }
+
+
+
+
+
+    override fun onNearByCountSuccess(responseData: CommonResponse?) {
 
     }
-    override fun onMyStoriesFailure(message: String) {
-        Utility.showLogoutPopup(this,languageData!!,message)
-    }
+
+
+
 
 }

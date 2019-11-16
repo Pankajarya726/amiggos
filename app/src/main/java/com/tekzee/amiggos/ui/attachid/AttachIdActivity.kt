@@ -100,7 +100,7 @@ class AttachIdActivity : BaseActivity(), AttachIdActivityPresenter.AttachIdMainV
             if (file == null) {
                 Toast.makeText(
                     applicationContext,
-                    "Please select profile picture",
+                    "Please upload ID",
                     Toast.LENGTH_LONG
                 ).show()
             } else {

@@ -14,6 +14,7 @@ import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.CommonFragmentLayoutBinding
 import com.tekzee.amiggos.ui.guestlist.GuestListActivity
+import com.tekzee.amiggos.ui.partydetails.PartyDetailsActivity
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.adapter.PartyInvitesAdapter
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.interfaces.PartyInviteInterface
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesData
@@ -113,12 +114,18 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMai
     }
 
     override fun onJoinPartyInvitesSuccess(responseData: CommonResponse?) {
-        callPartyInviteApi()
+//        callPartyInviteApi()
+        val intent = Intent(activity,PartyDetailsActivity::class.java)
+        startActivity(intent)
+        activity!!.finish()
         Toast.makeText(activity,responseData!!.message,Toast.LENGTH_LONG).show()
     }
 
     override fun onDeclinePartyInvitesSuccess(responseData: CommonResponse?) {
-        callPartyInviteApi()
+        //callPartyInviteApi()
+        val intent = Intent(activity,PartyDetailsActivity::class.java)
+        startActivity(intent)
+        activity!!.finish()
         Toast.makeText(activity,responseData!!.message,Toast.LENGTH_LONG).show()
     }
 

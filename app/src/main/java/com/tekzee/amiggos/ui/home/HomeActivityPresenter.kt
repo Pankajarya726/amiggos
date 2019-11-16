@@ -1,20 +1,26 @@
 package com.tekzee.amiggos.ui.home
 
 import com.google.gson.JsonObject
+import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
-import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
 import com.tekzee.mallortaxi.base.BaseMainView
 
 class HomeActivityPresenter {
-    interface HomeActivityPresenterMain{
+    interface HomeActivityPresenterMain {
 
         fun doGetMyStories(
             input: JsonObject,
             createHeaders: HashMap<String, String?>,
             requestDatFromServer: Boolean
         )
+
         fun doGetDashboardMapApi(
+            input: JsonObject,
+            createHeaders: HashMap<String, String?>
+        )
+
+        fun getNearByUserCount(
             input: JsonObject,
             createHeaders: HashMap<String, String?>
         )
@@ -30,7 +36,7 @@ class HomeActivityPresenter {
 
     }
 
-    interface HomeActivityMainView: BaseMainView{
+    interface HomeActivityMainView : BaseMainView {
 
         fun onMyStoriesSuccess(responseData: GetMyStoriesResponse)
         fun onMyStoriesInfiniteSuccess(responseData: GetMyStoriesResponse)
@@ -40,6 +46,7 @@ class HomeActivityPresenter {
         fun onMyStoriesFailure(message: String)
         fun onVenueFailure(message: String)
         fun onDashboardMapFailure(message: String)
+        fun onNearByCountSuccess(responseData: CommonResponse?)
 
 
     }

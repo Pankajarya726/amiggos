@@ -19,10 +19,13 @@ import com.tekzee.amiggos.databinding.NotificationActivityBinding
 import com.tekzee.amiggos.ui.attachid.AttachIdActivity
 import com.tekzee.amiggos.ui.friendprofile.FriendProfile
 import com.tekzee.amiggos.ui.friendprofile.model.UserFriendData
+import com.tekzee.amiggos.ui.home.model.StoriesData
 import com.tekzee.amiggos.ui.notification.adapter.NotificationAdapter
 import com.tekzee.amiggos.ui.notification.model.NotificationData
 import com.tekzee.amiggos.ui.notification.model.NotificationResponse
+import com.tekzee.amiggos.ui.notification.model.StorieResponse
 import com.tekzee.amiggos.ui.partydetails.PartyDetailsActivity
+import com.tekzee.amiggos.ui.storieview.StorieViewActivity
 import com.tekzee.mallortaxi.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
@@ -32,7 +35,7 @@ import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 
 class NotificationActivity : BaseActivity(), NotificationPresenter.NotificationMainView,
     InfiniteScrollRecyclerView.RecyclerViewAdapterCallback, NotificationAdapter.HomeItemClick {
-
+    var mDataList: ArrayList<StoriesData> = ArrayList()
     private var position: Int? = null
     private lateinit var binding: NotificationActivityBinding
     private var sharedPreference: SharedPreference? = null
@@ -169,7 +172,7 @@ class NotificationActivity : BaseActivity(), NotificationPresenter.NotificationM
                 gotToFriendProfile(userFriendData.friendId.toString())
             }
             4 -> {
-                //yet to be implemented
+                callStorieJoinViewApi(userFriendData.our_story_id.toString(), mydataList[position].id.toString())
             }
             5 -> {
                 gotoSendPartyInvitation()
@@ -178,7 +181,7 @@ class NotificationActivity : BaseActivity(), NotificationPresenter.NotificationM
                 gotoDocRejected(userFriendData.userid.toString())
             }
             7 -> {
-                //yet to be implemented
+                callStorieJoinViewApi(userFriendData.our_story_id.toString(), mydataList[position].id.toString())
             }
             8 -> {
                 gotoSendPartyInvitation()
@@ -190,6 +193,17 @@ class NotificationActivity : BaseActivity(), NotificationPresenter.NotificationM
                 gotoBookingScreen()
             }
         }
+    }
+
+    private fun callStorieJoinViewApi(our_story_id: String, notificationid: String) {
+        val input: JsonObject = JsonObject()
+        input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
+        input.addProperty("our_story_id", our_story_id)
+        notificationPresenterImplementation!!.doCallStorieViewApi(
+            notificationid,
+            input,
+            Utility.createHeaders(sharedPreference)
+        )
     }
 
     private fun gotoBookingScreen() {
@@ -258,6 +272,29 @@ class NotificationActivity : BaseActivity(), NotificationPresenter.NotificationM
     override fun onItemLongClickListener(pos: Int) {
         position = pos
         deleteNotificationConfirmation()
+    }
+
+
+    fun gotoStorieView(
+        mDataList: ArrayList<StoriesData>,
+        notificationId: String
+    ) {
+        val intent =Intent(applicationContext, StorieViewActivity::class.java)
+        intent.putExtra(ConstantLib.CONTENT, this.mDataList[0])
+        intent.putExtra(ConstantLib.PROFILE_IMAGE, this.mDataList[0].imageUrl)
+        intent.putExtra(ConstantLib.FROM,"NOTIFICATION")
+        intent.putExtra(ConstantLib.NOTIFICAION_ID,notificationId)
+        intent.putExtra(ConstantLib.USER_ID, this.mDataList[0].userid.toString())
+        intent.putExtra(ConstantLib.USER_NAME, this.mDataList[0].name)
+        startActivity(intent)
+    }
+
+    override fun onStorieSuccess(
+        responseData: StorieResponse,
+        notificationId: String
+    ) {
+        mDataList = responseData.data as ArrayList<StoriesData>
+        gotoStorieView(mDataList,notificationId)
     }
 
 

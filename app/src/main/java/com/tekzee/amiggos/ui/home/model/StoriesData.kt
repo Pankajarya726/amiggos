@@ -1,11 +1,23 @@
 package com.tekzee.amiggos.ui.home.model
 
+
+import com.google.gson.annotations.SerializedName
+import java.io.Serializable
+
 data class StoriesData(
     var loadingStatus: Boolean = false,
-    val api_url: String = "",
-    val content: List<Any> = ArrayList<Any>(),
+    @SerializedName("api_url")
+    val apiUrl: String = "",
+    @SerializedName("content")
+    val content: List<Content> = listOf(),
+    @SerializedName("imageUrl")
     val imageUrl: String = "",
+    @SerializedName("name")
     val name: String = "",
+    @SerializedName("status")
     val status: Int = 0,
-    val userid: Int = 0
-)
+    @SerializedName("userid")
+    val userid: Int = 0,
+    @SerializedName("our_story_id")
+    val our_story_id: Int = 0
+):Serializable

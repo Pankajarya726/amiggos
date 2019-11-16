@@ -7,6 +7,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.mallortaxiclient.constant.ConstantLib
+import org.json.JSONArray
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.regex.Pattern
@@ -15,6 +16,9 @@ import java.util.regex.Pattern
 class Utility {
 
     companion object {
+
+        var jsonArray: JSONArray = JSONArray()
+
 //        fun showDialogBooking(title: String, context: Context?, ridelist: Ridelist) {
 //            val dialog = Dialog(context!!)
 //            dialog.getWindow()!!.requestFeature(Window.FEATURE_NO_TITLE);
@@ -138,6 +142,26 @@ class Utility {
             }
         }
 
+        fun addSelectedId(id: Int, isChecked: Boolean){
+            if(!idExist(id)){
+                jsonArray.put(id)
+            }else if(isChecked){
+                jsonArray.remove(id)
+            }else{
+                jsonArray.put(id)
+            }
+
+        }
+
+        fun idExist(id: Int): Boolean {
+            if (jsonArray.length()>0){
+                for(i in 0..jsonArray.length()){
+                    return id == jsonArray.get(i)
+                }
+            }
+
+            return false
+        }
 
     }
 

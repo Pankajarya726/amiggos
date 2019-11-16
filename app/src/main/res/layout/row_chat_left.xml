@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:id="@+id/layoutprofile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_receiver"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+
+            android:layout_marginEnd="8dp"
+            app:civ_border_color="@color/colorPrimary"
+            app:civ_border_width="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/user" />
+
+        <com.an.customfontview.CustomTextView
+            android:id="@+id/txt_receiver_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/eras"
+            android:maxLines="2"
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            android:textSize="10dp"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/show_message_right"
+            app:layout_constraintTop_toBottomOf="@+id/img_sender" />
+
+    </LinearLayout>
+
+    <com.an.customfontview.CustomTextView
+        android:id="@+id/show_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/layoutprofile"
+        android:autoLink="all"
+        android:background="@drawable/chat_left"
+        android:fontFamily="@font/eras"
+        android:padding="8dp"
+        android:text="@string/app_name"
+        android:gravity="center|left"
+        android:textColorLink="@android:color/black"
+        android:textSize="14sp" />
+
+
+</RelativeLayout>

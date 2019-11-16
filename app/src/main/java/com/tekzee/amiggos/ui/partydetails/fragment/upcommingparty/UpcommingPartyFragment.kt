@@ -70,6 +70,7 @@ class UpcommingPartyFragment: BaseFragment(), UpcommingPartyPresenter.UpcomingPa
                     1->{
                         val intent = Intent(activity, GuestListActivity::class.java)
                         intent.putExtra(ConstantLib.BOOKING_ID,pastPartyData.bookingId.toString())
+                        intent.putExtra(ConstantLib.IS_PARTY_OWNER,pastPartyData.is_party_owner)
                         startActivity(intent)
                     }
                 }

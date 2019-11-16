@@ -1,0 +1,215 @@
+package com.tekzee.amiggos.ui.chat
+
+import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
+import com.tekzee.amiggos.R
+import com.tekzee.amiggos.base.model.Data
+import com.tekzee.amiggos.base.model.MyResponse
+import com.tekzee.amiggos.base.model.Sender
+import com.tekzee.amiggos.databinding.MessageActivityBinding
+import com.tekzee.amiggos.firebasemodel.User
+import com.tekzee.amiggos.network.APINotificationService
+import com.tekzee.amiggos.network.Client
+import com.tekzee.amiggos.ui.chat.adapter.ChatAdapter
+import com.tekzee.amiggos.ui.chat.interfaces.ReceiverIdInterface
+import com.tekzee.amiggos.ui.chat.model.Message
+import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.mallortaxi.util.SharedPreference
+import com.tekzee.mallortaxiclient.constant.ConstantLib
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
+
+class MessageActivity : BaseActivity() {
+    private var sharedPreferences: SharedPreference? = null
+    private var databaseReferenceMessage: DatabaseReference? = null
+    private var databaseReference: DatabaseReference? = null
+    private var adapter: ChatAdapter? = null
+    var chatListArray: ArrayList<Message>?= null
+    private lateinit var binding: MessageActivityBinding
+    private var sender: String? = null
+    private var listSize:Int=0
+    private var mApiService: APINotificationService? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this, R.layout.message_activity)
+        sender = FirebaseAuth.getInstance().currentUser!!.uid
+        sharedPreferences = SharedPreference(this)
+        setUpClickListener()
+        setUpViewData()
+
+        mApiService = Client.getClient("https://fcm.googleapis.com/").create(APINotificationService::class.java)
+
+        ChatHelper.getReceiverFirebaseId(intent.getStringExtra(ConstantLib.FRIEND_ID),
+            object : ReceiverIdInterface {
+                override fun getReceiverId(
+                    receiverId: String,
+                    user: User
+                ) {
+                    ChatHelper.setMessageStatusToSeen(sender!!,receiverId)
+                }
+            })
+
+
+
+        ChatHelper.getReceiverFirebaseId(intent.getStringExtra(ConstantLib.FRIEND_ID),
+            object : ReceiverIdInterface {
+                override fun getReceiverId(
+                    receiverId: String,
+                    user: User
+                ) {
+                    getAllMessageBetweenSenderAndReceiver(sender!!,receiverId)
+                }
+            })
+
+
+    }
+
+    override fun validateError(message: String) {
+
+    }
+
+
+    fun getAllMessageBetweenSenderAndReceiver(
+        senderid: String,
+        receiverId: String
+    ) {
+        chatListArray = ArrayList()
+        databaseReference =
+            FirebaseDatabase.getInstance().reference.child("conversation").child(senderid)
+        databaseReferenceMessage = FirebaseDatabase.getInstance().reference.child("message")
+        databaseReference!!.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(dataSnapshot: DatabaseError) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                chatListArray!!.clear()
+                listSize =0
+                for (conversationIds in dataSnapshot.children) {
+                    listSize++
+                    Log.d("Conversation id : ", conversationIds.key)
+                    databaseReferenceMessage!!.child(conversationIds.key!!)
+                        .addValueEventListener(object : ValueEventListener {
+                            override fun onCancelled(dataSnapshot: DatabaseError) {
+                                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                            }
+
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                if(dataSnapshot.getValue(Message::class.java)!=null){
+
+                                    val message: Message? =
+                                        dataSnapshot.getValue(Message::class.java)
+                                    if(senderid.equals(message!!.sender,true) && receiverId.equals(message.receiver,true)||senderid.equals(message!!.receiver,true) && receiverId.equals(message.sender,true)){
+                                        chatListArray!!.add(message)
+                                    }
+                                    setupRecyclerview()
+                                }else{
+                                    setupRecyclerview()
+                                }
+
+                            }
+                        })
+
+                }
+
+
+            }
+        })
+
+    }
+
+    private fun setMessageSeen(key: String?) {
+         val map = HashMap<String,Any>()
+         map["isSeen"] = true
+         databaseReferenceMessage!!.child(key!!).updateChildren(map)
+    }
+
+    private fun setupRecyclerview() {
+        binding.recyclerViewData.setHasFixedSize(true)
+        val mlayoutManager = LinearLayoutManager(this)
+        mlayoutManager.stackFromEnd = true
+        binding.recyclerViewData.layoutManager = mlayoutManager
+        adapter = ChatAdapter(chatListArray!!,sharedPreferences!!.getValueString(ConstantLib.PROFILE_IMAGE),sharedPreferences!!.getValueString(ConstantLib.USER_NAME),intent.getStringExtra(ConstantLib.FRIENDNAME),intent.getStringExtra(ConstantLib.FRIENDIMAGE))
+        binding.recyclerViewData.adapter = adapter
+    }
+
+    private fun setUpViewData() {
+        binding.toolbarTitle.text = intent.getStringExtra(ConstantLib.FRIENDNAME)
+    }
+
+    private fun setUpClickListener() {
+        binding.ivsend.setOnClickListener {
+            if (binding.etChat.text.trim().isEmpty()) {
+                Toast.makeText(applicationContext, "Please enter message", Toast.LENGTH_LONG).show()
+            } else {
+                ChatHelper.getReceiverFirebaseId(intent.getStringExtra(ConstantLib.FRIEND_ID),
+                    object : ReceiverIdInterface {
+                        override fun getReceiverId(
+                            receiverId: String,
+                            user: User
+                        ) {
+                            ChatHelper.sendMessage(
+                                sender!!,
+                                receiverId,
+                                binding.etChat.text.trim().toString(),
+                                false,
+                                System.currentTimeMillis()
+                            )
+                            sendNotification(user, binding.etChat.text.trim().toString())
+                            binding.etChat.setText("")
+                        }
+                    })
+            }
+        }
+
+
+        binding.toolbarIconNavigation.setOnClickListener {
+            onBackPressed()
+        }
+    }
+
+    private fun sendNotification(
+        user: User,
+        message: String
+    ) {
+        val data = Data(
+            user.deviceToken,
+            R.mipmap.ic_launcher,
+            "7007",
+            user.name ,
+            message,
+            user.deviceToken,
+            "60"
+        )
+        val sender = Sender(data, user.fcmToken)
+        mApiService!!.sendNotification(sender)
+            .enqueue(object : Callback<MyResponse> {
+                override fun onResponse(
+                    call: Call<MyResponse>,
+                    response: Response<MyResponse>
+                ) {
+                    if (response.code() == 200) {
+                        if (response.body()!!.success !== 1) {
+
+                        }
+                    }
+                }
+
+                override fun onFailure(
+                    call: Call<MyResponse>,
+                    t: Throwable
+                ) {
+                }
+            })
+    }
+
+    }
+
+

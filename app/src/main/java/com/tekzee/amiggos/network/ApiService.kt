@@ -1,5 +1,6 @@
 package com.tekzee.mallortaxi.network
 
+import com.facebook.common.Common
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
@@ -34,11 +35,23 @@ import com.tekzee.amiggos.ui.settings.model.SettingsResponse
 import com.tekzee.amiggos.ui.settings.model.UpdateSettingsResponse
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
 import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailResponse
+import com.tekzee.amiggos.ui.mymemories.fragment.memories.model.MyMemoriesResponse
+import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
+import com.tekzee.amiggos.ui.notification.model.StorieResponse
+import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
+import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendResponse
+import com.tekzee.amiggos.ui.viewfriends.model.StorieViewResponse
 import io.reactivex.Observable
+import io.reactivex.Single
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
+import okhttp3.ResponseBody
+import retrofit2.http.POST
+import retrofit2.http.Multipart
+
+
 
 interface ApiService {
 
@@ -71,6 +84,20 @@ interface ApiService {
     ): Observable<Response<TurningUpResponse>>
 
 
+    @POST("user/removeMyStoryAndOurStory")
+    fun doCallDeleteStorie(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
+
+    @POST("user/acceptOurStoryInvite")
+    fun doAcceptOurStoryInvite(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
+
     @POST("user/getVenueDetails")
     fun callVenueDetailsApi(
         @Body input: JsonObject,
@@ -90,6 +117,13 @@ interface ApiService {
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<SettingsResponse>>
+
+
+    @POST("user/getMemoryViewedUserList")
+    fun docallViewFriendApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<StorieViewResponse>>
 
 
     @POST("user/getHelpCenter")
@@ -131,11 +165,42 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<OnlineFriendResponse>>
 
+    @POST("user/getNearByUser")
+    fun getNearByUser(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<SearchFriendResponse>>
+
     @POST("user/userFreindsList")
     fun doCallRealFriendApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<RealFriendResponse>>
+
+
+    @POST("user/getOurStories")
+    fun doCallOurMemoriesApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<OurMemoriesResponse>>
+
+    @POST("user/userFreindsList")
+    fun doCallOurMemoriesUploadApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<OurFriendListResponse>>
+
+    @POST("user/getNearByUser")
+    fun doCallNearBy(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<OurFriendListResponse>>
+
+    @POST("user/getMyStories")
+    fun docallMemoriesApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<MyMemoriesResponse>>
 
     @POST("user/dashboard_map")
     fun doGetDashboardMapApi(
@@ -318,6 +383,15 @@ interface ApiService {
 
 
 
+
+    @POST("user/getOurStoryById")
+    fun doCallStorieViewApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<StorieResponse>>
+
+
+
     @POST("user/acceptPartyInvitaion")
     fun doCallJoinPartyInvites(
         @Body input: JsonObject,
@@ -360,6 +434,18 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<com.tekzee.amiggos.ui.home.model.VenueResponse>>
 
+    @POST("user/getNearByUserCount")
+    fun getNearByUserCount(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
+    @POST("user/updateLatLangUser")
+    fun doUploadUserLocation(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
     @Multipart
     @POST("user/save_photoid")
     fun doCallAttachIdApi(
@@ -369,5 +455,33 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<AttachIdResponse>>
 
+
+    @Multipart
+    @POST("user/createMyStory")
+    fun doUploadFileToServer(
+        @Part file: MultipartBody.Part?,
+        @Part("userid") valueInt: RequestBody,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<AttachIdResponse>>
+
+
+    @Multipart
+    @POST("user/createOurStory")
+    fun doUploadFileOurStoryToServer(
+        @Part file: MultipartBody.Part?,
+        @Part("userid") valueInt: RequestBody,
+        @Part("friend_ids") friend_ids: RequestBody,
+        @Part("our_story_id") our_story_id: RequestBody,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<AttachIdResponse>>
+
+
+
+    @POST("user/updateLatLangUser")
+
+    fun sendNotification(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
 
 }

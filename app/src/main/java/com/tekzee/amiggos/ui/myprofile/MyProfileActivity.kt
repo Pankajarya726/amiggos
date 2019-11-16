@@ -17,8 +17,12 @@ import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import android.content.Intent
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.tekzee.amiggos.ui.camera.CameraPreview
+import com.tekzee.amiggos.ui.chat.MessageActivity
+import com.tekzee.amiggos.ui.chat.myfriendchatlist.MyFriendChatActivity
 import com.tekzee.amiggos.ui.imageviewer.ImageViewerActivity
 import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
+import com.tekzee.amiggos.ui.storieview.StorieViewActivity
 
 
 class MyProfileActivity : BaseActivity(), MyProfilePresenter.MyProfileMainView {
@@ -44,8 +48,31 @@ class MyProfileActivity : BaseActivity(), MyProfilePresenter.MyProfileMainView {
 
     private fun setupClickListener() {
 
+        binding.chatlayout.setOnClickListener{
+            val intent = Intent(applicationContext, MyFriendChatActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.share.setOnClickListener{
             shareIntent()
+        }
+
+
+
+        binding.pMyMemories.setOnClickListener{
+//            val intent =Intent(applicationContext, StorieViewActivity::class.java)
+//            intent.putExtra(ConstantLib.CONTENT,mDataList!![adapterPosition])
+//            intent.putExtra(ConstantLib.PROFILE_IMAGE,mDataList!![adapterPosition].imageUrl)
+//            intent.putExtra(ConstantLib.USER_ID,mDataList!![adapterPosition].userid.toString())
+//            intent.putExtra(ConstantLib.USER_NAME,mDataList!![adapterPosition].name)
+//            startActivity(intent)
+        }
+
+        binding.addmemory.setOnClickListener{
+            val intent = Intent(applicationContext, CameraPreview::class.java)
+            intent.putExtra(ConstantLib.PROFILE_IMAGE,sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE))
+            intent.putExtra(ConstantLib.FROM_ACTIVITY,"MYPROFILEACTIVITY")
+            startActivity(intent)
         }
 
         binding.pMyId.setOnClickListener{

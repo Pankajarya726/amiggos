@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.facebook.*
-import com.facebook.login.LoginBehavior
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -20,14 +19,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.JsonObject
 import com.nikola.jakshic.instagramauth.*
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.enums.SocialLogins
 import com.tekzee.amiggos.base.model.LanguageData
-import com.tekzee.amiggos.databinding.HomeActivityBinding
 import com.tekzee.amiggos.databinding.LoginActivityBinding
+import com.tekzee.amiggos.firebasemodel.User
 import com.tekzee.amiggos.ui.agreement.LicenceAgreementActivity
 import com.tekzee.amiggos.ui.chooselanguage.ChooseLanguageActivity
 import com.tekzee.amiggos.ui.home.HomeActivity
@@ -40,10 +42,15 @@ import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.SimpleCallback
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
+import org.json.JSONObject
 import java.util.*
 
 
 class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
+
+
+
+    private lateinit var database: DatabaseReference
 
     private val CHECK_LICENCE_AGREEMENT: Int = 111
     private var sharedPreferences: SharedPreference? = null
@@ -72,6 +79,7 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
         sharedPreferences = SharedPreference(this)
         languageData = sharedPreferences!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         loginPresenterImplementation = LoginPresenterImplementation(this, this)
+        database = FirebaseDatabase.getInstance().reference
         setupViewNames()
         setupFacebookLogin()
         setupGoogleLogin()
@@ -100,11 +108,11 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
         binding.txtDontPost.text = languageData!!.klDontPostMedia
 
 
-            if(sharedPreferences!!.getValueBoolean(ConstantLib.ISAGREE, false)){
-                binding.radioAgree.setBackgroundResource(R.drawable.check)
-            }else{
-                binding.radioAgree.setBackgroundResource(R.drawable.uncheck)
-            }
+        if (sharedPreferences!!.getValueBoolean(ConstantLib.ISAGREE, false)) {
+            binding.radioAgree.setBackgroundResource(R.drawable.check)
+        } else {
+            binding.radioAgree.setBackgroundResource(R.drawable.uncheck)
+        }
     }
 
     private fun setupInstagramLogin() {
@@ -133,20 +141,8 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
             override fun onSuccess(userInfo: UserInfo) {
                 Logger.d(userInfo)
                 AuthManager.getInstance().logout()
-                callLoginApi(
-                    userInfo.photoUrl,
-                    userInfo.id,
-                    "I",
-                    "M",
-                    userInfo.fullName,
-                    "",
-                    userInfo.id,
-                    sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString(),
-                    Utility.getCurrentLanguageCode(sharedPreferences),
-                    "",
-                    "",
-                    sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString()
-                )
+                val userEmail = userInfo.id + "@amiggos.com"
+                callFireInstagramLogin(userEmail, userInfo)
 
             }
 
@@ -155,6 +151,124 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
             }
         })
 
+    }
+
+    private fun callFireInstagramLogin(
+        userEmail: String,
+        userInfo: UserInfo
+    ) {
+        var auth:FirebaseAuth = FirebaseAuth.getInstance()
+        auth.signInWithEmailAndPassword(userEmail, "amiggos@123")
+            .addOnCompleteListener(this) { task ->
+                val firebaseUser = FirebaseAuth.getInstance().currentUser
+                if (firebaseUser != null) {
+                    Logger.d("Firebase user logged in with email:" + userEmail)
+                    callLoginApi(
+                        userInfo.photoUrl,
+                        userInfo.id,
+                        "I",
+                        "M",
+                        userInfo.fullName,
+                        "",
+                        userInfo.id,
+                        sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString(),
+                        Utility.getCurrentLanguageCode(sharedPreferences),
+                        "",
+                        "",
+                        sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString()
+                    )
+
+                } else {
+                    auth.createUserWithEmailAndPassword(userEmail, "amiggos@123")
+                        .addOnCompleteListener(this) { task ->
+                            if (task.isSuccessful) {
+                                callLoginApi(
+                                    userInfo.photoUrl,
+                                    userInfo.id,
+                                    "I",
+                                    "M",
+                                    userInfo.fullName,
+                                    "",
+                                    userInfo.id,
+                                    sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString(),
+                                    Utility.getCurrentLanguageCode(sharedPreferences),
+                                    "",
+                                    "",
+                                    sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString()
+                                )
+                            } else {
+                                SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                                    .setTitleText("Error login for chat module")
+                                    .setConfirmText(languageData!!.klOk)
+                                    .setConfirmClickListener { sDialog ->
+                                        sDialog.dismissWithAnimation()
+                                    }
+                                    .show()
+                            }
+                        }
+                }
+            }
+    }
+
+
+    private fun callFirebaseFacebookLogin(
+        userEmail: String?,
+        jsonResponse: JSONObject,
+        accessToken: String
+    ) {
+
+        var auth:FirebaseAuth = FirebaseAuth.getInstance()
+        auth.signInWithEmailAndPassword(userEmail!!, "amiggos@123")
+            .addOnCompleteListener(this) { task ->
+                val firebaseUser = FirebaseAuth.getInstance().currentUser
+                if (firebaseUser != null) {
+                    callLoginApi(
+                        "https://graph.facebook.com/" + jsonResponse.getString("id") + "/picture?type=large",
+                        accessToken,
+                        "F",
+                        "",
+                        jsonResponse.getString("name"),
+                        "",
+                        jsonResponse.getString("id"),
+                        sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString(),
+                        Utility.getCurrentLanguageCode(sharedPreferences),
+                        "",
+                        jsonResponse.getString("email"),
+                        sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString()
+                    )
+                } else {
+                    auth.createUserWithEmailAndPassword(userEmail!!, "amiggos@123")
+                        .addOnCompleteListener(this) { task ->
+                            if (task.isSuccessful) {
+                                callLoginApi(
+                                    "https://graph.facebook.com/" + jsonResponse.getString("id") + "/picture?type=large",
+                                    accessToken,
+                                    "F",
+                                    "",
+                                    jsonResponse.getString("name"),
+                                    "",
+                                    jsonResponse.getString("id"),
+                                    sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString(),
+                                    Utility.getCurrentLanguageCode(sharedPreferences),
+                                    "",
+                                    jsonResponse.getString("email"),
+                                    sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString()
+                                )
+                            } else {
+                                SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                                    .setTitleText("Error login for chat module")
+                                    .setConfirmText(languageData!!.klOk)
+                                    .setConfirmClickListener { sDialog ->
+                                        sDialog.dismissWithAnimation()
+                                    }
+                                    .show()
+                            }
+                        }
+
+
+                }
+
+            }
     }
 
 
@@ -199,7 +313,7 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
             startActivityForResult(intent, CHECK_LICENCE_AGREEMENT)
         }
 
-        binding.radioAgree.setOnClickListener{
+        binding.radioAgree.setOnClickListener {
             sharedPreferences!!.save(ConstantLib.OPENMIDED_CHECKBOX, false)
             sharedPreferences!!.save(ConstantLib.SPREAD_CHECKBOX, false)
             sharedPreferences!!.save(ConstantLib.TURNTUP_CHECKBOX, false)
@@ -230,25 +344,18 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
         binding.btnFb.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
                 Logger.d("TAG" + loginResult.accessToken)
-                var accessToken = loginResult.accessToken
+                val accessToken = loginResult.accessToken
                 val request = GraphRequest.newMeRequest(
                     accessToken
                 ) { jsonResponse, _ ->
                     LoginManager.getInstance().logOut()
-                    callLoginApi(
-                        "https://graph.facebook.com/" + jsonResponse.getString("id") + "/picture?type=large",
-                        accessToken.token.toString(),
-                        "F",
-                        "",
-                        jsonResponse.getString("name"),
-                        "",
-                        jsonResponse.getString("id"),
-                        sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString(),
-                        Utility.getCurrentLanguageCode(sharedPreferences),
-                        "",
-                        jsonResponse.getString("email"),
-                        sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString()
-                    )
+                    var userEmail: String? = null
+                    if (jsonResponse.getString("email").length == 0) {
+                        userEmail = jsonResponse.getString("id") + "@amiggos.com"
+                    } else {
+                        userEmail = jsonResponse.getString("email")
+                    }
+                    callFirebaseFacebookLogin(userEmail, jsonResponse, accessToken.token.toString())
 
 
                 }
@@ -315,13 +422,13 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
 
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-                handleSignInResult(task)
+            handleSignInResult(task)
         } else if (requestCode == CHECK_LICENCE_AGREEMENT) {
             iAgreeFlag = data!!.getBooleanExtra(ConstantLib.LICENCE_AGREEMENT_COMPLETED, false)
             sharedPreferences!!.save(ConstantLib.ISAGREE, iAgreeFlag)
-            if(iAgreeFlag){
+            if (iAgreeFlag) {
                 binding.radioAgree.setBackgroundResource(R.drawable.check)
-            }else{
+            } else {
                 binding.radioAgree.setBackgroundResource(R.drawable.uncheck)
             }
 
@@ -333,24 +440,16 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
 
         try {
 
-                val account: GoogleSignInAccount? = task!!.getResult(ApiException::class.java)
-                // Signed in successfully, show authenticated UI.
-                Logger.d(account!!.displayName + "-" + account.id + "-" + account.displayName + "-" + account.email)
-                callLoginApi(
-                    account.photoUrl.toString(),
-                    account.idToken.toString(),
-                    "G",
-                    "",
-                    account.displayName.toString(),
-                    "",
-                    account.id.toString(),
-                    sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString(),
-                    Utility.getCurrentLanguageCode(sharedPreferences),
-                    "",
-                    account.email.toString(),
-                    sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString()
-                )
-
+            val account: GoogleSignInAccount? = task!!.getResult(ApiException::class.java)
+            // Signed in successfully, show authenticated UI.
+            Logger.d(account!!.displayName + "-" + account.id + "-" + account.displayName + "-" + account.email)
+            var userEmail: String? = null
+            if (account.email.toString().length == 0) {
+                userEmail = account.id.toString() + "@amiggos.com"
+            } else {
+                userEmail = account.email.toString()
+            }
+            callGoogleSignIn(account, userEmail)
 
 
         } catch (e: ApiException) {
@@ -359,6 +458,62 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
             Logger.d(e.printStackTrace())
             Toast.makeText(applicationContext, e.localizedMessage, Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun callGoogleSignIn(
+        account: GoogleSignInAccount,
+        userEmail: String
+    ) {
+        var auth:FirebaseAuth = FirebaseAuth.getInstance()
+        auth.createUserWithEmailAndPassword(userEmail, "amiggos@123")
+            .addOnCompleteListener(this) { task ->
+                val firebaseUser = FirebaseAuth.getInstance().currentUser
+                if (firebaseUser != null) {
+                    Logger.d("Firebase user logged in with email:" + userEmail)
+                    callLoginApi(
+                        account.photoUrl.toString(),
+                        account.idToken.toString(),
+                        "G",
+                        "",
+                        account.displayName.toString(),
+                        "",
+                        account.id.toString(),
+                        sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString(),
+                        Utility.getCurrentLanguageCode(sharedPreferences),
+                        "",
+                        account.email.toString(),
+                        sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString()
+                    )
+                } else {
+                    auth.signInWithEmailAndPassword(userEmail, "amiggos@123")
+                        .addOnCompleteListener(this) { task ->
+                            if (task.isSuccessful) {
+                                callLoginApi(
+                                    account.photoUrl.toString(),
+                                    account.idToken.toString(),
+                                    "G",
+                                    "",
+                                    account.displayName.toString(),
+                                    "",
+                                    account.id.toString(),
+                                    sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString(),
+                                    Utility.getCurrentLanguageCode(sharedPreferences),
+                                    "",
+                                    account.email.toString(),
+                                    sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString()
+                                )
+                            } else {
+                                SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                                    .setTitleText("Error login for chat module")
+                                    .setConfirmText(languageData!!.klOk)
+                                    .setConfirmClickListener { sDialog ->
+                                        sDialog.dismissWithAnimation()
+                                    }
+                                    .show()
+                            }
+                        }
+                }
+            }
     }
 
 
@@ -388,7 +543,7 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
 
 
     override fun onLoginSuccess(responseData: LoginResponse) {
-
+        createFirebaseUser(responseData)
         sharedPreferences!!.save(ConstantLib.USER_ID, responseData.data[0].userid)
         sharedPreferences!!.save(ConstantLib.USER_NAME, responseData.data[0].name)
         sharedPreferences!!.save(ConstantLib.USER_EMAIL, responseData.data[0].email)
@@ -397,9 +552,15 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
         sharedPreferences!!.save(ConstantLib.ACCESS_TOKEN, responseData.data[0].access_token)
         sharedPreferences!!.save(ConstantLib.PROFILE_IMAGE, responseData.data[0].profile)
         sharedPreferences!!.save(ConstantLib.ISAGREE, false)
-        sharedPreferences!!.save(ConstantLib.INVITE_FRIEND,responseData.data[0].invite_friend_count.toInt())
-        sharedPreferences!!.save(ConstantLib.IS_INVITE_FRIEND,responseData.data[0].is_freind_invities)
-        sharedPreferences!!.save(ConstantLib.INVITE_MESSAGE,responseData.data[0].invite_message)
+        sharedPreferences!!.save(
+            ConstantLib.INVITE_FRIEND,
+            responseData.data[0].invite_friend_count.toInt()
+        )
+        sharedPreferences!!.save(
+            ConstantLib.IS_INVITE_FRIEND,
+            responseData.data[0].is_freind_invities
+        )
+        sharedPreferences!!.save(ConstantLib.INVITE_MESSAGE, responseData.data[0].invite_message)
 
         if (responseData.data[0].is_profile == 1) {
             showHomeController()
@@ -408,6 +569,18 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
         }
 
 
+    }
+
+    private fun createFirebaseUser(responseData: LoginResponse) {
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        val user = User()
+        user.amiggosID = responseData.data[0].userid.toString()
+        user.deviceToken = responseData.data[0].api_token
+        user.email = responseData.data[0].email
+        user.fcmToken = sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString()
+        user.image = responseData.data[0].profile
+        user.name = responseData.data[0].name
+        database.child("users").child(firebaseUser!!.uid).setValue(user)
     }
 
     private fun showNextController() {
@@ -518,7 +691,11 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
                 }
             }
         } else {
-            Toast.makeText(applicationContext,"Unable to fetch your location ,Please try again", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                applicationContext,
+                "Unable to fetch your location ,Please try again",
+                Toast.LENGTH_LONG
+            ).show()
             startLocationUpdate()
         }
     }

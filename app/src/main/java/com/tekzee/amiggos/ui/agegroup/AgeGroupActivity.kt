@@ -32,25 +32,35 @@ class AgeGroupActivity:BaseActivity(), AgeGroupActivityPresenter.AgeGroupMainVie
 
     private fun setupDataView() {
 
+        binding.imgEighteen.setBackgroundResource(R.drawable.plus_18_disabled)
+        binding.imgEighteen.isEnabled = true
 
-        if(sharedPreference!!.getValueString(ConstantLib.USER_AGE)!!.toInt() < 18 ){
-            binding.imgEighteen.setBackgroundResource(R.drawable.plus_unchecked_18)
+        if(sharedPreference!!.getValueString(ConstantLib.USER_AGE)!!.toInt() < 21){
             binding.imgTwentyOne.setBackgroundResource(R.drawable.plus_unchecked_21)
-            binding.imgEighteen.isEnabled = false
             binding.imgTwentyOne.isEnabled = false
-        }else if(sharedPreference!!.getValueString(ConstantLib.USER_AGE)!!.toInt() in 19..20){
-            binding.imgEighteen.setBackgroundResource(R.drawable.plus_18_disabled)
-            binding.imgTwentyOne.setBackgroundResource(R.drawable.plus_unchecked_21)
-            binding.imgEighteen.isEnabled = true
-            binding.imgTwentyOne.isEnabled = false
-
-        }else if(sharedPreference!!.getValueString(ConstantLib.USER_AGE)!!.toInt()>21){
-
-            binding.imgEighteen.setBackgroundResource(R.drawable.plus_18_disabled)
+        }else{
             binding.imgTwentyOne.setBackgroundResource(R.drawable.plus_21_disabled)
-            binding.imgEighteen.isEnabled = true
             binding.imgTwentyOne.isEnabled = true
+            binding.imgEighteen.setBackgroundResource(R.drawable.plus_unchecked_18)
+            binding.imgEighteen.isEnabled = false
         }
+
+
+
+//        else if(sharedPreference!!.getValueString(ConstantLib.USER_AGE)!!.toInt() in 19..20){
+//
+//
+//            binding.imgTwentyOne.setBackgroundResource(R.drawable.plus_unchecked_21)
+//            binding.imgTwentyOne.isEnabled = true
+//           // binding.imgEighteen.isEnabled = true
+//            // binding.imgEighteen.setBackgroundResource(R.drawable.plus_18_disabled)
+//        }else if(sharedPreference!!.getValueString(ConstantLib.USER_AGE)!!.toInt()>21){
+//
+//            binding.imgEighteen.setBackgroundResource(R.drawable.plus_18_disabled)
+//            binding.imgTwentyOne.setBackgroundResource(R.drawable.plus_21_disabled)
+//            binding.imgEighteen.isEnabled = true
+//            binding.imgTwentyOne.isEnabled = true
+//        }
     }
 
     private fun setupClickListener() {

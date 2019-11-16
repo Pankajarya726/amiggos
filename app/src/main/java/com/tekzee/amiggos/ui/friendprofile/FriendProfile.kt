@@ -21,20 +21,23 @@ import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import com.kcode.bottomlib.BottomDialog
-
-
-
+import com.tekzee.amiggos.ui.chat.MessageActivity
+import com.tekzee.amiggos.ui.home.model.StoriesData
+import com.tekzee.amiggos.ui.notification.model.StorieResponse
+import com.tekzee.amiggos.ui.storieview.StorieViewActivity
 
 
 class FriendProfile : BaseActivity(), FriendProfilePresenter.FriendProfileMainView {
 
 
+    private var friendName: String? = ""
+    private var friendImage: String? = ""
     private lateinit var binding: FriendProfileBinding
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
     private var friendProfilePresenterImplementation: FriendProfilePresenterImplementation? = null
     var data: FriendProfileResponse? = null
-
+    var mDataList: ArrayList<StoriesData> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +52,19 @@ class FriendProfile : BaseActivity(), FriendProfilePresenter.FriendProfileMainVi
     }
 
     private fun setupClickListener() {
+        binding.fpOurMemories.setOnClickListener {
+            callOurMemorieApi()
+        }
+
+        binding.fpChat.setOnClickListener{
+            val intentActivity = Intent(applicationContext,MessageActivity::class.java)
+            intentActivity.putExtra(ConstantLib.FRIEND_ID,intent.getStringExtra(ConstantLib.FRIEND_ID))
+            intentActivity.putExtra(ConstantLib.FRIENDNAME,friendName)
+            intentActivity.putExtra(ConstantLib.FRIENDIMAGE,friendImage)
+            startActivity(intentActivity)
+        }
+
+
         binding.fpAccept.setOnClickListener {
             callAcceptApi()
         }
@@ -134,6 +150,18 @@ class FriendProfile : BaseActivity(), FriendProfilePresenter.FriendProfileMainVi
             }
 
         }
+    }
+
+    private fun callOurMemorieApi() {
+            val input: JsonObject = JsonObject()
+            input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
+            input.addProperty("our_story_id", intent.getStringExtra(ConstantLib.OURSTORYID))
+            friendProfilePresenterImplementation!!.doCallStorieViewApi(
+                "",
+                input,
+                Utility.createHeaders(sharedPreference)
+            )
+
     }
 
     private fun setupViewData() {
@@ -249,6 +277,8 @@ class FriendProfile : BaseActivity(), FriendProfilePresenter.FriendProfileMainVi
 
     override fun onFriendProfileSuccess(responseData: FriendProfileResponse?) {
         binding.fpTxtName.text = responseData!!.data[0].name
+        friendName = responseData!!.data[0].name
+        friendImage = responseData!!.data[0].profile
         binding.fpTxtDescriptionAge.text = responseData.data[0].location
         binding.fpTxtDescriptionLocation.text = responseData.data[0].age.toString()
         Glide.with(applicationContext).load(responseData.data[0].profile)
@@ -374,5 +404,24 @@ class FriendProfile : BaseActivity(), FriendProfilePresenter.FriendProfileMainVi
         pDialog.show()
     }
 
+    override fun onStorieSuccess(responseData: StorieResponse, notificationId: String) {
+        mDataList = responseData.data as ArrayList<StoriesData>
+        gotoStorieView(mDataList,notificationId)
+    }
+
+
+    fun gotoStorieView(
+        mDataList: ArrayList<StoriesData>,
+        notificationId: String
+    ) {
+        val intent =Intent(applicationContext, StorieViewActivity::class.java)
+        intent.putExtra(ConstantLib.CONTENT, this.mDataList[0])
+        intent.putExtra(ConstantLib.PROFILE_IMAGE, this.mDataList[0].imageUrl)
+        intent.putExtra(ConstantLib.FROM,"FRIENDPROFILE")
+        intent.putExtra(ConstantLib.NOTIFICAION_ID,notificationId)
+        intent.putExtra(ConstantLib.USER_ID, this.mDataList[0].userid.toString())
+        intent.putExtra(ConstantLib.USER_NAME, this.mDataList[0].name)
+        startActivity(intent)
+    }
 
 }
