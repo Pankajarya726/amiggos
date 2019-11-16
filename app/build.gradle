@@ -31,7 +31,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             multiDexEnabled = true
-            signingConfig signingConfigs.release
+           // signingConfig signingConfigs.release
             debuggable = true
         }
     }
