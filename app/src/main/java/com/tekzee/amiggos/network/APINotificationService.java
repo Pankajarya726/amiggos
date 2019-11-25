@@ -1,6 +1,7 @@
 package com.tekzee.amiggos.network;
 
 import com.tekzee.amiggos.base.model.MyResponse;
+import com.tekzee.amiggos.base.model.NotificationData;
 import com.tekzee.amiggos.base.model.Sender;
 
 import retrofit2.Call;
@@ -17,5 +18,5 @@ public interface APINotificationService {
     )
 
     @POST("fcm/send")
-    Call<MyResponse> sendNotification(@Body Sender body);
+    Call<MyResponse> sendNotification(@Body NotificationData body);
 }

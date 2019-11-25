@@ -5,6 +5,7 @@ import com.google.firebase.database.*
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.firebasemodel.User
 import com.tekzee.amiggos.ui.chat.interfaces.ChatListInterface
+import com.tekzee.amiggos.ui.chat.interfaces.FirebaseUserInterface
 import com.tekzee.amiggos.ui.chat.interfaces.ReceiverIdInterface
 import com.tekzee.amiggos.ui.chat.model.Message
 
@@ -16,27 +17,7 @@ class ChatHelper {
         private var databaseReference: DatabaseReference? = null
         private var databaseReferenceMessage: DatabaseReference? = null
 
-        fun setMessageStatusToSeen(senderId:String,receiverId:String){
 
-            databaseReference = FirebaseDatabase.getInstance().reference.child("message")
-            databaseReference!!.addValueEventListener(object : ValueEventListener{
-
-                override fun onCancelled(p0: DatabaseError) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                }
-
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (items in snapshot.children){
-                        val message = items.getValue(Message::class.java)
-                        if(message!!.sender.equals(receiverId) && message.receiver.equals(senderId)){
-                            val map = HashMap<String,Any>()
-                            map["isSeen"] = true
-                            databaseReference!!.child(items.key!!).updateChildren(map)
-                        }
-                    }
-                }
-            })
-        }
 
 
 
@@ -80,12 +61,42 @@ class ChatHelper {
                             listener.getReceiverId(items.key!!,user!!)
                             break
                         }
-                        Logger.d("User data: " + user.toString())
+//                        Logger.d("User data: " + user.toString())
                     }
                 }
             })
 
         }
+
+        fun getamiggosIdFromFirebaseId(
+            firebaseid: String,
+            listener: FirebaseUserInterface
+        ) {
+
+            databaseReference = FirebaseDatabase.getInstance().reference.child("users")
+            databaseReference!!.addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(dataSnapshot: DatabaseError) {
+
+                }
+
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                    for (items in dataSnapshot.children) {
+                        val user: User? = items.getValue(User::class.java)
+                        if(items.key.equals(firebaseid))
+                        {
+                            listener.getFirebaseUserIdFromAmiggosId(user!!.amiggosID!!)
+                            break
+                        }
+                    }
+                }
+            })
+
+        }
+
+
+
+
 
         fun setConversation(
             senderId: String,

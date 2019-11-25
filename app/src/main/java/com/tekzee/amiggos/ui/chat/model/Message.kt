@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Message(
     @SerializedName("isSeen")
-    val isSeen: Boolean = false,
+    var isSeen: Boolean = false,
     @SerializedName("msg")
     val msg: String = "",
     @SerializedName("receiver")

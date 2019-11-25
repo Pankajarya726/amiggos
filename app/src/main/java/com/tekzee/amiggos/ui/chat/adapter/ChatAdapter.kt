@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.tekzee.amiggos.R
+import com.tekzee.amiggos.ui.chat.MessageActivity
 import com.tekzee.amiggos.ui.chat.model.Message
 import kotlinx.android.synthetic.main.row_chat_left.view.*
 import kotlinx.android.synthetic.main.row_chat_right.view.*

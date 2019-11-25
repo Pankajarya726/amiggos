@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -35,6 +36,7 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import com.google.gson.JsonObject
 import com.google.maps.android.ui.IconGenerator
 import com.tekzee.amiggos.R
@@ -42,6 +44,7 @@ import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.HomeActivityBinding
 import com.tekzee.amiggos.ui.camera.CameraPreview
+import com.tekzee.amiggos.ui.chat.model.Message
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.MyFriendChatActivity
 import com.tekzee.amiggos.ui.friendprofile.FriendProfile
 import com.tekzee.amiggos.ui.helpcenter.HelpCenterActivity
@@ -130,6 +133,48 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setupRecyclerVenueView()
         setupRecyclerMyStoriesView()
 
+        getAllUnreadChatCount()
+
+
+
+
+    }
+
+    private fun getAllUnreadChatCount() {
+        val listOfUnreadMessageCount = ArrayList<Message>()
+        val databaseReference: DatabaseReference =
+            FirebaseDatabase.getInstance().reference.child("message")
+        databaseReference.addValueEventListener(
+            object : ValueEventListener {
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.e("error message", databaseError.message)
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    listOfUnreadMessageCount.clear()
+                    for(messages in snapshot.children){
+                        val data = messages.value as HashMap<String,Any>
+                        val messageData = Message(
+                            data["isSeen"]!!.toString().toBoolean(),
+                            data["msg"].toString(), data["receiver"].toString(), data["sender"].toString(),
+                            data["timeSpam"]!!.toString().toLong())
+                        if (messageData!=null) {
+                            if (messageData.receiver.equals(FirebaseAuth.getInstance().uid.toString())&& !messageData.isSeen){
+                                listOfUnreadMessageCount.add(Message(
+                                    data["isSeen"]!!.toString().toBoolean(),
+                                    data["msg"].toString(), data["receiver"].toString(), data["sender"].toString(),
+                                    data["timeSpam"]!!.toString().toLong()))
+                            }
+                        }
+                    }
+                    if(listOfUnreadMessageCount.size==0){
+                        binding.txtUnread.visibility = View.GONE
+                    }else{
+                        binding.txtUnread.visibility = View.VISIBLE
+                    }
+                    binding.txtUnread.text = listOfUnreadMessageCount.size.toString()
+                }
+            })
     }
 
 
@@ -215,7 +260,11 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private fun setUpMap() {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
+
         mapFragment.getMapAsync(this)
+
+
+
         checkForLocationPermissionFirst()
     }
 

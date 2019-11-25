@@ -1,6 +1,6 @@
 package com.tekzee.mallortaxi.network
 
-import com.facebook.common.Common
+
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse

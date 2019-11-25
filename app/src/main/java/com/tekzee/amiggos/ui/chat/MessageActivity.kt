@@ -8,9 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.tekzee.amiggos.R
-import com.tekzee.amiggos.base.model.Data
-import com.tekzee.amiggos.base.model.MyResponse
-import com.tekzee.amiggos.base.model.Sender
+import com.tekzee.amiggos.base.model.*
 import com.tekzee.amiggos.databinding.MessageActivityBinding
 import com.tekzee.amiggos.firebasemodel.User
 import com.tekzee.amiggos.network.APINotificationService
@@ -18,6 +16,7 @@ import com.tekzee.amiggos.network.Client
 import com.tekzee.amiggos.ui.chat.adapter.ChatAdapter
 import com.tekzee.amiggos.ui.chat.interfaces.ReceiverIdInterface
 import com.tekzee.amiggos.ui.chat.model.Message
+
 import com.tekzee.mallortaxi.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
@@ -27,24 +26,35 @@ import retrofit2.Response
 
 
 class MessageActivity : BaseActivity() {
+    private var valueEventSeenListener: ValueEventListener? = null
+    private var messageListener: ValueEventListener? = null
+    private var listListener: ValueEventListener? = null
     private var sharedPreferences: SharedPreference? = null
     private var databaseReferenceMessage: DatabaseReference? = null
     private var databaseReference: DatabaseReference? = null
     private var adapter: ChatAdapter? = null
-    var chatListArray: ArrayList<Message>?= null
+    var chatListArray: ArrayList<Message>? = null
     private lateinit var binding: MessageActivityBinding
-    private var sender: String? = null
-    private var listSize:Int=0
+    private var myFirebaseUserid: String? = null
+    private var listSize: Int = 0
     private var mApiService: APINotificationService? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.message_activity)
-        sender = FirebaseAuth.getInstance().currentUser!!.uid
+        myFirebaseUserid = FirebaseAuth.getInstance().currentUser!!.uid
         sharedPreferences = SharedPreference(this)
+        databaseReferenceMessage = FirebaseDatabase.getInstance().reference.child("message")
+
         setUpClickListener()
         setUpViewData()
 
-        mApiService = Client.getClient("https://fcm.googleapis.com/").create(APINotificationService::class.java)
+        mApiService = Client.getClient("https://fcm.googleapis.com/")
+            .create(APINotificationService::class.java)
+
+
+        Log.e("Message FriendId:", "" + intent.getStringExtra(ConstantLib.FRIEND_ID))
 
         ChatHelper.getReceiverFirebaseId(intent.getStringExtra(ConstantLib.FRIEND_ID),
             object : ReceiverIdInterface {
@@ -52,7 +62,7 @@ class MessageActivity : BaseActivity() {
                     receiverId: String,
                     user: User
                 ) {
-                    ChatHelper.setMessageStatusToSeen(sender!!,receiverId)
+                    setMessageStatusToSeen(myFirebaseUserid!!, receiverId)
                 }
             })
 
@@ -64,7 +74,7 @@ class MessageActivity : BaseActivity() {
                     receiverId: String,
                     user: User
                 ) {
-                    getAllMessageBetweenSenderAndReceiver(sender!!,receiverId)
+                    getAllMessageBetweenSenderAndReceiver(myFirebaseUserid!!, receiverId)
                 }
             })
 
@@ -83,34 +93,41 @@ class MessageActivity : BaseActivity() {
         chatListArray = ArrayList()
         databaseReference =
             FirebaseDatabase.getInstance().reference.child("conversation").child(senderid)
-        databaseReferenceMessage = FirebaseDatabase.getInstance().reference.child("message")
-        databaseReference!!.addValueEventListener(object : ValueEventListener {
+
+        messageListener = databaseReference!!.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(dataSnapshot: DatabaseError) {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 chatListArray!!.clear()
-                listSize =0
+                listSize = 0
                 for (conversationIds in dataSnapshot.children) {
                     listSize++
-                    Log.d("Conversation id : ", conversationIds.key)
-                    databaseReferenceMessage!!.child(conversationIds.key!!)
+                    listListener = databaseReferenceMessage!!.child(conversationIds.key!!)
                         .addValueEventListener(object : ValueEventListener {
                             override fun onCancelled(dataSnapshot: DatabaseError) {
                                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                             }
 
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                if(dataSnapshot.getValue(Message::class.java)!=null){
+                                if (dataSnapshot.getValue(Message::class.java) != null) {
 
                                     val message: Message? =
                                         dataSnapshot.getValue(Message::class.java)
-                                    if(senderid.equals(message!!.sender,true) && receiverId.equals(message.receiver,true)||senderid.equals(message!!.receiver,true) && receiverId.equals(message.sender,true)){
+                                    if (senderid.equals(
+                                            message!!.sender,
+                                            true
+                                        ) && receiverId.equals(
+                                            message.receiver,
+                                            true
+                                        ) || senderid.equals(
+                                            message!!.receiver,
+                                            true
+                                        ) && receiverId.equals(message.sender, true)
+                                    ) {
                                         chatListArray!!.add(message)
                                     }
-                                    setupRecyclerview()
-                                }else{
                                     setupRecyclerview()
                                 }
 
@@ -125,10 +142,10 @@ class MessageActivity : BaseActivity() {
 
     }
 
-    private fun setMessageSeen(key: String?) {
-         val map = HashMap<String,Any>()
-         map["isSeen"] = true
-         databaseReferenceMessage!!.child(key!!).updateChildren(map)
+    fun setMessageSeen(key: String?) {
+        val map = HashMap<String, Any>()
+        map["isSeen"] = true
+        databaseReferenceMessage!!.child(key!!).updateChildren(map)
     }
 
     private fun setupRecyclerview() {
@@ -136,7 +153,13 @@ class MessageActivity : BaseActivity() {
         val mlayoutManager = LinearLayoutManager(this)
         mlayoutManager.stackFromEnd = true
         binding.recyclerViewData.layoutManager = mlayoutManager
-        adapter = ChatAdapter(chatListArray!!,sharedPreferences!!.getValueString(ConstantLib.PROFILE_IMAGE),sharedPreferences!!.getValueString(ConstantLib.USER_NAME),intent.getStringExtra(ConstantLib.FRIENDNAME),intent.getStringExtra(ConstantLib.FRIENDIMAGE))
+        adapter = ChatAdapter(
+            chatListArray!!,
+            sharedPreferences!!.getValueString(ConstantLib.PROFILE_IMAGE),
+            sharedPreferences!!.getValueString(ConstantLib.USER_NAME),
+            intent.getStringExtra(ConstantLib.FRIENDNAME),
+            intent.getStringExtra(ConstantLib.FRIENDIMAGE)
+        )
         binding.recyclerViewData.adapter = adapter
     }
 
@@ -155,18 +178,23 @@ class MessageActivity : BaseActivity() {
                             receiverId: String,
                             user: User
                         ) {
-                            ChatHelper.sendMessage(
-                                sender!!,
-                                receiverId,
-                                binding.etChat.text.trim().toString(),
-                                false,
-                                System.currentTimeMillis()
-                            )
-                            sendNotification(user, binding.etChat.text.trim().toString())
-                            binding.etChat.setText("")
+                            if (binding.etChat.text.trim().toString().isNotEmpty()) {
+
+                                ChatHelper.sendMessage(
+                                    myFirebaseUserid!!,
+                                    receiverId,
+                                    binding.etChat.text.trim().toString(),
+                                    false,
+                                    System.currentTimeMillis()
+                                )
+                                sendNotification(user, binding.etChat.text.trim().toString())
+                                binding.etChat.setText("")
+                            }
+
                         }
                     })
             }
+
         }
 
 
@@ -179,17 +207,26 @@ class MessageActivity : BaseActivity() {
         user: User,
         message: String
     ) {
+        val notification = Notification(
+            "New Message",
+            message,
+            user.name
+
+        )
+
         val data = Data(
             user.deviceToken,
             R.mipmap.ic_launcher,
             "7007",
-            user.name ,
+            user.name,
             message,
             user.deviceToken,
             "60"
         )
-        val sender = Sender(data, user.fcmToken)
-        mApiService!!.sendNotification(sender)
+
+        val notificationData = NotificationData(notification, data, user.fcmToken)
+
+        mApiService!!.sendNotification(notificationData)
             .enqueue(object : Callback<MyResponse> {
                 override fun onResponse(
                     call: Call<MyResponse>,
@@ -210,6 +247,51 @@ class MessageActivity : BaseActivity() {
             })
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (listListener != null)
+            databaseReferenceMessage!!.removeEventListener(listListener!!)
+
+
+        if (messageListener != null)
+            databaseReference!!.removeEventListener(messageListener!!)
+
+
+        if (valueEventSeenListener != null)
+            databaseReferenceMessage!!.removeEventListener(valueEventSeenListener!!)
+
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+    }
+
+
+    fun setMessageStatusToSeen(myFirebaseUserId: String, receiverId: String) {
+
+        valueEventSeenListener =
+            databaseReferenceMessage!!.addValueEventListener(object : ValueEventListener {
+
+                override fun onCancelled(p0: DatabaseError) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (items in snapshot.children) {
+                        val message = items.getValue(Message::class.java)
+                        if (message!!.sender.equals(receiverId) && message.receiver.equals(
+                                myFirebaseUserId
+                            )
+                        ) {
+                            val map = HashMap<String, Any>()
+                            map["isSeen"] = true
+                            databaseReferenceMessage!!.child(items.key!!).updateChildren(map)
+                        }
+                    }
+                }
+            })
+    }
+}
 
 
