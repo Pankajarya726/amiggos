@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
@@ -137,8 +138,9 @@ class NotificationActivity : BaseActivity(), NotificationPresenter.NotificationM
 
     override fun onNotificationInfiniteSuccess(responseData: NotificationResponse?) {
         pageNo++
-        adapter?.setLoadingStatus(true)
         mydataList.removeAt(mydataList.size - 1)
+        adapter?.notifyDataSetChanged()
+        adapter?.setLoadingStatus(true)
         mydataList.addAll(responseData!!.data)
         adapter?.notifyDataSetChanged()
     }
@@ -162,7 +164,8 @@ class NotificationActivity : BaseActivity(), NotificationPresenter.NotificationM
         when (mydataList.get(position).notificationKey) {
 
             1 -> {
-                gotoDocRejected(userFriendData.userid.toString())
+//                gotoDocRejected(userFriendData.userid.toString())
+                Logger.d("document verified, will not go anywhere")
             }
             2 -> {
 

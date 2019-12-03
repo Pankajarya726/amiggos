@@ -170,6 +170,8 @@ class FriendProfile : BaseActivity(), FriendProfilePresenter.FriendProfileMainVi
         binding.fpChat.text = languageData!!.klBtnChatTitle
         binding.fpOurMemories.text = languageData!!.klOURMEMORY
         binding.addRealFriend.text = languageData!!.klAddFriend
+        binding.fpAccept.text = languageData!!.klAccept
+        binding.fpReject.text = languageData!!.klReject
     }
 
 
@@ -309,8 +311,7 @@ class FriendProfile : BaseActivity(), FriendProfilePresenter.FriendProfileMainVi
             3 -> {
                 binding.addRealFriend.visibility = View.GONE
                 binding.layoutAcceptReject.visibility = View.VISIBLE
-                binding.fpAccept.text = languageData!!.klAccept
-                binding.fpReject.text = languageData!!.klReject
+
                 binding.addRealFriend.isClickable = true
             }
             4 -> {

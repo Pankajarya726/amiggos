@@ -103,7 +103,9 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMai
 
 
     override fun validateError(message: String) {
-
+        items.clear()
+        adapter.notifyDataSetChanged()
+        Toast.makeText(activity,message,Toast.LENGTH_LONG).show()
     }
 
     override fun onPartyInviteSuccess(responseData: PartyInvitesResponse?) {

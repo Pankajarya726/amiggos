@@ -52,7 +52,10 @@ import com.tekzee.amiggos.ui.home.adapter.HomeMyStoriesAdapter
 import com.tekzee.amiggos.ui.home.adapter.HomeVenueAdapter
 import com.tekzee.amiggos.ui.home.adapter.NestedScrollPagination
 import com.tekzee.amiggos.ui.home.adapter.PaginationScrollListener
-import com.tekzee.amiggos.ui.home.model.*
+import com.tekzee.amiggos.ui.home.model.DashboardReponse
+import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
+import com.tekzee.amiggos.ui.home.model.NearestClub
+import com.tekzee.amiggos.ui.home.model.StoriesData
 import com.tekzee.amiggos.ui.invitefriend.InitGeoLocationUpdate
 import com.tekzee.amiggos.ui.invitefriend.InviteFriendActivity
 import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
@@ -108,17 +111,14 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         private const val TOTAL_PAGES_VENUE = 5
     }
 
+
     override fun onStart() {
         super.onStart()
 
-//        Intent(this, UpdateUserLocationToServer::class.java).also {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                startForegroundService(it)
-//                return
-//            }
-//            startService(it)
-//        }
+    }
 
+    fun getActivityContext(): HomeActivity {
+        return this
     }
 
 
@@ -132,12 +132,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setupClickListener()
         setupRecyclerVenueView()
         setupRecyclerMyStoriesView()
-
         getAllUnreadChatCount()
-
-
-
-
     }
 
     private fun getAllUnreadChatCount() {
@@ -188,21 +183,30 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
 
         binding.imgChat.setOnClickListener {
-            val intent = Intent(applicationContext, MyFriendChatActivity::class.java)
-            startActivity(intent)
+            if (!checkFriedRequestSent()) {
+                val intent = Intent(applicationContext, MyFriendChatActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         binding.imgCamera.setOnClickListener {
-            val intent = Intent(applicationContext, CameraPreview::class.java)
-            intent.putExtra(ConstantLib.PROFILE_IMAGE,sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE))
-            intent.putExtra(ConstantLib.FROM_ACTIVITY,"HOMEACTIVITY")
-            startActivity(intent)
+            if (!checkFriedRequestSent()) {
+                val intent = Intent(applicationContext, CameraPreview::class.java)
+                intent.putExtra(
+                    ConstantLib.PROFILE_IMAGE,
+                    sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE)
+                )
+                intent.putExtra(ConstantLib.FROM_ACTIVITY, "HOMEACTIVITY")
+                startActivity(intent)
+            }
         }
 
 
         binding.imgStories.setOnClickListener {
-            val intent = Intent(applicationContext, MyMemoriesActivity::class.java)
-            startActivity(intent)
+            if (!checkFriedRequestSent()) {
+                val intent = Intent(applicationContext, MyMemoriesActivity::class.java)
+                startActivity(intent)
+            }
         }
 
 
@@ -236,13 +240,18 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun checkFriedRequestSent(): Boolean {
-        if (sharedPreference!!.getValueInt(ConstantLib.IS_INVITE_FRIEND) == 0) {
-            val intent = Intent(this, InviteFriendActivity::class.java)
-            startActivity(intent)
-            return true
-        } else {
+        if(sharedPreference!!.getValueString(ConstantLib.NO_DAY_REGISTER)!!.toInt()>31){
+            if (sharedPreference!!.getValueInt(ConstantLib.IS_INVITE_FRIEND) == 0) {
+                val intent = Intent(this, InviteFriendActivity::class.java)
+                startActivity(intent)
+                return true
+            } else {
+                return false
+            }
+        }else{
             return false
         }
+
 
     }
 
@@ -318,7 +327,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun callgetNearByUserCount() {
-        var input = JsonObject()
+        val input = JsonObject()
         input.addProperty("userid",sharedPreference!!.getValueInt(ConstantLib.USER_ID).toString())
         input.addProperty("latitude",lastLocation!!.latitude)
         input.addProperty("longitude",lastLocation!!.longitude)
@@ -330,14 +339,20 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         mMap = googleMap!!
 
         mMap.setOnMarkerClickListener { marker ->
+
             callFriendProfileIntent(marker)
         }
     }
 
     private fun callFriendProfileIntent(marker: Marker): Boolean {
-        val intent = Intent(applicationContext, FriendProfile::class.java)
-        intent.putExtra(ConstantLib.FRIEND_ID, marker.tag.toString())
-        startActivity(intent)
+        if (!checkFriedRequestSent()) {
+
+            Log.e("Markerdata---->",marker.tag.toString()+"---"+marker.id.toString()+"====="+marker.title)
+
+            val intent = Intent(applicationContext, FriendProfile::class.java)
+            intent.putExtra(ConstantLib.FRIEND_ID, marker.title)
+            startActivity(intent)
+        }
         return true
     }
 
@@ -649,7 +664,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         txt_logout.setOnClickListener {
             drawer.closeDrawer(GravityCompat.START)
             val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-            pDialog.titleText = "Are you sure you want to logout"
+            pDialog.titleText = languageData!!.klLogoutConfirm
             pDialog.setCancelable(false)
             pDialog.setCancelButton(languageData!!.klCancel) {
                 pDialog.dismiss()
@@ -701,8 +716,9 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                         itemData.userid.toString()
                     )
                 )
-            ).position(LatLng(itemData.latitude.toDouble(), itemData.longitude.toDouble()))
+            ).position(LatLng(itemData.latitude.toDouble(), itemData.longitude.toDouble())).title(itemData.userid.toString())
             mMap.addMarker(markerOptions)
+
         }
 
         mMap.moveCamera(
@@ -715,7 +731,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         )
     }
 
-    fun createCustomMarker(context: Context, profile: String, friendId: String): Bitmap? {
+    private fun createCustomMarker(context: Context, profile: String, friendId: String): Bitmap? {
 
         val layoutInflater: LayoutInflater = LayoutInflater.from(context)
         val marker: View = layoutInflater.inflate(R.layout.custom_marker, null);
@@ -728,7 +744,9 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         windowManager.defaultDisplay.getMetrics(displayMetrics)
         marker.layoutParams = ViewGroup.LayoutParams(52, ViewGroup.LayoutParams.WRAP_CONTENT);
         marker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
-        marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
+        marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
+        marker.tag = friendId
+        marker.id = friendId.toInt()
         marker.buildDrawingCache();
         val bitmap = Bitmap.createBitmap(
             marker.measuredWidth,
@@ -737,7 +755,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         )
         val canvas = Canvas(bitmap)
         marker.draw(canvas)
-        marker.setTag(friendId)
+
         return bitmap
     }
 

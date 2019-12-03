@@ -48,11 +48,12 @@ class AttachIdActivity : BaseActivity(), AttachIdActivityPresenter.AttachIdMainV
         languageData = sharedPreferences!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         attachIdPresenterImplementation = AttachIdPresenterImplementation(this, this)
 
-        if(intent.getStringExtra(ConstantLib.FROM).equals(ConstantLib.NOTIFICAION)){
-            userid = intent.getStringExtra(ConstantLib.USER_DATA)
-        }else{
-            userid = sharedPreferences!!.getValueInt(ConstantLib.USER_ID).toString()
-        }
+            if(intent.getStringExtra(ConstantLib.FROM) == ConstantLib.NOTIFICAION){
+                userid = intent.getStringExtra(ConstantLib.USER_DATA)
+            }else{
+                userid = sharedPreferences!!.getValueInt(ConstantLib.USER_ID).toString()
+            }
+
 
 
         setupToolBar()

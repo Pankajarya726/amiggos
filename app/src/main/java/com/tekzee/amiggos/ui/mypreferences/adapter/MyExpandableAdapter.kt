@@ -57,7 +57,7 @@ class MyExpandableAdapter(
         childIndex: Int
     ) {
         val viewType = getItemViewType(flatPosition)
-        var childDataItem = group!!.items[childIndex] as Value
+        val childDataItem = group!!.items[childIndex] as Value
         listOfValue = group.items as ArrayList<Value>
 
         when (viewType) {
@@ -120,8 +120,8 @@ class MyExpandableAdapter(
 
 
             valueslider.setText("From " + childDataItem.filter_from + " Till " + childDataItem.filter_to)
-            var thumb1 = range_slider.getThumb(0)
-            var thumb2 = range_slider.getThumb(1)
+            val thumb1 = range_slider.getThumb(0)
+            val thumb2 = range_slider.getThumb(1)
             thumb1.setValue(childDataItem.filter_from.toInt())
             thumb2.setValue(childDataItem.filter_to.toInt())
 

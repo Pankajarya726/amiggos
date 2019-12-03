@@ -28,6 +28,7 @@ import java.io.IOException
 import java.util.*
 
 class UpdateUserLocationToServer : Service() {
+    private var activity: Activity?= null
     private var city: String? = ""
     private var state: String? =""
     private var postalCode: String? = ""
@@ -41,6 +42,7 @@ class UpdateUserLocationToServer : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+
 
         if (intent != null) {
             val action = intent.action
@@ -61,8 +63,10 @@ class UpdateUserLocationToServer : Service() {
 
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
-        input.addProperty("latitude", lastLocation!!.latitude.toString())
-        input.addProperty("longitude", lastLocation!!.longitude.toString())
+//        input.addProperty("latitude", lastLocation!!.latitude.toString())
+//        input.addProperty("longitude", lastLocation!!.longitude.toString())
+        input.addProperty("latitude", "22.7533")
+        input.addProperty("longitude", "75.8937")
         input.addProperty("country", countryName)
         input.addProperty("state", state)
         input.addProperty("city", city)
@@ -97,8 +101,7 @@ class UpdateUserLocationToServer : Service() {
     override fun onCreate() {
         super.onCreate()
         sharedPreferences = SharedPreference(this)
-        InitGeoLocationUpdate.stopLocationUpdate(this)
-        startLocationUpdate()
+        //startLocationUpdate()
         val notification = createNotification()
         startForeground(1, notification)
     }
@@ -106,7 +109,7 @@ class UpdateUserLocationToServer : Service() {
 
     private fun startLocationUpdate() {
 
-        InitGeoLocationUpdate.locationInit(this, object : SimpleCallback<LatLng> {
+        InitGeoLocationUpdate.locationInit(applicationContext, object : SimpleCallback<LatLng> {
             override fun callback(mCurrentLatLng: LatLng) {
                 lastLocation = mCurrentLatLng
             }

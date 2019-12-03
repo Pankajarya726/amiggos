@@ -3,6 +3,7 @@ package com.tekzee.amiggos.ui.mymemories.fragment.memories.model
 
 import com.google.gson.annotations.SerializedName
 import com.tekzee.amiggos.ui.home.model.Content
+import java.io.Serializable
 
 data class MemoriesData(
     @SerializedName("api_url")
@@ -18,4 +19,4 @@ data class MemoriesData(
     @SerializedName("userid")
     val userid: Int = 0,
     val loadingStatus: Boolean = false
-)
+): Serializable

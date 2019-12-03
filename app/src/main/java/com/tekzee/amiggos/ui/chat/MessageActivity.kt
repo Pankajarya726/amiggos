@@ -112,7 +112,6 @@ class MessageActivity : BaseActivity() {
 
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
                                 if (dataSnapshot.getValue(Message::class.java) != null) {
-
                                     val message: Message? =
                                         dataSnapshot.getValue(Message::class.java)
                                     if (senderid.equals(
@@ -121,16 +120,19 @@ class MessageActivity : BaseActivity() {
                                         ) && receiverId.equals(
                                             message.receiver,
                                             true
-                                        ) || senderid.equals(
-                                            message!!.receiver,
-                                            true
-                                        ) && receiverId.equals(message.sender, true)
+                                        )
                                     ) {
+                                        chatListArray!!.add(message)
+                                    }
+
+                                    if(senderid.equals(
+                                        message.receiver,
+                                        true
+                                    ) && receiverId.equals(message.sender, true)){
                                         chatListArray!!.add(message)
                                     }
                                     setupRecyclerview()
                                 }
-
                             }
                         })
 
@@ -221,7 +223,7 @@ class MessageActivity : BaseActivity() {
             user.name,
             message,
             user.deviceToken,
-            "60"
+            "100"
         )
 
         val notificationData = NotificationData(notification, data, user.fcmToken)

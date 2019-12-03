@@ -306,19 +306,31 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
             startActivity(intent)
         }
         binding.iAgree.setOnClickListener {
-            sharedPreferences!!.save(ConstantLib.OPENMIDED_CHECKBOX, false)
-            sharedPreferences!!.save(ConstantLib.SPREAD_CHECKBOX, false)
-            sharedPreferences!!.save(ConstantLib.TURNTUP_CHECKBOX, false)
-            val intent = Intent(this, LicenceAgreementActivity::class.java)
-            startActivityForResult(intent, CHECK_LICENCE_AGREEMENT)
+//            sharedPreferences!!.save(ConstantLib.OPENMIDED_CHECKBOX, false)
+//            sharedPreferences!!.save(ConstantLib.SPREAD_CHECKBOX, false)
+//            sharedPreferences!!.save(ConstantLib.TURNTUP_CHECKBOX, false)
+//            val intent = Intent(this, LicenceAgreementActivity::class.java)
+//            startActivityForResult(intent, CHECK_LICENCE_AGREEMENT)
+            iAgreeFlag = true
+            if (iAgreeFlag) {
+                binding.radioAgree.setBackgroundResource(R.drawable.check)
+            } else {
+                binding.radioAgree.setBackgroundResource(R.drawable.uncheck)
+            }
         }
 
         binding.radioAgree.setOnClickListener {
-            sharedPreferences!!.save(ConstantLib.OPENMIDED_CHECKBOX, false)
-            sharedPreferences!!.save(ConstantLib.SPREAD_CHECKBOX, false)
-            sharedPreferences!!.save(ConstantLib.TURNTUP_CHECKBOX, false)
-            val intent = Intent(this, LicenceAgreementActivity::class.java)
-            startActivityForResult(intent, CHECK_LICENCE_AGREEMENT)
+//            sharedPreferences!!.save(ConstantLib.OPENMIDED_CHECKBOX, false)
+//            sharedPreferences!!.save(ConstantLib.SPREAD_CHECKBOX, false)
+//            sharedPreferences!!.save(ConstantLib.TURNTUP_CHECKBOX, false)
+//            val intent = Intent(this, LicenceAgreementActivity::class.java)
+//            startActivityForResult(intent, CHECK_LICENCE_AGREEMENT)
+            iAgreeFlag = true
+            if (iAgreeFlag) {
+                binding.radioAgree.setBackgroundResource(R.drawable.check)
+            } else {
+                binding.radioAgree.setBackgroundResource(R.drawable.uncheck)
+            }
         }
     }
 
@@ -671,19 +683,19 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
     private fun callButtonClick() {
         if (lastLocation != null) {
             if (socialLogin == SocialLogins.FACEBOOK) {
-                if (checkAgrementStatus()) {
+                if (iAgreeFlag) {
                     binding.btnFb.performClick()
                 } else {
                     showTermsAndConditionPopup()
                 }
             } else if (socialLogin == SocialLogins.INSTAGRAM) {
-                if (checkAgrementStatus()) {
+                if (iAgreeFlag) {
                     setupInstagramLogin()
                 } else {
                     showTermsAndConditionPopup()
                 }
             } else if (socialLogin == SocialLogins.GOOGLE) {
-                if (checkAgrementStatus()) {
+                if (iAgreeFlag) {
                     val signInIntent = mGoogleSignInClient!!.signInIntent
                     startActivityForResult(signInIntent, RC_SIGN_IN)
                 } else {

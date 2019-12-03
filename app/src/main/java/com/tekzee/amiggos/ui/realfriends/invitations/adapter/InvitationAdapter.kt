@@ -36,8 +36,12 @@ class InvitationAdapter(
     override fun onBindViewHolder(holder: PartyInvitesViewHolder, position: Int) {
         holder.bindingdata.txt_name.text = items[position].name
         Glide.with(context!!).load(items[position].profile).placeholder(R.drawable.user).into(holder.bindingdata.profile_image)
-        holder.bindingdata.invitation_main_layout.setOnClickListener{
+        holder.bindingdata.txt_accept.setOnClickListener{
             invitationInterface.onItemClicked(items[position],1)
+        }
+
+        holder.bindingdata.txt_reject.setOnClickListener{
+            invitationInterface.onItemClicked(items[position],2)
         }
 
     }

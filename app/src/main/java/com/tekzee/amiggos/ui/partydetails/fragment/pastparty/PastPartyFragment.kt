@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.JsonObject
@@ -88,6 +89,8 @@ class PastPartyFragment: BaseFragment(), PastPartyPresenter.PastPartyMainView {
 
 
     override fun validateError(message: String) {
-
+        items.clear()
+        adapter.notifyDataSetChanged()
+        Toast.makeText(activity,message, Toast.LENGTH_LONG).show()
     }
 }

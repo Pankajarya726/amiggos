@@ -13,6 +13,7 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.chooseweek.ChooseWeekActivity
 import com.tekzee.amiggos.ui.home.model.NearestClub
 import com.tekzee.amiggos.ui.imagepanaroma.ImagePanaromaActivity
+import com.tekzee.amiggos.ui.venuedetails.VenueDetailsActivity
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 
@@ -63,16 +64,13 @@ class HomeVenueAdapter(var venueListData: ArrayList<NearestClub>) : RecyclerView
         fun bind() {
 
 
-
-
-
-
             val layoutimage = itemView.findViewById(R.id.imageView6) as ImageView
             layoutimage.setOnClickListener{
-                val intent = Intent(context,ImagePanaromaActivity::class.java)
-                intent.putExtra(ConstantLib.PROFILE_IMAGE,venueListData[adapterPosition].panaroma_Image)
-                intent.putExtra(ConstantLib.CLUB_ID,venueListData[adapterPosition].club_id.toString())
-                context!!.startActivity(intent)
+                    val intent = Intent(context,ImagePanaromaActivity::class.java)
+                    intent.putExtra(ConstantLib.PROFILE_IMAGE,venueListData[adapterPosition].panaroma_Image)
+                    intent.putExtra(ConstantLib.CLUB_ID,venueListData[adapterPosition].club_id.toString())
+                    intent.putExtra(ConstantLib.IS_REGULAR_IMAGE,venueListData[adapterPosition].is_regular_image)
+                    context!!.startActivity(intent)
             }
 
             val bottleImage = itemView.findViewById(R.id.img_bottle) as ImageView

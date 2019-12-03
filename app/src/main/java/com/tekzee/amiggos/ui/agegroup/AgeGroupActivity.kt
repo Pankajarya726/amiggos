@@ -44,23 +44,6 @@ class AgeGroupActivity:BaseActivity(), AgeGroupActivityPresenter.AgeGroupMainVie
             binding.imgEighteen.setBackgroundResource(R.drawable.plus_unchecked_18)
             binding.imgEighteen.isEnabled = false
         }
-
-
-
-//        else if(sharedPreference!!.getValueString(ConstantLib.USER_AGE)!!.toInt() in 19..20){
-//
-//
-//            binding.imgTwentyOne.setBackgroundResource(R.drawable.plus_unchecked_21)
-//            binding.imgTwentyOne.isEnabled = true
-//           // binding.imgEighteen.isEnabled = true
-//            // binding.imgEighteen.setBackgroundResource(R.drawable.plus_18_disabled)
-//        }else if(sharedPreference!!.getValueString(ConstantLib.USER_AGE)!!.toInt()>21){
-//
-//            binding.imgEighteen.setBackgroundResource(R.drawable.plus_18_disabled)
-//            binding.imgTwentyOne.setBackgroundResource(R.drawable.plus_21_disabled)
-//            binding.imgEighteen.isEnabled = true
-//            binding.imgTwentyOne.isEnabled = true
-//        }
     }
 
     private fun setupClickListener() {
@@ -70,7 +53,7 @@ class AgeGroupActivity:BaseActivity(), AgeGroupActivityPresenter.AgeGroupMainVie
         }
 
         binding.imgTwentyOne.setOnClickListener{
-            binding.imgEighteen.setBackgroundResource(R.drawable.plus_21)
+            binding.imgTwentyOne.setBackgroundResource(R.drawable.plus_21)
             doCallAgeGroupApi("2")
         }
     }
@@ -80,7 +63,6 @@ class AgeGroupActivity:BaseActivity(), AgeGroupActivityPresenter.AgeGroupMainVie
         input.addProperty("age_group", data)
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
         ageGroupActivityPresenterImplementation!!.doCallAgeGroupApi(input,Utility.createHeaders(sharedPreference))
-
     }
 
 

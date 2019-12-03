@@ -12,9 +12,10 @@ data class NearestClub(
     val country: String = "",
     val distance_from_mylocation: Double = 0.0,
     val image: String = "",
+    val is_regular_image: String = "",
     val latitude: String = "",
     val longitude: String = "",
-    val music: Any? = null,
+    val music: Any = Any(),
     val music_type: String = "",
     val music_value: String = "",
     val panaroma_Image: String = "",
@@ -22,4 +23,6 @@ data class NearestClub(
     val venue_type: String = "",
     val vip_table: Int = 0,
     val zipcode: String = ""
+
+
 )

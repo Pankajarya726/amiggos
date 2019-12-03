@@ -45,10 +45,11 @@
 
 
         <ScrollView
-            android:layout_below="@+id/toolbar"
-            android:layout_above="@+id/add_real_friend"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/add_real_friend"
+            android:layout_below="@+id/toolbar">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -161,92 +162,96 @@
                 </LinearLayout>
 
 
-
                 <LinearLayout
-                    android:padding="8dp"
-                    android:layout_margin="8dp"
-                    android:orientation="horizontal"
-                    android:weightSum="3"
-                    android:background="@drawable/btn_bg_less"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/btn_bg_less"
+                    android:orientation="horizontal"
+                    android:padding="8dp"
+                    android:weightSum="3">
 
 
                     <LinearLayout
                         android:id="@+id/chatlayout"
-                        android:background="@drawable/right_underline"
-                        android:layout_weight="1"
-                        android:weightSum="2"
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/right_underline"
+                        android:orientation="vertical"
+                        android:weightSum="2">
 
                         <ImageView
-                            android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:src="@drawable/chat_one"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@drawable/chat_one" />
 
                         <com.an.customfontview.CustomTextView
+                            android:id="@+id/txt_chat"
                             android:layout_width="match_parent"
-                            android:fontFamily="@font/eras"
-                            android:textColor="@android:color/black"
-                            android:text="Chat"
-                            android:gravity="center"
-                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
                             android:layout_margin="2dp"
-                            android:layout_height="wrap_content"/>
+                            android:layout_weight="1"
+                            android:fontFamily="@font/eras"
+                            android:gravity="center"
+                            android:text="Chat"
+                            android:textColor="@android:color/black" />
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/addmemory"
-                        android:background="@drawable/right_underline"
-                        android:layout_weight="1"
-                        android:weightSum="2"
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/right_underline"
+                        android:orientation="vertical"
+                        android:weightSum="2">
 
                         <ImageView
-                            android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:src="@drawable/add_user"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@drawable/add_user" />
 
                         <com.an.customfontview.CustomTextView
+                            android:id="@+id/txt_addmemory"
                             android:layout_width="match_parent"
-                            android:fontFamily="@font/eras"
-                            android:textColor="@android:color/black"
-                            android:text="Add Story"
+                            android:layout_height="wrap_content"
                             android:layout_margin="2dp"
-                            android:gravity="center"
                             android:layout_weight="1"
-                            android:layout_height="wrap_content"/>
+                            android:fontFamily="@font/eras"
+                            android:gravity="center"
+                            android:text="Add Story"
+                            android:textColor="@android:color/black" />
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/share"
-                        android:layout_weight="1"
-                        android:weightSum="2"
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:weightSum="2">
 
                         <ImageView
-                            android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:src="@drawable/share"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@drawable/share" />
 
                         <com.an.customfontview.CustomTextView
+                            android:id="@+id/txt_share"
                             android:layout_width="match_parent"
-                            android:fontFamily="@font/eras"
-                            android:textColor="@android:color/black"
-                            android:text="Share"
-                            android:gravity="center"
+                            android:layout_height="wrap_content"
                             android:layout_margin="2dp"
                             android:layout_weight="1"
-                            android:layout_height="wrap_content"/>
+                            android:fontFamily="@font/eras"
+                            android:gravity="center"
+                            android:text="Share"
+                            android:textColor="@android:color/black" />
 
                     </LinearLayout>
 
@@ -255,13 +260,13 @@
 
                 <com.an.customfontview.CustomTextView
                     android:id="@+id/p_my_memories"
-                    android:fontFamily="@font/eras"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:background="@drawable/btn_bg_less"
                     android:drawableLeft="@drawable/our_memories_icon"
                     android:drawablePadding="10dp"
+                    android:fontFamily="@font/eras"
                     android:gravity="center|left"
                     android:padding="12dp"
                     android:text="My Memories"
@@ -272,13 +277,13 @@
 
                 <com.an.customfontview.CustomTextView
                     android:id="@+id/p_my_referal_code"
-                    android:fontFamily="@font/eras"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:background="@drawable/btn_bg_less"
                     android:drawableLeft="@drawable/our_memories_icon"
                     android:drawablePadding="10dp"
+                    android:fontFamily="@font/eras"
                     android:gravity="center|left"
                     android:padding="12dp"
                     android:text="Our Memories"
@@ -288,13 +293,13 @@
 
                 <com.an.customfontview.CustomTextView
                     android:id="@+id/p_my_id"
-                    android:fontFamily="@font/eras"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:background="@drawable/btn_bg_less"
                     android:drawableLeft="@drawable/our_memories_icon"
                     android:drawablePadding="10dp"
+                    android:fontFamily="@font/eras"
                     android:gravity="center|left"
                     android:padding="12dp"
                     android:text="Our Memories"

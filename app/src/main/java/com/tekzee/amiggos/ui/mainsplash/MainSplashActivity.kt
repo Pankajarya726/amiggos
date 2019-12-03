@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.JsonObject
 import com.orhanobut.logger.Logger
@@ -29,7 +30,7 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
     lateinit var binding: MainSplashActivityBinding
     private var mainSplashPresenterImplementation: MainSplashPresenterImplementation? = null
     private var sharedPreferences: SharedPreference? = null
-
+    private var lastLocation: LatLng? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.main_splash_activity);
@@ -111,9 +112,13 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
             sharedPreferences!!.save(ConstantLib.USER_AGE, validateAppVersionResponse.data.age)
         }
         if(validateAppVersionResponse.data.invite_friend_count!=null && validateAppVersionResponse.data.invite_friend_count.isNotEmpty() && validateAppVersionResponse.data.invite_friend_count.toInt()>0){
-            sharedPreferences!!.save(ConstantLib.INVITE_FRIEND_COUNT, validateAppVersionResponse.data.age)
+            sharedPreferences!!.save(ConstantLib.INVITE_FRIEND, validateAppVersionResponse.data.invite_friend_count.toInt())
         }
-
+        sharedPreferences!!.save(ConstantLib.NO_DAY_REGISTER, validateAppVersionResponse.data.no_day_register)
+        sharedPreferences!!.save(
+            ConstantLib.IS_INVITE_FRIEND,
+            validateAppVersionResponse.data.is_friends_invited.toInt()
+        )
         when(validateAppVersionResponse.data.status){
             "0"->{
                 Logger.d("Login failed")

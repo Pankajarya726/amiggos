@@ -102,7 +102,7 @@ class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView 
     }
 
     private fun setupViewData() {
-        binding.txtMymemories.text = languageData!!.klMYMEMORY
+        binding.txtMymemories.text = languageData!!.klMemories
         binding.txtOurmemories.text = languageData!!.klOURMEMORY
     }
 

@@ -84,6 +84,8 @@ class UpcommingPartyFragment: BaseFragment(), UpcommingPartyPresenter.UpcomingPa
 
 
     override fun validateError(message: String) {
+        items.clear()
+        adapter.notifyDataSetChanged()
         Toast.makeText(activity,message,Toast.LENGTH_LONG).show()
     }
 

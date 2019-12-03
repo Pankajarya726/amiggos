@@ -105,6 +105,15 @@ class ImagePanaromaActivity: BaseActivity(), ImagePanaromaPresenter.ImagePanarom
 
     override fun onVenueDetailsSuccess(responseData: VenueDetailResponse?) {
         response = responseData
+        if(intent.getStringExtra(ConstantLib.IS_REGULAR_IMAGE).equals("yes",true)){
+            val intentActivity = Intent(applicationContext, VenueDetailsActivity::class.java)
+            intentActivity.putExtra(ConstantLib.VENUE_DATA, response)
+            intentActivity.putExtra(ConstantLib.CLUB_ID, intent.getStringExtra(ConstantLib.CLUB_ID))
+            startActivity(intentActivity)
+            finish()
+        }
+
+
     }
 
 }

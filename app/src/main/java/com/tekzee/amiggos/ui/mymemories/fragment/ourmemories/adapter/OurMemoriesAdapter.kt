@@ -8,15 +8,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
+import com.tekzee.amiggos.ui.home.model.StoriesData
 import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.OurMemories
-import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesData
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import kotlinx.android.synthetic.main.single_memories.view.*
 
 
 class OurMemoriesAdapter(
     val mContext: Context, mRecyclerView: RecyclerView, val mLayoutManager: LinearLayoutManager,
-    mRecyclerViewAdapterCallback: InfiniteScrollRecyclerView.RecyclerViewAdapterCallback, var mDataList: ArrayList<OurMemoriesData>, val mItemClickCallback: OurMemories
+    mRecyclerViewAdapterCallback: InfiniteScrollRecyclerView.RecyclerViewAdapterCallback, var mDataList: ArrayList<StoriesData>, val mItemClickCallback: OurMemories
 )
     : RecyclerView.Adapter<OurMemoriesAdapter.ViewHolder>(){
 

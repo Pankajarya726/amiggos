@@ -40,8 +40,8 @@ class TurningAdapter(
         Glide.with(context!!).load(items[position].profile).placeholder(R.drawable.user).into(holder.bindingdata.profile_image)
         holder.bindingdata.mainlayout.setOnClickListener{
             listener.onTuringUpClicked(position,items[position])
-
         }
+
 
     }
 

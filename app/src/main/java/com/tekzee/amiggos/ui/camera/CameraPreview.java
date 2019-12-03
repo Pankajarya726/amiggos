@@ -293,7 +293,7 @@ public class CameraPreview extends MyCanvas {
         });
 
 
-        Glide.with(getApplicationContext()).load(getIntent().getStringExtra(ConstantLib.PROFILE_IMAGE)).into(img_profile);
+        Glide.with(getApplicationContext()).load(getIntent().getStringExtra(ConstantLib.PROFILE_IMAGE)).placeholder(R.drawable.user).into(img_profile);
 
         if(getIntent().getStringExtra(ConstantLib.FROM_ACTIVITY).equalsIgnoreCase("STORIEVIEWACTIVITY")){
             txt_search.setVisibility(View.GONE);
@@ -342,7 +342,7 @@ public class CameraPreview extends MyCanvas {
 
         int PERMISSION_ALL = 1;
         String[] PERMISSIONS = {Manifest.permission.CAMERA,
-                Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE};
+                Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (!hasPermission(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
             finish();

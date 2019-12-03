@@ -98,6 +98,11 @@ class MyProfileActivity : BaseActivity(), MyProfilePresenter.MyProfileMainView {
         binding.pMyMemories.text = languageData!!.klMYMEMORY
         binding.pMyReferalCode.text = languageData!!.kllblMyrefralCodeTitle
         binding.pMyId.text = languageData!!.kllblMyIdTitle
+
+
+        binding.txtChat.text = languageData!!.klBtnChatTitle
+        binding.txtAddmemory.text = languageData!!.kllblAddStoryTitle
+        binding.txtShare.text = languageData!!.kllblShareTitle
     }
 
     private fun setupToolBar() {

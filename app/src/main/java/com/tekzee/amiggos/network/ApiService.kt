@@ -55,7 +55,8 @@ import retrofit2.http.Multipart
 
 interface ApiService {
 
-    @POST("auth/validateAppVersion")
+    //This api is changed from validateAppVersion to validateAppVersion_V1 by sumit sir on 2/12/2019
+    @POST("auth/validateAppVersion_V1")
     fun doValidateAppVersionApi(@Body input: JsonObject, @HeaderMap headers: HashMap<String, String?>): Observable<Response<ValidateAppVersionResponse>>
 
 
@@ -428,7 +429,9 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<PreferenceSavedResponse>>
 
-    @POST("user/dashboard_club")
+
+    //This api is changed from dashboard_club to dashboard_club_V1 by sumit sir on 2/12/2019
+    @POST("user/dashboard_club_V1")
     fun doGetVenueApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>

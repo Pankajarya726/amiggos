@@ -4,11 +4,14 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import android.widget.VideoView
 import androidx.databinding.DataBindingUtil
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bolaware.viewstimerstory.Momentz
 import com.bolaware.viewstimerstory.MomentzCallback
 import com.bolaware.viewstimerstory.MomentzView
@@ -28,10 +31,10 @@ import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import kotlinx.android.synthetic.main.storie_view.*
-import java.lang.Exception
 
 
 class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.StorieViewMainView {
+    private var mi: Momentz? = null
     private var languageData: LanguageData? = null
     var listOfViews = ArrayList<MomentzView>()
     var urlList = ArrayList<Content>()
@@ -65,7 +68,21 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
         }
 
         binding.imgDelete.setOnClickListener{
-            callDeleteStorieApi()
+            mi!!.pause(false)
+            val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+            pDialog.titleText = languageData!!.klAlertMsgDeleteMemory
+            pDialog.setCancelable(false)
+            pDialog.setCancelButton(languageData!!.klCancel) {
+                pDialog.dismiss()
+                mi!!.resume()
+
+            }
+            pDialog.setConfirmButton(languageData!!.klDeleteTitle1) {
+                pDialog.dismiss()
+                callDeleteStorieApi()
+            }
+            pDialog.show()
+
         }
 
         binding.txtView.setOnClickListener{
@@ -98,7 +115,7 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
 
     private fun setupViews() {
         Glide.with(applicationContext)
-            .load(intent.getStringExtra(ConstantLib.PROFILE_IMAGE)).into(img_profile)
+            .load(intent.getStringExtra(ConstantLib.PROFILE_IMAGE)).placeholder(R.drawable.user).into(img_profile)
         binding.txtName.text = intent.getStringExtra(ConstantLib.USER_NAME)
         binding.join.text = languageData!!.klJoin
         if(sharedPreferences!!.getValueInt(ConstantLib.USER_ID).toString().equals(intent.getStringExtra(ConstantLib.USER_ID))){
@@ -117,14 +134,14 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
                 listOfViews.add(MomentzView(internetLoadedImageView,5))
                 urlList.add(item)
             }else{
-                val internetLoadedVideo = VideoView(this)
+                val internetLoadedVideo = FullScreenVideoView(this)
                 internetLoadedVideo.setVideoURI(Uri.parse(item.url))
                 listOfViews.add(MomentzView(internetLoadedVideo,6))
                 urlList.add(item)
             }
         }
 
-        Momentz(this, listOfViews, container, this,R.drawable.white_drawable).start()
+         Momentz(this, listOfViews, container, this, R.drawable.white_drawable).start()
 
     }
 
@@ -138,6 +155,7 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
 
     override fun onNextCalled(view: View, momentz: Momentz, index: Int) {
         try{
+            mi = momentz
             if (view is VideoView) {
                 momentz.pause(true)
                 playVideo(view, index, momentz)
@@ -145,8 +163,8 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
                 storieId = urlList[index].id.toString()
             } else if ((view is ImageView) && (view.drawable == null)) {
                 momentz.pause(true)
-               // Glide.with(view).load(urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/0").into(view)
-                Glide.with(view).load(urlList[index].url).into(view)
+                Glide.with(view).load(urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/"+urlList[index].id+"/0").into(view)
+//                Glide.with(view).load(urlList[index].url).into(view)
                 binding.txtView.text = urlList[index].viewCount.toString()
                 storieId = urlList[index].id.toString()
                 momentz.resume()
@@ -160,12 +178,11 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
 
 
     fun playVideo(videoView: VideoView, index: Int, momentz: Momentz) {
-//        val str = urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/0"
-        val str = urlList[index].url
+        val str = urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/"+urlList[index].id+"/0"
+//        val str = urlList[index].url
+
         val uri = Uri.parse(str)
-
         videoView.setVideoURI(uri)
-
         videoView.requestFocus()
         videoView.start()
 

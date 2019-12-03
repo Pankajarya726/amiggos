@@ -15,9 +15,7 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.MyFriendChatListBinding
 import com.tekzee.amiggos.firebasemodel.User
-import com.tekzee.amiggos.ui.chat.ChatHelper
 import com.tekzee.amiggos.ui.chat.MessageActivity
-import com.tekzee.amiggos.ui.chat.interfaces.FirebaseUserInterface
 import com.tekzee.amiggos.ui.chat.model.Message
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.adapter.MyFriendChatAdapter
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.model.CustomUser
@@ -148,7 +146,9 @@ class MyFriendChatActivity : BaseActivity() {
                 ): String {
                     var count: Int = 0;
                     for(item in sortedMessageList){
+
                         if(!item.isSeen){
+                            if(!item.sender.equals(FirebaseAuth.getInstance().currentUser!!.uid))
                             count++
                         }
                     }
@@ -193,9 +193,12 @@ class MyFriendChatActivity : BaseActivity() {
 
                     Logger.d("myfriendChatList"+myfriendChatList.toString())
 
+                    val tempData: List<MyFriendChatModel> = myfriendChatList.sortedWith(compareBy (MyFriendChatModel::time)).reversed()
+
+
                     binding.friendRecyclerview.setHasFixedSize(true)
                     binding.friendRecyclerview.layoutManager = LinearLayoutManager(applicationContext)
-                    adapter = MyFriendChatAdapter(myfriendChatList, object : MyFriendChatListListener {
+                    adapter = MyFriendChatAdapter(tempData, object : MyFriendChatListListener {
                         override fun onMyFriendChatListClicked(myFriendChatModel: MyFriendChatModel) {
 
                             val intentActivity =

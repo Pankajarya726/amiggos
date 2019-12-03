@@ -8,18 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.gson.JsonObject
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.RealFriendFragmentBinding
-import com.tekzee.amiggos.ui.friendprofile.FriendProfile
+import com.tekzee.amiggos.ui.camera.CameraPreview
+import com.tekzee.amiggos.ui.home.model.StoriesData
 import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.adapter.OurMemoriesAdapter
-import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesData
 import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
 import com.tekzee.amiggos.ui.onlinefriends.adapter.OnlineFriendAdapter
+import com.tekzee.amiggos.ui.storieview.StorieViewActivity
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
@@ -32,14 +33,14 @@ import java.util.concurrent.TimeUnit
 class OurMemories: BaseFragment(), OurMemoriesPresenter.OurMemoriesMainView, InfiniteScrollRecyclerView.RecyclerViewAdapterCallback ,OnlineFriendAdapter.HomeItemClick{
 
 
-    private val mLoadingData = OurMemoriesData(loadingStatus = true)
+    private val mLoadingData = StoriesData(loadingStatus = true)
     lateinit var binding: RealFriendFragmentBinding
     private var myView: View? = null
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
     private var ourMemoriesPresenterImplementation: OurMemoriesPresenterImplementation? = null
     private var realFriendPageNo = 0
-    private var mydataList = ArrayList<OurMemoriesData>()
+    private var mydataList = ArrayList<StoriesData>()
     private var adapter: OurMemoriesAdapter? = null
 
     @SuppressLint("CheckResult")
@@ -96,7 +97,7 @@ class OurMemories: BaseFragment(), OurMemoriesPresenter.OurMemoriesMainView, Inf
 
     override fun onOurMemoriesSuccess(responseData: OurMemoriesResponse?) {
         realFriendPageNo++
-        mydataList = responseData!!.data as ArrayList<OurMemoriesData>
+        mydataList = responseData!!.data as ArrayList<StoriesData>
         setupRecyclerRealFriend()
     }
 
@@ -128,9 +129,10 @@ class OurMemories: BaseFragment(), OurMemoriesPresenter.OurMemoriesMainView, Inf
 
 
     override fun onOurMemoriesFailure(message: String) {
-//        adapter?.setLoadingStatus(false)
-//        mydataList.removeAt(mydataList.size - 1)
-//        adapter?.notifyDataSetChanged()
+        adapter?.setLoadingStatus(false)
+        if(mydataList.size>0)
+        mydataList.removeAt(mydataList.size - 1)
+        adapter?.notifyDataSetChanged()
     }
 
     override fun onLoadMoreData() {
@@ -141,9 +143,40 @@ class OurMemories: BaseFragment(), OurMemoriesPresenter.OurMemoriesMainView, Inf
 
 
     override fun itemClickCallback(position: Int) {
-        val intent = Intent(activity, FriendProfile::class.java)
-        intent.putExtra(ConstantLib.FRIEND_ID,mydataList[position].userid.toString())
-        startActivity(intent)
+        if(mydataList[position].userid ==  sharedPreference!!.getValueInt(ConstantLib.USER_ID) && position == 0 ){
+
+            if(mydataList[position].content.isEmpty()){
+                val pDialog = SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
+                pDialog.titleText = languageData!!.klAddStoryAlert
+                pDialog.setCancelable(false)
+                pDialog.setCancelButton(languageData!!.klCancel) {
+                    pDialog.dismiss()
+                }
+                pDialog.setConfirmButton(languageData!!.kllblAddStoryTitle) {
+                    pDialog.dismiss()
+                    val intent = Intent(activity, CameraPreview::class.java)
+                    intent.putExtra(ConstantLib.FROM_ACTIVITY,"MEMORIES")
+                    intent.putExtra(ConstantLib.PROFILE_IMAGE,mydataList[position].imageUrl)
+                    startActivity(intent)
+                }
+                pDialog.show()
+            }else{
+                val intent =Intent(activity, StorieViewActivity::class.java)
+                intent.putExtra(ConstantLib.CONTENT, mydataList[position])
+                intent.putExtra(ConstantLib.PROFILE_IMAGE, mydataList[position].imageUrl)
+                intent.putExtra(ConstantLib.USER_ID, mydataList[position].userid.toString())
+                intent.putExtra(ConstantLib.USER_NAME, mydataList[position].name)
+                startActivity(intent)
+            }
+
+        }else{
+            val intent =Intent(activity, StorieViewActivity::class.java)
+            intent.putExtra(ConstantLib.CONTENT, mydataList[position])
+            intent.putExtra(ConstantLib.PROFILE_IMAGE, mydataList[position].imageUrl)
+            intent.putExtra(ConstantLib.USER_ID, mydataList[position].userid.toString())
+            intent.putExtra(ConstantLib.USER_NAME, mydataList[position].name)
+            startActivity(intent)
+        }
     }
 
 }

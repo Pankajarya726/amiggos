@@ -1,5 +1,6 @@
 package com.tekzee.amiggos.ui.turningup
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
@@ -9,6 +10,7 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.TurningUpActivityBinding
+import com.tekzee.amiggos.ui.friendprofile.FriendProfile
 import com.tekzee.amiggos.ui.turningup.adapter.TurningAdapter
 import com.tekzee.amiggos.ui.turningup.interfaces.TurningUpClicked
 import com.tekzee.amiggos.ui.turningup.model.TurningUpData
@@ -44,7 +46,9 @@ class TurningUpActivity : BaseActivity(), TurningupPresenter.TurningUpMainView {
         binding.turningupRecyclerview.layoutManager = LinearLayoutManager(this)
         adapter = TurningAdapter(data,sharedPreferences, object : TurningUpClicked {
             override fun onTuringUpClicked(position: Int, selectedData: TurningUpData) {
-
+                val intent = Intent(applicationContext, FriendProfile::class.java)
+                intent.putExtra(ConstantLib.FRIEND_ID,selectedData.userid.toString())
+                startActivity(intent)
             }
         })
         binding.turningupRecyclerview.adapter = adapter

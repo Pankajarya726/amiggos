@@ -2,6 +2,8 @@ package com.tekzee.mallortaxiclient.constant
 
 object ConstantLib {
     const val DRIVER_ID = "driver_id"
+    const val NO_DAY_REGISTER = "no_day_register"
+    const val IS_REGULAR_IMAGE = "is_regular_image"
     const val RECEIVER_ID = "receiver_id"
     const val OURSTORYID = "ourstoryid"
     const val FROM_ACTIVITY = "from_activity"

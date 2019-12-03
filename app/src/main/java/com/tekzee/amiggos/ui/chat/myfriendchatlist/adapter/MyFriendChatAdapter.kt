@@ -6,18 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.MyFriendChatListListener
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.model.MyFriendChatModel
 import kotlinx.android.synthetic.main.single_myfriend_list.view.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MyFriendChatAdapter(
-    private val items: ArrayList<MyFriendChatModel>,
+    private val items: List<MyFriendChatModel>,
     private val listener: MyFriendChatListListener
 ) : RecyclerView.Adapter<MyFriendChatAdapter.MyFriendViewHolder>() {
 

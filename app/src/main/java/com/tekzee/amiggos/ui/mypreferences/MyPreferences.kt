@@ -1,11 +1,9 @@
 package com.tekzee.amiggos.ui.mypreferences
 
-import android.Manifest
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.pedant.SweetAlert.SweetAlertDialog
@@ -14,7 +12,6 @@ import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.MyPreferencesBinding
-import com.tekzee.amiggos.ui.home.HomeActivity
 import com.tekzee.amiggos.ui.mypreferences.adapter.MyExpandableAdapter
 import com.tekzee.amiggos.ui.mypreferences.interfaces.MyPreferenceClicked
 import com.tekzee.amiggos.ui.mypreferences.model.MyPreferenceData
@@ -160,7 +157,7 @@ class MyPreferences :BaseActivity(), MyPreferencesPresenter.MyPreferencesMainVie
         supportActionBar?.setDisplayShowTitleEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        binding.title.text = languageData!!.klMyPrefrence
+        binding.title.text = languageData!!.klSetting
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -30,8 +30,13 @@ class RealFriendsActivity : BaseActivity() {
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         setupToolBar()
         setupViewData()
-        LoadFirstFragment()
 
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        LoadFirstFragment()
     }
 
     private fun LoadFirstFragment() {

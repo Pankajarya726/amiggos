@@ -14,6 +14,8 @@ import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.agegroup.AgeGroupActivity
 import com.tekzee.amiggos.ui.home.HomeActivity
+import com.tekzee.amiggos.ui.partydetails.PartyDetailsActivity
+import com.tekzee.amiggos.ui.realfriends.RealFriendsActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import org.json.JSONObject
@@ -40,6 +42,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
             handleNotifications(remoteMessage)
         }
     }
+
     private fun handleNotifications(remoteMessage: RemoteMessage?) {
 
         val jsonData = JSONObject(remoteMessage!!.data as Map<String, String>)
@@ -133,10 +136,10 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
 
             }
             "2" -> {
-                gotoFriendRequest(remoteMessage)
+                gotoFriendRequest(title, body)
             }
             "3" -> {
-                gotoFriendRequestAccept(remoteMessage)
+                gotoFriendRequestAccept(title, body)
             }
             "4" -> {
 //               SenderID = senderid
@@ -145,12 +148,15 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
 //               kUserDefault.setValue(storyid, forKey:StoriesKey.OurStoryID.rawValue)
 //               kUserDefault.setValue(senderid, forKey: StoriesKey.NotifierUserId.rawValue)
 //               requestToOurStorisBYID(getOurStoryID: storyid, getUserID: userid, getSenderID: senderid, notificationID:notificationId)
+
+                createDefaultNotification(title, body)
             }
             "5" -> {
-                gotoSendPartyInvitation(bookingid!!, creatorid!!, userid!!)
+                gotoSendPartyInvitation(title, body)
             }
             "6" -> {
-                gotoDocRejected(userid!!, friendid!!)
+//                gotoDocRejected(userid!!, friendid!!)
+                createDefaultNotification(title, body)
             }
             "7" -> {
 //               print("Update Our Memory and Rejoin it")
@@ -159,23 +165,88 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
 //               kUserDefault.setValue(storyid, forKey:StoriesKey.OurStoryID.rawValue)
 //               kUserDefault.setValue(senderid, forKey: StoriesKey.NotifierUserId.rawValue)
 //               requestToOurStorisBYID(getOurStoryID: storyid, getUserID: userid, getSenderID: senderid, notificationID:notificationId)
+                createDefaultNotification(title, body)
             }
             "8" -> {
-                gotoPartyDetailsScreen()
+//                gotoPartyDetailsScreen()
+                createDefaultNotification(title, body)
             }
             "9" -> {
-                print("Party Invitation reject")
+//                print("Party Invitation reject")
+                createDefaultNotification(title, body)
             }
             "10" -> {
-                gotoBookingScreen()
+//                gotoBookingScreen()
+                createDefaultNotification(title, body)
             }
-            "60" ->{
-                showChatNotification(title,body)
+            "22" -> {
+                newMemory(title, body)
             }
+            "100" -> {
+                showChatNotification(title, body)
+            }
+            else -> { // Note the block
+                 createDefaultNotification(title, body)
+            }
+
 
         }
 
 
+    }
+
+    private fun createDefaultNotification(title: String, body: String) {
+        createNotificationChannel()
+
+        val intent = Intent(this, HomeActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
+        var builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setContentTitle(body)
+            .setContentText(title)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(title)
+            )
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+
+        with(NotificationManagerCompat.from(this)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(System.currentTimeMillis().toInt(), builder.build())
+        }
+    }
+
+    private fun newMemory(title: String, body: String) {
+        createNotificationChannel()
+
+        val intent = Intent(this, HomeActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
+        var builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setContentTitle(body)
+            .setContentText(title)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(title)
+            )
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+
+        with(NotificationManagerCompat.from(this)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(System.currentTimeMillis().toInt(), builder.build())
+        }
     }
 
     private fun showChatNotification(title: String, body: String) {
@@ -191,8 +262,10 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setContentTitle(body)
             .setContentText(title)
-            .setStyle(NotificationCompat.BigTextStyle()
-                .bigText(title))
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(title)
+            )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
@@ -215,16 +288,85 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
 
     }
 
-    private fun gotoSendPartyInvitation(bookingid: String, creatorid: String, userid: String) {
+    private fun gotoSendPartyInvitation(title: String, body: String) {
+        createNotificationChannel()
 
+        val intent = Intent(this, PartyDetailsActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setContentTitle(body)
+            .setContentText(title)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(title)
+            )
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+
+        with(NotificationManagerCompat.from(this)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(System.currentTimeMillis().toInt(), builder.build())
+        }
     }
 
-    private fun gotoFriendRequestAccept(remoteMessage: RemoteMessage) {
+    private fun gotoFriendRequestAccept(title: String, body: String) {
+        createNotificationChannel()
 
+        val intent = Intent(this, RealFriendsActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setContentTitle(body)
+            .setContentText(title)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(title)
+            )
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+
+        with(NotificationManagerCompat.from(this)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(System.currentTimeMillis().toInt(), builder.build())
+        }
     }
 
-    private fun gotoFriendRequest(remoteMessage: RemoteMessage) {
+    private fun gotoFriendRequest(title: String, body: String) {
+        createNotificationChannel()
 
+        val intent = Intent(this, RealFriendsActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setContentTitle(body)
+            .setContentText(title)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(title)
+            )
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+
+        with(NotificationManagerCompat.from(this)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(System.currentTimeMillis().toInt(), builder.build())
+        }
     }
 
     private fun gotoDocVerification(uid: Any, fid: Any, title: String?, body: String?) {
@@ -241,8 +383,10 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setContentTitle(body)
             .setContentText(title)
-            .setStyle(NotificationCompat.BigTextStyle()
-                .bigText(title))
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(title)
+            )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
