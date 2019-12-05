@@ -11,6 +11,7 @@ import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.ReferalActivityBinding
+import com.tekzee.amiggos.ui.agegroup.AgeGroupActivity
 import com.tekzee.amiggos.ui.attachid.AttachIdActivity
 import com.tekzee.amiggos.ui.referalcode.model.ReferalCodeResponse
 import com.tekzee.amiggos.ui.referalcode.model.VenueResponse
@@ -40,9 +41,10 @@ class ReferalCodeActivity:BaseActivity(), ReferalCodePresenter.ReferalCodeMainVi
 
     private fun setupClickListerner() {
         binding.txtDontHaveReferalCode.setOnClickListener{
-            val intent = Intent(this,AttachIdActivity::class.java)
-            intent.putExtra(ConstantLib.FROM,"")
-            startActivity(intent)
+//            val intent = Intent(this,AttachIdActivity::class.java)
+//            intent.putExtra(ConstantLib.FROM,"")
+//            startActivity(intent)
+            callAgeGroupActivity()
         }
 
         binding.btnSubmitCode.setOnClickListener{
@@ -85,8 +87,15 @@ class ReferalCodeActivity:BaseActivity(), ReferalCodePresenter.ReferalCodeMainVi
     }
 
     override fun onCallReferalApiSuccess(responseData: ReferalCodeResponse?) {
-        val intent = Intent(this,AttachIdActivity::class.java)
-        intent.putExtra(ConstantLib.FROM,"")
+//        val intent = Intent(this,AttachIdActivity::class.java)
+//        intent.putExtra(ConstantLib.FROM,"")
+//        startActivity(intent)
+
+        callAgeGroupActivity()
+    }
+
+    private fun callAgeGroupActivity() {
+        val intent = Intent(applicationContext, AgeGroupActivity::class.java)
         startActivity(intent)
     }
 

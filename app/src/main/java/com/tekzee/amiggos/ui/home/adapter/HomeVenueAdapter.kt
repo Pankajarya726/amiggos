@@ -13,7 +13,6 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.chooseweek.ChooseWeekActivity
 import com.tekzee.amiggos.ui.home.model.NearestClub
 import com.tekzee.amiggos.ui.imagepanaroma.ImagePanaromaActivity
-import com.tekzee.amiggos.ui.venuedetails.VenueDetailsActivity
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 
@@ -86,7 +85,7 @@ class HomeVenueAdapter(var venueListData: ArrayList<NearestClub>) : RecyclerView
                 context!!.startActivity(intent)
             }
 
-            Glide.with(itemView.context).load(venueListData[adapterPosition].image).placeholder(R.drawable.user).into(itemView.findViewById(R.id.imageView6))
+            Glide.with(itemView.context).load(venueListData[adapterPosition].image).placeholder(R.drawable.blackbg).into(itemView.findViewById(R.id.imageView6))
 
             val txtAge = itemView.findViewById(R.id.txt_age) as TextView
             if (venueListData[adapterPosition].agelimit.isEmpty()) {

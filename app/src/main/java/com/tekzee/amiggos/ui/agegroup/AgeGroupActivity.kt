@@ -14,18 +14,20 @@ import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
-class AgeGroupActivity:BaseActivity(), AgeGroupActivityPresenter.AgeGroupMainView {
+class AgeGroupActivity : BaseActivity(), AgeGroupActivityPresenter.AgeGroupMainView {
 
 
     lateinit var binding: AgeGroupActivityBinding
-    private var sharedPreference: SharedPreference ? = null
-    private var ageGroupActivityPresenterImplementation: AgeGroupActivityPresenterImplementation? = null
+    private var sharedPreference: SharedPreference? = null
+    private var ageGroupActivityPresenterImplementation: AgeGroupActivityPresenterImplementation? =
+        null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.age_group_activity)
         sharedPreference = SharedPreference(this)
-        ageGroupActivityPresenterImplementation = AgeGroupActivityPresenterImplementation(this,this)
+        ageGroupActivityPresenterImplementation =
+            AgeGroupActivityPresenterImplementation(this, this)
         setupClickListener()
         setupDataView()
     }
@@ -34,25 +36,28 @@ class AgeGroupActivity:BaseActivity(), AgeGroupActivityPresenter.AgeGroupMainVie
 
         binding.imgEighteen.setBackgroundResource(R.drawable.plus_18_disabled)
         binding.imgEighteen.isEnabled = true
+        binding.imgTwentyOne.setBackgroundResource(R.drawable.plus_21_disabled)
+        binding.imgTwentyOne.isEnabled = true
 
-        if(sharedPreference!!.getValueString(ConstantLib.USER_AGE)!!.toInt() < 21){
-            binding.imgTwentyOne.setBackgroundResource(R.drawable.plus_unchecked_21)
-            binding.imgTwentyOne.isEnabled = false
-        }else{
-            binding.imgTwentyOne.setBackgroundResource(R.drawable.plus_21_disabled)
-            binding.imgTwentyOne.isEnabled = true
-            binding.imgEighteen.setBackgroundResource(R.drawable.plus_unchecked_18)
-            binding.imgEighteen.isEnabled = false
-        }
+
+//        if(sharedPreference!!.getValueString(ConstantLib.USER_AGE)!!.toInt() < 21){
+//            binding.imgTwentyOne.setBackgroundResource(R.drawable.plus_unchecked_21)
+//            binding.imgTwentyOne.isEnabled = false
+//        }else{
+//            binding.imgTwentyOne.setBackgroundResource(R.drawable.plus_21_disabled)
+//            binding.imgTwentyOne.isEnabled = true
+//            binding.imgEighteen.setBackgroundResource(R.drawable.plus_unchecked_18)
+//            binding.imgEighteen.isEnabled = false
+//        }
     }
 
     private fun setupClickListener() {
-        binding.imgEighteen.setOnClickListener{
+        binding.imgEighteen.setOnClickListener {
             binding.imgEighteen.setBackgroundResource(R.drawable.plus_18)
             doCallAgeGroupApi("1")
         }
 
-        binding.imgTwentyOne.setOnClickListener{
+        binding.imgTwentyOne.setOnClickListener {
             binding.imgTwentyOne.setBackgroundResource(R.drawable.plus_21)
             doCallAgeGroupApi("2")
         }
@@ -62,12 +67,15 @@ class AgeGroupActivity:BaseActivity(), AgeGroupActivityPresenter.AgeGroupMainVie
         val input: JsonObject = JsonObject()
         input.addProperty("age_group", data)
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
-        ageGroupActivityPresenterImplementation!!.doCallAgeGroupApi(input,Utility.createHeaders(sharedPreference))
+        ageGroupActivityPresenterImplementation!!.doCallAgeGroupApi(
+            input,
+            Utility.createHeaders(sharedPreference)
+        )
     }
 
 
     override fun validateError(message: String) {
-        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
     override fun onAgeGroupApiSuccess(responseData: AgeGroupResponse) {

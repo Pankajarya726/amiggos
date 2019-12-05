@@ -718,6 +718,7 @@ public class CameraPreview extends MyCanvas {
     @Override
     public void onResume() {
         super.onResume();
+        currentCameraId = 0;
         camera=Camera.open(currentCameraId);
         try {
             camera.setPreviewDisplay(previewHolder);

@@ -126,9 +126,15 @@ class OnlineFriendActivity : BaseActivity(), OnlineFriendPresenter.OnlineFriendM
 
     override fun onOnlineFriendFailure(responseData: String) {
         adapter?.setLoadingStatus(false)
-        if(mydataList.size>0)
-        mydataList.removeAt(mydataList.size - 1)
-        adapter?.notifyDataSetChanged()
+        if(mydataList.size>0 && onlineFriendPageNo !=0){
+            mydataList.removeAt(mydataList.size - 1)
+            adapter?.notifyDataSetChanged()
+        }else{
+            mydataList.clear()
+            adapter!!.notifyDataSetChanged()
+        }
+
+
     }
 
     override fun onLoadMoreData() {

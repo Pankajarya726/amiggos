@@ -6,39 +6,57 @@ import android.content.Intent
 import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
+import android.location.Location
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
-import com.google.android.gms.maps.model.LatLng
+import android.os.SystemClock
 import com.google.gson.JsonObject
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.enums.Actions
 import com.tekzee.amiggos.ui.home.HomeActivity
-import com.tekzee.amiggos.ui.invitefriend.InitGeoLocationUpdate
 import com.tekzee.mallortaxi.network.ApiClient
 import com.tekzee.mallortaxi.util.SharedPreference
-import com.tekzee.mallortaxi.util.SimpleCallback
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
+import io.nlopez.smartlocation.SmartLocation
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.io.IOException
 import java.util.*
 
+
 class UpdateUserLocationToServer : Service() {
-    private var activity: Activity?= null
     private var city: String? = ""
-    private var state: String? =""
+    private var state: String? = ""
     private var postalCode: String? = ""
     private var countryName: String? = ""
-    private var lastLocation: LatLng? = null
     private var disposable: Disposable? = null
     private var sharedPreferences: SharedPreference? = null
 
+    var handler = Handler()
+
     override fun onBind(intent: Intent?): IBinder? {
         return null
+    }
+
+
+    private val periodicUpdate: Runnable = object : Runnable {
+        override fun run() {
+            handler.postDelayed(
+                this,
+                10 * 1000 - SystemClock.elapsedRealtime() % 1000
+            )
+
+            SmartLocation.with(applicationContext).location().oneFix()
+                .start { locationData ->
+                    getAddressFromLocation(locationData)
+                    callLocationUpdateService(locationData)
+                }
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -48,7 +66,6 @@ class UpdateUserLocationToServer : Service() {
             val action = intent.action
             when (action) {
                 Actions.START.name -> startService()
-//                Actions.STOP.name -> stopService()
                 else -> Logger.d("This should never happen. No action in the received intent")
             }
         } else {
@@ -59,20 +76,20 @@ class UpdateUserLocationToServer : Service() {
         return START_STICKY
     }
 
-    fun startService(){
+    fun startService() {
 
+        handler.post(periodicUpdate);
+    }
+
+    private fun callLocationUpdateService(location: Location?) {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
-//        input.addProperty("latitude", lastLocation!!.latitude.toString())
-//        input.addProperty("longitude", lastLocation!!.longitude.toString())
-        input.addProperty("latitude", "22.7533")
-        input.addProperty("longitude", "75.8937")
+        input.addProperty("latitude", location!!.latitude.toString())
+        input.addProperty("longitude", location!!.longitude.toString())
         input.addProperty("country", countryName)
         input.addProperty("state", state)
         input.addProperty("city", city)
         input.addProperty("postal_code", postalCode)
-
-
 
 
 
@@ -101,20 +118,11 @@ class UpdateUserLocationToServer : Service() {
     override fun onCreate() {
         super.onCreate()
         sharedPreferences = SharedPreference(this)
-        //startLocationUpdate()
-        val notification = createNotification()
-        startForeground(1, notification)
+
+        // val notification = createNotification()
+        // startForeground(1, notification)
     }
 
-
-    private fun startLocationUpdate() {
-
-        InitGeoLocationUpdate.locationInit(applicationContext, object : SimpleCallback<LatLng> {
-            override fun callback(mCurrentLatLng: LatLng) {
-                lastLocation = mCurrentLatLng
-            }
-        })
-    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -127,7 +135,8 @@ class UpdateUserLocationToServer : Service() {
         // depending on the Android API that we're dealing with we will have
         // to use a specific method to create the notification
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager;
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager;
             val channel = NotificationChannel(
                 notificationChannelId,
                 "Endless Service notifications channel",
@@ -143,14 +152,16 @@ class UpdateUserLocationToServer : Service() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        val pendingIntent: PendingIntent = Intent(this, HomeActivity::class.java).let { notificationIntent ->
-            PendingIntent.getActivity(this, 0, notificationIntent, 0)
-        }
+        val pendingIntent: PendingIntent =
+            Intent(this, HomeActivity::class.java).let { notificationIntent ->
+                PendingIntent.getActivity(this, 0, notificationIntent, 0)
+            }
 
-        val builder: Notification.Builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) Notification.Builder(
-            this,
-            notificationChannelId
-        ) else Notification.Builder(this)
+        val builder: Notification.Builder =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) Notification.Builder(
+                this,
+                notificationChannelId
+            ) else Notification.Builder(this)
 
         return builder
             .setContentTitle("Endless Service")
@@ -162,15 +173,16 @@ class UpdateUserLocationToServer : Service() {
             .build()
     }
 
-    fun getAddressFromLocation(){
+    fun getAddressFromLocation(location: Location) {
         val geocoder = Geocoder(this, Locale.getDefault())
         var addresses: List<Address> = emptyList()
         try {
             addresses = geocoder.getFromLocation(
-                lastLocation!!.latitude,
-                lastLocation!!.longitude,
+                location!!.latitude,
+                location!!.longitude,
                 // In this sample, we get just a single address.
-                1)
+                1
+            )
         } catch (ioException: IOException) {
             // Catch network or other I/O problems.
 

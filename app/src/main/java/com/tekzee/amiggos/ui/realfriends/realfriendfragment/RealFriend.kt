@@ -122,9 +122,14 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
 
 
     override fun onRealFriendFailure(message: String) {
-//        adapter?.setLoadingStatus(false)
-//        mydataList.removeAt(mydataList.size - 1)
-//        adapter?.notifyDataSetChanged()
+        adapter?.setLoadingStatus(false)
+        if(mydataList.size>0 && realFriendPageNo !=0){
+            mydataList.removeAt(mydataList.size - 1)
+            adapter?.notifyDataSetChanged()
+        }else{
+            mydataList.clear()
+            adapter!!.notifyDataSetChanged()
+        }
     }
 
     override fun onLoadMoreData() {

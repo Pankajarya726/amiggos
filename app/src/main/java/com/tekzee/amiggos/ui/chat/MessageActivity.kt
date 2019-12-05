@@ -122,6 +122,7 @@ class MessageActivity : BaseActivity() {
                                             true
                                         )
                                     ) {
+                                        if(!chatListArray!!.contains(message))
                                         chatListArray!!.add(message)
                                     }
 
@@ -129,8 +130,10 @@ class MessageActivity : BaseActivity() {
                                         message.receiver,
                                         true
                                     ) && receiverId.equals(message.sender, true)){
+                                        if(!chatListArray!!.contains(message))
                                         chatListArray!!.add(message)
                                     }
+                                    Log.d("chatListArray size :",""+chatListArray!!.size)
                                     setupRecyclerview()
                                 }
                             }

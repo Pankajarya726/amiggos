@@ -31,7 +31,7 @@ class HelpCenterAdapter(
     override fun onBindViewHolder(holder: PendingJobViewHolder, position: Int) {
         holder.bindingdata.h_txt_name.text = items[position].title
 
-        holder.bindingdata.h_txt_name.setOnClickListener{
+        holder.bindingdata.mainlayout.setOnClickListener{
            listener.onHelpCenterClicked(items[position])
         }
 

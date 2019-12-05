@@ -18,17 +18,17 @@ import com.tekzee.mallortaxiclient.constant.ConstantLib
 import android.content.Intent
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.tekzee.amiggos.ui.camera.CameraPreview
-import com.tekzee.amiggos.ui.chat.MessageActivity
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.MyFriendChatActivity
 import com.tekzee.amiggos.ui.imageviewer.ImageViewerActivity
-import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
+import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
 import com.tekzee.amiggos.ui.storieview.StorieViewActivity
 
 
 class MyProfileActivity : BaseActivity(), MyProfilePresenter.MyProfileMainView {
 
 
-    private var data: MyProfileResponse? =null
+    private var responseMyProfileData: OurMemoriesResponse? = null
+    private var data: MyProfileResponse? = null
     private var languageData: LanguageData? = null
     private var sharedPreference: SharedPreference? = null
     private lateinit var binding: MyprofileActivityBinding
@@ -39,51 +39,67 @@ class MyProfileActivity : BaseActivity(), MyProfilePresenter.MyProfileMainView {
         binding = DataBindingUtil.setContentView(this, R.layout.myprofile_activity)
         sharedPreference = SharedPreference(this)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        myProfilePresenterImplementation = MyProfilePresenterImplementation(this,this)
+        myProfilePresenterImplementation = MyProfilePresenterImplementation(this, this)
         setupToolBar()
         callMyProfileApi()
+        callGetMyStoryByUserId()
         setupViewData()
         setupClickListener()
     }
 
+    private fun callGetMyStoryByUserId() {
+
+        val input: JsonObject = JsonObject()
+        input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
+        input.addProperty("friend_id", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
+        myProfilePresenterImplementation!!.doGetMyStoryByUserId(
+            input,
+            Utility.createHeaders(sharedPreference)
+        )
+    }
+
     private fun setupClickListener() {
 
-        binding.chatlayout.setOnClickListener{
+        binding.chatlayout.setOnClickListener {
             val intent = Intent(applicationContext, MyFriendChatActivity::class.java)
             startActivity(intent)
         }
 
-        binding.share.setOnClickListener{
+        binding.share.setOnClickListener {
             shareIntent()
         }
 
 
 
-        binding.pMyMemories.setOnClickListener{
-//            val intent =Intent(applicationContext, StorieViewActivity::class.java)
-//            intent.putExtra(ConstantLib.CONTENT,mDataList!![adapterPosition])
-//            intent.putExtra(ConstantLib.PROFILE_IMAGE,mDataList!![adapterPosition].imageUrl)
-//            intent.putExtra(ConstantLib.USER_ID,mDataList!![adapterPosition].userid.toString())
-//            intent.putExtra(ConstantLib.USER_NAME,mDataList!![adapterPosition].name)
-//            startActivity(intent)
+        binding.pMyMemories.setOnClickListener {
+            val intent = Intent(applicationContext, StorieViewActivity::class.java)
+            intent.putExtra(ConstantLib.CONTENT,responseMyProfileData!!.data[0])
+            intent.putExtra(ConstantLib.PROFILE_IMAGE,responseMyProfileData!!.data[0].imageUrl)
+            intent.putExtra(ConstantLib.USER_ID, responseMyProfileData!!.data[0].userid.toString())
+            intent.putExtra(ConstantLib.USER_NAME, responseMyProfileData!!.data[0].name)
+            startActivity(intent)
         }
 
-        binding.addmemory.setOnClickListener{
+        binding.addmemory.setOnClickListener {
             val intent = Intent(applicationContext, CameraPreview::class.java)
-            intent.putExtra(ConstantLib.PROFILE_IMAGE,sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE))
-            intent.putExtra(ConstantLib.FROM_ACTIVITY,"MYPROFILEACTIVITY")
+            intent.putExtra(
+                ConstantLib.PROFILE_IMAGE,
+                sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE)
+            )
+            intent.putExtra(ConstantLib.FROM_ACTIVITY, "MYPROFILEACTIVITY")
             startActivity(intent)
         }
 
-        binding.pMyId.setOnClickListener{
-            val intent = Intent(applicationContext,ImageViewerActivity::class.java)
-            intent.putExtra(ConstantLib.PROFILE_IMAGE,data!!.data[0].idProof)
+        binding.pMyId.setOnClickListener {
+            val intent = Intent(applicationContext, ImageViewerActivity::class.java)
+            intent.putExtra(ConstantLib.PROFILE_IMAGE, data!!.data[0].idProof)
             startActivity(intent)
         }
 
-        binding.pMyReferalCode.setOnClickListener{
+        binding.pMyReferalCode.setOnClickListener {
             val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-            pDialog.titleText = languageData!!.kllblMyrefralCodeTitle+" "+ data!!.data[0].referencecode
+            pDialog.titleText =
+                languageData!!.kllblMyrefralCodeTitle + " " + data!!.data[0].referencecode
             pDialog.setCancelable(false)
             pDialog.setConfirmButton(languageData!!.klOk) {
                 pDialog.dismiss()
@@ -95,7 +111,7 @@ class MyProfileActivity : BaseActivity(), MyProfilePresenter.MyProfileMainView {
     }
 
     private fun setupViewData() {
-        binding.pMyMemories.text = languageData!!.klMYMEMORY
+        binding.pMyMemories.text = languageData!!.klMyMemories
         binding.pMyReferalCode.text = languageData!!.kllblMyrefralCodeTitle
         binding.pMyId.text = languageData!!.kllblMyIdTitle
 
@@ -141,12 +157,16 @@ class MyProfileActivity : BaseActivity(), MyProfilePresenter.MyProfileMainView {
 
     }
 
-
-    override fun validateError(message: String) {
-        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+    override fun onMyStoryByUserIdSuccess(responseData: OurMemoriesResponse?) {
+        responseMyProfileData = responseData
     }
 
-    fun shareIntent(){
+
+    override fun validateError(message: String) {
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+    }
+
+    fun shareIntent() {
         val sendIntent = Intent()
         sendIntent.action = Intent.ACTION_SEND
         sendIntent.putExtra(

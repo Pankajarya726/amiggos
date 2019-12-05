@@ -5,25 +5,26 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.core.widget.NestedScrollView
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.pedant.SweetAlert.SweetAlertDialog
+import co.metalab.asyncawait.async
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
 import com.github.florent37.runtimepermission.PermissionResult
 import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -43,6 +44,8 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.HomeActivityBinding
+import com.tekzee.amiggos.enums.Actions
+import com.tekzee.amiggos.services.UpdateUserLocationToServer
 import com.tekzee.amiggos.ui.camera.CameraPreview
 import com.tekzee.amiggos.ui.chat.model.Message
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.MyFriendChatActivity
@@ -52,10 +55,7 @@ import com.tekzee.amiggos.ui.home.adapter.HomeMyStoriesAdapter
 import com.tekzee.amiggos.ui.home.adapter.HomeVenueAdapter
 import com.tekzee.amiggos.ui.home.adapter.NestedScrollPagination
 import com.tekzee.amiggos.ui.home.adapter.PaginationScrollListener
-import com.tekzee.amiggos.ui.home.model.DashboardReponse
-import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
-import com.tekzee.amiggos.ui.home.model.NearestClub
-import com.tekzee.amiggos.ui.home.model.StoriesData
+import com.tekzee.amiggos.ui.home.model.*
 import com.tekzee.amiggos.ui.invitefriend.InitGeoLocationUpdate
 import com.tekzee.amiggos.ui.invitefriend.InviteFriendActivity
 import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
@@ -75,9 +75,11 @@ import com.tekzee.mallortaxi.util.SimpleCallback
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
+
 class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener,
     HomeActivityPresenter.HomeActivityMainView,
     OnMapReadyCallback {
+
 
     lateinit var binding: HomeActivityBinding
     private var sharedPreference: SharedPreference? = null
@@ -112,16 +114,6 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
 
-    override fun onStart() {
-        super.onStart()
-
-    }
-
-    fun getActivityContext(): HomeActivity {
-        return this
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.home_activity)
@@ -133,7 +125,15 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setupRecyclerVenueView()
         setupRecyclerMyStoriesView()
         getAllUnreadChatCount()
+
+        Intent(this, UpdateUserLocationToServer::class.java).also { intent ->
+            intent.action = Actions.START.name
+            startService(intent)
+        }
+
+
     }
+
 
     private fun getAllUnreadChatCount() {
         val listOfUnreadMessageCount = ArrayList<Message>()
@@ -147,24 +147,32 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
                 override fun onDataChange(snapshot: DataSnapshot) {
                     listOfUnreadMessageCount.clear()
-                    for(messages in snapshot.children){
-                        val data = messages.value as HashMap<String,Any>
+                    for (messages in snapshot.children) {
+                        val data = messages.value as HashMap<String, Any>
                         val messageData = Message(
                             data["isSeen"]!!.toString().toBoolean(),
-                            data["msg"].toString(), data["receiver"].toString(), data["sender"].toString(),
-                            data["timeSpam"]!!.toString().toLong())
-                        if (messageData!=null) {
-                            if (messageData.receiver.equals(FirebaseAuth.getInstance().uid.toString())&& !messageData.isSeen){
-                                listOfUnreadMessageCount.add(Message(
-                                    data["isSeen"]!!.toString().toBoolean(),
-                                    data["msg"].toString(), data["receiver"].toString(), data["sender"].toString(),
-                                    data["timeSpam"]!!.toString().toLong()))
+                            data["msg"].toString(),
+                            data["receiver"].toString(),
+                            data["sender"].toString(),
+                            data["timeSpam"]!!.toString().toLong()
+                        )
+                        if (messageData != null) {
+                            if (messageData.receiver.equals(FirebaseAuth.getInstance().uid.toString()) && !messageData.isSeen) {
+                                listOfUnreadMessageCount.add(
+                                    Message(
+                                        data["isSeen"]!!.toString().toBoolean(),
+                                        data["msg"].toString(),
+                                        data["receiver"].toString(),
+                                        data["sender"].toString(),
+                                        data["timeSpam"]!!.toString().toLong()
+                                    )
+                                )
                             }
                         }
                     }
-                    if(listOfUnreadMessageCount.size==0){
+                    if (listOfUnreadMessageCount.size == 0) {
                         binding.txtUnread.visibility = View.GONE
-                    }else{
+                    } else {
                         binding.txtUnread.visibility = View.VISIBLE
                     }
                     binding.txtUnread.text = listOfUnreadMessageCount.size.toString()
@@ -176,6 +184,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onResume() {
         super.onResume()
         setUpMap()
+
     }
 
 
@@ -240,7 +249,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun checkFriedRequestSent(): Boolean {
-        if(sharedPreference!!.getValueString(ConstantLib.NO_DAY_REGISTER)!!.toInt()>31){
+        if (sharedPreference!!.getValueString(ConstantLib.NO_DAY_REGISTER)!!.toInt() > 31) {
             if (sharedPreference!!.getValueInt(ConstantLib.IS_INVITE_FRIEND) == 0) {
                 val intent = Intent(this, InviteFriendActivity::class.java)
                 startActivity(intent)
@@ -248,7 +257,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             } else {
                 return false
             }
-        }else{
+        } else {
             return false
         }
 
@@ -328,10 +337,13 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun callgetNearByUserCount() {
         val input = JsonObject()
-        input.addProperty("userid",sharedPreference!!.getValueInt(ConstantLib.USER_ID).toString())
-        input.addProperty("latitude",lastLocation!!.latitude)
-        input.addProperty("longitude",lastLocation!!.longitude)
-        homeActivityPresenterImplementation!!.getNearByUserCount(input, Utility.createHeaders(sharedPreference))
+        input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID).toString())
+        input.addProperty("latitude", lastLocation!!.latitude)
+        input.addProperty("longitude", lastLocation!!.longitude)
+        homeActivityPresenterImplementation!!.getNearByUserCount(
+            input,
+            Utility.createHeaders(sharedPreference)
+        )
     }
 
 
@@ -347,7 +359,10 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private fun callFriendProfileIntent(marker: Marker): Boolean {
         if (!checkFriedRequestSent()) {
 
-            Log.e("Markerdata---->",marker.tag.toString()+"---"+marker.id.toString()+"====="+marker.title)
+            Log.e(
+                "Markerdata---->",
+                marker.tag.toString() + "---" + marker.id.toString() + "=====" + marker.title
+            )
 
             val intent = Intent(applicationContext, FriendProfile::class.java)
             intent.putExtra(ConstantLib.FRIEND_ID, marker.title)
@@ -482,8 +497,8 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 pDialog.setConfirmButton(languageData!!.kllblAddStoryTitle) {
                     pDialog.dismiss()
                     val intent = Intent(applicationContext, CameraPreview::class.java)
-                    intent.putExtra(ConstantLib.FROM_ACTIVITY,"HOMEACTIVITY")
-                    intent.putExtra(ConstantLib.PROFILE_IMAGE,storiesData.imageUrl)
+                    intent.putExtra(ConstantLib.FROM_ACTIVITY, "HOMEACTIVITY")
+                    intent.putExtra(ConstantLib.PROFILE_IMAGE, storiesData.imageUrl)
                     startActivity(intent)
                 }
                 pDialog.show()
@@ -578,6 +593,8 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val txt_logout = view.findViewById(R.id.txt_logout) as TextView
         val txt_venue = findViewById<TextView>(R.id.txt_venue)
         val txt_map = findViewById<TextView>(R.id.txt_map)
+        val imagetrans = findViewById<ImageView>(R.id.imagetrans)
+        val nestedScrollView = findViewById<NestedScrollView>(R.id.scrollview)
 
 
         txt_home.text = languageData!!.klHome
@@ -590,6 +607,33 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         txt_logout.text = languageData!!.klLogout
         txt_map.text = languageData!!.klMaptitle
         txt_venue.text = languageData!!.klVenues
+
+
+
+        imagetrans.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                val action = event!!.action
+                when (action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        nestedScrollView.requestDisallowInterceptTouchEvent(true)
+                        return false
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        nestedScrollView.requestDisallowInterceptTouchEvent(false);
+                        return true;
+                    }
+
+                    MotionEvent.ACTION_MOVE -> {
+                        nestedScrollView.requestDisallowInterceptTouchEvent(true);
+                        return false;
+                    }
+                    else -> {
+                        return true;
+                    }
+
+                }
+            }
+        })
 
 
         img_share.setOnClickListener {
@@ -708,17 +752,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val iconGen: IconGenerator = IconGenerator(this)
         iconGen.setBackground(resources.getDrawable(R.drawable.map_profile))
         for (itemData in responseData!!.data.users) {
-            val markerOptions: MarkerOptions = MarkerOptions().icon(
-                BitmapDescriptorFactory.fromBitmap(
-                    createCustomMarker(
-                        this,
-                        itemData.profile,
-                        itemData.userid.toString()
-                    )
-                )
-            ).position(LatLng(itemData.latitude.toDouble(), itemData.longitude.toDouble())).title(itemData.userid.toString())
-            mMap.addMarker(markerOptions)
-
+            createBitmapAndAddMarker(itemData)
         }
 
         mMap.moveCamera(
@@ -731,32 +765,71 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         )
     }
 
-    private fun createCustomMarker(context: Context, profile: String, friendId: String): Bitmap? {
 
+    private fun createBitmapAndAddMarker(itemData: User) {
+        createCustomMarker(
+            applicationContext,
+            itemData.profile,
+            itemData.userid.toString(),
+            itemData
+        )
+    }
+
+
+    private fun createCustomMarker(
+        context: Context,
+        profile: String,
+        friendId: String,
+        itemData: User
+    ) {
         val layoutInflater: LayoutInflater = LayoutInflater.from(context)
         val marker: View = layoutInflater.inflate(R.layout.custom_marker, null);
         val imageview: ImageView = marker.findViewById(R.id.marker_image) as ImageView
+//        Glide.with(this).load(profile).placeholder(R.drawable.user).into(imageview)
+        Glide.with(this)
+            .asBitmap()
+            .load(profile)
+            .placeholder(R.drawable.user)
+            .into(object : CustomTarget<Bitmap>(30, 30) {
+                override fun onLoadCleared(placeholder: Drawable?) {
 
-        Glide.with(context).load(profile).placeholder(R.drawable.user).into(imageview)
+                }
+
+                override fun onResourceReady(
+                    resource: Bitmap,
+                    transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
+                ) {
+                    imageview.setImageBitmap(resource)
+                    val displayMetrics = DisplayMetrics()
+                    windowManager.defaultDisplay.getMetrics(displayMetrics)
+                    marker.layoutParams =
+                        ViewGroup.LayoutParams(52, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    marker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
+                    marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
+                    marker.tag = friendId
+                    marker.id = friendId.toInt()
+                    marker.buildDrawingCache();
+
+                    val bitmap = Bitmap.createBitmap(
+                        marker.measuredWidth,
+                        marker.measuredHeight,
+                        Bitmap.Config.ARGB_8888
+                    )
+                    val canvas = Canvas(bitmap)
+                    marker.draw(canvas)
 
 
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        marker.layoutParams = ViewGroup.LayoutParams(52, ViewGroup.LayoutParams.WRAP_CONTENT);
-        marker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
-        marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
-        marker.tag = friendId
-        marker.id = friendId.toInt()
-        marker.buildDrawingCache();
-        val bitmap = Bitmap.createBitmap(
-            marker.measuredWidth,
-            marker.measuredHeight,
-            Bitmap.Config.ARGB_8888
-        )
-        val canvas = Canvas(bitmap)
-        marker.draw(canvas)
+                    val markerOptions: MarkerOptions = MarkerOptions().icon(
+                        BitmapDescriptorFactory.fromBitmap(
+                            bitmap
+                        )
+                    ).position(LatLng(itemData.latitude.toDouble(), itemData.longitude.toDouble()))
+                        .title(itemData.userid.toString())
+                    mMap.addMarker(markerOptions)
 
-        return bitmap
+                }
+            })
+
     }
 
 
@@ -787,7 +860,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
 
     //venue responses
-    override fun onVenueResponse(responseData: com.tekzee.amiggos.ui.home.model.VenueResponse?) {
+    override fun onVenueResponse(responseData: VenueResponse?) {
 
         venueListData.clear()
         venueAdapter!!.notifyDataSetChanged()
@@ -862,14 +935,15 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
 
-
-
-
     override fun onNearByCountSuccess(responseData: CommonResponse?) {
 
     }
 
 
+    override fun onDestroy() {
+        super.onDestroy()
+        homeActivityPresenterImplementation!!.onStop()
+    }
 
 
 }

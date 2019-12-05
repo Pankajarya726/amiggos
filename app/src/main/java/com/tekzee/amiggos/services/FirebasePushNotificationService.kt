@@ -13,6 +13,7 @@ import com.google.firebase.messaging.RemoteMessage
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.agegroup.AgeGroupActivity
+import com.tekzee.amiggos.ui.attachid.AttachIdActivity
 import com.tekzee.amiggos.ui.home.HomeActivity
 import com.tekzee.amiggos.ui.partydetails.PartyDetailsActivity
 import com.tekzee.amiggos.ui.realfriends.RealFriendsActivity
@@ -173,7 +174,8 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
             }
             "9" -> {
 //                print("Party Invitation reject")
-                createDefaultNotification(title, body)
+//                createDefaultNotification(title, body)
+                goToAttachidActivity(title,body)
             }
             "10" -> {
 //                gotoBookingScreen()
@@ -192,6 +194,35 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
 
         }
 
+
+    }
+
+    private fun goToAttachidActivity(title: String?, body: String?) {
+
+        createNotificationChannel()
+
+        val intent = Intent(this, AttachIdActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
+        var builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setContentTitle(body)
+            .setContentText(title)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(title)
+            )
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+
+        with(NotificationManagerCompat.from(this)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(System.currentTimeMillis().toInt(), builder.build())
+        }
 
     }
 

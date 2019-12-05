@@ -44,6 +44,11 @@ class MyFriendChatActivity : BaseActivity() {
         sharedPreferences = SharedPreference(this)
         languageData = sharedPreferences!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         setupToolBar()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
         getAllConversation()
     }
 

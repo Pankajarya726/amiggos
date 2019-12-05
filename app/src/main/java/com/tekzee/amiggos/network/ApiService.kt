@@ -70,7 +70,7 @@ interface ApiService {
     ): Observable<Response<LanguageResponse>>
 
 
-    @POST("auth/login")
+    @POST("auth/login_V1")
     fun doLoginApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
@@ -231,7 +231,7 @@ interface ApiService {
     ): Observable<Response<ChooseWeekResponse>>
 
 
-    @POST("user/getPakageList")
+    @POST("user/getPakageList_V1")
     fun doCallPackageApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
@@ -334,6 +334,13 @@ interface ApiService {
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<MyProfileResponse>>
+
+
+    @POST("user/getMyStoryByUserId")
+    fun doGetMyStoryByUserId(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<OurMemoriesResponse>>
 
 
     @POST("user/blockFriend")

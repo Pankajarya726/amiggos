@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PackageResponse(
     @SerializedName("data")
-    val `data`: List<PackageData> = listOf(),
+    val `data`: Data = Data(),
     @SerializedName("message")
     val message: String = "",
     @SerializedName("status")

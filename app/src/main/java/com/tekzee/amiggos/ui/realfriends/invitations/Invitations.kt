@@ -118,5 +118,7 @@ class Invitations: BaseFragment(), InvitationPresenter.InvitationMainView {
     override fun onInvitationFailure(responseData: String) {
         items.clear()
         adapter.notifyDataSetChanged()
+
+
     }
 }

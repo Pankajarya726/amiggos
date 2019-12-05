@@ -213,7 +213,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:src="@drawable/add_user" />
+                            android:src="@drawable/add_story" />
 
                         <com.an.customfontview.CustomTextView
                             android:id="@+id/txt_addmemory"
@@ -264,7 +264,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:background="@drawable/btn_bg_less"
-                    android:drawableLeft="@drawable/our_memories_icon"
+                    android:drawableLeft="@drawable/ic_stories"
                     android:drawablePadding="10dp"
                     android:fontFamily="@font/eras"
                     android:gravity="center|left"
@@ -281,7 +281,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:background="@drawable/btn_bg_less"
-                    android:drawableLeft="@drawable/our_memories_icon"
+                    android:drawableLeft="@drawable/refferal"
                     android:drawablePadding="10dp"
                     android:fontFamily="@font/eras"
                     android:gravity="center|left"
@@ -297,7 +297,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:background="@drawable/btn_bg_less"
-                    android:drawableLeft="@drawable/our_memories_icon"
+                    android:drawableLeft="@drawable/id"
                     android:drawablePadding="10dp"
                     android:fontFamily="@font/eras"
                     android:gravity="center|left"

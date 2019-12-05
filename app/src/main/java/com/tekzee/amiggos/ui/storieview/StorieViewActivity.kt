@@ -180,8 +180,8 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
     fun playVideo(videoView: VideoView, index: Int, momentz: Momentz) {
         val str = urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/"+urlList[index].id+"/0"
 //        val str = urlList[index].url
-
-        val uri = Uri.parse(str)
+        val videoUrl= java.net.URLDecoder.decode(str, "UTF-8");
+        val uri = Uri.parse(videoUrl)
         videoView.setVideoURI(uri)
         videoView.requestFocus()
         videoView.start()

@@ -229,6 +229,7 @@ class MyPreferences :BaseActivity(), MyPreferencesPresenter.MyPreferencesMainVie
         pDialog.setCancelable(false)
         pDialog.setConfirmButton(languageData!!.klOk) {
             pDialog.dismiss()
+            onBackPressed()
         }
         pDialog.show()
     }

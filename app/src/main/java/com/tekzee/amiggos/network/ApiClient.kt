@@ -396,6 +396,13 @@ class ApiClient {
         return apiService.doMyProfile(input, createHeaders)
     }
 
+    fun doGetMyStoryByUserId(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<OurMemoriesResponse>> {
+        return apiService.doGetMyStoryByUserId(input, createHeaders)
+    }
+
 
     fun callBlock(
         input: JsonObject,

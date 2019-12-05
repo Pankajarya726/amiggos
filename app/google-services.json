@@ -1,35 +1,50 @@
 {
   "project_info": {
-    "project_number": "675949083703",
-    "firebase_url": "https://amiggosdev.firebaseio.com",
-    "project_id": "amiggosdev",
-    "storage_bucket": "amiggosdev.appspot.com"
+    "project_number": "350203036410",
+    "firebase_url": "https://amiggos-1551344645945.firebaseio.com",
+    "project_id": "amiggos-1551344645945",
+    "storage_bucket": "amiggos-1551344645945.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:675949083703:android:0412a358e099d13cf853b2",
+        "mobilesdk_app_id": "1:350203036410:android:9d8b408af3d8350b517f43",
         "android_client_info": {
           "package_name": "com.tekzee.amiggos"
         }
       },
       "oauth_client": [
         {
-          "client_id": "675949083703-fvklv8fam1l0gijka98df6b306r838j9.apps.googleusercontent.com",
+          "client_id": "350203036410-m4jamkgagu10s010jfco2tijtgoi5dam.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tekzee.amiggos",
+            "certificate_hash": "92d9ed996dae6456055c3123f13b4af34684ecdd"
+          }
+        },
+        {
+          "client_id": "350203036410-1n1m8vvq3ecmrpi89tck8n55q8sa9vvq.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDnRigfrJVehlqVbw1-y--sbMVraW7fn4o"
+          "current_key": "AIzaSyAkurmx-lYNyTLmNovIpRulGpedBgWxzdE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "675949083703-fvklv8fam1l0gijka98df6b306r838j9.apps.googleusercontent.com",
+              "client_id": "350203036410-1n1m8vvq3ecmrpi89tck8n55q8sa9vvq.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "350203036410-0jp4ce96ds5o9kepb76hrplk83k7g033.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.amiggosuser.app"
+              }
             }
           ]
         }

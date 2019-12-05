@@ -12,19 +12,21 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.ChoosePackageBinding
+import com.tekzee.amiggos.ui.attachid.AttachIdActivity
 import com.tekzee.amiggos.ui.choosepackage.adapter.ChoosePackageAdapter
 import com.tekzee.amiggos.ui.choosepackage.interfaces.ChoosePackageInterface
 import com.tekzee.amiggos.ui.choosepackage.model.PackageBookResponse
 import com.tekzee.amiggos.ui.choosepackage.model.PackageData
 import com.tekzee.amiggos.ui.choosepackage.model.PackageResponse
 import com.tekzee.amiggos.ui.friendlist.FriendListActivity
+import com.tekzee.amiggos.ui.statusview.StatusViewActivity
 
 import com.tekzee.mallortaxi.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
-class ChoosePackageActivity: BaseActivity(), ChoosePackagePresenter.ChoosePackageMainView {
+class ChoosePackageActivity : BaseActivity(), ChoosePackagePresenter.ChoosePackageMainView {
 
 
     private var response: PackageResponse? = null
@@ -32,14 +34,14 @@ class ChoosePackageActivity: BaseActivity(), ChoosePackagePresenter.ChoosePackag
     private lateinit var binding: ChoosePackageBinding
     private var sharedPreferences: SharedPreference? = null
     private var languageData: LanguageData? = null
-    private var choosePackagePresenterImplementation: ChoosePackagePresenterImplementation? =null
+    private var choosePackagePresenterImplementation: ChoosePackagePresenterImplementation? = null
     private var data = ArrayList<PackageData>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.choose_package)
         sharedPreferences = SharedPreference(this)
         languageData = sharedPreferences!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        choosePackagePresenterImplementation = ChoosePackagePresenterImplementation(this,this)
+        choosePackagePresenterImplementation = ChoosePackagePresenterImplementation(this, this)
         setupToolBar()
         callChoosePackageApi()
         setupRecyclerView()
@@ -52,26 +54,59 @@ class ChoosePackageActivity: BaseActivity(), ChoosePackagePresenter.ChoosePackag
 
 
     }
-
+//    0: No document
+//    1: Document uploaded
+//    2: Document Approved
 
     private fun setupRecyclerView() {
         binding.chooseRecyclerview.setHasFixedSize(true)
         val layoutManager = GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false)
         binding.chooseRecyclerview.layoutManager = layoutManager
-        adapter = ChoosePackageAdapter(data,languageData!!,object: ChoosePackageInterface {
+        adapter = ChoosePackageAdapter(data, languageData!!, object : ChoosePackageInterface {
             override fun onClickWeek(packageData: PackageData) {
-                val pDialog = SweetAlertDialog(this@ChoosePackageActivity, SweetAlertDialog.WARNING_TYPE)
-                pDialog.titleText = languageData!!.klAlertmessageBooking
-                pDialog.setCancelable(false)
-                pDialog.setCancelButton(languageData!!.klCancel) {
-                    pDialog.dismiss()
-                }
-                pDialog.setConfirmButton(languageData!!.klOk) {
-                    pDialog.dismiss()
-                    callBookPackage(packageData.packageId,packageData.clubId)
+                if(response!!.data.userFirstPackage.equals("1")){
+                    var intent: Intent?= null
+                    when(response!!.data.userDocumentStatus){
+                        "0"->{
+                             intent = Intent(applicationContext, AttachIdActivity::class.java)
+                            startActivity(intent)
+                        }
+                        "1"->{
+                            intent = Intent(applicationContext, StatusViewActivity::class.java)
+                            startActivity(intent)
+                        }
+                        "2"->{
+                            val pDialog =
+                                SweetAlertDialog(this@ChoosePackageActivity, SweetAlertDialog.WARNING_TYPE)
+                            pDialog.titleText = languageData!!.klAlertmessageBooking
+                            pDialog.setCancelable(false)
+                            pDialog.setCancelButton(languageData!!.klCancel) {
+                                pDialog.dismiss()
+                            }
+                            pDialog.setConfirmButton(languageData!!.klOk) {
+                                pDialog.dismiss()
+                                callBookPackage(packageData.packageId, packageData.clubId)
+                            }
+                            pDialog.show()
+                        }
 
+                    }
+
+                }else{
+                    val pDialog =
+                        SweetAlertDialog(this@ChoosePackageActivity, SweetAlertDialog.WARNING_TYPE)
+                    pDialog.titleText = languageData!!.klAlertmessageBooking
+                    pDialog.setCancelable(false)
+                    pDialog.setCancelButton(languageData!!.klCancel) {
+                        pDialog.dismiss()
+                    }
+                    pDialog.setConfirmButton(languageData!!.klOk) {
+                        pDialog.dismiss()
+                        callBookPackage(packageData.packageId, packageData.clubId)
+                    }
+                    pDialog.show()
                 }
-                pDialog.show()
+
             }
         })
         binding.chooseRecyclerview.adapter = adapter
@@ -119,19 +154,19 @@ class ChoosePackageActivity: BaseActivity(), ChoosePackagePresenter.ChoosePackag
     }
 
     override fun validateError(message: String) {
-        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
     override fun onChoosePackageSuccess(responseData: PackageResponse?) {
         response = responseData
-        data.addAll(responseData!!.data)
+        data.addAll(responseData!!.data.packageData)
         adapter.notifyDataSetChanged()
     }
 
     override fun onBookPackageSuccess(responseData: PackageBookResponse?) {
-        Toast.makeText(applicationContext,responseData!!.message,Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, responseData!!.message, Toast.LENGTH_LONG).show()
         val intent = Intent(applicationContext, FriendListActivity::class.java)
-        intent.putExtra(ConstantLib.BOOKING_ID,responseData.data.bookingId.toString())
+        intent.putExtra(ConstantLib.BOOKING_ID, responseData.data.bookingId.toString())
         startActivity(intent)
     }
 
