@@ -160,7 +160,7 @@ interface ApiService {
     ): Observable<Response<GetMyStoriesResponse>>
 
 
-    @POST("user/getAllActiveUserList")
+    @POST("user/getAllActiveUserList_V1")
     fun doCallOnlineFriendApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>

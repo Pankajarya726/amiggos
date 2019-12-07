@@ -542,6 +542,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         binding.scrollview.setOnScrollChangeListener(object :
             NestedScrollPagination(layoutManager) {
+
             override fun loadMoreItems() {
                 isLoadingVenue = true
                 currentPageVenue += 1
@@ -866,8 +867,13 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         venueAdapter!!.notifyDataSetChanged()
         venueListData.addAll(responseData!!.data.nearest_clubs)
         if (currentPageVenue <= TOTAL_PAGES_VENUE) {
-            if (venueListData.size > 0)
+            if (venueListData.size > 10){
                 venueAdapter!!.addLoadingFooter()
+                isLastpageVenue = false
+            }else{
+                isLastpageVenue = true
+            }
+
         } else {
             isLastpageVenue = true
         }
@@ -904,7 +910,13 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         myStoriesAdapter!!.notifyDataSetChanged()
         myStoriesListData.addAll(responseData.data)
         if (currentPage <= TOTAL_PAGES) {
-            myStoriesAdapter!!.addLoadingFooter()
+            if (venueListData.size > 10){
+                myStoriesAdapter!!.addLoadingFooter()
+                isLastPage = false
+            }else{
+                isLastPage = true
+            }
+
         } else {
             isLastPage = true
         }

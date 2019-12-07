@@ -104,12 +104,12 @@ class ApiClient {
             }
     }
 
-    fun doValidateAppVersionApi(
-        input: JsonObject,
-        headers: HashMap<String, String?>
-    ): Observable<Response<ValidateAppVersionResponse>> {
-        return apiService.doValidateAppVersionApi(input, headers)
-    }
+        fun doValidateAppVersionApi(
+            input: JsonObject,
+            headers: HashMap<String, String?>
+        ): Observable<Response<ValidateAppVersionResponse>> {
+            return apiService.doValidateAppVersionApi(input, headers)
+        }
 
 
     fun doLanguageConstantApi(

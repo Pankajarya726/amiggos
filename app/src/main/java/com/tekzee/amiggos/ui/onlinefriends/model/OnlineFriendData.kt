@@ -28,5 +28,7 @@ data class OnlineFriendData(
     @SerializedName("status")
     val status: Int = 0,
     @SerializedName("userid")
-    val userid: Int = 0
+    val userid: Int = 0,
+    @SerializedName("is_user_active")
+    val is_user_active: String = ""
 )

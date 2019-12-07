@@ -7,4 +7,9 @@ interface MyPreferenceClicked {
         position: Int,
         selectedData: MyPreferenceData
     )
+
+    fun lastPosition(
+        position: Int
+
+    )
 }

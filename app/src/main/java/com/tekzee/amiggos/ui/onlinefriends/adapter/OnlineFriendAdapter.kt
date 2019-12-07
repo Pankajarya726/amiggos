@@ -54,6 +54,12 @@ class OnlineFriendAdapter(
             Glide.with(itemView.context).load(mDataList[adapterPosition].profile).placeholder(R.drawable.user).into(itemView.profile_image)
             itemView.txt_name.text = mDataList[adapterPosition].name
 
+            if(mDataList[adapterPosition].is_user_active.equals("yes",true)){
+                itemView.img_green_dot.setBackgroundResource(R.drawable.circle_green)
+            }else{
+                itemView.img_green_dot.setBackgroundResource(R.drawable.circle_red)
+            }
+
             itemView.setOnClickListener {
                 mItemClickCallback?.let {
                     mItemClickCallback.itemClickCallback(adapterPosition)

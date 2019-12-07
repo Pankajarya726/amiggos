@@ -48,7 +48,7 @@ class UpdateUserLocationToServer : Service() {
         override fun run() {
             handler.postDelayed(
                 this,
-                10 * 1000 - SystemClock.elapsedRealtime() % 1000
+                30000
             )
 
             SmartLocation.with(applicationContext).location().oneFix()

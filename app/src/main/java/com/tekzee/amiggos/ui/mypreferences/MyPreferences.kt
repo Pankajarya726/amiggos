@@ -1,6 +1,7 @@
 package com.tekzee.amiggos.ui.mypreferences
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
@@ -22,6 +23,9 @@ import com.tekzee.mallortaxi.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.thoughtbot.expandablerecyclerview.listeners.GroupExpandCollapseListener
+import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
+
 
 class MyPreferences :BaseActivity(), MyPreferencesPresenter.MyPreferencesMainView {
 
@@ -185,8 +189,29 @@ class MyPreferences :BaseActivity(), MyPreferencesPresenter.MyPreferencesMainVie
 
             }
 
+            override fun lastPosition(position: Int) {
+
+            }
+
         })
+
         binding.mypreferenceRecyclerview.adapter = adapter
+
+
+
+
+
+        adapter!!.setOnGroupExpandCollapseListener(object : GroupExpandCollapseListener {
+            override fun onGroupExpanded(group: ExpandableGroup<*>?) {
+                Log.e("OnGroup Expanded","Exapanded")
+            }
+            override fun onGroupCollapsed(group: ExpandableGroup<*>?) {
+                Log.e("OnGroup collapsed","collapsed")
+            }
+        })
+
+
+
     }
 
 
@@ -200,6 +225,7 @@ class MyPreferences :BaseActivity(), MyPreferencesPresenter.MyPreferencesMainVie
 
     override fun validateError(message: String) {
         Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+        finish()
     }
 
 

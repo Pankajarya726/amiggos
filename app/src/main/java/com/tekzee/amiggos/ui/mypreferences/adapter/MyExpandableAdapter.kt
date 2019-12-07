@@ -23,7 +23,7 @@ import io.apptik.widget.MultiSlider
 class MyExpandableAdapter(
     groups: ArrayList<ParentData>,
     sharedPreference: SharedPreference?,
-    param: MyPreferenceClicked
+    var param: MyPreferenceClicked
 ) : MultiTypeExpandableRecyclerViewAdapter<ParentViewHolder, ChildViewHolder>(groups) {
 
     var listOfValue = ArrayList<Value>()
@@ -82,6 +82,10 @@ class MyExpandableAdapter(
         flatPosition: Int,
         group: ExpandableGroup<*>?
     ) {
+        if(groups.size-1 == flatPosition){
+            param.lastPosition(flatPosition)
+        }
+//        param.lastPosition(flatPosition)
         holder!!.bindParentData(group)
     }
 
