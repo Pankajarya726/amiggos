@@ -66,6 +66,7 @@ class ChatAdapter(
                         override fun getFirebaseUserIdFromAmiggosId(firebaseuserid: String) {
                             val intent = Intent(context, FriendProfile::class.java)
                             intent.putExtra(ConstantLib.FRIEND_ID,firebaseuserid)
+                            intent.putExtra("from","ChatAdapter")
                             context!!.startActivity(intent)
                         }
                     })

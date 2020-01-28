@@ -68,6 +68,7 @@ class ViewFriendsActivity:BaseActivity(), ViewFriendPresenter.ViewFriendMainView
                     startActivity(intent)
                 }else{
                     val intent = Intent(applicationContext, FriendProfile::class.java)
+                    intent.putExtra("from","ViewFriend")
                     intent.putExtra(ConstantLib.FRIEND_ID,storieViewData.userid.toString())
                     startActivity(intent)
                 }

@@ -15,7 +15,19 @@ private String body;
 @Expose
 private String subtitle;
 
-public String getTitle() {
+@SerializedName("sound")
+@Expose
+private String sound;
+
+    public String getSound() {
+        return sound;
+    }
+
+    public void setSound(String sound) {
+        this.sound = sound;
+    }
+
+    public String getTitle() {
 return title;
 }
 
@@ -39,9 +51,10 @@ public void setSubtitle(String subtitle) {
 this.subtitle = subtitle;
 }
 
-    public Notification(String title, String body, String subtitle) {
+    public Notification(String title, String body, String subtitle, String sound) {
         this.title = title;
         this.body = body;
         this.subtitle = subtitle;
+        this.sound = sound;
     }
 }

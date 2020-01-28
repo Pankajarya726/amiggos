@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.pedant.SweetAlert.SweetAlertDialog
-import co.metalab.asyncawait.async
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.github.florent37.runtimepermission.PermissionResult
@@ -41,7 +40,6 @@ import com.google.firebase.database.*
 import com.google.gson.JsonObject
 import com.google.maps.android.ui.IconGenerator
 import com.tekzee.amiggos.R
-import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.HomeActivityBinding
 import com.tekzee.amiggos.enums.Actions
@@ -81,6 +79,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     OnMapReadyCallback {
 
 
+    private var count: Int=0;
     lateinit var binding: HomeActivityBinding
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
@@ -206,6 +205,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE)
                 )
                 intent.putExtra(ConstantLib.FROM_ACTIVITY, "HOMEACTIVITY")
+                intent.putExtra(ConstantLib.COUNT, count)
                 startActivity(intent)
             }
         }
@@ -366,6 +366,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
             val intent = Intent(applicationContext, FriendProfile::class.java)
             intent.putExtra(ConstantLib.FRIEND_ID, marker.title)
+            intent.putExtra("from","HomeActivity")
             startActivity(intent)
         }
         return true
@@ -746,6 +747,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun validateError(message: String) {
         InitGeoLocationUpdate.stopLocationUpdate(this)
+        count = 0
     }
 
 
@@ -791,7 +793,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             .asBitmap()
             .load(profile)
             .placeholder(R.drawable.user)
-            .into(object : CustomTarget<Bitmap>(30, 30) {
+            .into(object : CustomTarget<Bitmap>(120, 120) {
                 override fun onLoadCleared(placeholder: Drawable?) {
 
                 }
@@ -947,8 +949,8 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
 
-    override fun onNearByCountSuccess(responseData: CommonResponse?) {
-
+    override fun onNearByCountSuccess(responseData: NearbyMeCountResponse?) {
+        count = responseData!!.data.nearByUserCount
     }
 
 

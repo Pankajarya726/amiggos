@@ -5,7 +5,7 @@ data class Data(
     val age: String = "",
     val get_package_count: Int = 0,
     val invite_friend_count: String = "",
-    val is_friends_invited: String = "",
+    val is_freind_invities: String = "",
     val no_day_register: String = "",
     val status: String = ""
 )

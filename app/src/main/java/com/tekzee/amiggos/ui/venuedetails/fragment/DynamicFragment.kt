@@ -5,25 +5,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.tekzee.amiggos.R
-import com.tekzee.amiggos.databinding.DynamicFragmentBinding
-import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailData
-import com.tekzee.amiggos.ui.venuedetails.SliderAdapter
-import com.tekzee.mallortaxi.base.BaseFragment
-import com.tekzee.mallortaxi.util.SharedPreference
-import com.tekzee.mallortaxiclient.constant.ConstantLib
-import com.smarteist.autoimageslider.IndicatorView.draw.controller.DrawController
 import com.smarteist.autoimageslider.IndicatorAnimations
+import com.smarteist.autoimageslider.IndicatorView.draw.controller.DrawController
+import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
+import com.tekzee.amiggos.databinding.DynamicFragmentBinding
 import com.tekzee.amiggos.ui.chooseweek.ChooseWeekActivity
 import com.tekzee.amiggos.ui.imagepanaroma.model.ImageVideoData
+import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailData
 import com.tekzee.amiggos.ui.venuedetails.ImageClickListener
+import com.tekzee.amiggos.ui.venuedetails.SliderAdapter
 import com.tekzee.amiggos.ui.venuedetails.fragment.adapter.DataAdapter
 import com.tekzee.amiggos.ui.venuedetails.imageslider.ImageSliderActivity
 import com.tekzee.amiggos.ui.videoplayer.MyPlayerActivity
+import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.mallortaxi.util.SharedPreference
+import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 
 class DynamicFragment: BaseFragment() {
@@ -54,6 +55,8 @@ class DynamicFragment: BaseFragment() {
         sharedPreference = SharedPreference(activity!!.baseContext)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
 
+
+
         val bundle = arguments
         dataItem = bundle!!.getSerializable(ConstantLib.VENUE_DATA) as VenueDetailData
         clubId = bundle.getString(ConstantLib.CLUB_ID)
@@ -81,12 +84,20 @@ class DynamicFragment: BaseFragment() {
             binding.imageSlider.setCurrentPagePosition(
                 position
             )
+
+
         })
 
         setupViewData(dataItem!!)
         setupReyclerView(dataItem!!)
         setupClickListener()
         return myView
+    }
+
+    fun slideTotop(){
+        binding.nestedscrollview.post(Runnable {
+            binding.nestedscrollview.fullScroll(ScrollView.FOCUS_UP)
+        })
     }
 
     private fun setupClickListener() {
@@ -103,6 +114,11 @@ class DynamicFragment: BaseFragment() {
         binding.dataReyclerview.layoutManager = LinearLayoutManager(activity)
         adapter = DataAdapter(dataItem.venueData)
         binding.dataReyclerview.adapter = adapter
+//        binding.dataReyclerview.smoothScrollToPosition(0);
+//        slideTotop()
+        if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.M) {
+            slideTotop()
+        }
     }
 
     private fun setupViewData(dataItem: VenueDetailData) {

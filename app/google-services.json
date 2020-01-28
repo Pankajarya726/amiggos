@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "350203036410-ahudl56f49gmp5g13bs4f89vgafht8if.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tekzee.amiggos",
+            "certificate_hash": "827f6c063ee185e81bb88d55f9b7433b4d60d9fc"
+          }
+        },
+        {
+          "client_id": "350203036410-9gl0bt7gq3251o00ffo4ecf9u5u72op4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tekzee.amiggos",
+            "certificate_hash": "cfe19e8cc176cf3b8bcc2a10228f907d8f49450d"
+          }
+        },
+        {
           "client_id": "350203036410-m4jamkgagu10s010jfco2tijtgoi5dam.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

@@ -69,6 +69,7 @@ class HomeVenueAdapter(var venueListData: ArrayList<NearestClub>) : RecyclerView
                     intent.putExtra(ConstantLib.PROFILE_IMAGE,venueListData[adapterPosition].panaroma_Image)
                     intent.putExtra(ConstantLib.CLUB_ID,venueListData[adapterPosition].club_id.toString())
                     intent.putExtra(ConstantLib.IS_REGULAR_IMAGE,venueListData[adapterPosition].is_regular_image)
+                    intent.putExtra(ConstantLib.VIP_TABLE,venueListData[adapterPosition].vip_table)
                     context!!.startActivity(intent)
             }
 

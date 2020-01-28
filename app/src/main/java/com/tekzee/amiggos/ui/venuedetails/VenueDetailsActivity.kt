@@ -11,6 +11,7 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.VenueDetailsActivityBinding
 import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailResponse
+import com.tekzee.amiggos.ui.venuedetails.fragment.DynamicFragment
 import com.tekzee.amiggos.ui.venuedetails.fragment.DynamicFragmentAdapter
 import com.tekzee.mallortaxi.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
@@ -61,15 +62,19 @@ class VenueDetailsActivity: BaseActivity(), VenueDetailsPresenter.VenueDetailsMa
         binding.tabs.setOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabReselected(p0: TabLayout.Tab?) {
                 Logger.d("TAB RESELECTED")
+
             }
 
             override fun onTabUnselected(p0: TabLayout.Tab?) {
 
                 Logger.d("TAB UNSELECTED")
+
             }
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 binding.viewpager.currentItem = tab!!.position
+
+
             }
         })
 

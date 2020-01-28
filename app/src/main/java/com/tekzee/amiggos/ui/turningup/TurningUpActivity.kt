@@ -47,6 +47,7 @@ class TurningUpActivity : BaseActivity(), TurningupPresenter.TurningUpMainView {
         adapter = TurningAdapter(data,sharedPreferences, object : TurningUpClicked {
             override fun onTuringUpClicked(position: Int, selectedData: TurningUpData) {
                 val intent = Intent(applicationContext, FriendProfile::class.java)
+                intent.putExtra("from","TurningupActivity")
                 intent.putExtra(ConstantLib.FRIEND_ID,selectedData.userid.toString())
                 startActivity(intent)
             }

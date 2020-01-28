@@ -10,10 +10,16 @@ class LoginPresenter {
             input: JsonObject,
             createHeaders: HashMap<String, String?>
         )
+
+        fun doUpdateFirebaseApi(
+            input: JsonObject,
+            createHeaders: HashMap<String, String?>
+        )
         fun onStop()
     }
 
     interface LoginMainView:BaseMainView{
         fun onLoginSuccess(responseData: LoginResponse)
+        fun onFirebaseUpdateSuccess(responseData: LoginResponse)
     }
 }

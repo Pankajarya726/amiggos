@@ -174,6 +174,7 @@ class GroupFriendActivity : BaseActivity(), GroupFriendPresenter.GroupFriendMain
     ) {
         val intent = Intent(applicationContext,FriendProfile::class.java)
         intent.putExtra(ConstantLib.FRIEND_ID,mydataList[adapterPosition].userid.toString())
+        intent.putExtra("from","GroupFriendActivity")
         startActivity(intent)
     }
 

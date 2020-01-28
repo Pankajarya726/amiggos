@@ -19,6 +19,7 @@ import com.tekzee.amiggos.ui.guestlist.model.GuestListResponse
 import com.tekzee.amiggos.ui.helpcenter.model.HelpCenterResponse
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
+import com.tekzee.amiggos.ui.home.model.NearbyMeCountResponse
 import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
 import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
@@ -88,7 +89,7 @@ class ApiClient {
     }
 
     companion object {
-        private val BASE_URL = "http://dev.tekzee.in/Amiggos_new/api/"
+        private val BASE_URL = "http://amiggos.com/Amiggos_tek/api/"
         private var apiClient: ApiClient? = null
         /**
          * Gets my app client.
@@ -158,6 +159,13 @@ class ApiClient {
         createHeaders: HashMap<String, String?>
     ): Observable<Response<LoginResponse>> {
         return apiService.doLoginApi(input, createHeaders)
+    }
+
+    fun doUpdateFirebaseApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<LoginResponse>> {
+        return apiService.doUpdateFirebaseApi(input, createHeaders)
     }
 
     fun callTurningUpApi(
@@ -311,6 +319,14 @@ class ApiClient {
         createHeaders: HashMap<String, String?>
     ): Observable<Response<FriendListResponse>> {
         return apiService.doGetFriendList(input, createHeaders)
+    }
+
+
+    fun getallAmiggos_invited(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<FriendListResponse>> {
+        return apiService.getallAmiggos_invited(input, createHeaders)
     }
 
     fun doInviteFriend(
@@ -501,7 +517,7 @@ class ApiClient {
     fun getNearByUserCount(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
-    ): Observable<Response<CommonResponse>> {
+    ): Observable<Response<NearbyMeCountResponse>> {
         return apiService.getNearByUserCount(input, createHeaders)
     }
 

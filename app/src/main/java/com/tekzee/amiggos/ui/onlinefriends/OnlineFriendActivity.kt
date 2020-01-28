@@ -148,6 +148,7 @@ class OnlineFriendActivity : BaseActivity(), OnlineFriendPresenter.OnlineFriendM
     ) {
         val intent = Intent(applicationContext,FriendProfile::class.java)
         intent.putExtra(ConstantLib.FRIEND_ID,mydataList[adapterPosition].userid.toString())
+        intent.putExtra("from","OnlineFriendActivity")
         startActivity(intent)
     }
 

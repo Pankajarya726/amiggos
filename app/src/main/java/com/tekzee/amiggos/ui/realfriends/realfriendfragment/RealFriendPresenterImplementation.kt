@@ -42,7 +42,7 @@ class RealFriendPresenterImplementation(
                     when (response.code()) {
                         200 -> {
                             val responseData: RealFriendResponse? = response.body()
-                            if (responseData!!.data.size>0) {
+                            if (responseData!!.data.isNotEmpty()) {
                                 if(requestDatFromServer){
                                     mainView.onRealFriendInfiniteSuccess(responseData)
                                 }else{

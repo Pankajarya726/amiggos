@@ -16,6 +16,7 @@ import com.tekzee.amiggos.ui.guestlist.model.GuestListResponse
 import com.tekzee.amiggos.ui.helpcenter.model.HelpCenterResponse
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
+import com.tekzee.amiggos.ui.home.model.NearbyMeCountResponse
 import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
 import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
@@ -72,6 +73,13 @@ interface ApiService {
 
     @POST("auth/login_V1")
     fun doLoginApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<LoginResponse>>
+
+
+    @POST("user/updateUserFirebaseId")
+    fun doUpdateFirebaseApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<LoginResponse>>
@@ -245,6 +253,12 @@ interface ApiService {
 
     @POST("user/getFriendsForPartyInvite")
     fun doGetFriendList(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<FriendListResponse>>
+
+    @POST("user/getallAmiggos_invited_V1")
+    fun getallAmiggos_invited(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<FriendListResponse>>
@@ -448,7 +462,7 @@ interface ApiService {
     fun getNearByUserCount(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<CommonResponse>>
+    ): Observable<Response<NearbyMeCountResponse>>
 
     @POST("user/updateLatLangUser")
     fun doUploadUserLocation(

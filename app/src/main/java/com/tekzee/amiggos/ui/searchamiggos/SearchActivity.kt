@@ -170,6 +170,7 @@ class SearchActivity : BaseActivity(), SearchPresenter.SearchMainView,
         adapterPosition: Int
     ) {
         val intent = Intent(applicationContext,FriendProfile::class.java)
+        intent.putExtra("from","SearchActivity")
         intent.putExtra(ConstantLib.FRIEND_ID,mydataList[adapterPosition].userid.toString())
         startActivity(intent)
     }

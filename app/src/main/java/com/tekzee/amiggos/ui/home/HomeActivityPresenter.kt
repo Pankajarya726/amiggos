@@ -1,9 +1,9 @@
 package com.tekzee.amiggos.ui.home
 
 import com.google.gson.JsonObject
-import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
+import com.tekzee.amiggos.ui.home.model.NearbyMeCountResponse
 import com.tekzee.mallortaxi.base.BaseMainView
 
 class HomeActivityPresenter {
@@ -46,7 +46,7 @@ class HomeActivityPresenter {
         fun onMyStoriesFailure(message: String)
         fun onVenueFailure(message: String)
         fun onDashboardMapFailure(message: String)
-        fun onNearByCountSuccess(responseData: CommonResponse?)
+        fun onNearByCountSuccess(responseData: NearbyMeCountResponse?)
 
 
     }

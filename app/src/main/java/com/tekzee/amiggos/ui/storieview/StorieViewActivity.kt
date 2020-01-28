@@ -1,13 +1,13 @@
 package com.tekzee.amiggos.ui.storieview
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
-import android.util.DisplayMetrics
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Toast
 import android.widget.VideoView
 import androidx.databinding.DataBindingUtil
@@ -16,6 +16,10 @@ import com.bolaware.viewstimerstory.Momentz
 import com.bolaware.viewstimerstory.MomentzCallback
 import com.bolaware.viewstimerstory.MomentzView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.google.gson.JsonObject
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
@@ -23,6 +27,7 @@ import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.StorieViewBinding
 import com.tekzee.amiggos.ui.camera.CameraPreview
+import com.tekzee.amiggos.ui.friendprofile.FriendProfile
 import com.tekzee.amiggos.ui.home.model.Content
 import com.tekzee.amiggos.ui.home.model.StoriesData
 import com.tekzee.amiggos.ui.viewfriends.ViewFriendsActivity
@@ -60,6 +65,16 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
             binding.join.visibility = View.GONE
         }
 
+
+        img_profile.setOnClickListener{
+            if(data!!.userid!=sharedPreferences!!.getValueInt(ConstantLib.USER_ID)){
+                val intent = Intent(this, FriendProfile::class.java)
+                intent.putExtra(ConstantLib.FRIEND_ID,data!!.userid.toString())
+                intent.putExtra("from","StorieView")
+                startActivity(intent)
+            }
+
+        }
     }
 
     private fun setupClickListeners() {
@@ -163,11 +178,27 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
                 storieId = urlList[index].id.toString()
             } else if ((view is ImageView) && (view.drawable == null)) {
                 momentz.pause(true)
-                Glide.with(view).load(urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/"+urlList[index].id+"/0").into(view)
-//                Glide.with(view).load(urlList[index].url).into(view)
+                Log.d("image--->",""+urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/"+urlList[index].id+"/0");
+
+                Glide.with(view)
+                    .load(urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/"+urlList[index].id+"/0")
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                            //TODO: something on exception
+                            return false
+                        }
+                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                            //do something when picture already loaded
+                            momentz.resume()
+                            return false
+                        }
+                    })
+                    .into(view)
+
+
                 binding.txtView.text = urlList[index].viewCount.toString()
                 storieId = urlList[index].id.toString()
-                momentz.resume()
+
 
             }
         }catch (e: Exception){

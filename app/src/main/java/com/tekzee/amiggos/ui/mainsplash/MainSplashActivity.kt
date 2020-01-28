@@ -1,9 +1,12 @@
 package com.tekzee.amiggos.ui.mainsplash
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.JsonObject
@@ -25,7 +28,6 @@ import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 
 class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresenterMainView {
-
     private var validateAppVersionResponse: ValidateAppVersionResponse? = null
     lateinit var binding: MainSplashActivityBinding
     private var mainSplashPresenterImplementation: MainSplashPresenterImplementation? = null
@@ -61,6 +63,7 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
         val input = JsonObject()
         input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("version", BuildConfig.VERSION_NAME)
+        input.addProperty("device_type", "2")
         mainSplashPresenterImplementation!!.doValidateAppVersionApi(input,Utility.createHeaders(sharedPreferences))
     }
 
@@ -72,6 +75,7 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
     override fun onValidateAppVersionResponse(response: ValidateAppVersionResponse) {
 
         validateAppVersionResponse = response
+
         callLanguageConstantApi()
 
 
@@ -83,28 +87,74 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
         sharedPreferences!!.save(ConstantLib.LANGUAGE_DATA,response.toString())
 
         when(validateAppVersionResponse!!.update_type){
+            0->{
+                if(validateAppVersionResponse!!.data != null){
+                    checkValidateVersionPerformAction(validateAppVersionResponse)
+                }
+            }
             1->{
                 compulsaryUpdation(validateAppVersionResponse!!.message)
             }
             2->{
                 optionalUpdation(validateAppVersionResponse!!.message)
             }
+
         }
 
-        if(validateAppVersionResponse!!.data != null){
-            checkValidateVersionPerformAction(validateAppVersionResponse)
-        }
 
 
 
     }
 
     private fun optionalUpdation(message: String) {
-
+        val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+        pDialog.titleText = message
+        pDialog.setCancelable(false)
+        pDialog.setCancelButton("CANCEL") {
+            pDialog.dismiss()
+            if(validateAppVersionResponse!!.data != null){
+                checkValidateVersionPerformAction(validateAppVersionResponse)
+            }
+        }
+        pDialog.setConfirmButton("UPDATE") {
+            pDialog.dismiss()
+            openPlayStore();
+        }
+        pDialog.show()
     }
 
     private fun compulsaryUpdation(message: String) {
 
+        val pDialog = SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+        pDialog.titleText = message
+        pDialog.setCancelable(false)
+        pDialog.setConfirmButton("UPDATE") {
+            pDialog.dismiss()
+
+            openPlayStore();
+        }
+        pDialog.show()
+    }
+
+    private fun openPlayStore() {
+        val appPackageName =
+            packageName // getPackageName() from Context or Activity object
+
+        try {
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=$appPackageName")
+                )
+            )
+        } catch (anfe: ActivityNotFoundException) {
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")
+                )
+            )
+        }
     }
 
     private fun checkValidateVersionPerformAction(validateAppVersionResponse: ValidateAppVersionResponse?) {
@@ -117,7 +167,7 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
         sharedPreferences!!.save(ConstantLib.NO_DAY_REGISTER, validateAppVersionResponse.data.no_day_register)
         sharedPreferences!!.save(
             ConstantLib.IS_INVITE_FRIEND,
-            validateAppVersionResponse.data.is_friends_invited.toInt()
+            validateAppVersionResponse.data.is_freind_invities.toInt()
         )
         when(validateAppVersionResponse.data.status){
             "0"->{
@@ -181,5 +231,6 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
         startActivity(intent)
         finish()
     }
+
 
 }

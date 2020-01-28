@@ -110,6 +110,22 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:src="@drawable/click"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/custom_square"
+                android:layout_width="60dp"
+                android:visibility="invisible"
+                android:layout_height="60dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_stories"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -145,6 +161,7 @@
             <TextView
                 android:id="@+id/badge"
                 android:layout_width="15dp"
+                android:visibility="gone"
                 android:layout_height="15dp"
                 android:layout_alignBottom="@+id/img_group"
                 android:background="@drawable/circle_bg"

@@ -3,9 +3,9 @@ package com.tekzee.amiggos.ui.home
 import android.content.Context
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
-import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
+import com.tekzee.amiggos.ui.home.model.NearbyMeCountResponse
 import com.tekzee.amiggos.ui.home.model.VenueResponse
 import com.tekzee.mallortaxi.network.ApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -72,7 +72,7 @@ class HomeActivityPresenterImplementation(private var mainView: HomeActivityPres
                     mainView.hideProgressbar()
                     when (response.code()) {
                         200 -> {
-                            val responseData: CommonResponse? = response.body()
+                            val responseData: NearbyMeCountResponse? = response.body()
                             if (responseData!!.status) {
                                     mainView.onNearByCountSuccess(responseData)
                             } else {

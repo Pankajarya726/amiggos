@@ -17,6 +17,7 @@ android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
     defaultConfig {
+        resConfigs "en", "US"
         applicationId "com.tekzee.amiggos"
         minSdkVersion 21
         targetSdkVersion 28
@@ -27,11 +28,11 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             multiDexEnabled = true
             signingConfig signingConfigs.release
-            debuggable = true
+            debuggable = false
         }
     }
 
@@ -182,7 +183,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:19.2.0'
     implementation 'io.nlopez.smartlocation:rx:3.3.3'
 
+    implementation 'com.iceteck.silicompressorr:silicompressor:2.2.2'
+
 
     implementation 'co.metalab.asyncawait:asyncawait:1.0.0'
     implementation 'bg.devlabs.fullscreenvideoview:library:1.1.4'
+
+    implementation 'com.warnyul.android.fast-video-view:fast-video-view:1.0.2'
 }

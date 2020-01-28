@@ -215,7 +215,8 @@ class MessageActivity : BaseActivity() {
         val notification = Notification(
             "New Message",
             message,
-            user.name
+            user.name,
+            "coin.aiff"
 
         )
 
@@ -226,7 +227,8 @@ class MessageActivity : BaseActivity() {
             user.name,
             message,
             user.deviceToken,
-            "100"
+            "100",
+            myFirebaseUserid
         )
 
         val notificationData = NotificationData(notification, data, user.fcmToken)

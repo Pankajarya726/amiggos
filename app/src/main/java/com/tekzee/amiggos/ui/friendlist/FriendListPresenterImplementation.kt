@@ -16,7 +16,7 @@ class FriendListPresenterImplementation(private var mainView: FriendListPresente
     override fun doGetFriendList(input: JsonObject, createHeaders: HashMap<String, String?>) {
         mainView.showProgressbar()
         if (mainView.checkInternet()) {
-            disposable = ApiClient.instance.doGetFriendList(input, createHeaders)
+            disposable = ApiClient.instance.getallAmiggos_invited(input, createHeaders)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->

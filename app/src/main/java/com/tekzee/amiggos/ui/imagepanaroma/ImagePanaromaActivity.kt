@@ -3,6 +3,7 @@ package com.tekzee.amiggos.ui.imagepanaroma
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
@@ -49,6 +50,13 @@ class ImagePanaromaActivity: BaseActivity(), ImagePanaromaPresenter.ImagePanarom
                 }
 
             })
+
+        if(intent.getIntExtra(ConstantLib.VIP_TABLE,0) == 1){
+
+            binding.imgBottle.visibility = View.VISIBLE
+        }else{
+            binding.imgBottle.visibility = View.GONE
+        }
 
         callVenueDetailsApi()
 

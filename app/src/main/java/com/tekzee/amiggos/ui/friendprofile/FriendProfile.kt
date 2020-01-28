@@ -3,6 +3,7 @@ package com.tekzee.amiggos.ui.friendprofile
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -11,20 +12,20 @@ import androidx.databinding.DataBindingUtil
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bumptech.glide.Glide
 import com.google.gson.JsonObject
+import com.kcode.bottomlib.BottomDialog
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.FriendProfileBinding
+import com.tekzee.amiggos.ui.chat.MessageActivity
 import com.tekzee.amiggos.ui.friendprofile.model.FriendProfileResponse
+import com.tekzee.amiggos.ui.home.model.StoriesData
+import com.tekzee.amiggos.ui.notification.model.StorieResponse
+import com.tekzee.amiggos.ui.storieview.StorieViewActivity
 import com.tekzee.mallortaxi.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
-import com.kcode.bottomlib.BottomDialog
-import com.tekzee.amiggos.ui.chat.MessageActivity
-import com.tekzee.amiggos.ui.home.model.StoriesData
-import com.tekzee.amiggos.ui.notification.model.StorieResponse
-import com.tekzee.amiggos.ui.storieview.StorieViewActivity
 
 
 class FriendProfile : BaseActivity(), FriendProfilePresenter.FriendProfileMainView {
@@ -46,10 +47,19 @@ class FriendProfile : BaseActivity(), FriendProfilePresenter.FriendProfileMainVi
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         friendProfilePresenterImplementation = FriendProfilePresenterImplementation(this, this)
         setupToolBar()
+        onNewIntent(intent)
+
+
+
+
+       Log.d("From",intent.getStringExtra("from"))
+
         callFriendProfileApi(intent.getStringExtra(ConstantLib.FRIEND_ID))
         setupViewData()
         setupClickListener()
     }
+
+
 
     private fun setupClickListener() {
         binding.fpOurMemories.setOnClickListener {

@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="allow_location_permission">Allow location permission for amiggos</string>
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCBAPM9f4Xzl_Bmv-pqaYi_UAbn5JISYU4</string>
-</resources>

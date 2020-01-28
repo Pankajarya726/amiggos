@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -30,7 +31,6 @@ import com.tekzee.amiggos.base.enums.SocialLogins
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.LoginActivityBinding
 import com.tekzee.amiggos.firebasemodel.User
-import com.tekzee.amiggos.ui.agreement.LicenceAgreementActivity
 import com.tekzee.amiggos.ui.chooselanguage.ChooseLanguageActivity
 import com.tekzee.amiggos.ui.home.HomeActivity
 import com.tekzee.amiggos.ui.invitefriend.InitGeoLocationUpdate
@@ -580,6 +580,19 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
             showNextController()
         }
 
+        callUpdateFirebaseApi(responseData.data[0].userid)
+    }
+
+    override fun onFirebaseUpdateSuccess(responseData: LoginResponse) {
+        Log.d("Firebase id updated","Updated")
+    }
+
+    private fun callUpdateFirebaseApi(userid: Int) {
+
+        val input: JsonObject = JsonObject()
+        input.addProperty("userid", userid.toString())
+        input.addProperty("firebase_id", FirebaseAuth.getInstance().currentUser!!.uid)
+        loginPresenterImplementation!!.doUpdateFirebaseApi(input, Utility.createHeaders(sharedPreferences))
 
     }
 

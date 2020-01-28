@@ -46,6 +46,40 @@ class LoginPresenterImplementation(private var  mainView: LoginPresenter.LoginMa
         }
     }
 
+
+
+    override fun doUpdateFirebaseApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ) {
+        mainView.showProgressbar()
+        if (mainView.checkInternet()) {
+            disposable = ApiClient.instance.doUpdateFirebaseApi(input,createHeaders)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    mainView.hideProgressbar()
+                    val responseCode = response.code()
+                    when (responseCode) {
+                        200 -> {
+                            val responseData: LoginResponse? = response.body()
+                            if (responseData!!.status) {
+                                mainView.onFirebaseUpdateSuccess(responseData)
+                            } else {
+                                mainView.validateError(responseData.message)
+                            }
+                        }
+                    }
+                }, { error ->
+                    mainView.hideProgressbar()
+                    mainView.validateError(error.message.toString())
+                })
+        } else {
+            mainView.hideProgressbar()
+            mainView.validateError(context!!.getString(R.string.check_internet))
+        }
+    }
+
     override fun onStop() {
         if (disposable != null) {
             disposable!!.dispose()

@@ -168,8 +168,8 @@ class NotificationActivity : BaseActivity(), NotificationPresenter.NotificationM
                 Logger.d("document verified, will not go anywhere")
             }
             2 -> {
-
-                gotToFriendProfile(userFriendData.friendId.toString())
+                //friend_id (s) , user_id (r)
+                gotToFriendProfile(userFriendData.userid.toString())
             }
             3 -> {
                 gotToFriendProfile(userFriendData.friendId.toString())
@@ -230,6 +230,7 @@ class NotificationActivity : BaseActivity(), NotificationPresenter.NotificationM
 
     private fun gotToFriendProfile(friendId: String) {
         val intent = Intent(applicationContext, FriendProfile::class.java)
+        intent.putExtra("from","NotificationActivity")
         intent.putExtra(ConstantLib.FRIEND_ID, friendId)
         startActivity(intent)
     }

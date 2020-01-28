@@ -42,6 +42,8 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
     private var mydataList = ArrayList<RealFriendData>()
     private var adapter: RealFriendAdapter? = null
 
+    private lateinit var onlineFriendRecyclerview: RecyclerView
+
     @SuppressLint("CheckResult")
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,7 +55,10 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
         sharedPreference = SharedPreference(activity!!.baseContext)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         realFriendPresenterImplementation = RealFriendPresenterImplementation(this,activity!!)
+        onlineFriendRecyclerview = myView!!.findViewById(R.id.real_friend_fragment)
 
+
+        setupRecyclerRealFriend()
         callRealFriendApi(false, "")
 
         RxTextView.textChanges(binding.edtSearch) .filter { it.length > 2 }.debounce(500, TimeUnit.MILLISECONDS).subscribeOn(
@@ -65,7 +70,10 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
                 callRealFriendApi(false, it.toString())
             }
         }
+
+
         return myView
+
     }
 
     private fun callRealFriendApi(requestDatFromServer: Boolean, searchvalue: String) {
@@ -91,12 +99,12 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
 
     override fun onRealFriendSuccess(responseData: RealFriendResponse?) {
         realFriendPageNo++
-        mydataList = responseData!!.data as ArrayList<RealFriendData>
-        setupRecyclerRealFriend()
+        mydataList.addAll(responseData!!.data as ArrayList<RealFriendData>)
+        adapter!!.notifyDataSetChanged()
     }
 
     private fun setupRecyclerRealFriend() {
-        val onlineFriendRecyclerview: RecyclerView = activity!!.findViewById(R.id.real_friend_fragment)
+
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         onlineFriendRecyclerview.layoutManager = layoutManager
         adapter = RealFriendAdapter(
@@ -123,7 +131,7 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
 
     override fun onRealFriendFailure(message: String) {
         adapter?.setLoadingStatus(false)
-        if(mydataList.size>0 && realFriendPageNo !=0){
+        if(mydataList.size>0 && realFriendPageNo > 0){
             mydataList.removeAt(mydataList.size - 1)
             adapter?.notifyDataSetChanged()
         }else{
@@ -142,6 +150,7 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
     override fun itemClickCallback(position: Int) {
         val intent = Intent(activity, FriendProfile::class.java)
         intent.putExtra(ConstantLib.FRIEND_ID,mydataList[position].userid.toString())
+        intent.putExtra("from","RealFriend")
         intent.putExtra(ConstantLib.OURSTORYID,mydataList[position].isRelateOurMemory.ourStoryId.toString())
         startActivity(intent)
     }

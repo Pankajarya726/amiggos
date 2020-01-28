@@ -13,9 +13,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
+import android.media.CamcorderProfile;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -35,8 +37,10 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.iceteck.silicompressorr.SiliCompressor;
 import com.orhanobut.logger.Logger;
 import com.tekzee.amiggos.R;
 import com.tekzee.amiggos.ui.camera.camerautil.MyCanvas;
@@ -55,6 +59,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -78,6 +83,7 @@ public class CameraPreview extends MyCanvas {
     private RelativeLayout captureMedia;
     private FrameLayout editMedia;
     private ImageView customButton;
+    private ImageView customButtonSquare;
     private ImageView switchCameraBtn;
     private ImageView img_stories;
     private ImageView img_profile;
@@ -103,10 +109,13 @@ public class CameraPreview extends MyCanvas {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GetPermission();
+
+
         sharedPreferences = new SharedPreference(this);
         captureMedia = (RelativeLayout) findViewById(R.id.camera_view);
         editMedia = (FrameLayout) findViewById(R.id.edit_media);
         customButton = (ImageView) findViewById(R.id.custom_progressBar);
+        customButtonSquare = (ImageView) findViewById(R.id.custom_square);
         switchCameraBtn = (ImageView) findViewById(R.id.img_switch_camera);
         img_stories = (ImageView) findViewById(R.id.img_stories);
         img_profile = (ImageView) findViewById(R.id.img_profile);
@@ -123,6 +132,18 @@ public class CameraPreview extends MyCanvas {
         //selectSticker  = (LinearLayout) findViewById(R.id.select_sticker);
 
 
+        if(getIntent().getIntExtra(ConstantLib.COUNT,0)>0)
+        {
+            badge.setText(""+getIntent().getIntExtra(ConstantLib.COUNT,0));
+            badge.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            badge.setText("");
+            badge.setVisibility(View.GONE);
+        }
+
+
         setupclickListener();
         ImageView addText = (ImageView) findViewById(R.id.add_text);
         ImageView addSticker = (ImageView) findViewById(R.id.add_stickers);
@@ -137,6 +158,7 @@ public class CameraPreview extends MyCanvas {
         previewHolder=preview.getHolder();
         previewHolder.addCallback(surfaceCallback);
         previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
 
         noti_id = (int) ((new Date().getTime()/1000L)%Integer.MAX_VALUE);
 
@@ -171,6 +193,7 @@ public class CameraPreview extends MyCanvas {
             }
         });
 
+
         customButton.setOnTouchListener(new View.OnTouchListener() {
 
             private Timer timer = new Timer();
@@ -188,8 +211,17 @@ public class CameraPreview extends MyCanvas {
                         public void run() {
                             wasLong = true;
                             // touch & hold was long
-                            Log.i("Click","touch & hold was long");
-                            VideoCountDown.start();
+                            runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+
+                                    customButton.setVisibility(View.INVISIBLE);
+                                    customButtonSquare.setVisibility(View.VISIBLE);
+
+                                }
+                            });
+
                             try {
                                 startRecording();
                             } catch (IOException e) {
@@ -226,6 +258,19 @@ public class CameraPreview extends MyCanvas {
                             takePicture();
                         }
                     } else {
+
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+
+                                customButton.setVisibility(View.VISIBLE);
+                                customButtonSquare.setVisibility(View.INVISIBLE);
+
+                            }
+                        });
+
+
                         stopRecording();
                         VideoCountDown.cancel();
 
@@ -363,12 +408,14 @@ public class CameraPreview extends MyCanvas {
     CountDownTimer VideoCountDown = new CountDownTimer(50000,1000) {
         @Override
         public void onTick(long millisUntilFinished) {
-            VideoSeconds++;
+
             if(VideoSeconds ==6){
                 VideoCountDown.onFinish();
             }else{
+                if(VideoSeconds!=0)
                 counter.setText(""+VideoSeconds);
             }
+            VideoSeconds++;
 
         }
 
@@ -395,20 +442,20 @@ public class CameraPreview extends MyCanvas {
 
     private void takePicture() {
         params = camera.getParameters();
-        List<Camera.Size> sizes = params.getSupportedPictureSizes();
-
-        List<Integer> list = new ArrayList<Integer>();
-        for (Camera.Size size : params.getSupportedPictureSizes()) {
-            Log.i("ASDF", "Supported Picture: " + size.width + "x" + size.height);
-            list.add(size.height);
-        }
-
-        Camera.Size cs = sizes.get(closest(720, list));
-        Log.i("Width x Height", cs.width+"x"+cs.height);
-        params.setPictureSize(cs.width, cs.height); //1920, 1080
-
-        //params.setRotation(90);
-        camera.setParameters(params);
+//        List<Camera.Size> sizes = params.getSupportedPictureSizes();
+//
+//        List<Integer> list = new ArrayList<Integer>();
+//        for (Camera.Size size : params.getSupportedPictureSizes()) {
+//            Log.i("ASDF", "Supported Picture: " + size.width + "x" + size.height);
+//            list.add(size.height);
+//        }
+//
+//        Camera.Size cs = sizes.get(closest(720, list));
+//        Log.i("Width x Height", cs.width+"x"+cs.height);
+//        params.setPictureSize(cs.width, cs.height); //1920, 1080
+//
+//        //params.setRotation(90);
+//        camera.setParameters(params);
         camera.takePicture(null, null, new Camera.PictureCallback() {
 
             @Override
@@ -487,9 +534,9 @@ public class CameraPreview extends MyCanvas {
         mediaRecorder.setCamera(camera);
         mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
-        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+        mediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_480P));
+
         mediaRecorder.setPreviewDisplay(previewHolder.getSurface());
 
         if (currentCameraId == Camera.CameraInfo.CAMERA_FACING_FRONT) {
@@ -497,30 +544,11 @@ public class CameraPreview extends MyCanvas {
         } else {
             mediaRecorder.setOrientationHint(setCameraDisplayOrientation(this, currentCameraId, camera));
         }
-        mediaRecorder.setVideoEncodingBitRate(3000000);
-        mediaRecorder.setVideoFrameRate(30);
-
-        List<Integer> list = new ArrayList<Integer>();
-
-        List<Camera.Size> VidSizes = params.getSupportedVideoSizes();
-        if (VidSizes == null) {
-            Log.i("Size length", "is null");
-            mediaRecorder.setVideoSize(640,480);
-        } else {
-            Log.i("Size length", "is NOT null");
-            for (Camera.Size sizesx : params.getSupportedVideoSizes()) {
-                Log.i("ASDF", "Supported Video: " + sizesx.width + "x" + sizesx.height);
-                list.add(sizesx.height);
-            }
-            Camera.Size cs = VidSizes.get(closest(1080, list));
-            Log.i("Width x Height", cs.width+"x"+cs.height);
-            mediaRecorder.setVideoSize(cs.width,cs.height);
-        }
-
         mediaRecorder.setOutputFile(defaultVideo);
         mediaRecorder.prepare();
         isRecording = true;
         mediaRecorder.start();
+        VideoCountDown.start();
     }
 
     public void stopRecording() {
@@ -546,7 +574,7 @@ public class CameraPreview extends MyCanvas {
                 finish();
 
 
-//                playVideo();
+                //                playVideo();
             } catch (RuntimeException stopException) {
                 Log.i("Stop Recoding", "Too short video");
                 takePicture();
@@ -557,23 +585,65 @@ public class CameraPreview extends MyCanvas {
         }
     }
 
-    public void playVideo() {
-        videoView.setVisibility(View.VISIBLE);
-        editMedia.setVisibility(View.VISIBLE);
-        captureMedia.setVisibility(View.GONE);
 
-        Uri video = Uri.parse(defaultVideo);
-        videoView.setVideoURI(video);
-        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.setLooping(true);
-            }
-        });
-        videoView.start();
-        preview.setVisibility(View.INVISIBLE);
-        setStickerView(1);
-    }
+//    class VideoCompressAsyncTask extends AsyncTask<String, String, String> {
+//
+//        Context mContext;
+//
+//        public VideoCompressAsyncTask(Context context) {
+//            mContext = context;
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//
+//        }
+//
+//
+//        @Override
+//        protected String doInBackground(String... paths) {
+//            String filePath = null;
+//            try {
+//
+//                filePath = SiliCompressor.with(mContext).compressVideo(paths[0], paths[1]);
+//
+//            } catch (URISyntaxException e) {
+//                e.printStackTrace();
+//            }
+//            return filePath;
+//
+//        }@Override
+//        protected void onPostExecute(String compressedFilePath) {
+//            super.onPostExecute(compressedFilePath);
+//            Intent intentActivity = new Intent(getApplicationContext(), PostImageCapturedActivity.class);
+//            intentActivity.putExtra("BitmapImage",  compressedFilePath);
+//            intentActivity.putExtra(ConstantLib.FROM_ACTIVITY,getIntent().getStringExtra(ConstantLib.FROM_ACTIVITY));
+//            intentActivity.putExtra(ConstantLib.OURSTORYID,getIntent().getStringExtra(ConstantLib.OURSTORYID));
+//            Logger.d("inside Camerapreview"+getIntent().getStringExtra(ConstantLib.OURSTORYID));
+//            intentActivity.putExtra(ConstantLib.FROM,"VIDEO");
+//            startActivity(intentActivity);
+//            finish();
+//        }
+//    }
+//
+//    public void playVideo() {
+//        videoView.setVisibility(View.VISIBLE);
+//        editMedia.setVisibility(View.VISIBLE);
+//        captureMedia.setVisibility(View.GONE);
+//
+//        Uri video = Uri.parse(defaultVideo);
+//        videoView.setVideoURI(video);
+//        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//            @Override
+//            public void onPrepared(MediaPlayer mp) {
+//                mp.setLooping(true);
+//            }
+//        });
+//        videoView.start();
+//        preview.setVisibility(View.INVISIBLE);
+//        setStickerView(1);
+//    }
 
     public void saveMedia(View v) throws IOException {
         if (!videoView.isShown()) {
@@ -784,12 +854,14 @@ public class CameraPreview extends MyCanvas {
                     Log.i("ASDF", "Supported Preview: " + sizes.get(i).width + "x" + sizes.get(i).height);
                     list.add(sizes.get(i).width);
                 }
-                Camera.Size cs = sizes.get(closest(1920, list));
+                Camera.Size cs = getOptimalPreviewSize(sizes,preview.getWidth(),preview.getHeight());
 
                 Log.i("Width x Height", cs.width+"x"+cs.height);
 
                 parameters.setPreviewSize(cs.width, cs.height);
+                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
                 camera.setParameters(parameters);
+
                 cameraConfigured=true;
             }
         }
@@ -839,6 +911,8 @@ public class CameraPreview extends MyCanvas {
         public void surfaceDestroyed(SurfaceHolder holder) {
             // no-op
         }
+
+
     };
 
 
@@ -850,7 +924,7 @@ public class CameraPreview extends MyCanvas {
         try{
             // Compress the bitmap and save in jpg format
             OutputStream stream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG,30,stream);
             stream.flush();
             stream.close();
         }catch (Exception e){
@@ -859,5 +933,42 @@ public class CameraPreview extends MyCanvas {
 
         return Uri.parse(file.getAbsolutePath());
     }
+
+
+
+    private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h) {
+        final double ASPECT_TOLERANCE = 0.1;
+        double targetRatio=(double)h / w;
+
+        if (sizes == null) return null;
+
+        Camera.Size optimalSize = null;
+        double minDiff = Double.MAX_VALUE;
+
+        int targetHeight = h;
+
+        for (Camera.Size size : sizes) {
+            double ratio = (double) size.width / size.height;
+            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue;
+            if (Math.abs(size.height - targetHeight) < minDiff) {
+                optimalSize = size;
+                minDiff = Math.abs(size.height - targetHeight);
+            }
+        }
+
+        if (optimalSize == null) {
+            minDiff = Double.MAX_VALUE;
+            for (Camera.Size size : sizes) {
+                if (Math.abs(size.height - targetHeight) < minDiff) {
+                    optimalSize = size;
+                    minDiff = Math.abs(size.height - targetHeight);
+                }
+            }
+        }
+        return optimalSize;
+    }
+
+
+
 
 }

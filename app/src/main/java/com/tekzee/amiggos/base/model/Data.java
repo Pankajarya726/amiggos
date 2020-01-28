@@ -8,8 +8,9 @@ public class Data {
     private String title;
     private String sented;
     private String notification_key;
+    private String friendFirebaseid;
 
-    public Data(String user, int icon, String type, String body, String title, String sented, String notification_key) {
+    public Data(String user, int icon, String type, String body, String title, String sented, String notification_key, String friendFirebaseid) {
         this.user = user;
         this.icon = icon;
         this.type = type;
@@ -17,6 +18,15 @@ public class Data {
         this.title = title;
         this.sented = sented;
         this.notification_key = notification_key;
+        this.friendFirebaseid = friendFirebaseid;
+    }
+
+    public String getFriendFirebaseid() {
+        return friendFirebaseid;
+    }
+
+    public void setFriendFirebaseid(String friendFirebaseid) {
+        this.friendFirebaseid = friendFirebaseid;
     }
 
     public Data() {
