@@ -2,6 +2,7 @@ package com.tekzee.amiggos.ui.mainsplash
 
 import android.content.Context
 import com.google.gson.JsonObject
+import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
 import com.tekzee.mallortaxi.network.ApiClient
@@ -40,6 +41,7 @@ class MainSplashPresenterImplementation(private var mainView: MainSplashPresente
                         }
                     }, { error ->
 //                        mainView.hideProgressbar()
+                        Logger.d("himanshu"+error);
                         mainView.validateError(error.message.toString())
                     })
         } else {

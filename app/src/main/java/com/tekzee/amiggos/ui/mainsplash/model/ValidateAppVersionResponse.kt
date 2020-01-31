@@ -1,8 +1,15 @@
 package com.tekzee.amiggos.ui.mainsplash.model
 
+
+import com.google.gson.annotations.SerializedName
+
 data class ValidateAppVersionResponse(
-    val `data`: Data,
-    val message: String,
-    val status: Boolean,
-    val update_type: Int
+    @SerializedName("data")
+    val `data`: Data = Data(),
+    @SerializedName("message")
+    val message: String = "",
+    @SerializedName("status")
+    val status: Boolean = false,
+    @SerializedName("update_type")
+    val updateType: Int = 0
 )

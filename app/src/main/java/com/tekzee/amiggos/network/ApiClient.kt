@@ -21,8 +21,6 @@ import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
 import com.tekzee.amiggos.ui.home.model.NearbyMeCountResponse
 import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
-import com.tekzee.amiggos.ui.login.model.LoginResponse
-import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingResponse
 import com.tekzee.amiggos.ui.mypreferences.model.MyPreferenceResponse
 import com.tekzee.amiggos.ui.mypreferences.model.PreferenceSavedResponse
@@ -39,6 +37,8 @@ import com.tekzee.amiggos.ui.settings.model.SettingsResponse
 import com.tekzee.amiggos.ui.settings.model.UpdateSettingsResponse
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
 import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailResponse
+import com.tekzee.amiggos.ui.login.model.LoginResponse
+import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
 import com.tekzee.amiggos.ui.mymemories.fragment.memories.model.MyMemoriesResponse
 import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
 import com.tekzee.amiggos.ui.notification.model.StorieResponse
@@ -90,6 +90,7 @@ class ApiClient {
 
     companion object {
         private val BASE_URL = "http://amiggos.com/Amiggos_tek/api/"
+//        private val BASE_URL = "http://dev.tekzee.in/Amiggos_new/api/"
         private var apiClient: ApiClient? = null
         /**
          * Gets my app client.

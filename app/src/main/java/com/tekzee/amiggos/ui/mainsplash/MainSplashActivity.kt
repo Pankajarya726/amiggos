@@ -86,7 +86,7 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
 
         sharedPreferences!!.save(ConstantLib.LANGUAGE_DATA,response.toString())
 
-        when(validateAppVersionResponse!!.update_type){
+        when(validateAppVersionResponse!!.updateType){
             0->{
                 if(validateAppVersionResponse!!.data != null){
                     checkValidateVersionPerformAction(validateAppVersionResponse)
@@ -161,13 +161,13 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
         if(validateAppVersionResponse!!.data.age.isNotEmpty()){
             sharedPreferences!!.save(ConstantLib.USER_AGE, validateAppVersionResponse.data.age)
         }
-        if(validateAppVersionResponse.data.invite_friend_count!=null && validateAppVersionResponse.data.invite_friend_count.isNotEmpty() && validateAppVersionResponse.data.invite_friend_count.toInt()>0){
-            sharedPreferences!!.save(ConstantLib.INVITE_FRIEND, validateAppVersionResponse.data.invite_friend_count.toInt())
+        if(validateAppVersionResponse.data.inviteFriendCount!=null && validateAppVersionResponse.data.inviteFriendCount.isNotEmpty() && validateAppVersionResponse.data.inviteFriendCount.toInt()>0){
+            sharedPreferences!!.save(ConstantLib.INVITE_FRIEND, validateAppVersionResponse.data.inviteFriendCount.toInt())
         }
-        sharedPreferences!!.save(ConstantLib.NO_DAY_REGISTER, validateAppVersionResponse.data.no_day_register)
+        sharedPreferences!!.save(ConstantLib.NO_DAY_REGISTER, validateAppVersionResponse.data.noDayRegister)
         sharedPreferences!!.save(
             ConstantLib.IS_INVITE_FRIEND,
-            validateAppVersionResponse.data.is_freind_invities.toInt()
+            validateAppVersionResponse.data.isFreindInvities.toInt()
         )
         when(validateAppVersionResponse.data.status){
             "0"->{

@@ -62,7 +62,7 @@ class InviteFriendActivity : BaseActivity(), InviteFriendActivityPresenter.Invit
     }
 
     private fun checkFriendRequest() {
-        askPermission(Manifest.permission.READ_CONTACTS, Manifest.permission.SEND_SMS) {
+        askPermission(Manifest.permission.READ_CONTACTS) {
             MultiContactPicker.Builder(this) //Activity/fragment context
                 .theme(R.style.MyCustomPickerTheme) //Optional - default: MultiContactPicker.Azure
                 .hideScrollbar(false) //Optional - default: false

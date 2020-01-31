@@ -456,7 +456,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Logger.d("Refreshed token: " + token!!)
+     //   Logger.d("Refreshed token: " + token!!)
         sharedPreferences!!.save(ConstantLib.FCMTOKEN, token)
     }
 
