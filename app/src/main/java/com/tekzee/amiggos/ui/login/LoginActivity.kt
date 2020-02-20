@@ -10,7 +10,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import cn.pedant.SweetAlert.SweetAlertDialog
-import com.facebook.*
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.GraphRequest
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -32,7 +35,7 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.LoginActivityBinding
 import com.tekzee.amiggos.firebasemodel.User
 import com.tekzee.amiggos.ui.chooselanguage.ChooseLanguageActivity
-import com.tekzee.amiggos.ui.home.HomeActivity
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.invitefriend.InitGeoLocationUpdate
 import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.pages.WebViewActivity
@@ -615,7 +618,7 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
     }
 
     private fun showHomeController() {
-        val intent = Intent(this, HomeActivity::class.java)
+        val intent = Intent(this, AHomeScreen::class.java)
         startActivity(intent)
         finishAffinity()
     }

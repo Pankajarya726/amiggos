@@ -16,7 +16,7 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.databinding.MainSplashActivityBinding
 import com.tekzee.amiggos.ui.agegroup.AgeGroupActivity
 import com.tekzee.amiggos.ui.attachid.AttachIdActivity
-import com.tekzee.amiggos.ui.home.HomeActivity
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.login.LoginActivity
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
 import com.tekzee.amiggos.ui.splash.SplashActivity
@@ -209,7 +209,7 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
     }
 
     private fun showHomeController() {
-        val intent = Intent(applicationContext, HomeActivity::class.java)
+        val intent = Intent(applicationContext, AHomeScreen::class.java)
         startActivity(intent)
         finish()
     }

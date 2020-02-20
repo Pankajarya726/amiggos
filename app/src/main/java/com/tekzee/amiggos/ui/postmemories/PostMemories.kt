@@ -1,23 +1,22 @@
 package com.tekzee.amiggos.ui.postmemories
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.PostMemoriesBinding
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
+import com.tekzee.amiggos.ui.ourmemories.OurMemoriesActivity
+import com.tekzee.amiggos.ui.postmemories.service.FileUploadService
 import com.tekzee.mallortaxi.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
-import com.tekzee.amiggos.ui.postmemories.service.FileUploadService
-import android.content.Intent
-import android.net.Uri
-import cn.pedant.SweetAlert.SweetAlertDialog
-import com.tekzee.amiggos.ui.home.HomeActivity
-import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
-import com.tekzee.amiggos.ui.ourmemories.OurMemoriesActivity
 
 
 class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView {
@@ -84,7 +83,7 @@ class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView 
             mIntent.putExtra(ConstantLib.FROM, "VIDEO")
             FileUploadService.enqueueWork(this, mIntent)
 
-            val intent = Intent(applicationContext,HomeActivity::class.java)
+            val intent = Intent(applicationContext, AHomeScreen::class.java)
             startActivity(intent)
             finishAffinity()
         }else{
@@ -94,7 +93,7 @@ class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView 
             mIntent.putExtra(ConstantLib.FILEURI, imageUri)
             mIntent.putExtra(ConstantLib.FROM, "IMAGE")
             FileUploadService.enqueueWork(this, mIntent)
-            val intent = Intent(applicationContext,HomeActivity::class.java)
+            val intent = Intent(applicationContext,AHomeScreen::class.java)
             startActivity(intent)
             finishAffinity()
         }

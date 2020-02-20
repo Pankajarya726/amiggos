@@ -8,7 +8,7 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.databinding.AgeGroupActivityBinding
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
-import com.tekzee.amiggos.ui.home.HomeActivity
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.mallortaxi.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
@@ -79,7 +79,7 @@ class AgeGroupActivity : BaseActivity(), AgeGroupActivityPresenter.AgeGroupMainV
     }
 
     override fun onAgeGroupApiSuccess(responseData: AgeGroupResponse) {
-        val intent = Intent(this, HomeActivity::class.java)
+        val intent = Intent(this, AHomeScreen::class.java)
         startActivity(intent)
         finishAffinity()
     }

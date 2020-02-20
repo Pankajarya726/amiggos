@@ -81,6 +81,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity
+            android:name=".ui.homescreen_new.AHomeScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
       <activity
             android:name=".ui.searchamiggos.SearchActivity"
             android:screenOrientation="portrait"

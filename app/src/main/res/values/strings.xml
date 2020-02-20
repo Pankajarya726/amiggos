@@ -43,5 +43,6 @@
     <string name="storage_access_required">Storage access is required to downloading the file.</string>
     <string name="storage_permission_denied">Storage permission request was denied.</string>
     <string name="ok">OK</string>
+    <string name="mapbox_token">pk.eyJ1IjoidmhpbWFuc2h1ODgiLCJhIjoiY2s2dW52bThhMDFvZTNlcGdmaGszazlseCJ9.jYLfMwclIPs1maytozjCLg</string>
 
 </resources>

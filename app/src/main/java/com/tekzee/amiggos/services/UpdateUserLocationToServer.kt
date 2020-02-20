@@ -10,13 +10,12 @@ import android.location.Location
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
-import android.os.SystemClock
 import com.google.gson.JsonObject
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.enums.Actions
-import com.tekzee.amiggos.ui.home.HomeActivity
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.mallortaxi.network.ApiClient
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
@@ -153,7 +152,7 @@ class UpdateUserLocationToServer : Service() {
         }
 
         val pendingIntent: PendingIntent =
-            Intent(this, HomeActivity::class.java).let { notificationIntent ->
+            Intent(this, AHomeScreen::class.java).let { notificationIntent ->
                 PendingIntent.getActivity(this, 0, notificationIntent, 0)
             }
 

@@ -18,7 +18,7 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.attachid.AttachIdActivity
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.MyFriendChatActivity
 import com.tekzee.amiggos.ui.friendprofile.FriendProfile
-import com.tekzee.amiggos.ui.home.HomeActivity
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.partydetails.PartyDetailsActivity
 import com.tekzee.amiggos.ui.realfriends.RealFriendsActivity
 import com.tekzee.mallortaxi.util.SharedPreference
@@ -240,7 +240,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
     private fun createDefaultNotification(title: String, body: String) {
         createNotificationChannel()
         playSound()
-        val intent = Intent(this, HomeActivity::class.java)
+        val intent = Intent(this, AHomeScreen::class.java)
 
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
@@ -266,7 +266,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
         createNotificationChannel()
         playSound()
 
-        val intent = Intent(this, HomeActivity::class.java)
+        val intent = Intent(this, AHomeScreen::class.java)
 
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
@@ -426,7 +426,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
         createNotificationChannel()
         playSound()
 
-        val intent = Intent(this, HomeActivity::class.java).apply {
+        val intent = Intent(this, AHomeScreen::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 

@@ -13,12 +13,11 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.BookingQrcodeActivityBinding
 import com.tekzee.amiggos.ui.bookingqrcode.model.BookinQrCodeResponse
-import com.tekzee.amiggos.ui.home.HomeActivity
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.mallortaxi.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
-import kotlinx.android.synthetic.main.single_list_language.view.*
 
 class GetBookingQrCodeActivity: BaseActivity(), BookingQrCodePresenter.BookingQrCodeMainView {
 
@@ -94,7 +93,7 @@ class GetBookingQrCodeActivity: BaseActivity(), BookingQrCodePresenter.BookingQr
         if(intent.getStringExtra(ConstantLib.FROM).equals("Booking",true)){
             super.onBackPressed()
         }else{
-            val intent = Intent(applicationContext,HomeActivity::class.java)
+            val intent = Intent(applicationContext,AHomeScreen::class.java)
             startActivity(intent)
             finishAffinity()
         }

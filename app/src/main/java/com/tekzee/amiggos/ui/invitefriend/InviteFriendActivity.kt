@@ -2,7 +2,6 @@ package com.tekzee.amiggos.ui.invitefriend
 
 import android.Manifest
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.telephony.SmsManager
@@ -19,7 +18,6 @@ import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.InviteFriendActivityBinding
-import com.tekzee.amiggos.ui.home.HomeActivity
 import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
 import com.tekzee.mallortaxi.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference

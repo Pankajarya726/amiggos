@@ -14,7 +14,7 @@ import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.ActivityOurMemoriesBinding
-import com.tekzee.amiggos.ui.home.HomeActivity
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.ourmemories.fragment.nearby.NearBy
 import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.OurMemoriesUpload
 import com.tekzee.amiggos.ui.ourmemories.service.FileOurMemoryUploadService
@@ -166,7 +166,7 @@ class OurMemoriesActivity : BaseActivity() {
             mIntent.putExtra(ConstantLib.USERIDLIST, commaSeperatedString)
             FileOurMemoryUploadService.enqueueWork(this, mIntent)
 
-            val intent = Intent(applicationContext, HomeActivity::class.java)
+            val intent = Intent(applicationContext, AHomeScreen::class.java)
             startActivity(intent)
             selectUserIds.clear()
             finishAffinity()
@@ -179,7 +179,7 @@ class OurMemoriesActivity : BaseActivity() {
             mIntent.putExtra(ConstantLib.OURSTORYID, ourMemoryId)
             mIntent.putExtra(ConstantLib.USERIDLIST, commaSeperatedString)
             FileOurMemoryUploadService.enqueueWork(this, mIntent)
-            val intent = Intent(applicationContext, HomeActivity::class.java)
+            val intent = Intent(applicationContext, AHomeScreen::class.java)
             startActivity(intent)
             selectUserIds.clear()
             finishAffinity()

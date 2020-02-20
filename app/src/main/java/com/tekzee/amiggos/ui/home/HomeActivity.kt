@@ -79,6 +79,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     OnMapReadyCallback {
 
 
+
     private var count: Int=0;
     lateinit var binding: HomeActivityBinding
     private var sharedPreference: SharedPreference? = null
