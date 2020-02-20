@@ -6,9 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import com.orhanobut.logger.Logger
 import com.tekzee.mallortaxi.util.NetWorkConection
-import com.tekzee.mallortaxi.util.SharedPreference
 
 abstract class BaseActivity : AppCompatActivity(),BaseMainView
 {

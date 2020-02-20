@@ -1,7 +1,12 @@
 package com.tekzee.amiggos.ui.login.model
 
+import com.google.gson.annotations.SerializedName
+
 data class LoginResponse(
-    val `data`: List<Data> = listOf(),
-    val message: String = "",
-    val status: Boolean = false
+    @SerializedName("data")
+    var `data`: List<Data> = listOf(),
+    @SerializedName("message")
+    var message: String = "",
+    @SerializedName("status")
+    var status: Boolean = false
 )

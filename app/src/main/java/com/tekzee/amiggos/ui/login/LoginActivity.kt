@@ -560,21 +560,21 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
         sharedPreferences!!.save(ConstantLib.USER_NAME, responseData.data[0].name)
         sharedPreferences!!.save(ConstantLib.USER_EMAIL, responseData.data[0].email)
         sharedPreferences!!.save(ConstantLib.USER_DOB, responseData.data[0].dob.toString())
-        sharedPreferences!!.save(ConstantLib.API_TOKEN, responseData.data[0].api_token)
-        sharedPreferences!!.save(ConstantLib.ACCESS_TOKEN, responseData.data[0].access_token)
+        sharedPreferences!!.save(ConstantLib.API_TOKEN, responseData.data[0].apiToken)
+        sharedPreferences!!.save(ConstantLib.ACCESS_TOKEN, responseData.data[0].accessToken)
         sharedPreferences!!.save(ConstantLib.PROFILE_IMAGE, responseData.data[0].profile)
         sharedPreferences!!.save(ConstantLib.ISAGREE, false)
         sharedPreferences!!.save(
             ConstantLib.INVITE_FRIEND,
-            responseData.data[0].invite_friend_count.toInt()
+            responseData.data[0].inviteFriendCount.toInt()
         )
         sharedPreferences!!.save(
             ConstantLib.IS_INVITE_FRIEND,
-            responseData.data[0].is_freind_invities
+            responseData.data[0].isFreindInvities
         )
-        sharedPreferences!!.save(ConstantLib.INVITE_MESSAGE, responseData.data[0].invite_message)
+        sharedPreferences!!.save(ConstantLib.INVITE_MESSAGE, responseData.data[0].inviteMessage)
 
-        if (responseData.data[0].is_profile == 1) {
+        if (responseData.data[0].isProfile == 1) {
             showHomeController()
         } else {
             showNextController()
@@ -600,7 +600,7 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
         val user = User()
         user.amiggosID = responseData.data[0].userid.toString()
-        user.deviceToken = responseData.data[0].api_token
+        user.deviceToken = responseData.data[0].apiToken
         user.email = responseData.data[0].email
         user.fcmToken = sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString()
         user.image = responseData.data[0].profile

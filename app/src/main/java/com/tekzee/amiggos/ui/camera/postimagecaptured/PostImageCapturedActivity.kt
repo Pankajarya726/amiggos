@@ -213,7 +213,7 @@ class PostImageCapturedActivity : BaseActivity() {
                 val BUFFER_SIZE = 1024
                 val fileStream = FileInputStream(imagePath)
                 try {
-                    val imageOut = cr.openOutputStream(url)
+                    val imageOut = cr.openOutputStream(url!!)
                     try {
                         val buffer = ByteArray(BUFFER_SIZE)
                         while (true) {
@@ -221,10 +221,10 @@ class PostImageCapturedActivity : BaseActivity() {
                             if (numBytesRead <= 0) {
                                 break
                             }
-                            imageOut.write(buffer, 0, numBytesRead)
+                            imageOut!!.write(buffer, 0, numBytesRead)
                         }
                     } finally {
-                        imageOut.close()
+                        imageOut!!.close()
                     }
                 } finally {
                     fileStream.close()
@@ -243,7 +243,7 @@ class PostImageCapturedActivity : BaseActivity() {
                 showImageSaveDialog()
 
             } else {
-                cr.delete(url, null, null)
+                cr.delete(url!!, null, null)
             }
         } catch (e: java.lang.Exception) {
             if (url != null) {
@@ -288,9 +288,9 @@ class PostImageCapturedActivity : BaseActivity() {
         val url =
             cr.insert(MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, values)
         return try {
-            val thumbOut = cr.openOutputStream(url)
+            val thumbOut = cr.openOutputStream(url!!)
             thumb.compress(Bitmap.CompressFormat.JPEG, 100, thumbOut)
-            thumbOut.close()
+            thumbOut!!.close()
             thumb
         } catch (ex: FileNotFoundException) {
             null

@@ -287,7 +287,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun showExplanationDialog(e: PermissionResult) {
-        val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+        val pDialog = SweetAlertDialog(this)
         pDialog.titleText = getString(R.string.allow_location_permission)
         pDialog.setCancelable(false)
         pDialog.setCancelButton(languageData!!.klCancel) {
@@ -489,7 +489,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         binding.mystoriesRecyclerview.layoutManager = linearLayoutManager
         myStoriesAdapter = HomeMyStoriesAdapter(myStoriesListData, object : StorieClickListener {
             override fun onStorieClick(storiesData: StoriesData) {
-                val pDialog = SweetAlertDialog(this@HomeActivity, SweetAlertDialog.WARNING_TYPE)
+                val pDialog = SweetAlertDialog(this@HomeActivity)
                 pDialog.titleText = languageData!!.klAddStoryAlert
                 pDialog.setCancelable(false)
                 pDialog.setCancelButton(languageData!!.klCancel) {
@@ -709,7 +709,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         txt_logout.setOnClickListener {
             drawer.closeDrawer(GravityCompat.START)
-            val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+            val pDialog = SweetAlertDialog(this)
             pDialog.titleText = languageData!!.klLogoutConfirm
             pDialog.setCancelable(false)
             pDialog.setCancelButton(languageData!!.klCancel) {
