@@ -16,7 +16,7 @@ import com.tekzee.amiggos.ui.helpcenter.interfaces.HelpCenterInterface
 import com.tekzee.amiggos.ui.helpcenter.model.HelpCenterData
 import com.tekzee.amiggos.ui.helpcenter.model.HelpCenterResponse
 import com.tekzee.amiggos.ui.pages.WebViewActivity
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib

@@ -21,8 +21,8 @@ android {
         applicationId "com.tekzee.amiggos"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 4
-        versionName "1.4"
+        versionCode 1
+        versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -32,7 +32,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             multiDexEnabled = true
             signingConfig signingConfigs.release
-            debuggable = false
+            debuggable = true
             jniDebuggable = true
             renderscriptDebuggable = true
         }
@@ -201,4 +201,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0-alpha10'
 
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v8:0.7.0'
+
+    implementation 'com.github.mohammadatif:Animatoo:master'
+
+    implementation 'com.kaopiz:kprogresshud:1.2.0'
 }

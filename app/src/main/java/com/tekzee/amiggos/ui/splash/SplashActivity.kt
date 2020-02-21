@@ -14,7 +14,7 @@ import com.tekzee.amiggos.databinding.SplashActivityBinding
 import com.tekzee.amiggos.ui.login.LoginActivity
 import com.tekzee.amiggos.ui.splash.adapter.ViewPagerAdapter
 import com.tekzee.amiggos.ui.splash.model.ViewPageData
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 

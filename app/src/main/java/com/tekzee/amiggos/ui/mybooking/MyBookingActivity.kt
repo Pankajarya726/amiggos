@@ -14,12 +14,11 @@ import com.tekzee.amiggos.databinding.BookingActivityBinding
 import com.tekzee.amiggos.ui.mybooking.adapter.MyBookingAdapter
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingData
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingResponse
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.tekzee.amiggos.ui.bookingdetail.BookingDetailsActivity
 import com.tekzee.amiggos.ui.bookingqrcode.GetBookingQrCodeActivity
 
 

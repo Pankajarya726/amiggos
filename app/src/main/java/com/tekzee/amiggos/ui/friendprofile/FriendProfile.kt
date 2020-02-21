@@ -22,7 +22,7 @@ import com.tekzee.amiggos.ui.friendprofile.model.FriendProfileResponse
 import com.tekzee.amiggos.ui.home.model.StoriesData
 import com.tekzee.amiggos.ui.notification.model.StorieResponse
 import com.tekzee.amiggos.ui.storieview.StorieViewActivity
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib

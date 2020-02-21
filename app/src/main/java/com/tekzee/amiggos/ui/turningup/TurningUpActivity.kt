@@ -15,7 +15,7 @@ import com.tekzee.amiggos.ui.turningup.adapter.TurningAdapter
 import com.tekzee.amiggos.ui.turningup.interfaces.TurningUpClicked
 import com.tekzee.amiggos.ui.turningup.model.TurningUpData
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib

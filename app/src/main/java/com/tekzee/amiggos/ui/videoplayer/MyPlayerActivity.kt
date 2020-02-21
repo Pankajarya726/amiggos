@@ -4,10 +4,9 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.Toast
 import com.khizar1556.mkvideoplayer.MKPlayer
-import com.khizar1556.mkvideoplayer.MKPlayerActivity
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.imagepanaroma.model.ImageVideoData
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 

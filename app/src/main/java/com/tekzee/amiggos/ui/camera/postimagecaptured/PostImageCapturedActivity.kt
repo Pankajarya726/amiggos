@@ -19,7 +19,7 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.PostImageCaptureBinding
 import com.tekzee.amiggos.ui.ourmemories.OurMemoriesActivity
 import com.tekzee.amiggos.ui.postmemories.PostMemories
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import java.io.*

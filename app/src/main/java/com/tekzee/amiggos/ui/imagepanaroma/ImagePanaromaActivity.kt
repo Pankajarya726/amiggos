@@ -16,7 +16,7 @@ import com.tekzee.amiggos.databinding.ImagePanaromaBinding
 import com.tekzee.amiggos.ui.chooseweek.ChooseWeekActivity
 import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailResponse
 import com.tekzee.amiggos.ui.venuedetails.VenueDetailsActivity
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib

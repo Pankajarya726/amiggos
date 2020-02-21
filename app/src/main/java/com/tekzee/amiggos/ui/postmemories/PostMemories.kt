@@ -14,7 +14,7 @@ import com.tekzee.amiggos.databinding.PostMemoriesBinding
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.ourmemories.OurMemoriesActivity
 import com.tekzee.amiggos.ui.postmemories.service.FileUploadService
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 

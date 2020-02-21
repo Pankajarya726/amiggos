@@ -11,9 +11,8 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.VenueDetailsActivityBinding
 import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailResponse
-import com.tekzee.amiggos.ui.venuedetails.fragment.DynamicFragment
 import com.tekzee.amiggos.ui.venuedetails.fragment.DynamicFragmentAdapter
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 

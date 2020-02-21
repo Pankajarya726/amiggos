@@ -31,7 +31,7 @@ import com.tekzee.amiggos.ui.friendprofile.FriendProfile
 import com.tekzee.amiggos.ui.home.model.Content
 import com.tekzee.amiggos.ui.home.model.StoriesData
 import com.tekzee.amiggos.ui.viewfriends.ViewFriendsActivity
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib

@@ -89,8 +89,8 @@ class ApiClient {
     }
 
     companion object {
-        private val BASE_URL = "http://amiggos.com/Amiggos_tek/api/"
-//        private val BASE_URL = "http://dev.tekzee.in/Amiggos_new/api/"
+//        private val BASE_URL = "http://amiggos.com/Amiggos_tek/api/"
+        private val BASE_URL = "http://dev.tekzee.in/Amiggos_new/api/"
         private var apiClient: ApiClient? = null
         /**
          * Gets my app client.

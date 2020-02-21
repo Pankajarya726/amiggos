@@ -67,7 +67,7 @@ import com.tekzee.amiggos.ui.partydetails.PartyDetailsActivity
 import com.tekzee.amiggos.ui.realfriends.RealFriendsActivity
 import com.tekzee.amiggos.ui.settings.SettingsActivity
 import com.tekzee.amiggos.ui.turningup.TurningUpActivity
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.SimpleCallback
 import com.tekzee.mallortaxi.util.Utility

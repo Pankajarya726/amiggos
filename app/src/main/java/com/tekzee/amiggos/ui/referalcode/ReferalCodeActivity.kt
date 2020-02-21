@@ -12,15 +12,14 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.ReferalActivityBinding
 import com.tekzee.amiggos.ui.agegroup.AgeGroupActivity
-import com.tekzee.amiggos.ui.attachid.AttachIdActivity
 import com.tekzee.amiggos.ui.referalcode.model.ReferalCodeResponse
 import com.tekzee.amiggos.ui.referalcode.model.VenueResponse
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
-class ReferalCodeActivity:BaseActivity(), ReferalCodePresenter.ReferalCodeMainView {
+class ReferalCodeActivity: BaseActivity(), ReferalCodePresenter.ReferalCodeMainView {
 
     lateinit var binding: ReferalActivityBinding
     private var sharedPreferences: SharedPreference? = null

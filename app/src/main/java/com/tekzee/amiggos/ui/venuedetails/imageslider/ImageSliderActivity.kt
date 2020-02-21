@@ -13,10 +13,10 @@ import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailData
 import com.tekzee.amiggos.ui.venuedetails.ImageClickListener
 import com.tekzee.amiggos.ui.venuedetails.ImageSliderAdapter
 import com.tekzee.amiggos.ui.videoplayer.MyPlayerActivity
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
-class ImageSliderActivity:BaseActivity() {
+class ImageSliderActivity: BaseActivity() {
 
     private lateinit var binding:ImageSliderActivityBinding
     var sliderAdapter: ImageSliderAdapter? = null

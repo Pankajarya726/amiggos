@@ -1,34 +1,37 @@
-package com.tekzee.mallortaxi.base
+package com.tekzee.amiggos.base
 
-import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import com.kaopiz.kprogresshud.KProgressHUD
+import com.tekzee.mallortaxi.base.BaseMainView
 import com.tekzee.mallortaxi.util.NetWorkConection
 
-abstract class BaseActivity : AppCompatActivity(),BaseMainView
+
+abstract class BaseActivity : AppCompatActivity(), BaseMainView
 {
-
-
-    lateinit var progressDialog: ProgressDialog
+    lateinit var hud: KProgressHUD
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Please wait...")
-        progressDialog.setCancelable(false)
+        hud = KProgressHUD.create(this)
+            .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+            .setLabel("Please wait")
+            .setCancellable(false)
+
+
 
     }
 
     override fun showProgressbar() {
         hideKeyboard()
-        progressDialog.show()
+        hud.show()
     }
 
     override fun hideProgressbar() {
-        progressDialog.dismiss()
+        hud.dismiss()
     }
 
     override fun checkInternet(): Boolean {

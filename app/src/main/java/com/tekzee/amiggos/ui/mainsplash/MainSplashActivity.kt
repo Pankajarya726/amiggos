@@ -21,7 +21,7 @@ import com.tekzee.amiggos.ui.login.LoginActivity
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
 import com.tekzee.amiggos.ui.splash.SplashActivity
 import com.tekzee.amiggos.ui.statusview.StatusViewActivity
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib

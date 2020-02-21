@@ -14,7 +14,7 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.BookingQrcodeActivityBinding
 import com.tekzee.amiggos.ui.bookingqrcode.model.BookinQrCodeResponse
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib

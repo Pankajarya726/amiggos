@@ -19,7 +19,7 @@ import com.tekzee.amiggos.ui.ourmemories.fragment.nearby.NearBy
 import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.OurMemoriesUpload
 import com.tekzee.amiggos.ui.ourmemories.service.FileOurMemoryUploadService
 import com.tekzee.amiggos.ui.postmemories.service.FileUploadService
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import kotlinx.android.synthetic.main.activity_realfriends.*

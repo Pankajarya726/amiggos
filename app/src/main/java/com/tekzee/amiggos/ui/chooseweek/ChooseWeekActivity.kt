@@ -17,7 +17,7 @@ import com.tekzee.amiggos.ui.chooseweek.adapter.ChooseWeekAdapter
 import com.tekzee.amiggos.ui.chooseweek.interfaces.ChooseWeekInterface
 import com.tekzee.amiggos.ui.chooseweek.model.ChooseWeekResponse
 import com.tekzee.amiggos.ui.chooseweek.model.DayData
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib

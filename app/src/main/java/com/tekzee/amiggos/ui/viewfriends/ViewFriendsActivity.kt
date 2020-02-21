@@ -16,13 +16,12 @@ import com.tekzee.amiggos.ui.myprofile.MyProfileActivity
 import com.tekzee.amiggos.ui.viewfriends.adapter.ViewFriendAdapter
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewData
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewResponse
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
-import kotlinx.android.synthetic.main.myprofile_activity.*
 
-class ViewFriendsActivity:BaseActivity(), ViewFriendPresenter.ViewFriendMainView {
+class ViewFriendsActivity: BaseActivity(), ViewFriendPresenter.ViewFriendMainView {
 
     private lateinit var adapter: ViewFriendAdapter
     private lateinit var binding: ViewFriendActivityBinding

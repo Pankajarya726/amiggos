@@ -1,31 +1,33 @@
 package com.tekzee.mallortaxi.base
 
-import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import com.kaopiz.kprogresshud.KProgressHUD
 import com.tekzee.mallortaxi.util.NetWorkConection
 
 abstract class BaseFragment : Fragment(),BaseMainView {
 
-    lateinit var progressDialog: ProgressDialog
+    lateinit var hud: KProgressHUD
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        progressDialog = ProgressDialog(activity)
-        progressDialog.setMessage("Please wait...")
-        progressDialog.setCancelable(false)
+        hud = KProgressHUD.create(activity)
+            .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+            .setLabel("Please wait")
+            .setCancellable(false)
+
     }
 
     override fun showProgressbar() {
         hideKeyboard()
-        progressDialog.show()
+        hud.show()
     }
 
     override fun hideProgressbar() {
-        progressDialog.dismiss()
+        hud.dismiss()
     }
 
     override fun checkInternet(): Boolean {

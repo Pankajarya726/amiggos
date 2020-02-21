@@ -19,7 +19,7 @@ import com.tekzee.amiggos.ui.bookingqrcode.GetBookingQrCodeActivity
 import com.tekzee.amiggos.ui.friendlist.adapter.FriendListAdapter
 import com.tekzee.amiggos.ui.friendlist.model.FriendListData
 import com.tekzee.amiggos.ui.friendlist.model.FriendListResponse
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib

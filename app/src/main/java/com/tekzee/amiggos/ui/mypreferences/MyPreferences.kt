@@ -19,7 +19,7 @@ import com.tekzee.amiggos.ui.mypreferences.model.MyPreferenceData
 import com.tekzee.amiggos.ui.mypreferences.model.MyPreferenceResponse
 import com.tekzee.amiggos.ui.mypreferences.model.ParentData
 import com.tekzee.amiggos.ui.mypreferences.model.PreferenceSavedResponse
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
@@ -27,7 +27,7 @@ import com.thoughtbot.expandablerecyclerview.listeners.GroupExpandCollapseListen
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
 
 
-class MyPreferences :BaseActivity(), MyPreferencesPresenter.MyPreferencesMainView {
+class MyPreferences : BaseActivity(), MyPreferencesPresenter.MyPreferencesMainView {
 
     lateinit var binding : MyPreferencesBinding
     private var sharedPreference: SharedPreference? = null

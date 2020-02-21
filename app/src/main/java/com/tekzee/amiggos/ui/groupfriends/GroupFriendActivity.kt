@@ -20,7 +20,7 @@ import com.tekzee.amiggos.ui.groupfriends.adapter.GroupFriendAdapter
 import com.tekzee.amiggos.ui.invitefriend.InitGeoLocationUpdate
 import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendData
 import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendResponse
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxi.util.SimpleCallback
 import com.tekzee.mallortaxi.util.Utility

@@ -12,7 +12,7 @@ import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.PartyInvitesFragm
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.PastPartyFragment
 import com.tekzee.amiggos.ui.partydetails.fragment.upcommingparty.UpcommingPartyFragment
 
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 

@@ -20,7 +20,7 @@ import com.tekzee.amiggos.ui.chat.model.Message
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.adapter.MyFriendChatAdapter
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.model.CustomUser
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.model.MyFriendChatModel
-import com.tekzee.mallortaxi.base.BaseActivity
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
