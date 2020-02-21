@@ -1,17 +1,16 @@
 package com.tekzee.amiggos.ui.homescreen_new
 
-import android.content.res.ColorStateList
-import android.graphics.Color
+import android.content.Intent
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import com.annimon.stream.operator.IntArray
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.AHomeScreenBinding
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.HomeFragment
+import com.tekzee.amiggos.ui.settings_new.ASettings
 import com.tekzee.mallortaxi.base.BaseActivity
 import com.tekzee.mallortaxi.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
@@ -59,6 +58,16 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView {
                 }
                 false
             }
+
+
+        setupClickListener()
+    }
+
+    private fun setupClickListener() {
+        binding.menuDrawer.setOnClickListener {
+            val intent = Intent(this@AHomeScreen,ASettings::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun openFragment(fragment: Fragment) {
