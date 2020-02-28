@@ -13,85 +13,76 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:src="@drawable/profile_bg"
-            app:civ_border_color="@color/colorPrimary"
-            app:civ_border_width="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.cbr.gradienttextview.GradientTextView
-            android:id="@+id/txt_name"
+        <TextView
+            android:id="@+id/txt_name_invitation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
             android:layout_marginBottom="5dp"
             android:gravity="left"
             android:maxLines="1"
             android:text="VENUES"
-            android:textSize="18dp"
+            android:textSize="14dp"
+            android:textColor="@android:color/black"
             app:fontFamily="@font/eras_bold"
-            app:gt_color_list="@array/rainbow"
-            app:gt_gradient_angle="90"
-            app:gt_gradient_direction="right"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/txt_accept"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/profile_image"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.477" />
 
-        <com.an.customfontview.CustomTextView
+        <TextView
             android:id="@+id/txt_accept"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/btn_bg_less"
-            android:fontFamily="@font/eras_bold"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/btn_line_bg"
+            android:fontFamily="@font/eras"
             android:gravity="center"
             android:padding="5dp"
             android:text="Accept"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintBottom_toTopOf="@+id/guideline4"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txt_reject"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.50" />
-
-        <com.an.customfontview.CustomTextView
+        <TextView
             android:id="@+id/txt_reject"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/btn_bg_less"
-            android:fontFamily="@font/eras_bold"
+            android:background="@drawable/btn_line_bg"
+            android:fontFamily="@font/eras"
             android:gravity="center"
             android:padding="5dp"
-            android:text="Reject"
-            android:textColor="@color/colorPrimary"
+            android:text="Decline"
+            android:textColor="@android:color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline4" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="5dp"
+        android:background="@android:color/black"/>
 
 
 

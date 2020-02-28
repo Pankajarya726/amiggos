@@ -1,5 +1,6 @@
 package com.tekzee.amiggos.ui.realfriends.adapter
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,8 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
+import com.tekzee.amiggos.ui.chat.MessageActivity
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.RealFriend
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendData
+import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendV2Response
+import com.tekzee.mallortaxiclient.constant.ConstantLib
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import kotlinx.android.synthetic.main.single_online_friend.view.*
 import kotlinx.android.synthetic.main.single_online_friend.view.profile_image
@@ -19,7 +23,7 @@ import kotlinx.android.synthetic.main.single_real_friend.view.*
 
 class RealFriendAdapter(
     val mContext: Context, mRecyclerView: RecyclerView, val mLayoutManager: LinearLayoutManager,
-    mRecyclerViewAdapterCallback: InfiniteScrollRecyclerView.RecyclerViewAdapterCallback, var mDataList: ArrayList<RealFriendData>, val mItemClickCallback: RealFriend
+    mRecyclerViewAdapterCallback: InfiniteScrollRecyclerView.RecyclerViewAdapterCallback, var mDataList: ArrayList<RealFriendV2Response.Data.RealFreind>, val mItemClickCallback: RealFriend
 )
     : RecyclerView.Adapter<RealFriendAdapter.ViewHolder>(){
 
@@ -48,7 +52,7 @@ class RealFriendAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Logger.d(mDataList[position].name)
+
         if (holder.itemViewType == holderRow) {
             holder.bind()
         }
@@ -63,6 +67,14 @@ class RealFriendAdapter(
                 mItemClickCallback.let {
                     mItemClickCallback.itemClickCallback(adapterPosition)
                 }
+            }
+
+            itemView.imageView8.setOnClickListener {
+                val intentActivity = Intent(mContext, MessageActivity::class.java)
+                intentActivity.putExtra(ConstantLib.FRIEND_ID,mDataList[adapterPosition].userid.toString())
+                intentActivity.putExtra(ConstantLib.FRIENDNAME,mDataList[adapterPosition].name)
+                intentActivity.putExtra(ConstantLib.FRIENDIMAGE,mDataList[adapterPosition].profile)
+                mContext.startActivity(intentActivity)
             }
         }
     }

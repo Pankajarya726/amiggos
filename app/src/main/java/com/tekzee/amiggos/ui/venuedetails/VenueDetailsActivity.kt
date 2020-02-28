@@ -13,7 +13,7 @@ import com.tekzee.amiggos.databinding.VenueDetailsActivityBinding
 import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailResponse
 import com.tekzee.amiggos.ui.venuedetails.fragment.DynamicFragmentAdapter
 import com.tekzee.amiggos.base.BaseActivity
-import com.tekzee.mallortaxi.util.SharedPreference
+import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 

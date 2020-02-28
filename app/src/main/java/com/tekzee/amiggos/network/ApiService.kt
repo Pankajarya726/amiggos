@@ -10,6 +10,7 @@ import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
 import com.tekzee.amiggos.ui.choosepackage.model.PackageBookResponse
 import com.tekzee.amiggos.ui.choosepackage.model.PackageResponse
 import com.tekzee.amiggos.ui.chooseweek.model.ChooseWeekResponse
+import com.tekzee.amiggos.ui.favoritevenues.model.FavoriteVenueResponse
 import com.tekzee.amiggos.ui.friendlist.model.FriendListResponse
 import com.tekzee.amiggos.ui.friendprofile.model.FriendProfileResponse
 import com.tekzee.amiggos.ui.guestlist.model.GuestListResponse
@@ -18,6 +19,8 @@ import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
 import com.tekzee.amiggos.ui.home.model.NearbyMeCountResponse
 import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
+import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeApiResponse
+import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingResponse
 import com.tekzee.amiggos.ui.mypreferences.model.MyPreferenceResponse
 import com.tekzee.amiggos.ui.mypreferences.model.PreferenceSavedResponse
@@ -40,6 +43,8 @@ import com.tekzee.amiggos.ui.mymemories.fragment.memories.model.MyMemoriesRespon
 import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
 import com.tekzee.amiggos.ui.notification.model.StorieResponse
 import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
+import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponseV2
+import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendV2Response
 import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendResponse
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewResponse
 import io.reactivex.Observable
@@ -178,11 +183,37 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<SearchFriendResponse>>
 
+    @POST("user/getNearByUser_V2")
+    fun getNearByUserv2(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<NearByV2Response>>
+
     @POST("user/userFreindsList")
     fun doCallRealFriendApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<RealFriendResponse>>
+
+
+    @POST("user/userFreindsList_V2")
+    fun doCallRealFriendApiV2(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<RealFriendV2Response>>
+
+
+    @POST("user/get_favorite_venue")
+    fun doCallFavoriteVenueV2(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<FavoriteVenueResponse>>
+
+    @POST("user/dashboard_club_V2")
+    fun docallHomeApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<HomeApiResponse>>
 
 
     @POST("user/getOurStories")
@@ -291,7 +322,25 @@ interface ApiService {
 
 
 
-    @POST("user/acceptFriendRequest")
+
+    @POST("user/getRequestList_V2")
+    fun doCallInvitationApiV2(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<InvitationResponseV2>>
+
+
+
+//    @POST("user/acceptFriendRequest")
+//    fun doAcceptInvitationApi(
+//        @Body input: JsonObject,
+//        @HeaderMap createHeaders: HashMap<String, String?>
+//    ): Observable<Response<CommonResponse>>
+
+
+
+
+    @POST("user/acceptFriendRequest_V2")
     fun doAcceptInvitationApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
@@ -370,7 +419,7 @@ interface ApiService {
     ): Observable<Response<CommonResponse>>
 
 
-    @POST("user/declineFriendRequest")
+    @POST("user/declineFriendRequest_V2")
     fun doRejectInvitationApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>

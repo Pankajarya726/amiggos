@@ -7,7 +7,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.tekzee.mallortaxi.base.BaseMainView
-import com.tekzee.mallortaxi.util.NetWorkConection
+import com.tekzee.amiggos.util.NetWorkConection
 
 
 abstract class BaseActivity : AppCompatActivity(), BaseMainView

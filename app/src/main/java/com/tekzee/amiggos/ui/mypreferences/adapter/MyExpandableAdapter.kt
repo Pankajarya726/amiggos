@@ -13,7 +13,7 @@ import com.tekzee.amiggos.ui.mypreferences.model.ParentData
 import com.tekzee.amiggos.ui.mypreferences.model.Value
 
 import com.tekzee.amiggos.ui.mypreferences.viewholders.ParentViewHolder
-import com.tekzee.mallortaxi.util.SharedPreference
+import com.tekzee.amiggos.util.SharedPreference
 import com.thoughtbot.expandablerecyclerview.MultiTypeExpandableRecyclerViewAdapter
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder

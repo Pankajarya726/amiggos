@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
+import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
 import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendData
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import kotlinx.android.synthetic.main.single_first_fragment.view.*
@@ -16,7 +17,7 @@ import kotlinx.android.synthetic.main.single_group_friend.view.*
 
 class FirstFragmentAdapter(
     val mContext: Context, mRecyclerView: RecyclerView, val mLayoutManager: LinearLayoutManager,
-    mRecyclerViewAdapterCallback: InfiniteScrollRecyclerView.RecyclerViewAdapterCallback, var mDataList: ArrayList<SearchFriendData>, val mItemClickCallback: HomeItemClick?)
+    mRecyclerViewAdapterCallback: InfiniteScrollRecyclerView.RecyclerViewAdapterCallback, var mDataList: ArrayList<NearByV2Response.Data.NearestFreind>, val mItemClickCallback: HomeItemClick?)
     : RecyclerView.Adapter<FirstFragmentAdapter.ViewHolder>(){
 
     private val holderLoading: Int = 0
@@ -44,7 +45,6 @@ class FirstFragmentAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Logger.d(mDataList[position].name)
         if (holder.itemViewType == holderRow) {
             holder.bind()
         }
@@ -52,6 +52,7 @@ class FirstFragmentAdapter(
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind() {
+            Logger.d(mDataList[adapterPosition].profile)
             Glide.with(itemView.context).load(mDataList[adapterPosition].profile).placeholder(R.drawable.blackbg).into(itemView.img_user_firstfragment)
 //            itemView.txt_name.text = mDataList[adapterPosition].name
 //            if(mDataList[adapterPosition].isRelate ==4 && mDataList[adapterPosition].isRelate== 5){

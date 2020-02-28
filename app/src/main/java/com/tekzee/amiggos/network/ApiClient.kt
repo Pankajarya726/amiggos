@@ -13,6 +13,7 @@ import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
 import com.tekzee.amiggos.ui.choosepackage.model.PackageBookResponse
 import com.tekzee.amiggos.ui.choosepackage.model.PackageResponse
 import com.tekzee.amiggos.ui.chooseweek.model.ChooseWeekResponse
+import com.tekzee.amiggos.ui.favoritevenues.model.FavoriteVenueResponse
 import com.tekzee.amiggos.ui.friendlist.model.FriendListResponse
 import com.tekzee.amiggos.ui.friendprofile.model.FriendProfileResponse
 import com.tekzee.amiggos.ui.guestlist.model.GuestListResponse
@@ -21,6 +22,8 @@ import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
 import com.tekzee.amiggos.ui.home.model.NearbyMeCountResponse
 import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
+import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeApiResponse
+import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingResponse
 import com.tekzee.amiggos.ui.mypreferences.model.MyPreferenceResponse
 import com.tekzee.amiggos.ui.mypreferences.model.PreferenceSavedResponse
@@ -43,6 +46,8 @@ import com.tekzee.amiggos.ui.mymemories.fragment.memories.model.MyMemoriesRespon
 import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
 import com.tekzee.amiggos.ui.notification.model.StorieResponse
 import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
+import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponseV2
+import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendV2Response
 import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendResponse
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewResponse
 import io.reactivex.Observable
@@ -90,6 +95,7 @@ class ApiClient {
 
     companion object {
 //        private val BASE_URL = "http://amiggos.com/Amiggos_tek/api/"
+//        private val BASE_URL = "http://dev.tekzee.in/Amiggos_new/api/"
         private val BASE_URL = "http://dev.tekzee.in/Amiggos_new/api/"
         private var apiClient: ApiClient? = null
         /**
@@ -233,11 +239,42 @@ class ApiClient {
         return apiService.getNearByUser(input, createHeaders)
     }
 
+    fun getNearByUserv2(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<NearByV2Response>> {
+        return apiService.getNearByUserv2(input, createHeaders)
+    }
+
     fun doCallRealFriendApi(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<RealFriendResponse>> {
         return apiService.doCallRealFriendApi(input, createHeaders)
+    }
+
+    fun doCallRealFriendApiV2(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<RealFriendV2Response>> {
+        return apiService.doCallRealFriendApiV2(input, createHeaders)
+    }
+
+
+    fun doCallFavoriteVenueV2(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<FavoriteVenueResponse>> {
+        return apiService.doCallFavoriteVenueV2(input, createHeaders)
+    }
+
+
+
+    fun doCallHomeApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<HomeApiResponse>> {
+        return apiService.docallHomeApi(input, createHeaders)
     }
 
 
@@ -357,6 +394,14 @@ class ApiClient {
         createHeaders: HashMap<String, String?>
     ): Observable<Response<InvitationResponse>> {
         return apiService.doCallInvitationApi(input, createHeaders)
+    }
+
+
+    fun doCallInvitationApiV2(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<InvitationResponseV2>> {
+        return apiService.doCallInvitationApiV2(input, createHeaders)
     }
 
 

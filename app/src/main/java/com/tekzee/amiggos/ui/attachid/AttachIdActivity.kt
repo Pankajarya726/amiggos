@@ -14,8 +14,8 @@ import com.tekzee.amiggos.databinding.AttachidActivityBinding
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
 import com.tekzee.amiggos.ui.statusview.StatusViewActivity
 import com.tekzee.amiggos.base.BaseActivity
-import com.tekzee.mallortaxi.util.SharedPreference
-import com.tekzee.mallortaxi.util.Utility
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView

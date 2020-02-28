@@ -22,8 +22,8 @@ import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
 import com.tekzee.amiggos.ui.splash.SplashActivity
 import com.tekzee.amiggos.ui.statusview.StatusViewActivity
 import com.tekzee.amiggos.base.BaseActivity
-import com.tekzee.mallortaxi.util.SharedPreference
-import com.tekzee.mallortaxi.util.Utility
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 
@@ -64,7 +64,7 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
         input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("version", BuildConfig.VERSION_NAME)
         input.addProperty("device_type", "2")
-        mainSplashPresenterImplementation!!.doValidateAppVersionApi(input,Utility.createHeaders(sharedPreferences))
+        mainSplashPresenterImplementation!!.doValidateAppVersionApi(input, Utility.createHeaders(sharedPreferences))
     }
 
     private fun callLanguageConstantApi() {

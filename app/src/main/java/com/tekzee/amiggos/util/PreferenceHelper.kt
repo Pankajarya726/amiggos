@@ -1,4 +1,4 @@
-package com.tekzee.mallortaxi.util
+package com.tekzee.amiggos.util
 
 import android.content.Context
 import android.content.SharedPreferences

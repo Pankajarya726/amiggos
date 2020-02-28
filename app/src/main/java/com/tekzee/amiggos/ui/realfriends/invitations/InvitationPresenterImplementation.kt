@@ -4,7 +4,7 @@ import android.content.Context
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
-import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponse
+import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponseV2
 import com.tekzee.mallortaxi.network.ApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -22,6 +22,8 @@ class InvitationPresenterImplementation(private var mainView: InvitationPresente
     override fun onStop() {
         if (disposable != null) {
             disposable!!.dispose()
+            if(mainView!=null)
+                mainView.hideProgressbar()
         }
     }
 
@@ -30,16 +32,17 @@ class InvitationPresenterImplementation(private var mainView: InvitationPresente
         createHeaders: HashMap<String, String?>
     ) {
 
+
         mainView.showProgressbar()
         if (mainView.checkInternet()) {
-            disposable = ApiClient.instance.doCallInvitationApi(input, createHeaders)
+            disposable = ApiClient.instance.doCallInvitationApiV2(input, createHeaders)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
                     mainView.hideProgressbar()
                     when (response.code()) {
                         200 -> {
-                            val responseData: InvitationResponse? = response.body()
+                            val responseData: InvitationResponseV2? = response.body()
                             if (responseData!!.status) {
                                 mainView.onInvitaionSuccess(responseData)
                             } else {

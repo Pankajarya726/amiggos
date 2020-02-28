@@ -6,7 +6,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import com.kaopiz.kprogresshud.KProgressHUD
-import com.tekzee.mallortaxi.util.NetWorkConection
+import com.tekzee.amiggos.util.NetWorkConection
 
 abstract class BaseFragment : Fragment(),BaseMainView {
 

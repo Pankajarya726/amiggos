@@ -9,12 +9,12 @@ import com.bumptech.glide.Glide
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.realfriends.invitations.interfaces.InvitationInterfaces
-import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationData
+import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponseV2
 import kotlinx.android.synthetic.main.single_invitation.view.*
 
 
 class InvitationAdapter(
-    private val items: ArrayList<InvitationData>,
+    private val items: ArrayList<InvitationResponseV2.Data.FreindRequest>,
     private val languageData: LanguageData?,
     private val invitationInterface: InvitationInterfaces
 ): RecyclerView.Adapter<InvitationAdapter.PartyInvitesViewHolder>() {
@@ -29,13 +29,13 @@ class InvitationAdapter(
         return PartyInvitesViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
 
     override fun onBindViewHolder(holder: PartyInvitesViewHolder, position: Int) {
-        holder.bindingdata.txt_name.text = items[position].name
+        holder.bindingdata.txt_name_invitation.text = items[position].name
+        holder.bindingdata.txt_accept.text = languageData!!.PACCEPT
+        holder.bindingdata.txt_reject.text = languageData.PREJECT
         Glide.with(context!!).load(items[position].profile).placeholder(R.drawable.user).into(holder.bindingdata.profile_image)
+
         holder.bindingdata.txt_accept.setOnClickListener{
             invitationInterface.onItemClicked(items[position],1)
         }
@@ -44,9 +44,17 @@ class InvitationAdapter(
             invitationInterface.onItemClicked(items[position],2)
         }
 
+        holder.itemView.setOnClickListener{
+            invitationInterface.onItemClicked(items[position],3)
+        }
+
     }
 
     inner class PartyInvitesViewHolder(val bindingdata: View): RecyclerView.ViewHolder(bindingdata)
+
+    override fun getItemCount(): Int {
+        return items.size
+    }
 
 
 }

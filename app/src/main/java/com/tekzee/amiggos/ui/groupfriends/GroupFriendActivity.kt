@@ -17,13 +17,13 @@ import com.tekzee.amiggos.databinding.OnlineFriendActivityBinding
 import com.tekzee.amiggos.ui.camera.CameraPreview
 import com.tekzee.amiggos.ui.friendprofile.FriendProfile
 import com.tekzee.amiggos.ui.groupfriends.adapter.GroupFriendAdapter
-import com.tekzee.amiggos.ui.invitefriend.InitGeoLocationUpdate
+import com.tekzee.amiggos.util.InitGeoLocationUpdate
 import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendData
 import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendResponse
 import com.tekzee.amiggos.base.BaseActivity
-import com.tekzee.mallortaxi.util.SharedPreference
-import com.tekzee.mallortaxi.util.SimpleCallback
-import com.tekzee.mallortaxi.util.Utility
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.SimpleCallback
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers

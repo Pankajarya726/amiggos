@@ -1,7 +1,7 @@
 package com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment
 
 import com.google.gson.JsonObject
-import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendResponse
+import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
 import com.tekzee.mallortaxi.base.BaseMainView
 
 class FirstFragmentPresenter{
@@ -16,8 +16,8 @@ class FirstFragmentPresenter{
     }
 
     interface FirstFragmentPresenterMainView: BaseMainView {
-        fun onOnlineFriendSuccess(responseData: SearchFriendResponse?)
-        fun onOnlineFriendInfiniteSuccess(responseData: SearchFriendResponse?)
+        fun onOnlineFriendSuccess(responseData: List<NearByV2Response.Data.NearestFreind>)
+        fun onOnlineFriendInfiniteSuccess(responseData: List<NearByV2Response.Data.NearestFreind>)
         fun onOnlineFriendFailure(responseData: String)
     }
 }

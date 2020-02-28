@@ -21,7 +21,7 @@ import com.tekzee.amiggos.ui.friendprofile.FriendProfile
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.partydetails.PartyDetailsActivity
 import com.tekzee.amiggos.ui.realfriends.RealFriendsActivity
-import com.tekzee.mallortaxi.util.SharedPreference
+import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import org.json.JSONObject
 

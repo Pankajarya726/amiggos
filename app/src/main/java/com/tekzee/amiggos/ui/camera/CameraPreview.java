@@ -14,10 +14,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
-import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -37,10 +35,9 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.bumptech.glide.Glide;
-import com.iceteck.silicompressorr.SiliCompressor;
 import com.orhanobut.logger.Logger;
 import com.tekzee.amiggos.R;
 import com.tekzee.amiggos.ui.camera.camerautil.MyCanvas;
@@ -48,7 +45,8 @@ import com.tekzee.amiggos.ui.camera.postimagecaptured.PostImageCapturedActivity;
 import com.tekzee.amiggos.ui.groupfriends.GroupFriendActivity;
 import com.tekzee.amiggos.ui.mymemories.MyMemoriesActivity;
 import com.tekzee.amiggos.ui.searchamiggos.SearchActivity;
-import com.tekzee.mallortaxi.util.SharedPreference;
+import com.tekzee.amiggos.util.OnSwipeTouchListener;
+import com.tekzee.amiggos.util.SharedPreference;
 import com.tekzee.mallortaxiclient.constant.ConstantLib;
 
 import java.io.File;
@@ -59,7 +57,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -99,20 +96,24 @@ public class CameraPreview extends MyCanvas {
     private LinearLayout editTextBody;
     private ImageView capturedImage;
     private VideoView videoView;
+    private View viewright;
     int VideoSeconds = 0;
     private static String fileName = null;
     int noti_id;
     private SharedPreference sharedPreferences = null;
-
+    Context context;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GetPermission();
-
+        context = this;
 
         sharedPreferences = new SharedPreference(this);
         captureMedia = (RelativeLayout) findViewById(R.id.camera_view);
+
+
+
         editMedia = (FrameLayout) findViewById(R.id.edit_media);
         customButton = (ImageView) findViewById(R.id.custom_progressBar);
         customButtonSquare = (ImageView) findViewById(R.id.custom_square);
@@ -122,6 +123,7 @@ public class CameraPreview extends MyCanvas {
         img_group = (ImageView) findViewById(R.id.img_group);
         flashButton = (ImageView) findViewById(R.id.img_flash_control);
         img_back = (ImageView) findViewById(R.id.img_back);
+        viewright = (View) findViewById(R.id.viewright);
         uploadButton = (ImageView) findViewById(R.id.upload_media);
         uploadButtonTxt = (TextView) findViewById(R.id.upload_media_txt);
         badge = (TextView) findViewById(R.id.badge);
@@ -333,9 +335,12 @@ public class CameraPreview extends MyCanvas {
         img_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 onBackPressed();
+
             }
         });
+
 
 
         Glide.with(getApplicationContext()).load(getIntent().getStringExtra(ConstantLib.PROFILE_IMAGE)).placeholder(R.drawable.user).into(img_profile);
@@ -350,7 +355,19 @@ public class CameraPreview extends MyCanvas {
 
     }
 
+
+
     private void setupclickListener() {
+
+        viewright.setOnTouchListener(new OnSwipeTouchListener(context){
+            @Override
+            public void onSwipeLeft() {
+
+                onBackPressed();
+
+            }
+        });
+
         img_stories.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -782,6 +799,7 @@ public class CameraPreview extends MyCanvas {
         } else {
             finish();
         }
+        Animatoo.animateSlideLeft(context); //fire the slide left animation
     }
 
     @SuppressLint("NewApi")

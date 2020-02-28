@@ -196,6 +196,13 @@
             android:textSize="25dp"
             android:textStyle="bold" />
 
+        <View
+            android:id="@+id/viewright"
+            android:layout_width="15dp"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:layout_height="wrap_content"/>
+
     </RelativeLayout>
 
     <FrameLayout

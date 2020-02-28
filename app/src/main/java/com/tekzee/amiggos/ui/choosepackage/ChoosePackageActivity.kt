@@ -22,8 +22,8 @@ import com.tekzee.amiggos.ui.friendlist.FriendListActivity
 import com.tekzee.amiggos.ui.statusview.StatusViewActivity
 
 import com.tekzee.amiggos.base.BaseActivity
-import com.tekzee.mallortaxi.util.SharedPreference
-import com.tekzee.mallortaxi.util.Utility
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 class ChoosePackageActivity : BaseActivity(), ChoosePackagePresenter.ChoosePackageMainView {

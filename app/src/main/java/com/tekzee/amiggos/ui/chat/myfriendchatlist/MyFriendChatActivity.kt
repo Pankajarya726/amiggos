@@ -18,10 +18,9 @@ import com.tekzee.amiggos.firebasemodel.User
 import com.tekzee.amiggos.ui.chat.MessageActivity
 import com.tekzee.amiggos.ui.chat.model.Message
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.adapter.MyFriendChatAdapter
-import com.tekzee.amiggos.ui.chat.myfriendchatlist.model.CustomUser
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.model.MyFriendChatModel
 import com.tekzee.amiggos.base.BaseActivity
-import com.tekzee.mallortaxi.util.SharedPreference
+import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 class MyFriendChatActivity : BaseActivity() {
@@ -34,9 +33,7 @@ class MyFriendChatActivity : BaseActivity() {
     var myfriendChatList = ArrayList<MyFriendChatModel>()
     val listOfAllUsers = ArrayList<User>()
     val listOfSenders = ArrayList<String>()
-    val userList: ArrayList<CustomUser>? = null
-    var mUsers: ArrayList<User>?= null
-    var databaseReference: DatabaseReference? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

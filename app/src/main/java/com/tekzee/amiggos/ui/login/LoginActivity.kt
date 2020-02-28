@@ -36,14 +36,14 @@ import com.tekzee.amiggos.databinding.LoginActivityBinding
 import com.tekzee.amiggos.firebasemodel.User
 import com.tekzee.amiggos.ui.chooselanguage.ChooseLanguageActivity
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
-import com.tekzee.amiggos.ui.invitefriend.InitGeoLocationUpdate
+import com.tekzee.amiggos.util.InitGeoLocationUpdate
 import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.pages.WebViewActivity
 import com.tekzee.amiggos.ui.referalcode.ReferalCodeActivity
 import com.tekzee.amiggos.base.BaseActivity
-import com.tekzee.mallortaxi.util.SharedPreference
-import com.tekzee.mallortaxi.util.SimpleCallback
-import com.tekzee.mallortaxi.util.Utility
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.SimpleCallback
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import org.json.JSONObject
 import java.util.*
@@ -562,7 +562,7 @@ class LoginActivity : BaseActivity(), LoginPresenter.LoginMainView {
         sharedPreferences!!.save(ConstantLib.USER_ID, responseData.data[0].userid)
         sharedPreferences!!.save(ConstantLib.USER_NAME, responseData.data[0].name)
         sharedPreferences!!.save(ConstantLib.USER_EMAIL, responseData.data[0].email)
-        sharedPreferences!!.save(ConstantLib.USER_DOB, responseData.data[0].dob.toString())
+        sharedPreferences!!.save(ConstantLib.USER_DOB, responseData.data[0].dob)
         sharedPreferences!!.save(ConstantLib.API_TOKEN, responseData.data[0].apiToken)
         sharedPreferences!!.save(ConstantLib.ACCESS_TOKEN, responseData.data[0].accessToken)
         sharedPreferences!!.save(ConstantLib.PROFILE_IMAGE, responseData.data[0].profile)

@@ -18,8 +18,8 @@ import com.tekzee.amiggos.ui.guestlist.interfaces.GuestListInterface
 import com.tekzee.amiggos.ui.guestlist.model.GuestListData
 import com.tekzee.amiggos.ui.guestlist.model.GuestListResponse
 import com.tekzee.amiggos.base.BaseActivity
-import com.tekzee.mallortaxi.util.SharedPreference
-import com.tekzee.mallortaxi.util.Utility
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 class GuestListActivity: BaseActivity(), GuestListPresenter.GuestListMainView {

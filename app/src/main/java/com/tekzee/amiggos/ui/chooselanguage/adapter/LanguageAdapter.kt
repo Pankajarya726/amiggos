@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.chooselanguage.interfaces.LanguageClicked
 import com.tekzee.amiggos.ui.chooselanguage.model.Language
-import com.tekzee.mallortaxi.util.SharedPreference
+import com.tekzee.amiggos.util.SharedPreference
 import kotlinx.android.synthetic.main.single_list_language.view.*
 
 class LanguageAdapter(

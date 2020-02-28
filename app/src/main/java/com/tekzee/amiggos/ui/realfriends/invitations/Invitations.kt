@@ -1,5 +1,6 @@
 package com.tekzee.amiggos.ui.realfriends.invitations
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,37 +13,40 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.InvitationsFragmentBinding
+import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.ui.realfriends.invitations.adapter.InvitationAdapter
 import com.tekzee.amiggos.ui.realfriends.invitations.interfaces.InvitationInterfaces
-import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationData
-import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponse
+import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponseV2
 import com.tekzee.mallortaxi.base.BaseFragment
-import com.tekzee.mallortaxi.util.SharedPreference
-import com.tekzee.mallortaxi.util.Utility
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
-class Invitations: BaseFragment(), InvitationPresenter.InvitationMainView {
+class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
 
 
-
+    private val pageNo: Int? =0
+    private val searchName: String? =""
     lateinit var binding: InvitationsFragmentBinding
     private var myView: View? = null
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
     private var invitationPresenterImplementation: InvitationPresenterImplementation? = null
     private lateinit var adapter: InvitationAdapter
-    private val items: ArrayList<InvitationData> = ArrayList()
+    private val items: ArrayList<InvitationResponseV2.Data.FreindRequest> = ArrayList()
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.invitations_fragment,container,false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.invitations_fragment, container, false)
         myView = binding.root
         sharedPreference = SharedPreference(activity!!.baseContext)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        invitationPresenterImplementation = InvitationPresenterImplementation(this,activity!!)
+        invitationPresenterImplementation = InvitationPresenterImplementation(this, activity!!)
         setupRecyclerView()
         callInvitationApi()
         return myView
@@ -52,17 +56,27 @@ class Invitations: BaseFragment(), InvitationPresenter.InvitationMainView {
 
         binding.invitationRecyclerview.setHasFixedSize(true)
         binding.invitationRecyclerview.layoutManager = LinearLayoutManager(activity)
-        adapter = InvitationAdapter(items,languageData, object : InvitationInterfaces {
+        adapter = InvitationAdapter(items, languageData, object : InvitationInterfaces {
             override fun onItemClicked(
-                invitationData: InvitationData,
+                invitationData: InvitationResponseV2.Data.FreindRequest,
                 type: Int
             ) {
-                when(type){
-                    1->{
+                when (type) {
+                    1 -> {
                         callAcceptApi(invitationData)
                     }
-                    2->{
+                    2 -> {
                         callRejectApi(invitationData)
+                    }
+                    3 -> {
+                        val intent = Intent(activity, AProfileDetails::class.java)
+                        intent.putExtra(ConstantLib.FRIEND_ID, invitationData.userid.toString())
+                        intent.putExtra(ConstantLib.PROFILE_IMAGE,invitationData.profile)
+                        intent.putExtra(ConstantLib.NAME, invitationData.name)
+                        intent.putExtra(ConstantLib.ADDRESS, invitationData.address)
+                        intent.putExtra(ConstantLib.REAL_FREIND_COUNT, invitationData.real_freind_count)
+                        intent.putExtra("from", "Invitation")
+                        startActivity(intent)
                     }
                 }
             }
@@ -72,53 +86,68 @@ class Invitations: BaseFragment(), InvitationPresenter.InvitationMainView {
 
     }
 
-    private fun callRejectApi(invitationData: InvitationData) {
+    private fun callRejectApi(invitationData: InvitationResponseV2.Data.FreindRequest) {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("friend_id", invitationData.userid)
-        invitationPresenterImplementation!!.doRejectInvitationApi(input,Utility.createHeaders(sharedPreference))
+        invitationPresenterImplementation!!.doRejectInvitationApi(
+            input,
+            Utility.createHeaders(sharedPreference)
+        )
     }
 
-    private fun callAcceptApi(invitationData: InvitationData) {
+    private fun callAcceptApi(invitationData: InvitationResponseV2.Data.FreindRequest) {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("friend_id", invitationData.userid)
-        invitationPresenterImplementation!!.doAcceptInvitationApi(input,Utility.createHeaders(sharedPreference))
+        invitationPresenterImplementation!!.doAcceptInvitationApi(
+            input,
+            Utility.createHeaders(sharedPreference)
+        )
     }
 
     private fun callInvitationApi() {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
-        invitationPresenterImplementation!!.doCallInvitationApi(input,Utility.createHeaders(sharedPreference))
+        input.addProperty("page_no", pageNo)
+        input.addProperty("name",searchName)
+        invitationPresenterImplementation!!.doCallInvitationApi(
+            input,
+            Utility.createHeaders(sharedPreference)
+        )
     }
 
     override fun validateError(message: String) {
 
-        Toast.makeText(activity,message,Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
-    override fun onInvitaionSuccess(responseData: InvitationResponse?) {
+    override fun onInvitaionSuccess(responseData: InvitationResponseV2?) {
         items.clear()
         adapter.notifyDataSetChanged()
-        items.addAll(responseData!!.data)
+        items.addAll(responseData!!.data.freindRequest)
         adapter.notifyDataSetChanged()
     }
 
 
     override fun onAcceptInvitation(responseData: CommonResponse?) {
-        Toast.makeText(activity,responseData!!.message,Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, responseData!!.message, Toast.LENGTH_LONG).show()
         callInvitationApi()
     }
 
     override fun onRejectInvitation(responseData: CommonResponse?) {
-        Toast.makeText(activity,responseData!!.message,Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, responseData!!.message, Toast.LENGTH_LONG).show()
         callInvitationApi()
     }
 
     override fun onInvitationFailure(responseData: String) {
         items.clear()
         adapter.notifyDataSetChanged()
+    }
 
 
+    override fun onStop() {
+        super.onStop()
+        invitationPresenterImplementation!!.onStop()
     }
 }

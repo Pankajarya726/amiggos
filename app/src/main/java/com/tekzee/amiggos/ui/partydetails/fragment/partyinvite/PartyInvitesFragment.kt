@@ -20,8 +20,8 @@ import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.interfaces.PartyI
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesData
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesResponse
 import com.tekzee.mallortaxi.base.BaseFragment
-import com.tekzee.mallortaxi.util.SharedPreference
-import com.tekzee.mallortaxi.util.Utility
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMainView {
@@ -53,7 +53,7 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMai
     private fun callPartyInviteApi() {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
-        partyInvitesPresenterImplementation!!.doCallPartyInviteApi(input,Utility.createHeaders(sharedPreference))
+        partyInvitesPresenterImplementation!!.doCallPartyInviteApi(input, Utility.createHeaders(sharedPreference))
     }
 
     private fun setupRecyclerView() {
@@ -90,7 +90,7 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMai
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("booking_id", partyinvitesData.bookingId)
-        partyInvitesPresenterImplementation!!.doCallJoinPartyInvites(input,Utility.createHeaders(sharedPreference))
+        partyInvitesPresenterImplementation!!.doCallJoinPartyInvites(input, Utility.createHeaders(sharedPreference))
     }
 
 
@@ -98,7 +98,7 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMai
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("booking_id", partyinvitesData.bookingId)
-        partyInvitesPresenterImplementation!!.doCallDeclinePartyInvites(input,Utility.createHeaders(sharedPreference))
+        partyInvitesPresenterImplementation!!.doCallDeclinePartyInvites(input, Utility.createHeaders(sharedPreference))
     }
 
 

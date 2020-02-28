@@ -131,6 +131,9 @@ dependencies {
     //api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
     api project(':cropper')
 
+    api project(':autocompleteplace')
+    api project(':hiddensearchwithrecyclerview')
+
     //circular image view
     implementation 'com.library.tangxiaolv:effectiveshapeview:1.0.1'
     implementation 'de.hdodenhof:circleimageview:3.0.1'
@@ -202,7 +205,9 @@ dependencies {
 
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v8:0.7.0'
 
+
     implementation 'com.github.mohammadatif:Animatoo:master'
 
     implementation 'com.kaopiz:kprogresshud:1.2.0'
+
 }

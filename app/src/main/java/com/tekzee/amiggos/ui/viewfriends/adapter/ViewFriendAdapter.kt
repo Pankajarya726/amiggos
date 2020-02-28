@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.viewfriends.ViewFriendInterface
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewData
-import com.tekzee.mallortaxi.util.SharedPreference
+import com.tekzee.amiggos.util.SharedPreference
 import kotlinx.android.synthetic.main.single_list_language.view.*
 
 class ViewFriendAdapter(

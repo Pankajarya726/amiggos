@@ -1,7 +1,7 @@
 package com.tekzee.amiggos.ui.realfriends.realfriendfragment
 
 import com.google.gson.JsonObject
-import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendResponse
+import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendV2Response
 import com.tekzee.mallortaxi.base.BaseMainView
 
 class RealFriendPresenter {
@@ -16,8 +16,8 @@ class RealFriendPresenter {
     }
 
     interface RealFriendMainView : BaseMainView{
-        fun onRealFriendSuccess(responseData: RealFriendResponse?)
-        fun onRealFriendInfiniteSuccess(responseData: RealFriendResponse?)
+        fun onRealFriendSuccess(responseData: List<RealFriendV2Response.Data.RealFreind>)
+        fun onRealFriendInfiniteSuccess(responseData: List<RealFriendV2Response.Data.RealFreind>)
         fun onRealFriendFailure(message: String)
     }
 

@@ -1,6 +1,5 @@
 package com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.adapter
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,13 +9,9 @@ import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bumptech.glide.Glide
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
-import com.tekzee.amiggos.ui.camera.CameraPreview
 import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.OurMemoriesUpload
 import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListData
-import com.tekzee.mallortaxi.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
-import io.apptik.widget.Util
 import kotlinx.android.synthetic.main.real_friend_upload.view.*
 import kotlinx.android.synthetic.main.single_online_friend.view.profile_image
 import kotlinx.android.synthetic.main.single_online_friend.view.txt_name

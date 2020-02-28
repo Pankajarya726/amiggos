@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="8dp"
-        android:id="@+id/first_fragment_recyclierview"
+    <com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView
+        android:id="@+id/hidden_search_with_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        app:filterWhileTyping="false"
+        app:scrollToBottomBeforeHide="true"
+        app:scrollToTopBeforeShow="true"
+        app:hideAtScroll="true"
+        app:visibleAtInit="false">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/first_fragment_recyclierview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp" />
+
+    </com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView>
 </LinearLayout>

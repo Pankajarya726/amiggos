@@ -54,7 +54,7 @@ import com.tekzee.amiggos.ui.home.adapter.HomeVenueAdapter
 import com.tekzee.amiggos.ui.home.adapter.NestedScrollPagination
 import com.tekzee.amiggos.ui.home.adapter.PaginationScrollListener
 import com.tekzee.amiggos.ui.home.model.*
-import com.tekzee.amiggos.ui.invitefriend.InitGeoLocationUpdate
+import com.tekzee.amiggos.util.InitGeoLocationUpdate
 import com.tekzee.amiggos.ui.invitefriend.InviteFriendActivity
 import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
 import com.tekzee.amiggos.ui.mybooking.MyBookingActivity
@@ -68,9 +68,9 @@ import com.tekzee.amiggos.ui.realfriends.RealFriendsActivity
 import com.tekzee.amiggos.ui.settings.SettingsActivity
 import com.tekzee.amiggos.ui.turningup.TurningUpActivity
 import com.tekzee.amiggos.base.BaseActivity
-import com.tekzee.mallortaxi.util.SharedPreference
-import com.tekzee.mallortaxi.util.SimpleCallback
-import com.tekzee.mallortaxi.util.Utility
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.SimpleCallback
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 
@@ -110,7 +110,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     companion object {
         private const val TOTAL_PAGES = 5
-        private const val TOTAL_PAGES_VENUE = 5
+        const val TOTAL_PAGES_VENUE = 5
     }
 
 
@@ -846,8 +846,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onDashboardMapFailure(message: String) {
         InitGeoLocationUpdate.stopLocationUpdate(this)
-        Utility.showLogoutPopup(this, languageData!!, message)
-
+        Utility.showLogoutPopup(this, message)
     }
 
 
@@ -903,7 +902,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun onVenueFailure(message: String) {
-        Utility.showLogoutPopup(this, languageData!!, message)
+        Utility.showLogoutPopup(this, message)
     }
 
 
@@ -946,7 +945,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun onMyStoriesFailure(message: String) {
-        Utility.showLogoutPopup(this, languageData!!, message)
+        Utility.showLogoutPopup(this, message)
     }
 
 

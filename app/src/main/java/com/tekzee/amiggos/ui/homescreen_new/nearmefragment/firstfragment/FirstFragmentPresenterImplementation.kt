@@ -3,14 +3,17 @@ package com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment
 import android.content.Context
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
-import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendResponse
+import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.network.ApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import retrofit2.Response
 
-class FirstFragmentPresenterImplementation (private var mainView: FirstFragmentPresenter.FirstFragmentPresenterMainView,
-context: Context
+class FirstFragmentPresenterImplementation(
+    private var mainView: FirstFragmentPresenter.FirstFragmentPresenterMainView,
+    context: Context
 ) : FirstFragmentPresenter.FirstFragmentPresenterMain {
 
 
@@ -21,6 +24,8 @@ context: Context
     override fun onStop() {
         if (disposable != null) {
             disposable!!.dispose()
+            if (mainView != null)
+                mainView.hideProgressbar()
         }
     }
 
@@ -29,27 +34,33 @@ context: Context
         createHeaders: HashMap<String, String?>,
         requestDatFromServer: Boolean
     ) {
-        if(!requestDatFromServer){
+        if (!requestDatFromServer) {
             mainView.showProgressbar()
         }
         if (mainView.checkInternet()) {
-            disposable = ApiClient.instance.getNearByUser(input,createHeaders)
+            disposable = ApiClient.instance.getNearByUserv2(input, createHeaders)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response ->
+                .subscribe({ response: Response<NearByV2Response> ->
                     mainView.hideProgressbar()
                     when (response.code()) {
                         200 -> {
-                            val responseData: SearchFriendResponse? = response.body()
-                            if (responseData!!.data.isNotEmpty()) {
-                                if(requestDatFromServer){
-                                    mainView.onOnlineFriendInfiniteSuccess(responseData)
-                                }else{
-                                    mainView.onOnlineFriendSuccess(responseData)
+                            val responseData: NearByV2Response? = response.body()
+                            if (responseData!!.data.nearestFreind.isNotEmpty()) {
+                                if (requestDatFromServer) {
+                                    mainView.onOnlineFriendInfiniteSuccess(responseData.data.nearestFreind)
+                                } else {
+                                    mainView.onOnlineFriendSuccess(responseData.data.nearestFreind)
                                 }
                             } else {
                                 mainView.onOnlineFriendFailure(responseData.message)
                             }
+                        }
+                        404 -> {
+                            Utility.showLogoutPopup(
+                                context!!,
+                                "your Session has been expired,please logout"
+                            )
                         }
                     }
                 }, { error ->

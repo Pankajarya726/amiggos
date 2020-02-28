@@ -6,8 +6,8 @@ import android.net.Uri
 import androidx.core.app.JobIntentService
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
 import com.tekzee.mallortaxi.network.ApiClient
-import com.tekzee.mallortaxi.util.SharedPreference
-import com.tekzee.mallortaxi.util.Utility
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

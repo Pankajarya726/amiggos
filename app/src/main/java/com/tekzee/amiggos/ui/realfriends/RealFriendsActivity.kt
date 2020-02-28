@@ -13,7 +13,7 @@ import com.tekzee.amiggos.databinding.ActivityRealfriendsBinding
 import com.tekzee.amiggos.ui.realfriends.invitations.Invitations
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.RealFriend
 import com.tekzee.amiggos.base.BaseActivity
-import com.tekzee.mallortaxi.util.SharedPreference
+import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import kotlinx.android.synthetic.main.activity_realfriends.*
 

@@ -23,7 +23,7 @@ import com.tekzee.amiggos.ui.venuedetails.fragment.adapter.DataAdapter
 import com.tekzee.amiggos.ui.venuedetails.imageslider.ImageSliderActivity
 import com.tekzee.amiggos.ui.videoplayer.MyPlayerActivity
 import com.tekzee.mallortaxi.base.BaseFragment
-import com.tekzee.mallortaxi.util.SharedPreference
+import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 

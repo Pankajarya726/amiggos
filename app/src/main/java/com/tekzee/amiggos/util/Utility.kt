@@ -1,11 +1,16 @@
-package com.tekzee.mallortaxi.util
+package com.tekzee.amiggos.util
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.util.Base64
+import androidx.core.app.ActivityCompat.finishAffinity
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.google.firebase.auth.FirebaseAuth
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.base.model.LanguageData
+import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
+import com.tekzee.amiggos.ui.splash.SplashActivity
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import org.json.JSONArray
 import java.security.MessageDigest
@@ -123,13 +128,21 @@ class Utility {
 //            return json
 //        }
 
-        fun showLogoutPopup(context: Context,languageData: LanguageData,message: String) {
+        fun showLogoutPopup(context: Context,message: String) {
 
+            val sharedPreference = SharedPreference(context)
+            val languageData = sharedPreference.getLanguageData(ConstantLib.LANGUAGE_DATA)
             SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
                 .setTitleText(message)
-                .setConfirmText(languageData.klOk)
+                .setConfirmText(languageData!!.klOk)
                 .setConfirmClickListener { sDialog ->
                     sDialog.dismissWithAnimation()
+                    FirebaseAuth.getInstance().signOut()
+                    sharedPreference.clearSharedPreference()
+                    val intent = Intent(context, MainSplashActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent)
                 }
                 .show()
         }

@@ -18,8 +18,8 @@ import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.interfaces.PastPart
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyData
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
 import com.tekzee.mallortaxi.base.BaseFragment
-import com.tekzee.mallortaxi.util.SharedPreference
-import com.tekzee.mallortaxi.util.Utility
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 class UpcommingPartyFragment: BaseFragment(), UpcommingPartyPresenter.UpcomingPartyMainView {

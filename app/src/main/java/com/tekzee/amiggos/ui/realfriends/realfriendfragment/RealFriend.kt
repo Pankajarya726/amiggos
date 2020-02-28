@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,12 +17,12 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.RealFriendFragmentBinding
 import com.tekzee.amiggos.ui.friendprofile.FriendProfile
 import com.tekzee.amiggos.ui.onlinefriends.adapter.OnlineFriendAdapter
+import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.ui.realfriends.adapter.RealFriendAdapter
-import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendData
-import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendResponse
+import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendV2Response
 import com.tekzee.mallortaxi.base.BaseFragment
-import com.tekzee.mallortaxi.util.SharedPreference
-import com.tekzee.mallortaxi.util.Utility
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -32,17 +33,18 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
 
 
 
-    private val mLoadingData = RealFriendData(loadingStatus = true)
+    private val mLoadingData = RealFriendV2Response.Data.RealFreind(loadingStatus = true)
     lateinit var binding: RealFriendFragmentBinding
     private var myView: View? = null
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
     private var realFriendPresenterImplementation: RealFriendPresenterImplementation? = null
     private var realFriendPageNo = 0
-    private var mydataList = ArrayList<RealFriendData>()
+    private var mydataList = ArrayList<RealFriendV2Response.Data.RealFreind>()
     private var adapter: RealFriendAdapter? = null
-
     private lateinit var onlineFriendRecyclerview: RecyclerView
+
+
 
     @SuppressLint("CheckResult")
     override fun onCreateView(
@@ -56,10 +58,7 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         realFriendPresenterImplementation = RealFriendPresenterImplementation(this,activity!!)
         onlineFriendRecyclerview = myView!!.findViewById(R.id.real_friend_fragment)
-
-
         setupRecyclerRealFriend()
-        callRealFriendApi(false, "")
 
         RxTextView.textChanges(binding.edtSearch) .filter { it.length > 2 }.debounce(500, TimeUnit.MILLISECONDS).subscribeOn(
             Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
@@ -74,6 +73,11 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
 
         return myView
 
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        callRealFriendApi(false, "")
     }
 
     private fun callRealFriendApi(requestDatFromServer: Boolean, searchvalue: String) {
@@ -93,13 +97,13 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
 
     override fun validateError(message: String) {
 
-
+        Toast.makeText(activity,message,Toast.LENGTH_LONG).show()
     }
 
 
-    override fun onRealFriendSuccess(responseData: RealFriendResponse?) {
+    override fun onRealFriendSuccess(responseData: List<RealFriendV2Response.Data.RealFreind>) {
         realFriendPageNo++
-        mydataList.addAll(responseData!!.data as ArrayList<RealFriendData>)
+        mydataList.addAll(responseData)
         adapter!!.notifyDataSetChanged()
     }
 
@@ -120,11 +124,11 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
     }
 
 
-    override fun onRealFriendInfiniteSuccess(responseData: RealFriendResponse?) {
+    override fun onRealFriendInfiniteSuccess(responseData: List<RealFriendV2Response.Data.RealFreind>) {
         realFriendPageNo++
         adapter?.setLoadingStatus(true)
         mydataList.removeAt(mydataList.size - 1)
-        mydataList.addAll(responseData!!.data)
+        mydataList.addAll(responseData)
         adapter?.notifyDataSetChanged()
     }
 
@@ -148,11 +152,27 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
 
 
     override fun itemClickCallback(position: Int) {
-        val intent = Intent(activity, FriendProfile::class.java)
-        intent.putExtra(ConstantLib.FRIEND_ID,mydataList[position].userid.toString())
-        intent.putExtra("from","RealFriend")
-        intent.putExtra(ConstantLib.OURSTORYID,mydataList[position].isRelateOurMemory.ourStoryId.toString())
+//        val intent = Intent(activity, FriendProfile::class.java)
+//        intent.putExtra(ConstantLib.FRIEND_ID,mydataList[position].userid.toString())
+//        intent.putExtra("from","RealFriend")
+//        //intent.putExtra(ConstantLib.OURSTORYID,mydataList[position].isRelateOurMemory.ourStoryId.toString())
+//        startActivity(intent)
+
+
+        val intent = Intent(activity, AProfileDetails::class.java)
+        intent.putExtra(ConstantLib.FRIEND_ID, mydataList[position].userid.toString())
+        intent.putExtra(ConstantLib.PROFILE_IMAGE, mydataList[position].profile)
+        intent.putExtra(ConstantLib.NAME, mydataList[position].name)
+        intent.putExtra(ConstantLib.ADDRESS, mydataList[position].address)
+        intent.putExtra(ConstantLib.REAL_FREIND_COUNT, mydataList[position].real_freind_count)
+        intent.putExtra("from", "RealFriend")
         startActivity(intent)
+    }
+
+
+    override fun onStop() {
+        super.onStop()
+        realFriendPresenterImplementation!!.onStop()
     }
 
 }

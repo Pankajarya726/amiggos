@@ -17,8 +17,8 @@ import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.enums.Actions
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.mallortaxi.network.ApiClient
-import com.tekzee.mallortaxi.util.SharedPreference
-import com.tekzee.mallortaxi.util.Utility
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import io.nlopez.smartlocation.SmartLocation
 import io.reactivex.android.schedulers.AndroidSchedulers

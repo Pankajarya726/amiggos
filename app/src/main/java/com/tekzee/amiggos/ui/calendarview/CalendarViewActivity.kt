@@ -14,7 +14,7 @@ import com.tekzee.amiggos.databinding.ActivityCalendarBinding
 import com.tekzee.amiggos.ui.choosepackage.ChoosePackageActivity
 import com.tekzee.amiggos.ui.chooseweek.model.ChooseWeekResponse
 import com.tekzee.amiggos.base.BaseActivity
-import com.tekzee.mallortaxi.util.SharedPreference
+import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import java.util.*
 import kotlin.collections.ArrayList

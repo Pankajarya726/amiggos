@@ -1,4 +1,4 @@
-package com.tekzee.mallortaxi.util
+package com.tekzee.amiggos.util
 
 import android.annotation.SuppressLint
 import android.content.Context

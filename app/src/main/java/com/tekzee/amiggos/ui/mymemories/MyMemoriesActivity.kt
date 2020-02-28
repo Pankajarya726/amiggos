@@ -14,7 +14,7 @@ import com.tekzee.amiggos.databinding.ActivityMyMemoriesBinding
 import com.tekzee.amiggos.ui.mymemories.fragment.memories.Memories
 import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.OurMemories
 import com.tekzee.amiggos.base.BaseActivity
-import com.tekzee.mallortaxi.util.SharedPreference
+import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import kotlinx.android.synthetic.main.activity_realfriends.*
 

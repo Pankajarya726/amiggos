@@ -9,8 +9,7 @@ import com.bumptech.glide.Glide
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.turningup.interfaces.TurningUpClicked
 import com.tekzee.amiggos.ui.turningup.model.TurningUpData
-import com.tekzee.mallortaxi.util.SharedPreference
-import kotlinx.android.synthetic.main.single_list_language.view.*
+import com.tekzee.amiggos.util.SharedPreference
 import kotlinx.android.synthetic.main.single_list_language.view.mainlayout
 import kotlinx.android.synthetic.main.single_list_language.view.txt_name
 import kotlinx.android.synthetic.main.single_turning_up.view.*

@@ -16,8 +16,8 @@ import com.tekzee.amiggos.ui.turningup.interfaces.TurningUpClicked
 import com.tekzee.amiggos.ui.turningup.model.TurningUpData
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
 import com.tekzee.amiggos.base.BaseActivity
-import com.tekzee.mallortaxi.util.SharedPreference
-import com.tekzee.mallortaxi.util.Utility
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 class TurningUpActivity : BaseActivity(), TurningupPresenter.TurningUpMainView {
@@ -76,7 +76,7 @@ class TurningUpActivity : BaseActivity(), TurningupPresenter.TurningUpMainView {
     private fun callTurningUpApi() {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
-        turningUpImplementation!!.callTurningUpApi(input,Utility.createHeaders(sharedPreferences))
+        turningUpImplementation!!.callTurningUpApi(input, Utility.createHeaders(sharedPreferences))
     }
 
     override fun validateError(message: String) {

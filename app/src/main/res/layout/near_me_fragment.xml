@@ -7,10 +7,10 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/near_me_heading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp"
-        android:text="Near Me"
         android:textColor="@android:color/black"
         android:textSize="18dp"
         android:textStyle="bold" />
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             app:tabBackground="@android:color/white"
             app:tabGravity="fill"
-            app:tabMode="scrollable"
+            app:tabMode="fixed"
             app:tabIndicatorColor="@android:color/black"
             app:tabSelectedTextColor="@color/black"
             app:tabTextAppearance="@style/CustomTextAppearanceTab"

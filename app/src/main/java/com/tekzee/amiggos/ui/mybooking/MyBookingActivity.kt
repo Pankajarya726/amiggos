@@ -2,9 +2,10 @@ package com.tekzee.amiggos.ui.mybooking
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.JsonObject
@@ -14,15 +15,15 @@ import com.tekzee.amiggos.databinding.BookingActivityBinding
 import com.tekzee.amiggos.ui.mybooking.adapter.MyBookingAdapter
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingData
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingResponse
-import com.tekzee.amiggos.base.BaseActivity
-import com.tekzee.mallortaxi.util.SharedPreference
-import com.tekzee.mallortaxi.util.Utility
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.tekzee.amiggos.ui.bookingqrcode.GetBookingQrCodeActivity
+import com.tekzee.mallortaxi.base.BaseFragment
 
 
-class MyBookingActivity : BaseActivity(), MyBookingPresenter.MyBookingMainView {
+class MyBookingActivity : BaseFragment(), MyBookingPresenter.MyBookingMainView {
 
     private var languageData: LanguageData? = null
     private var sharedPreference: SharedPreference? = null
@@ -32,38 +33,32 @@ class MyBookingActivity : BaseActivity(), MyBookingPresenter.MyBookingMainView {
     private var myBookingPresenterImplementation: MyBookingPresenterImplementation? = null
     private var data = ArrayList<MyBookingData>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.booking_activity)
-        myBookingPresenterImplementation = MyBookingPresenterImplementation(this, this)
-        sharedPreference = SharedPreference(this)
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+
+        binding =DataBindingUtil.inflate(
+            inflater, R.layout.booking_activity, container, false);
+        myBookingPresenterImplementation = MyBookingPresenterImplementation(this, activity!!)
+        sharedPreference = SharedPreference(activity!!)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        setupToolBar()
         callMyBookingApi()
+
         setupRecyclerView()
+        return binding.root
     }
 
-    private fun setupToolBar() {
-        val toolbar: Toolbar = binding.toolbar
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-        binding.title.text = languageData!!.klMyBooking
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        if (item.itemId == android.R.id.home) {
-            onBackPressed()
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
 
     private fun setupRecyclerView() {
         binding.bookingRecyclerview.setHasFixedSize(true)
-        val layoutManager = LinearLayoutManager(this)
+        val layoutManager = LinearLayoutManager(activity)
         binding.bookingRecyclerview.layoutManager = layoutManager
         val dividerItemDecoration = DividerItemDecoration(
             binding.bookingRecyclerview.context,
@@ -72,7 +67,7 @@ class MyBookingActivity : BaseActivity(), MyBookingPresenter.MyBookingMainView {
         binding.bookingRecyclerview.addItemDecoration(dividerItemDecoration)
         adapter = MyBookingAdapter(data,object : BookingClicked {
             override fun onBookingClicked(position: Int, selectedData: MyBookingData) {
-                val intent = Intent(applicationContext, GetBookingQrCodeActivity::class.java)
+                val intent = Intent(activity, GetBookingQrCodeActivity::class.java)
                 intent.putExtra(ConstantLib.BOOKING_ID,selectedData.id.toString())
                 intent.putExtra(ConstantLib.FROM,"Booking")
                 startActivity(intent)
@@ -96,7 +91,7 @@ class MyBookingActivity : BaseActivity(), MyBookingPresenter.MyBookingMainView {
     }
 
     override fun validateError(message: String) {
-        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
 
@@ -105,6 +100,11 @@ class MyBookingActivity : BaseActivity(), MyBookingPresenter.MyBookingMainView {
         adapter!!.notifyDataSetChanged()
         data.addAll(responseData!!.data)
         adapter!!.notifyDataSetChanged()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        myBookingPresenterImplementation!!.onStop()
     }
 
 }

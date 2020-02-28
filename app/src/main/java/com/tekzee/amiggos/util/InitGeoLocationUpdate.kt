@@ -1,4 +1,4 @@
-package com.tekzee.amiggos.ui.invitefriend
+package com.tekzee.amiggos.util
 
 
 import android.Manifest
@@ -14,7 +14,6 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
-import com.tekzee.mallortaxi.util.SimpleCallback
 
 class InitGeoLocationUpdate {
     companion object {
@@ -23,7 +22,7 @@ class InitGeoLocationUpdate {
         private lateinit var locationLatLngCallback : SimpleCallback<LatLng>;
 
         fun locationInit(context: Context, locationLatLngCallback: SimpleCallback<LatLng>) {
-            this.locationLatLngCallback = locationLatLngCallback
+            Companion.locationLatLngCallback = locationLatLngCallback
             createLocationRequest(context, getLocationCallBack());
         }
 
@@ -97,7 +96,8 @@ class InitGeoLocationUpdate {
                         // Show the dialog by calling startResolutionForResult(),
                         // and check the result in onActivityResult().
                         it.startResolutionForResult(context as Activity,
-                            REQUEST_CHECK_SETTINGS)
+                            REQUEST_CHECK_SETTINGS
+                        )
                     } catch (sendEx: IntentSender.SendIntentException) {
                         // Ignore the error.
                     }
