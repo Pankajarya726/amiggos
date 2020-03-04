@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:fontFamily="@font/opensans_bold"
         android:id="@+id/memories_heading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,7 +29,7 @@
             android:layout_height="wrap_content"
             app:tabBackground="@android:color/white"
             app:tabGravity="fill"
-            app:tabMode="scrollable"
+            app:tabMode="fixed"
             app:tabIndicatorColor="@android:color/black"
             app:tabSelectedTextColor="@color/black"
             app:tabTextAppearance="@style/CustomTextAppearanceTab"

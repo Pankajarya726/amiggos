@@ -5,7 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.core.app.JobIntentService
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
-import com.tekzee.mallortaxi.network.ApiClient
+import com.tekzee.amiggos.network.ApiClient
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib

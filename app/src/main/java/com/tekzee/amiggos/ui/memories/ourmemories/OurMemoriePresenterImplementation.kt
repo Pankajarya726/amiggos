@@ -3,14 +3,11 @@ package com.tekzee.amiggos.ui.memories.ourmemories
 import android.content.Context
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
-import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
-import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
-import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxi.network.ApiClient
+import com.tekzee.amiggos.network.ApiClient
+import com.tekzee.amiggos.ui.memories.ourmemories.model.AMyMemorieResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Response
 
 class OurMemoriePresenterImplementation(
     private var mainView: OurMemoriePresenter.OurMemoriePresenterMainView,
@@ -31,83 +28,39 @@ class OurMemoriePresenterImplementation(
     }
 
 
-    override fun doGetMyStories(
+    override fun callGetOurMemories(
         input: JsonObject,
-        createHeaders: HashMap<String, String?>,
-        requestDatFromServer: Boolean
-    ) {
-//        mainView.showProgressbar()
+        createHeaders: HashMap<String, String?>
+     ) {
         if (mainView.checkInternet()) {
-            disposable = ApiClient.instance.doGetMyStories(input,createHeaders)
+            disposable = ApiClient.instance.doCallGetOurMemories(input,createHeaders)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
-                    mainView.hideProgressbar()
+                   // mainView.hideProgressbar()
                     when (response.code()) {
                         200 -> {
-                            val responseData: GetMyStoriesResponse? = response.body()
+                            val responseData: AMyMemorieResponse? = response.body()
                             if (responseData!!.status) {
-                                if(requestDatFromServer){
-                                    mainView.onMyStoriesInfiniteSuccess(responseData)
+                                if(responseData.data.myStoryList.isNotEmpty()){
+                                    mainView.onOurMemorieSuccess(responseData.data.myStoryList)
                                 }else{
-                                    mainView.onMyStoriesSuccess(responseData)
+                                    mainView.onOurMemorieFailure(responseData.message)
                                 }
+
                             } else {
-                                mainView.onMyStoriesFailure(responseData.message)
+                                mainView.onOurMemorieFailure(responseData.message)
                             }
                         }
                     }
                 }, { error ->
                     //                    mainView.hideProgressbar()
-                    mainView.onMyStoriesFailure(error.message.toString())
+                    mainView.onOurMemorieFailure(error.message.toString())
                 })
         } else {
-//            mainView.hideProgressbar()
+            //mainView.hideProgressbar()
             mainView.validateError(context!!.getString(R.string.check_internet))
         }
     }
 
-    override fun getNearByUser(
-        input: JsonObject,
-        createHeaders: HashMap<String, String?>,
-        requestDatFromServer: Boolean
-    ) {
-        if (!requestDatFromServer) {
-            mainView.showProgressbar()
-        }
-        if (mainView.checkInternet()) {
-            disposable = ApiClient.instance.getNearByUserv2(input, createHeaders)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: Response<NearByV2Response> ->
-                    mainView.hideProgressbar()
-                    when (response.code()) {
-                        200 -> {
-                            val responseData: NearByV2Response? = response.body()
-                            if (responseData!!.data.nearestFreind.isNotEmpty()) {
-                                if (requestDatFromServer) {
-                                    mainView.onOnlineFriendInfiniteSuccess(responseData.data.nearestFreind)
-                                } else {
-                                    mainView.onOnlineFriendSuccess(responseData.data.nearestFreind)
-                                }
-                            } else {
-                                mainView.onOnlineFriendFailure(responseData.message)
-                            }
-                        }
-                        404 -> {
-                            Utility.showLogoutPopup(
-                                context!!,
-                                "your Session has been expired,please logout"
-                            )
-                        }
-                    }
-                }, { error ->
-                    mainView.hideProgressbar()
-                    mainView.onOnlineFriendFailure(error.message.toString())
-                })
-        } else {
-            mainView.hideProgressbar()
-            mainView.validateError(context!!.getString(R.string.check_internet))
-        }
-    }
 }

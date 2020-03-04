@@ -17,6 +17,8 @@ import com.tekzee.amiggos.ui.chooselanguage.model.Language
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
 import com.tekzee.amiggos.ui.login.LoginActivity
 import com.tekzee.amiggos.base.BaseActivity
+import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
+import com.tekzee.amiggos.ui.splash.SplashActivity
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
@@ -125,7 +127,7 @@ class ChooseLanguageActivity: BaseActivity(),ChooseLanguagePresenter.ChooseLangu
 
     override fun onLanguageConstantResponse(response: JsonObject) {
         sharedPreferences!!.save(ConstantLib.LANGUAGE_DATA,response.toString())
-        val intent = Intent(this,LoginActivity::class.java)
+        val intent = Intent(this, MainSplashActivity::class.java)
         startActivity(intent)
         onBackPressed()
     }

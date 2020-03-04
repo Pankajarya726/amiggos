@@ -4,8 +4,8 @@ import android.content.Context
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
+import com.tekzee.amiggos.network.ApiClient
 import com.tekzee.amiggos.ui.friendlist.model.FriendListResponse
-import com.tekzee.mallortaxi.network.ApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers

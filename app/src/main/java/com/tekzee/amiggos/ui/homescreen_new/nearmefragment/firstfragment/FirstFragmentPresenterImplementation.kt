@@ -5,7 +5,7 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxi.network.ApiClient
+import com.tekzee.amiggos.network.ApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -32,9 +32,10 @@ class FirstFragmentPresenterImplementation(
     override fun getNearByUser(
         input: JsonObject,
         createHeaders: HashMap<String, String?>,
-        requestDatFromServer: Boolean
+        requestDatFromServer: Boolean,
+        fragmentVisible: Boolean
     ) {
-        if (!requestDatFromServer) {
+        if (!requestDatFromServer && fragmentVisible) {
             mainView.showProgressbar()
         }
         if (mainView.checkInternet()) {

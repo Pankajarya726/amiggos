@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
+import com.kcode.bottomlib.BottomDialog
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
@@ -24,6 +25,7 @@ class AProfileDetails : BaseActivity(){
 
     private var binding: ProfileDetailsBinding? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.profile_details)
@@ -37,6 +39,79 @@ class AProfileDetails : BaseActivity(){
         binding!!.imgBack.setOnClickListener {
             onBackPressed()
         }
+
+
+//        binding!!.imageoptions.setOnClickListener {
+//
+//            if (data!!.data[0].isRelate == 1 || data!!.data[0].isRelate == 2 || data!!.data[0].isRelate == 3) {
+//                val dialog: BottomDialog = BottomDialog.newInstance(
+//                    "",
+//                    arrayOf(languageData!!.klBlock, languageData!!.lblBtnReport)
+//                )
+//                dialog.show(supportFragmentManager, "dialog")
+//                dialog.setListener { position: Int ->
+//                    when (position) {
+//                        0 -> {
+//                            blockConfirmation()
+//                        }
+//                        1 -> {
+//                            callReport()
+//                        }
+//
+//                    }
+//                }
+//            } else if (data!!.data[0].isRelate == 4) {
+//                val dialog: BottomDialog = BottomDialog.newInstance(
+//                    "",
+//                    arrayOf(
+//                        languageData!!.klUnfriend,
+//                        languageData!!.klBlock,
+//                        languageData!!.lblBtnReport
+//                    )
+//                )
+//                dialog.show(supportFragmentManager, "dialog")
+//                dialog.setListener { position: Int ->
+//                    when (position) {
+//                        0 -> {
+//                            unFriendConfirmation()
+//                        }
+//                        1 -> {
+//                            blockConfirmation()
+//                        }
+//                        2 -> {
+//                            callReport()
+//                        }
+//
+//                    }
+//                }
+//            } else if (data!!.data[0].isRelate == 5) {
+//                val dialog: BottomDialog = BottomDialog.newInstance(
+//                    "",
+//                    arrayOf(
+//                        languageData!!.klUnfriend,
+//                        languageData!!.klUnblocked,
+//                        languageData!!.lblBtnReport
+//                    )
+//                )
+//                dialog.show(supportFragmentManager, "dialog")
+//                dialog.setListener { position: Int ->
+//                    when (position) {
+//                        0 -> {
+//                            unFriendConfirmation()
+//                        }
+//                        1 -> {
+//                            callUnBlock()
+//                        }
+//                        2 -> {
+//                            callReport()
+//                        }
+//
+//                    }
+//                }
+//            }
+//
+//        }
+
     }
 
 

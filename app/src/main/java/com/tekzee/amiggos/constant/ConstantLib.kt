@@ -58,7 +58,7 @@ object ConstantLib {
     const val LANGUAGE_CODE= "language_code"
     const val LANGUAGE_NAME= "language_name"
     const val LANGUAGE_DATA= "language_data"
-    const val DEVICETYPE= "ANDROID"
+    const val DEVICETYPE= "2"
     const val PAGEURL= "pageurl"
     const val ISAGREE= "isagree"
     const val OPENMIDED_CHECKBOX= "openmided_checkbox"

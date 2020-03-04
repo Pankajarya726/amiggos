@@ -11,7 +11,8 @@ class RealFriendPresenter {
         fun doCallRealFriendApi(
             input: JsonObject,
             createHeaders: HashMap<String, String?>,
-            requestDatFromServer: Boolean
+            requestDatFromServer: Boolean,
+            fragmentVisible: Boolean
         )
     }
 

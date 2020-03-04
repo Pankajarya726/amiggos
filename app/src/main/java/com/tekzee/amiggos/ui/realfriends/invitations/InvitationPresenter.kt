@@ -11,7 +11,8 @@ class InvitationPresenter {
         fun onStop()
         fun doCallInvitationApi(
             input: JsonObject,
-            createHeaders: HashMap<String, String?>
+            createHeaders: HashMap<String, String?>,
+            fragmentVisible: Boolean
         )
 
         fun doAcceptInvitationApi(

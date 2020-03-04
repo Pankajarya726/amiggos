@@ -5,7 +5,7 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponseV2
-import com.tekzee.mallortaxi.network.ApiClient
+import com.tekzee.amiggos.network.ApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -22,18 +22,19 @@ class InvitationPresenterImplementation(private var mainView: InvitationPresente
     override fun onStop() {
         if (disposable != null) {
             disposable!!.dispose()
-            if(mainView!=null)
-                mainView.hideProgressbar()
+            mainView.hideProgressbar()
         }
     }
 
     override fun doCallInvitationApi(
         input: JsonObject,
-        createHeaders: HashMap<String, String?>
+        createHeaders: HashMap<String, String?>,
+        fragmentVisible: Boolean
     ) {
 
-
+        if(fragmentVisible)
         mainView.showProgressbar()
+
         if (mainView.checkInternet()) {
             disposable = ApiClient.instance.doCallInvitationApiV2(input, createHeaders)
                 .subscribeOn(Schedulers.io())

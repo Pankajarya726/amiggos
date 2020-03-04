@@ -6,7 +6,7 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.ui.notification.model.NotificationResponse
 import com.tekzee.amiggos.ui.notification.model.StorieResponse
-import com.tekzee.mallortaxi.network.ApiClient
+import com.tekzee.amiggos.network.ApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers

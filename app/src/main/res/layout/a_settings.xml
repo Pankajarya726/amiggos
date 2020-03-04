@@ -49,24 +49,26 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:fontFamily="@font/opensans_bold"
                     android:id="@+id/txt_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="15dp"
                     android:padding="2dp"
-                    android:text="John Smith"
+
                     android:textColor="@android:color/black"
                     android:textSize="18dp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:fontFamily="@font/opensans_regular"
                     android:id="@+id/address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:padding="2dp"
-                    android:text="Columbs,Ohio" />
+                />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -75,6 +77,8 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:fontFamily="@font/opensans_bold"
+                        android:id="@+id/txt_age"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="2dp"
@@ -83,14 +87,18 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:textColor="@android:color/black"
                         android:id="@+id/age"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="2dp"
-                        android:text="21" />
+                         />
                 </LinearLayout>
 
                 <TextView
+                    android:fontFamily="@font/opensans_semibold"
+                    android:textColor="@android:color/black"
+                    android:id="@+id/viewprofile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
@@ -141,6 +149,8 @@
 
 
                 <TextView
+                    android:fontFamily="@font/opensans_regular"
+                    android:id="@+id/txt_lifestyle_preference"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="12dp"
@@ -156,6 +166,8 @@
                     android:background="@color/grey_underline" />
 
                 <TextView
+                    android:fontFamily="@font/opensans_regular"
+                    android:id="@+id/edit_profile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="12dp"
@@ -172,6 +184,8 @@
 
 
                 <TextView
+                    android:fontFamily="@font/opensans_regular"
+                    android:id="@+id/payment_method"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="12dp"
@@ -189,6 +203,7 @@
 
 
                 <TextView
+                    android:fontFamily="@font/opensans_regular"
                     android:id="@+id/settings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -207,6 +222,8 @@
 
 
                 <TextView
+                    android:fontFamily="@font/opensans_regular"
+                    android:id="@+id/blockeduser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="12dp"
@@ -224,6 +241,8 @@
 
 
                 <TextView
+                    android:fontFamily="@font/opensans_regular"
+                    android:id="@+id/change_langauge"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="12dp"
@@ -241,6 +260,8 @@
 
 
                 <TextView
+                    android:fontFamily="@font/opensans_regular"
+                    android:id="@+id/my_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="12dp"
@@ -259,6 +280,7 @@
 
 
                 <TextView
+                    android:fontFamily="@font/opensans_regular"
                     android:id="@+id/n_logout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

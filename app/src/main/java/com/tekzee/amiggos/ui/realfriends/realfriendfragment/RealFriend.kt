@@ -15,7 +15,6 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.RealFriendFragmentBinding
-import com.tekzee.amiggos.ui.friendprofile.FriendProfile
 import com.tekzee.amiggos.ui.onlinefriends.adapter.OnlineFriendAdapter
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.ui.realfriends.adapter.RealFriendAdapter
@@ -43,7 +42,25 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
     private var mydataList = ArrayList<RealFriendV2Response.Data.RealFreind>()
     private var adapter: RealFriendAdapter? = null
     private lateinit var onlineFriendRecyclerview: RecyclerView
+    private var isFragmentVisible= false
 
+
+    companion object {
+        private val realfriend: RealFriend? = null
+
+
+        fun newInstance(): RealFriend {
+            if(realfriend == null){
+                return RealFriend()
+            }
+            return realfriend
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        isFragmentVisible = true
+    }
 
 
     @SuppressLint("CheckResult")
@@ -64,9 +81,9 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
             Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
             realFriendPageNo = 0
             if(it.isEmpty()){
-                callRealFriendApi(false, "")
+                callRealFriendApi(false, "",isFragmentVisible)
             }else{
-                callRealFriendApi(false, it.toString())
+                callRealFriendApi(false, it.toString(),isFragmentVisible)
             }
         }
 
@@ -77,10 +94,14 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        callRealFriendApi(false, "")
+        callRealFriendApi(false, "", isFragmentVisible)
     }
 
-    private fun callRealFriendApi(requestDatFromServer: Boolean, searchvalue: String) {
+    private fun callRealFriendApi(
+        requestDatFromServer: Boolean,
+        searchvalue: String,
+        fragmentVisible: Boolean
+    ) {
 
 
         val input: JsonObject = JsonObject()
@@ -90,7 +111,8 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
         realFriendPresenterImplementation!!.doCallRealFriendApi(
             input,
             Utility.createHeaders(sharedPreference),
-            requestDatFromServer
+            requestDatFromServer,
+            fragmentVisible
         )
 
     }
@@ -147,7 +169,7 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
     override fun onLoadMoreData() {
         mydataList.add(mLoadingData)
         adapter?.notifyDataSetChanged()
-        callRealFriendApi(true, "")
+        callRealFriendApi(true, "", isFragmentVisible)
     }
 
 

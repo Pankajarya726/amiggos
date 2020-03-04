@@ -9,7 +9,7 @@ data class StoriesData(
     @SerializedName("api_url")
     val apiUrl: String = "",
     @SerializedName("content")
-    val content: List<Content> = listOf(),
+    val content: ArrayList<Content> = ArrayList<Content>(),
     @SerializedName("imageUrl")
     val imageUrl: String = "",
     @SerializedName("name")

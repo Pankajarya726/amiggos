@@ -83,7 +83,7 @@ class AFavoriteVenues: BaseFragment(), AFavoriteVenuePresenter.AFavoriteVenuePre
 
 
         val input: JsonObject = JsonObject()
-        input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
+        input.addProperty("userid", activity!!.intent.getStringExtra(ConstantLib.FRIEND_ID))
 //        input.addProperty("name", searchvalue)
 //        input.addProperty("page_no", realFriendPageNo)
         realFriendPresenterImplementation!!.doCallFavoriteVenueApi(

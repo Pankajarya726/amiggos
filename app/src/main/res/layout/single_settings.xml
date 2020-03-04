@@ -6,26 +6,24 @@
     android:layout_height="wrap_content">
 
 
-    <com.an.customfontview.CustomTextView
+    <TextView
+        android:fontFamily="@font/opensans_regular"
         android:id="@+id/s_txt_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="8dp"
-        android:textColor="@android:color/black"
-        android:layout_marginRight="8dp"
         android:layout_marginBottom="5dp"
         android:text="Testing"
-        android:textSize="15dp"
+        android:textColor="@android:color/black"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/s_switch"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:textFontPath="font/eras.ttf">
+        app:layout_constraintTop_toTopOf="parent">
 
-    </com.an.customfontview.CustomTextView>
+    </TextView>
 
     <Switch
         android:id="@+id/s_switch"
@@ -39,5 +37,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="5dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/s_txt_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

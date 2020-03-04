@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
-import com.tekzee.amiggos.databinding.SettingsActivityBinding
 import com.tekzee.amiggos.ui.pages.WebViewActivity
 import com.tekzee.amiggos.ui.settings.adapter.SettingsAdapter
 import com.tekzee.amiggos.ui.settings.interfaces.SettingsInterface
@@ -18,6 +17,7 @@ import com.tekzee.amiggos.ui.settings.model.SettingsData
 import com.tekzee.amiggos.ui.settings.model.SettingsResponse
 import com.tekzee.amiggos.ui.settings.model.UpdateSettingsResponse
 import com.tekzee.amiggos.base.BaseActivity
+import com.tekzee.amiggos.databinding.SettingsActivityBinding
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
@@ -48,7 +48,8 @@ class SettingsActivity: BaseActivity(), SettingsPresenter.SettingsMainView {
         supportActionBar?.setDisplayShowTitleEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        binding.title.text = languageData!!.klSetting
+        binding.notificationtitle.text = languageData!!.PNOTIFICATIONANDSETTINS
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -10,7 +10,6 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
-import com.tekzee.amiggos.ui.homescreen_new.homefragment.HomeFragment
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.adapter.ViewPagerAdapter
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.FirstFragment
 import com.tekzee.amiggos.ui.realfriends.invitations.Invitations
@@ -23,12 +22,20 @@ import com.tekzee.mallortaxiclient.constant.ConstantLib
 class NearMeFragment : BaseFragment() {
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
-
     companion object {
 
+        private val nearmefragment: NearMeFragment? = null
 
-        @JvmStatic
-        fun newInstance() = NearMeFragment()
+        fun newInstance(): NearMeFragment{
+            if(nearmefragment == null){
+                return NearMeFragment()
+            }
+            return nearmefragment
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
     }
 
 
@@ -57,9 +64,9 @@ class NearMeFragment : BaseFragment() {
     ) {
         val fragmentManager = getChildFragmentManager()
         val adapter = ViewPagerAdapter(fragmentManager)
-        adapter.addFragment(FirstFragment(), languageData!!.PNearme)
-        adapter.addFragment(RealFriend(), languageData!!.PRealFriends)
-        adapter.addFragment(Invitations(), languageData!!.PInvitaion)
+        adapter.addFragment(FirstFragment.newInstance(), languageData!!.PNearme)
+        adapter.addFragment(RealFriend.newInstance(), languageData!!.PRealFriends)
+        adapter.addFragment(Invitations.newInstance(), languageData!!.PInvitaion)
         viewPager.adapter = adapter
         tabs.setupWithViewPager(viewPager)
     }

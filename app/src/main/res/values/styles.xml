@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -41,5 +41,12 @@
         <item name="textAllCaps">false</item>
         <item name="android:textAllCaps">false</item>
 
+    </style>
+
+
+    <style name="NumberPickerStyle">
+        <item name="android:textSize">18dp</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:colorControlNormal" tools:targetApi="lollipop">@color/black</item>
     </style>
 </resources>

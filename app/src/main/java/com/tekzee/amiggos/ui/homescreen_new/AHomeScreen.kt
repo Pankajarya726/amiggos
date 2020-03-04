@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
@@ -24,7 +25,6 @@ import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
 import com.tekzee.amiggos.ui.memories.AMemoriesFragment
 import com.tekzee.amiggos.ui.notification.NotificationActivity
 import com.tekzee.amiggos.ui.settings_new.ASettings
-import com.tekzee.amiggos.util.OnSwipeTouchListener
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
@@ -36,8 +36,6 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
     private var bottomNavigation: BottomNavigationView? = null
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.a_home_screen)
@@ -98,20 +96,10 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
     @SuppressLint("LongLogTag")
     private fun openFragment(fragment: Fragment, fragmentName: String) {
         Handler().postDelayed({
-            val tag = supportFragmentManager.findFragmentByTag(fragmentName)
-            if(tag == null){
-                val transaction = supportFragmentManager.beginTransaction().apply {
-                    replace(R.id.container, fragment,fragmentName)
-                    addToBackStack(fragmentName)
-                }
-                transaction.commit()
-            }else{
-                val transaction = supportFragmentManager.beginTransaction().apply {
-                    replace(R.id.container, fragment,fragmentName)
-                }
-                transaction.commit()
-                Log.d("Fragment is already in the stack --- >",""+"===="+tag)
+            val transaction = supportFragmentManager.beginTransaction().apply {
+                replace(R.id.container, fragment,fragmentName)
             }
+            transaction.commit()
         }, 200)
     }
 
@@ -179,21 +167,15 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
 
 
     override fun onBackPressed() {
-
-        val count = supportFragmentManager.backStackEntryCount
-        Log.d("Fragment count --- >",""+count)
-        if(count>1){
-            supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            bottomNavigation!!.selectedItemId = R.id.nav_home
-
-            val transaction = supportFragmentManager.beginTransaction().apply {
-                replace(R.id.container, HomeFragment.newInstance(),"1")
-                addToBackStack("1")
-            }
-            transaction.commit()
+        if(bottomNavigation!!.menu.getItem(0).isChecked){
+            onBackPressed()
         }else{
-            super.onBackPressed()
+            bottomNavigation!!.menu.getItem(0).isChecked = true
+            openFragment(HomeFragment.newInstance(),"1")
+
         }
 
     }
+
+
 }

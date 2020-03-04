@@ -66,8 +66,31 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
+
+
+        <activity
+            android:name=".ui.signup.login_new.ALogin"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+
+        <activity
+            android:name=".ui.signup.stepone.StepOne"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".ui.profiledetails.AProfileDetails"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ui.viewandeditprofile.AViewAndEditProfile"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ui.signup.steptwo.StepTwo"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -108,6 +131,11 @@
 
        <activity
             android:name=".ui.friendlist.FriendListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+       <activity
+            android:name=".ui.blockedusers.ABlockedUser"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 

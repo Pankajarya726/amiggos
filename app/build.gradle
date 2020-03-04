@@ -209,5 +209,10 @@ dependencies {
     implementation 'com.github.mohammadatif:Animatoo:master'
 
     implementation 'com.kaopiz:kprogresshud:1.2.0'
+    implementation 'com.github.drawers:SpinnerDatePicker:2.0.1'
 
+    implementation 'com.github.ajithvgiri:search-dialog:v1.3'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
+
+    implementation 'ru.alexbykov:nopaginate:0.9.9'
 }

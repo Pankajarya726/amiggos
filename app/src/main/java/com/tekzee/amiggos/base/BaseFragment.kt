@@ -35,12 +35,15 @@ abstract class BaseFragment : Fragment(),BaseMainView {
     }
 
     override fun hideKeyboard(){
-        val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        var view = activity!!.currentFocus
-        if (view == null) {
-            view = View(activity)
+        if(activity!=null){
+            val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            var view = activity!!.currentFocus
+            if (view == null) {
+                view = View(activity)
+            }
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
+
     }
 
 }

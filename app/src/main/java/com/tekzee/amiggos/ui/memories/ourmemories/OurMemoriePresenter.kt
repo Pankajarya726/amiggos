@@ -1,34 +1,24 @@
 package com.tekzee.amiggos.ui.memories.ourmemories
 
 import com.google.gson.JsonObject
-import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
-import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
+import com.tekzee.amiggos.ui.home.model.StoriesData
 import com.tekzee.mallortaxi.base.BaseMainView
 
 class OurMemoriePresenter{
 
     interface OurMemoriePresenterrMain{
         fun onStop()
-        fun getNearByUser(
-            input: JsonObject,
-            createHeaders: HashMap<String, String?>,
-            requestDatFromServer: Boolean
-        )
 
-        fun doGetMyStories(
+        fun callGetOurMemories(
             input: JsonObject,
-            createHeaders: HashMap<String, String?>,
-            requestDatFromServer: Boolean
+            createHeaders: HashMap<String, String?>
         )
     }
 
     interface OurMemoriePresenterMainView: BaseMainView {
-        fun onMyStoriesInfiniteSuccess(responseData: GetMyStoriesResponse)
-        fun onMyStoriesSuccess(responseData: GetMyStoriesResponse)
-        fun onMyStoriesFailure(message: String)
 
-        fun onOnlineFriendSuccess(responseData: List<NearByV2Response.Data.NearestFreind>)
-        fun onOnlineFriendInfiniteSuccess(responseData: List<NearByV2Response.Data.NearestFreind>)
-        fun onOnlineFriendFailure(responseData: String)
+        fun onOurMemorieSuccess(myStoryList: List<StoriesData>)
+        fun onOurMemorieFailure(message: String)
+
     }
 }

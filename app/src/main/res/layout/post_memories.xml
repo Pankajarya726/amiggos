@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
+        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -45,9 +46,52 @@
         </androidx.appcompat.widget.Toolbar>
 
         <LinearLayout
-            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
             android:orientation="horizontal"
+           >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_edit_profile_heading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="15dp"
+                    android:padding="2dp"
+                    android:text="Memories"
+                    android:textColor="@android:color/black"
+                    android:textSize="25dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_edit_profile_subheading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:padding="2dp"
+                    android:text="Add to my memories or to our memories" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:background="@android:color/black"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
             android:weightSum="2"
             android:layout_height="match_parent">
 
@@ -64,7 +108,7 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/my_memories"/>
+                    android:src="@drawable/my_memories_image"/>
 
                 <com.an.customfontview.CustomTextView
                     android:id="@+id/txt_mymemories"
@@ -92,7 +136,7 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/our_memories"/>
+                    android:src="@drawable/our_memories_image"/>
 
                 <com.an.customfontview.CustomTextView
                     android:layout_margin="8dp"

@@ -34,7 +34,24 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
     private var invitationPresenterImplementation: InvitationPresenterImplementation? = null
     private lateinit var adapter: InvitationAdapter
     private val items: ArrayList<InvitationResponseV2.Data.FreindRequest> = ArrayList()
+    private var isFragmentVisible = false
 
+    companion object {
+        private val invitation: Invitations? = null
+
+
+        fun newInstance(): Invitations {
+            if(invitation == null){
+                return Invitations()
+            }
+            return invitation
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        isFragmentVisible = true
+    }
 
 
     override fun onCreateView(
@@ -113,7 +130,8 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
         input.addProperty("name",searchName)
         invitationPresenterImplementation!!.doCallInvitationApi(
             input,
-            Utility.createHeaders(sharedPreference)
+            Utility.createHeaders(sharedPreference),
+                    isFragmentVisible
         )
     }
 

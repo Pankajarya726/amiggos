@@ -41,28 +41,36 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
     private var firstFragmentPresenterImplementation: FirstFragmentPresenterImplementation? = null
     private var mydataList = ArrayList<NearByV2Response.Data.NearestFreind>()
     private var adapter: FirstFragmentAdapter? = null
+    private var isFragmentVisible = false;
 
     companion object {
+        private val firstFragment: FirstFragment? = null
 
-        fun newInstance(): FirstFragment {
-            return FirstFragment()
+
+        fun newInstance(): FirstFragment{
+            if(firstFragment == null){
+             return FirstFragment()
+            }
+            return firstFragment
         }
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        startLocationUpdate()
     }
 
     override fun onStart() {
         super.onStart()
+        isFragmentVisible = true
     }
 
     override fun onResume() {
         super.onResume()
-        startLocationUpdate()
+
     }
+
 
     private fun startLocationUpdate() {
 
@@ -73,7 +81,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
                 onlineFriendPageNo = 0
                 mydataList.clear()
                 adapter!!.notifyDataSetChanged()
-                callOnlineFriendApi(false, "")
+                callOnlineFriendApi(false, "",isFragmentVisible)
             }
         })
     }
@@ -113,7 +121,11 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
     }
 
 
-    private fun callOnlineFriendApi(requestDatFromServer: Boolean, searchvalue: String) {
+    private fun callOnlineFriendApi(
+        requestDatFromServer: Boolean,
+        searchvalue: String,
+        fragmentVisible: Boolean
+    ) {
         hideKeyboard()
         InitGeoLocationUpdate.stopLocationUpdate(activity!!)
         val input: JsonObject = JsonObject()
@@ -125,7 +137,8 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         firstFragmentPresenterImplementation!!.getNearByUser(
             input,
             Utility.createHeaders(sharedPreference),
-            requestDatFromServer
+            requestDatFromServer,
+            fragmentVisible
         )
 
     }
@@ -176,7 +189,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
                 mydataList.clear()
                 adapter!!.notifyDataSetChanged()
                 searchView!!.searchBarSearchView.clearFocus()
-                callOnlineFriendApi(false, t.toString())
+                callOnlineFriendApi(false, t.toString(), isFragmentVisible)
             })
 
 
@@ -199,7 +212,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
     override fun onLoadMoreData() {
         mydataList.add(mLoadingData)
         adapter?.notifyDataSetChanged()
-        callOnlineFriendApi(true, "")
+        callOnlineFriendApi(true, "", isFragmentVisible)
 
     }
 

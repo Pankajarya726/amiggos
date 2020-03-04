@@ -1,4 +1,4 @@
-package com.tekzee.mallortaxi.network
+package com.tekzee.amiggos.network
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -8,6 +8,8 @@ import com.tekzee.amiggos.BuildConfig
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
+import com.tekzee.amiggos.ui.blockedusers.model.BlockedUserResponse
+import com.tekzee.amiggos.ui.blockedusers.model.UnBlockFriendResponse
 import com.tekzee.amiggos.ui.bookingqrcode.model.BookinQrCodeResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
 import com.tekzee.amiggos.ui.choosepackage.model.PackageBookResponse
@@ -24,34 +26,43 @@ import com.tekzee.amiggos.ui.home.model.NearbyMeCountResponse
 import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeApiResponse
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
+import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailResponse
+import com.tekzee.amiggos.ui.login.model.LoginResponse
+import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
+import com.tekzee.amiggos.ui.memories.mymemories.model.OurMemoriesWithoutProductsResponse
+import com.tekzee.amiggos.ui.memories.ourmemories.model.AMyMemorieResponse
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingResponse
+import com.tekzee.amiggos.ui.mymemories.fragment.memories.model.MyMemoriesResponse
+import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
 import com.tekzee.amiggos.ui.mypreferences.model.MyPreferenceResponse
 import com.tekzee.amiggos.ui.mypreferences.model.PreferenceSavedResponse
 import com.tekzee.amiggos.ui.myprofile.model.MyProfileResponse
 import com.tekzee.amiggos.ui.notification.model.NotificationResponse
+import com.tekzee.amiggos.ui.notification.model.StorieResponse
 import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendResponse
+import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
 import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponse
+import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponseV2
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendResponse
+import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendV2Response
 import com.tekzee.amiggos.ui.referalcode.model.ReferalCodeResponse
 import com.tekzee.amiggos.ui.referalcode.model.VenueResponse
+import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendResponse
 import com.tekzee.amiggos.ui.settings.model.SettingsResponse
 import com.tekzee.amiggos.ui.settings.model.UpdateSettingsResponse
+import com.tekzee.amiggos.ui.signup.login_new.model.ALoginResponse
+import com.tekzee.amiggos.ui.signup.steptwo.model.CityResponse
+import com.tekzee.amiggos.ui.signup.steptwo.model.StateResponse
+import com.tekzee.amiggos.ui.signup.steptwo.model.UserData
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
-import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailResponse
-import com.tekzee.amiggos.ui.login.model.LoginResponse
-import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
-import com.tekzee.amiggos.ui.mymemories.fragment.memories.model.MyMemoriesResponse
-import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
-import com.tekzee.amiggos.ui.notification.model.StorieResponse
-import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
-import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponseV2
-import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendV2Response
-import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendResponse
+import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
+import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewResponse
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
@@ -60,6 +71,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 import java.util.concurrent.TimeUnit
 
 
@@ -139,6 +151,76 @@ class ApiClient {
         return apiService.doCallSettingsApi(input,createHeaders)
     }
 
+    fun doCallLoginApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<ALoginResponse>> {
+        return apiService.doCallLoginApi(input,createHeaders)
+    }
+
+
+    fun doCallStateApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<StateResponse>> {
+        return apiService.doCallStateApi(input,createHeaders)
+    }
+
+
+    fun doCallSignupApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<UserData>> {
+        return apiService.doCallSignupApi(input,createHeaders)
+    }
+
+    fun doCallCityApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CityResponse>> {
+        return apiService.doCallCityApi(input,createHeaders)
+    }
+
+    fun docallunblockusers(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<UnBlockFriendResponse>> {
+        return apiService.docallunblockusers(input,createHeaders)
+    }
+
+    fun doCallBlockedUser(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<BlockedUserResponse>> {
+        return apiService.doCallBlockedUser(input,createHeaders)
+    }
+
+    fun doCallUpdateProfileApi(
+        fileMultipartBody: MultipartBody.Part?,
+        firstnameRequestBody: RequestBody,
+        lastnameRequestBody: RequestBody,
+        dobRequestBody: RequestBody,
+        cityIdRequestBody: RequestBody,
+        stateIdRequestBody: RequestBody,
+        phonenumberRequestBody: RequestBody,
+        useridRequestBody: RequestBody,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<UpdateProfileResponse>> {
+        return apiService.doCallUpdateprofile(fileMultipartBody,firstnameRequestBody,lastnameRequestBody,dobRequestBody,cityIdRequestBody,stateIdRequestBody,
+            phonenumberRequestBody,useridRequestBody,createHeaders)
+    }
+
+
+    private fun getFilesMultipart(params: HashMap<String?, File?>?): MultipartBody.Part? {
+        val requestFile =
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(), params?.get("image")!!)
+        return MultipartBody.Part.createFormData(
+            "image",
+            "image_" + System.currentTimeMillis() + ".jpg",
+            requestFile
+        )
+    }
+
 
     fun docallViewFriendApi(
         input: JsonObject,
@@ -180,6 +262,13 @@ class ApiClient {
         createHeaders: HashMap<String, String?>
     ): Observable<Response<TurningUpResponse>> {
         return apiService.callTurningUpApi(input, createHeaders)
+    }
+
+    fun callGetProfile(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<GetUserProfileResponse>> {
+        return apiService.callGetProfile(input, createHeaders)
     }
 
   fun doCallDeleteStorie(
@@ -311,6 +400,18 @@ class ApiClient {
         createHeaders: HashMap<String, String?>
     ): Observable<Response<GetMyStoriesResponse>> {
         return apiService.doGetMyStories(input, createHeaders)
+    }
+    fun doCallGetOurMemories(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<AMyMemorieResponse>> {
+        return apiService.doCallGetOurMemories(input, createHeaders)
+    }
+    fun docallGetMyMemories(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<OurMemoriesWithoutProductsResponse>> {
+        return apiService.docallGetMyMemories(input, createHeaders)
     }
 
     fun doGetDashboardMapApi(

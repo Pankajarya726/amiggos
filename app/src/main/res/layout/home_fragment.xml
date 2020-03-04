@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -14,7 +15,7 @@
         <TextView
             android:textColor="@android:color/black"
             android:textColorHint="@android:color/black"
-
+            android:fontFamily="@font/opensans_regular"
             android:id="@+id/search_txt"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -31,6 +32,7 @@
 
 
         <AutoCompleteTextView
+            android:fontFamily="@font/opensans_regular"
             android:id="@+id/autoCompleteEditText"
             android:layout_width="match_parent"
             android:layout_height="40dp"

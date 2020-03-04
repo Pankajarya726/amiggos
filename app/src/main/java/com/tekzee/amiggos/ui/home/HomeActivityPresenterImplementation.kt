@@ -7,7 +7,7 @@ import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
 import com.tekzee.amiggos.ui.home.model.NearbyMeCountResponse
 import com.tekzee.amiggos.ui.home.model.VenueResponse
-import com.tekzee.mallortaxi.network.ApiClient
+import com.tekzee.amiggos.network.ApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers

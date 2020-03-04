@@ -11,7 +11,8 @@ class FirstFragmentPresenter{
         fun getNearByUser(
             input: JsonObject,
             createHeaders: HashMap<String, String?>,
-            requestDatFromServer: Boolean
+            requestDatFromServer: Boolean,
+            fragmentVisible: Boolean
         )
     }
 

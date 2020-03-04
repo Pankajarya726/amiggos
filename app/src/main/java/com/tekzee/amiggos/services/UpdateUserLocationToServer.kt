@@ -15,8 +15,8 @@ import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.enums.Actions
+import com.tekzee.amiggos.network.ApiClient
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
-import com.tekzee.mallortaxi.network.ApiClient
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib

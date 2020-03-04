@@ -1,10 +1,12 @@
-package com.tekzee.mallortaxi.network
+package com.tekzee.amiggos.network
 
 
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
+import com.tekzee.amiggos.ui.blockedusers.model.BlockedUserResponse
+import com.tekzee.amiggos.ui.blockedusers.model.UnBlockFriendResponse
 import com.tekzee.amiggos.ui.bookingqrcode.model.BookinQrCodeResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
 import com.tekzee.amiggos.ui.choosepackage.model.PackageBookResponse
@@ -21,40 +23,45 @@ import com.tekzee.amiggos.ui.home.model.NearbyMeCountResponse
 import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeApiResponse
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
+import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailResponse
+import com.tekzee.amiggos.ui.login.model.LoginResponse
+import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
+import com.tekzee.amiggos.ui.memories.mymemories.model.OurMemoriesWithoutProductsResponse
+import com.tekzee.amiggos.ui.memories.ourmemories.model.AMyMemorieResponse
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingResponse
+import com.tekzee.amiggos.ui.mymemories.fragment.memories.model.MyMemoriesResponse
+import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
 import com.tekzee.amiggos.ui.mypreferences.model.MyPreferenceResponse
 import com.tekzee.amiggos.ui.mypreferences.model.PreferenceSavedResponse
 import com.tekzee.amiggos.ui.myprofile.model.MyProfileResponse
 import com.tekzee.amiggos.ui.notification.model.NotificationResponse
+import com.tekzee.amiggos.ui.notification.model.StorieResponse
 import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendResponse
+import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
 import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponse
+import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponseV2
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendResponse
+import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendV2Response
 import com.tekzee.amiggos.ui.referalcode.model.ReferalCodeResponse
 import com.tekzee.amiggos.ui.referalcode.model.VenueResponse
+import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendResponse
 import com.tekzee.amiggos.ui.settings.model.SettingsResponse
 import com.tekzee.amiggos.ui.settings.model.UpdateSettingsResponse
+import com.tekzee.amiggos.ui.signup.login_new.model.ALoginResponse
+import com.tekzee.amiggos.ui.signup.steptwo.model.CityResponse
+import com.tekzee.amiggos.ui.signup.steptwo.model.StateResponse
+import com.tekzee.amiggos.ui.signup.steptwo.model.UserData
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
-import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailResponse
-import com.tekzee.amiggos.ui.login.model.LoginResponse
-import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
-import com.tekzee.amiggos.ui.mymemories.fragment.memories.model.MyMemoriesResponse
-import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
-import com.tekzee.amiggos.ui.notification.model.StorieResponse
-import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
-import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponseV2
-import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendV2Response
-import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendResponse
+import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
+import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewResponse
 import io.reactivex.Observable
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
-import retrofit2.http.POST
-import retrofit2.http.Multipart
-
 
 
 interface ApiService {
@@ -96,6 +103,14 @@ interface ApiService {
     ): Observable<Response<TurningUpResponse>>
 
 
+
+    @POST("user/getUserProfile_V2")
+    fun callGetProfile(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<GetUserProfileResponse>>
+
+
     @POST("user/removeMyStoryAndOurStory")
     fun doCallDeleteStorie(
         @Body input: JsonObject,
@@ -129,6 +144,68 @@ interface ApiService {
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<SettingsResponse>>
+
+
+
+    @POST("auth/login_V2")
+    fun doCallLoginApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<ALoginResponse>>
+
+
+
+    @POST("auth/get_state")
+    fun doCallStateApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<StateResponse>>
+
+
+
+    @POST("auth/register_V2")
+    fun doCallSignupApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<UserData>>
+
+
+
+    @POST("auth/get_city")
+    fun doCallCityApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CityResponse>>
+
+
+
+    @POST("user/unblockFriend_V2")
+    fun docallunblockusers(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<UnBlockFriendResponse>>
+
+
+    @POST("user/blockList_V2")
+    fun doCallBlockedUser(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<BlockedUserResponse>>
+
+
+    @Multipart
+    @POST("user/updateProfile_V2")
+    fun doCallUpdateprofile(
+        @Part filesMultipart:  MultipartBody.Part?,
+        @Part("first_name") first_name: RequestBody,
+        @Part("last_name") last_name: RequestBody,
+        @Part("date_of_birth") date_of_birth: RequestBody,
+        @Part("city") city: RequestBody,
+        @Part("state") state: RequestBody,
+        @Part("phone_number") phone_number: RequestBody,
+        @Part("userid") userid: RequestBody,
+        @HeaderMap createHeaders: HashMap<String, String?>
+        ): Observable<Response<UpdateProfileResponse>>
 
 
     @POST("user/getMemoryViewedUserList")
@@ -169,6 +246,20 @@ interface ApiService {
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<GetMyStoriesResponse>>
+
+
+    @POST("user/getMyStories_V2")
+    fun doCallGetOurMemories(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<AMyMemorieResponse>>
+
+
+    @POST("user/getOurStories_withoutFeaturedProduct_V2")
+    fun docallGetMyMemories(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<OurMemoriesWithoutProductsResponse>>
 
 
     @POST("user/getAllActiveUserList_V1")

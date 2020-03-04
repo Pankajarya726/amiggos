@@ -2,8 +2,8 @@ package com.tekzee.amiggos.ui.attachid
 
 import android.content.Context
 import com.tekzee.amiggos.R
+import com.tekzee.amiggos.network.ApiClient
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
-import com.tekzee.mallortaxi.network.ApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers

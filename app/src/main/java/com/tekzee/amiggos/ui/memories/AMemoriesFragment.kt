@@ -10,6 +10,7 @@ import com.google.android.material.tabs.TabLayout
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.adapter.ViewPagerAdapter
+import com.tekzee.amiggos.ui.memories.mymemories.MyMemorieFragment
 import com.tekzee.amiggos.ui.memories.ourmemories.OurMemorieFragment
 import com.tekzee.amiggos.ui.memories_new.venuefragment.VenueFragment
 import com.tekzee.amiggos.ui.mybooking.MyBookingActivity
@@ -18,7 +19,7 @@ import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 
-class AMemoriesFragment : BaseFragment(){
+class AMemoriesFragment : BaseFragment() {
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
 
@@ -52,7 +53,7 @@ class AMemoriesFragment : BaseFragment(){
     }
 
     private fun setupLanguage(view: View?) {
-        view!!.findViewById<TextView>(R.id.memories_heading).text = languageData!!.PNearme
+        view!!.findViewById<TextView>(R.id.memories_heading).text = languageData!!.PMemories
 
     }
 
@@ -62,8 +63,9 @@ class AMemoriesFragment : BaseFragment(){
     ) {
         val fragmentManager = getChildFragmentManager()
         val adapter = ViewPagerAdapter(fragmentManager)
-        adapter.addFragment(OurMemorieFragment(), languageData!!.PMemories)
-        adapter.addFragment(MyBookingActivity(), languageData!!.PMyMemories)
+
+        adapter.addFragment(OurMemorieFragment(), languageData!!.POURMEMORIES)
+        adapter.addFragment(MyMemorieFragment(), languageData!!.POURMEMORIES)
         adapter.addFragment(VenueFragment(), languageData!!.PVenue)
         viewPager.adapter = adapter
         viewPager.offscreenPageLimit = 1;
@@ -78,7 +80,7 @@ class AMemoriesFragment : BaseFragment(){
     private fun setupViews(view: View?) {
         val tabs = view!!.findViewById<TabLayout>(R.id.near_me_tabs)
         val viewPager = view.findViewById<ViewPager>(R.id.near_me_viewPager)
-        setupAdapter(viewPager,tabs)
+        setupAdapter(viewPager, tabs)
     }
 
 

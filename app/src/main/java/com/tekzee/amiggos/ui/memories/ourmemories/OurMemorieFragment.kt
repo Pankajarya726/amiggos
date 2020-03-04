@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.pedant.SweetAlert.SweetAlertDialog
@@ -14,44 +15,38 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.camera.CameraPreview
-import com.tekzee.amiggos.ui.home.StorieClickListener
-import com.tekzee.amiggos.ui.home.adapter.PaginationScrollListener
-import com.tekzee.amiggos.ui.home.model.GetMyStoriesResponse
-import com.tekzee.amiggos.ui.home.model.NearestClub
 import com.tekzee.amiggos.ui.home.model.StoriesData
-import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.adapter.FirstFragmentAdapter
-import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
-import com.tekzee.amiggos.ui.memories.AMemoriesFragment
+import com.tekzee.amiggos.ui.memories.ourmemories.adapter.FeaturedBrandAdapter
 import com.tekzee.amiggos.ui.memories.ourmemories.adapter.MemorieAdapter
-import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
+import com.tekzee.amiggos.ui.memories.ourmemories.custom.CustomErrorItem
+import com.tekzee.amiggos.ui.memories.ourmemories.custom.CustomLoadingItem
+import com.tekzee.amiggos.ui.memories.ourmemories.model.GetOurMemoriesResponse
+import com.tekzee.amiggos.ui.storieview.StorieViewActivity
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.mallortaxiclient.constant.ConstantLib
-import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
+import ru.alexbykov.nopaginate.paginate.NoPaginate
 
 
-class OurMemorieFragment : BaseFragment(), OurMemoriePresenter.OurMemoriePresenterMainView,
-    InfiniteScrollRecyclerView.RecyclerViewAdapterCallback, FirstFragmentAdapter.HomeItemClick {
+class OurMemorieFragment : BaseFragment(), OurMemoriePresenter.OurMemoriePresenterMainView{
 
 
+    private var noPaginate: NoPaginate? = null
+    private var ourMemorieData = ArrayList<StoriesData>()
+    private var featuredProduct = ArrayList<GetOurMemoriesResponse.Data.FeaturedProduct>()
+    private lateinit var adapter: MemorieAdapter
+    private lateinit var adapterFeaturedBrands: FeaturedBrandAdapter
+    private var reyclerview: RecyclerView? = null
+    private var reyclerviewFeaturedBrand: RecyclerView? = null
     private var addMemories: ConstraintLayout? =null
-    //adapters
-    private var myStoriesAdapter: MemorieAdapter? = null
-    private var myStoriesListData = ArrayList<StoriesData>()
-    private var reyclerview: RecyclerView? =null
-    private var isLoading = false
-    private var isLastPage = false
-    private var currentPage = 0
-    private var venueListData = ArrayList<NearestClub>()
-
     private var languageData: LanguageData? = null
-    private val mLoadingData = NearByV2Response.Data.NearestFreind(loadingStatus = true)
     private var sharedPreference: SharedPreference? = null
-    private var onlineFriendPageNo = 0
     private var ourMemoriePresenterImplementation: OurMemoriePresenterImplementation? = null
-    private var mydataList = ArrayList<NearByV2Response.Data.NearestFreind>()
-    private var adapter: FirstFragmentAdapter? = null
+
+
+
+    private var ourMemoriePageNo=0
 
     companion object {
 
@@ -74,10 +69,40 @@ class OurMemorieFragment : BaseFragment(), OurMemoriePresenter.OurMemoriePresent
         ourMemoriePresenterImplementation =
             OurMemoriePresenterImplementation(this, activity!!)
         setupViews(view)
-        setupRecyclerMyStoriesView()
-        callGetMyStories(false)
+        setupRecyclerOurMemorie()
+        //setupFeaturedBrandRecyclerView()
         setupClickListener()
+
+
+        callGetOurMemories()
+
+
         return view
+    }
+
+    private fun setupPagination() {
+        noPaginate = NoPaginate.with(reyclerview!!)
+            .setOnLoadMoreListener {
+                ourMemoriePageNo++
+                callGetOurMemories()
+            }
+            .setLoadingTriggerThreshold(5) //0 by default
+            .setCustomErrorItem(CustomErrorItem())
+            .setCustomLoadingItem(CustomLoadingItem())
+            .build()
+    }
+
+    private fun setupFeaturedBrandRecyclerView() {
+        reyclerviewFeaturedBrand!!.setHasFixedSize(true)
+        val layoutManager = GridLayoutManager(activity,2)
+        reyclerviewFeaturedBrand!!.layoutManager = layoutManager
+        adapterFeaturedBrands = FeaturedBrandAdapter(featuredProduct,object: FeaturedBrandsClickListener{
+             override fun OnFeaturedBrandsClicked(featuredBrandsData: GetOurMemoriesResponse.Data.FeaturedProduct) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+        })
+        reyclerviewFeaturedBrand!!.adapter = adapterFeaturedBrands
     }
 
     private fun setupClickListener() {
@@ -100,128 +125,61 @@ class OurMemorieFragment : BaseFragment(), OurMemoriePresenter.OurMemoriePresent
     }
 
 
-    private fun setupRecyclerMyStoriesView() {
+    private fun setupRecyclerOurMemorie() {
         reyclerview!!.setHasFixedSize(true)
-        val linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        reyclerview!!.layoutManager = linearLayoutManager
-        myStoriesAdapter = MemorieAdapter(myStoriesListData, object : StorieClickListener {
-            override fun onStorieClick(storiesData: StoriesData) {
-                val pDialog = SweetAlertDialog(activity)
-                pDialog.titleText = languageData!!.klAddStoryAlert
-                pDialog.setCancelable(false)
-                pDialog.setCancelButton(languageData!!.klCancel) {
-                    pDialog.dismiss()
+        val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL,
+            false)
+        reyclerview!!.layoutManager = layoutManager
+        adapter = MemorieAdapter(ourMemorieData,object: OurMemorieClickListener{
+            override fun OnMemorieClicked(memorieData: StoriesData) {
+                if(memorieData.content.isNotEmpty()){
+                    val intent =Intent(activity, StorieViewActivity::class.java)
+                    intent.putExtra(ConstantLib.CONTENT, memorieData)
+                    intent.putExtra(ConstantLib.PROFILE_IMAGE, memorieData.imageUrl)
+                    intent.putExtra(ConstantLib.USER_ID, memorieData.userid.toString())
+                    intent.putExtra(ConstantLib.USER_NAME, memorieData.name)
+                    context!!.startActivity(intent)
                 }
-                pDialog.setConfirmButton(languageData!!.kllblAddStoryTitle) {
-                    pDialog.dismiss()
-                    val intent = Intent(activity, CameraPreview::class.java)
-                    intent.putExtra(ConstantLib.FROM_ACTIVITY, "HOMEACTIVITY")
-                    intent.putExtra(ConstantLib.PROFILE_IMAGE, storiesData.imageUrl)
-                    startActivity(intent)
-                }
-                pDialog.show()
-            }
-        })
-        reyclerview!!.adapter = myStoriesAdapter
-
-
-        reyclerview!!.addOnScrollListener(object :
-            PaginationScrollListener(linearLayoutManager) {
-            override fun loadMoreItems() {
-                isLoading = true
-                currentPage += 1
-                callGetMyStories(true)
-            }
-
-            override fun getTotalPageCount(): Int {
-                return AMemoriesFragment.TOTAL_PAGES
-            }
-
-            override fun isLastPage(): Boolean {
-                return isLastPage
-            }
-
-            override fun isLoading(): Boolean {
-                return isLoading
             }
 
         })
+        reyclerview!!.adapter = adapter
+     }
 
+    private fun callGetOurMemories() {
 
-    }
-
-    private fun callGetMyStories(requestDatFromServer: Boolean) {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
-        input.addProperty("is_dashboard", "1")
-        input.addProperty("page_no", currentPage)
-        ourMemoriePresenterImplementation!!.doGetMyStories(
+        input.addProperty("page_no", ourMemoriePageNo)
+        input.addProperty("name", "")
+        ourMemoriePresenterImplementation!!.callGetOurMemories(
             input,
-            Utility.createHeaders(sharedPreference),
-            requestDatFromServer
+            Utility.createHeaders(sharedPreference)
         )
     }
 
 
-    override fun onMyStoriesInfiniteSuccess(responseData: GetMyStoriesResponse) {
-        myStoriesAdapter!!.removeLoadingFooter()
-        isLoading = false
-        myStoriesListData.addAll(responseData.data)
-        myStoriesAdapter!!.notifyDataSetChanged()
 
-        if (currentPage != AMemoriesFragment.TOTAL_PAGES) {
-            if (responseData.data.size == 0) {
-                isLastPage = true
-            } else {
-                myStoriesAdapter!!.addLoadingFooter()
-            }
-        } else {
-            isLastPage = true
-        }
+
+    override fun onOurMemorieSuccess(myStoryList: List<StoriesData>) {
+        ourMemorieData.addAll(myStoryList)
+        adapter.notifyDataSetChanged()
+
+        setupPagination()
+
     }
 
-    override fun onMyStoriesSuccess(responseData: GetMyStoriesResponse) {
-        myStoriesListData.clear()
-        myStoriesAdapter!!.notifyDataSetChanged()
-        myStoriesListData.addAll(responseData.data)
-        if (currentPage <= AMemoriesFragment.TOTAL_PAGES) {
-            if (venueListData.size > 10){
-                myStoriesAdapter!!.addLoadingFooter()
-                isLastPage = false
-            }else{
-                isLastPage = true
-            }
-
-        } else {
-            isLastPage = true
-        }
-        myStoriesAdapter!!.notifyDataSetChanged()
+    private fun resetData() {
+        ourMemorieData.clear()
+        featuredProduct.clear()
+        adapter.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
     }
 
-    override fun onMyStoriesFailure(message: String) {
-        Utility.showLogoutPopup(activity!!, message)
-    }
-
-    override fun onOnlineFriendSuccess(responseData: List<NearByV2Response.Data.NearestFreind>) {
-        onlineFriendPageNo++
-        mydataList.addAll(responseData)
-        adapter!!.notifyDataSetChanged()
-    }
-
-    override fun onOnlineFriendInfiniteSuccess(responseData: List<NearByV2Response.Data.NearestFreind>) {
-        onlineFriendPageNo++
-        adapter?.setLoadingStatus(true)
-        mydataList.removeAt(mydataList.size - 1)
-        mydataList.addAll(responseData)
-        adapter?.notifyDataSetChanged()
-    }
-
-    override fun onOnlineFriendFailure(responseData: String) {
-        if (mydataList.size > 0) {
-            adapter?.setLoadingStatus(false)
-            mydataList.removeAt(mydataList.size - 1)
-            adapter?.notifyDataSetChanged()
-        }
+    override fun onOurMemorieFailure(message: String) {
+        noPaginate!!.showLoading(false)
+        noPaginate!!.setNoMoreItems(true)
+        Toast.makeText(activity,message,Toast.LENGTH_LONG).show()
     }
 
 
@@ -231,32 +189,19 @@ class OurMemorieFragment : BaseFragment(), OurMemoriePresenter.OurMemoriePresent
 
     private fun setupViews(view: View?) {
         reyclerview = view!!.findViewById<RecyclerView>(R.id.our_memorie_recycler)
+        reyclerviewFeaturedBrand = view!!.findViewById<RecyclerView>(R.id.featuredbrand_recyclerview)
         addMemories =view.findViewById<ConstraintLayout>(R.id.user_image)
-    }
-
-    override fun onLoadMoreData() {
-        mydataList.add(mLoadingData)
-        adapter?.notifyDataSetChanged()
-    }
-
-    override fun itemClickCallback(position: Int) {
-        val intent = Intent(activity, AProfileDetails::class.java)
-        intent.putExtra(ConstantLib.FRIEND_ID, mydataList[position].userid.toString())
-        intent.putExtra(ConstantLib.PROFILE_IMAGE, mydataList[position].profile)
-        intent.putExtra(ConstantLib.NAME, mydataList[position].name)
-        intent.putExtra(ConstantLib.ADDRESS, mydataList[position].address)
-        intent.putExtra(ConstantLib.REAL_FREIND_COUNT, mydataList[position].real_freind_count)
-        intent.putExtra("from", "GroupFriendActivity")
-        startActivity(intent)
-    }
-
-    override fun storieClicked(position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 
     override fun onStop() {
         super.onStop()
         ourMemoriePresenterImplementation!!.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+//        if(noPaginate!=null)
+//        noPaginate!!.unbind()
     }
 }

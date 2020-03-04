@@ -56,6 +56,8 @@ InfiniteScrollRecyclerView.RecyclerViewAdapterCallback,VenueFragmentAdapter.Home
     }
 
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -118,7 +120,7 @@ InfiniteScrollRecyclerView.RecyclerViewAdapterCallback,VenueFragmentAdapter.Home
     }
 
     private fun callVenueApi(isfirsttime: Boolean) {
-        InitGeoLocationUpdate.stopLocationUpdate(activity!!)
+
         if (lastLocation != null) {
             val input: JsonObject = JsonObject()
             input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
@@ -150,6 +152,8 @@ InfiniteScrollRecyclerView.RecyclerViewAdapterCallback,VenueFragmentAdapter.Home
         } else {
             startLocationUpdate()
         }
+
+        InitGeoLocationUpdate.stopLocationUpdate(activity!!)
     }
 
     override fun onVenueResponse(responseData: VenueResponse?) {

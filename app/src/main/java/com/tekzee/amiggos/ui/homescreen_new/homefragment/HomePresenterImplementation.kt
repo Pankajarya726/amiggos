@@ -5,7 +5,7 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeApiResponse
-import com.tekzee.mallortaxi.network.ApiClient
+import com.tekzee.amiggos.network.ApiClient
 import com.tekzee.amiggos.util.Utility
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -41,7 +41,7 @@ class HomePresenterImplementation(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response: Response<HomeApiResponse> ->
-                    mainView.hideProgressbar()
+
                     when (response.code()) {
                         200 -> {
                             val responseData: HomeApiResponse = response.body()!!
@@ -57,6 +57,7 @@ class HomePresenterImplementation(
                                 Utility.showLogoutPopup(context!!,"your Session has been expired,please logout")
                         }
                     }
+                    mainView.hideProgressbar()
                 }, { error ->
                     mainView.hideProgressbar()
                     mainView.onHomeApiFailure(error.message.toString())

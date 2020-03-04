@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.facebook.login.Login
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.JsonObject
@@ -22,6 +23,9 @@ import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
 import com.tekzee.amiggos.ui.splash.SplashActivity
 import com.tekzee.amiggos.ui.statusview.StatusViewActivity
 import com.tekzee.amiggos.base.BaseActivity
+import com.tekzee.amiggos.databinding.StepOneBinding
+import com.tekzee.amiggos.ui.signup.login_new.ALogin
+import com.tekzee.amiggos.ui.signup.stepone.StepOne
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
@@ -202,7 +206,7 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
 
     private fun showSplashScreen() {
         sharedPreferences!!.save(ConstantLib.ISAGREE, false)
-        val intent = Intent(applicationContext, SplashActivity::class.java)
+        val intent = Intent(applicationContext, ALogin::class.java)
         intent.putExtra(ConstantLib.FROM,"")
         startActivity(intent)
         finish()

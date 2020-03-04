@@ -4,7 +4,7 @@ import android.content.Context
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendV2Response
-import com.tekzee.mallortaxi.network.ApiClient
+import com.tekzee.amiggos.network.ApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -46,9 +46,9 @@ class RealAmiggosPresenterImplementation(
                             val responseData: RealFriendV2Response? = response.body()
                             if (responseData!!.data.realFreind.isNotEmpty()) {
                                 if(requestDatFromServer){
-                                    mainView.onRealFriendInfiniteSuccess(responseData!!.data.realFreind)
+                                    mainView.onRealFriendInfiniteSuccess(responseData.data.realFreind)
                                 }else{
-                                    mainView.onRealFriendSuccess(responseData!!.data.realFreind)
+                                    mainView.onRealFriendSuccess(responseData.data.realFreind)
                                 }
                             } else {
                                 mainView.onRealFriendFailure(responseData.message)
