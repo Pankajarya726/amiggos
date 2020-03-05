@@ -80,6 +80,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
+            android:name=".ui.bookingdetails.ABookingDetails"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
             android:name=".ui.profiledetails.AProfileDetails"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />

@@ -6,6 +6,7 @@ object ConstantLib {
     const val IS_REGULAR_IMAGE = "is_regular_image"
     const val VIP_TABLE = "vip_table"
     const val RECEIVER_ID = "receiver_id"
+    const val BOOKING_DATA = "booking_data"
     const val OURSTORYID = "ourstoryid"
     const val FROM_ACTIVITY = "from_activity"
     const val COUNT = "count"

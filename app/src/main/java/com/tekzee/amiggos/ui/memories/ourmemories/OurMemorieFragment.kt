@@ -20,7 +20,7 @@ import com.tekzee.amiggos.ui.memories.ourmemories.adapter.FeaturedBrandAdapter
 import com.tekzee.amiggos.ui.memories.ourmemories.adapter.MemorieAdapter
 import com.tekzee.amiggos.ui.memories.ourmemories.custom.CustomErrorItem
 import com.tekzee.amiggos.ui.memories.ourmemories.custom.CustomLoadingItem
-import com.tekzee.amiggos.ui.memories.ourmemories.model.GetOurMemoriesResponse
+import com.tekzee.amiggos.ui.memories.ourmemories.model.FeaturedBrandProductResponse
 import com.tekzee.amiggos.ui.storieview.StorieViewActivity
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
@@ -34,7 +34,7 @@ class OurMemorieFragment : BaseFragment(), OurMemoriePresenter.OurMemoriePresent
 
     private var noPaginate: NoPaginate? = null
     private var ourMemorieData = ArrayList<StoriesData>()
-    private var featuredProduct = ArrayList<GetOurMemoriesResponse.Data.FeaturedProduct>()
+    private var featuredProduct = ArrayList<FeaturedBrandProductResponse.Data.FeaturedProduct>()
     private lateinit var adapter: MemorieAdapter
     private lateinit var adapterFeaturedBrands: FeaturedBrandAdapter
     private var reyclerview: RecyclerView? = null
@@ -70,14 +70,23 @@ class OurMemorieFragment : BaseFragment(), OurMemoriePresenter.OurMemoriePresent
             OurMemoriePresenterImplementation(this, activity!!)
         setupViews(view)
         setupRecyclerOurMemorie()
-        //setupFeaturedBrandRecyclerView()
+        setupFeaturedBrandRecyclerView()
         setupClickListener()
 
 
         callGetOurMemories()
-
+        callGetFeaturedProductForMemory()
 
         return view
+    }
+
+    private fun callGetFeaturedProductForMemory() {
+        val input: JsonObject = JsonObject()
+        input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
+        ourMemoriePresenterImplementation!!.doCallFeaturedProductFromMemory(
+            input,
+            Utility.createHeaders(sharedPreference)
+        )
     }
 
     private fun setupPagination() {
@@ -97,7 +106,7 @@ class OurMemorieFragment : BaseFragment(), OurMemoriePresenter.OurMemoriePresent
         val layoutManager = GridLayoutManager(activity,2)
         reyclerviewFeaturedBrand!!.layoutManager = layoutManager
         adapterFeaturedBrands = FeaturedBrandAdapter(featuredProduct,object: FeaturedBrandsClickListener{
-             override fun OnFeaturedBrandsClicked(featuredBrandsData: GetOurMemoriesResponse.Data.FeaturedProduct) {
+             override fun OnFeaturedBrandsClicked(featuredBrandsData: FeaturedBrandProductResponse.Data.FeaturedProduct) {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
 
@@ -169,12 +178,18 @@ class OurMemorieFragment : BaseFragment(), OurMemoriePresenter.OurMemoriePresent
 
     }
 
-    private fun resetData() {
-        ourMemorieData.clear()
+    override fun onFeaturedBrandSuccess(data: List<FeaturedBrandProductResponse.Data.FeaturedProduct>) {
         featuredProduct.clear()
-        adapter.notifyDataSetChanged()
-        adapter.notifyDataSetChanged()
+        adapterFeaturedBrands.notifyDataSetChanged()
+        featuredProduct.addAll(data)
+        adapterFeaturedBrands.notifyDataSetChanged()
     }
+
+    override fun onFeaturedBrandFailure(message: String) {
+        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    }
+
+
 
     override fun onOurMemorieFailure(message: String) {
         noPaginate!!.showLoading(false)

@@ -112,7 +112,10 @@ class AViewAndEditProfile: BaseActivity(), AViewAndEditPresenter.AViewAndEditPre
         }
 
         binding!!.btnSave.setOnClickListener {
-            callUpdateProfile()
+            if(validateFields()){
+                callUpdateProfile()
+            }
+
         }
 
 
@@ -135,6 +138,29 @@ class AViewAndEditProfile: BaseActivity(), AViewAndEditPresenter.AViewAndEditPre
             }
             true
         }
+    }
+
+    private fun validateFields(): Boolean {
+        if(binding!!.eFirstname.text.toString().trim().isEmpty()){
+            Toast.makeText(applicationContext,"First name can not be blank..",Toast.LENGTH_LONG).show()
+            return false
+        }else if(binding!!.eLastname.text.toString().trim().isEmpty()){
+            Toast.makeText(applicationContext,"Last name can not be blank..",Toast.LENGTH_LONG).show()
+            return false
+        }else if(binding!!.eDateofbirth.text.toString().trim().isEmpty()){
+            Toast.makeText(applicationContext,"Date of birth can not be blank..",Toast.LENGTH_LONG).show()
+            return false
+        }else if(stateId!!.isEmpty()){
+            Toast.makeText(applicationContext,"State can not be blank..",Toast.LENGTH_LONG).show()
+            return false
+        }else if(cityId!!.isEmpty()){
+            Toast.makeText(applicationContext,"City can not be blank..",Toast.LENGTH_LONG).show()
+            return false
+        }else if(binding!!.ePhone.text.toString().trim().isEmpty()){
+            Toast.makeText(applicationContext,"Phone number can not be blank..",Toast.LENGTH_LONG).show()
+            return false
+        }
+        return true
     }
 
     private fun callUpdateProfile() {
@@ -267,6 +293,8 @@ class AViewAndEditProfile: BaseActivity(), AViewAndEditPresenter.AViewAndEditPre
             override fun onClick(position: Int, searchListItem: SearchListItem) {
                 binding!!.eState.setText(searchListItem.title)
                 stateId = searchListItem.id.toString()
+                cityId =""
+                binding!!.eCity.setText("")
                 searchableDialogState.dismiss()
             }
         }) // implement 'OnSearchItemSelected'in your Activity

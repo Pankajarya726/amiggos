@@ -11,6 +11,8 @@ import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
 import com.tekzee.amiggos.ui.blockedusers.model.BlockedUserResponse
 import com.tekzee.amiggos.ui.blockedusers.model.UnBlockFriendResponse
 import com.tekzee.amiggos.ui.bookingqrcode.model.BookinQrCodeResponse
+import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
+import com.tekzee.amiggos.ui.bookings_new.bookings.model.ABookingResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
 import com.tekzee.amiggos.ui.choosepackage.model.PackageBookResponse
 import com.tekzee.amiggos.ui.choosepackage.model.PackageResponse
@@ -31,6 +33,8 @@ import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
 import com.tekzee.amiggos.ui.memories.mymemories.model.OurMemoriesWithoutProductsResponse
 import com.tekzee.amiggos.ui.memories.ourmemories.model.AMyMemorieResponse
+import com.tekzee.amiggos.ui.memories.ourmemories.model.FeaturedBrandProductResponse
+import com.tekzee.amiggos.ui.memories.venuefragment.model.VenueTaggedResponse
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingResponse
 import com.tekzee.amiggos.ui.mymemories.fragment.memories.model.MyMemoriesResponse
 import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
@@ -407,6 +411,29 @@ class ApiClient {
     ): Observable<Response<AMyMemorieResponse>> {
         return apiService.doCallGetOurMemories(input, createHeaders)
     }
+
+
+    fun callTaggedVenueApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<VenueTaggedResponse>> {
+        return apiService.callTaggedVenueApi(input, createHeaders)
+    }
+
+
+    fun docallGetBookings(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<ABookingResponse>> {
+        return apiService.docallGetBookings(input, createHeaders)
+    }
+
+    fun doCallFeaturedProductFromMemory(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<FeaturedBrandProductResponse>> {
+        return apiService.doCallFeaturedProductFromMemory(input, createHeaders)
+    }
     fun docallGetMyMemories(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
@@ -506,11 +533,26 @@ class ApiClient {
     }
 
 
+    fun doCallBookingInvitationApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<BookingInvitationResponse>> {
+        return apiService.doCallBookingInvitationApi(input, createHeaders)
+    }
+
+
     fun doAcceptInvitationApi(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>> {
         return apiService.doAcceptInvitationApi(input, createHeaders)
+    }
+
+    fun doAcceptBookingInvitationApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.doAcceptBookingInvitationApi(input, createHeaders)
     }
 
     fun doSendFriendRequest(
@@ -587,6 +629,13 @@ class ApiClient {
         createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>> {
         return apiService.doRejectInvitationApi(input, createHeaders)
+    }
+
+    fun doRejectBookingInvitationApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.doRejectBookingInvitationApi(input, createHeaders)
     }
 
 

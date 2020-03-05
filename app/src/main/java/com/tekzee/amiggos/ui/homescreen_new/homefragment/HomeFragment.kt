@@ -256,6 +256,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
     override fun onStop() {
         super.onStop()
         mapView!!.onStop()
+        homepresenterImplementation.onStop()
     }
 
     override fun onLowMemory() {
@@ -408,12 +409,13 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
             mstyle = style
         })
 
-        startLocationUpdate()
+
         setupViews(view)
         setupPlaceAutoComplete(view!!)
         setupClickListener(view!!)
         setUpLanguage(view!!)
         setupGestures(view)
+        startLocationUpdate()
     }
 
     override fun onRequestPermissionsResult(

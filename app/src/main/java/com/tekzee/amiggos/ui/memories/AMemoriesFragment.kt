@@ -12,8 +12,7 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.adapter.ViewPagerAdapter
 import com.tekzee.amiggos.ui.memories.mymemories.MyMemorieFragment
 import com.tekzee.amiggos.ui.memories.ourmemories.OurMemorieFragment
-import com.tekzee.amiggos.ui.memories_new.venuefragment.VenueFragment
-import com.tekzee.amiggos.ui.mybooking.MyBookingActivity
+import com.tekzee.amiggos.ui.memories.venuefragment.VenueFragment
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.mallortaxiclient.constant.ConstantLib

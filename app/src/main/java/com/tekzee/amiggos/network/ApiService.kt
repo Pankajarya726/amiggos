@@ -8,6 +8,8 @@ import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
 import com.tekzee.amiggos.ui.blockedusers.model.BlockedUserResponse
 import com.tekzee.amiggos.ui.blockedusers.model.UnBlockFriendResponse
 import com.tekzee.amiggos.ui.bookingqrcode.model.BookinQrCodeResponse
+import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
+import com.tekzee.amiggos.ui.bookings_new.bookings.model.ABookingResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
 import com.tekzee.amiggos.ui.choosepackage.model.PackageBookResponse
 import com.tekzee.amiggos.ui.choosepackage.model.PackageResponse
@@ -28,6 +30,8 @@ import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
 import com.tekzee.amiggos.ui.memories.mymemories.model.OurMemoriesWithoutProductsResponse
 import com.tekzee.amiggos.ui.memories.ourmemories.model.AMyMemorieResponse
+import com.tekzee.amiggos.ui.memories.ourmemories.model.FeaturedBrandProductResponse
+import com.tekzee.amiggos.ui.memories.venuefragment.model.VenueTaggedResponse
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingResponse
 import com.tekzee.amiggos.ui.mymemories.fragment.memories.model.MyMemoriesResponse
 import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
@@ -255,6 +259,27 @@ interface ApiService {
     ): Observable<Response<AMyMemorieResponse>>
 
 
+    @POST("user/get_tagedVenue_from_memory_V2")
+    fun callTaggedVenueApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<VenueTaggedResponse>>
+
+
+    @POST("user/userUpcomingParties_V2")
+    fun docallGetBookings(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<ABookingResponse>>
+
+
+    @POST("user/get_featuredProduct_from_memory_V2")
+    fun doCallFeaturedProductFromMemory(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<FeaturedBrandProductResponse>>
+
+
     @POST("user/getOurStories_withoutFeaturedProduct_V2")
     fun docallGetMyMemories(
         @Body input: JsonObject,
@@ -422,6 +447,14 @@ interface ApiService {
 
 
 
+    @POST("user/userPartyInvites_V2")
+    fun doCallBookingInvitationApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<BookingInvitationResponse>>
+
+
+
 //    @POST("user/acceptFriendRequest")
 //    fun doAcceptInvitationApi(
 //        @Body input: JsonObject,
@@ -433,6 +466,23 @@ interface ApiService {
 
     @POST("user/acceptFriendRequest_V2")
     fun doAcceptInvitationApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
+
+
+
+    @POST("user/acceptPartyInvitaion_V2")
+    fun doAcceptBookingInvitationApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
+
+
+    @POST("user/rejectPartyInvitaion_V2")
+    fun doRejectBookingInvitationApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>>

@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:fontFamily="@font/opensans_bold"
         android:id="@+id/booking_heading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

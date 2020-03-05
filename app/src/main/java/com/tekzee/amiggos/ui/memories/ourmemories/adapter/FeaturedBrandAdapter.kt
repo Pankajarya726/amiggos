@@ -7,13 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.memories.ourmemories.FeaturedBrandsClickListener
-import com.tekzee.amiggos.ui.memories.ourmemories.model.GetOurMemoriesResponse
+import com.tekzee.amiggos.ui.memories.ourmemories.model.FeaturedBrandProductResponse
 import kotlinx.android.synthetic.main.single_first_fragment.view.*
-import kotlinx.android.synthetic.main.single_list_stories.view.*
 
 
 class FeaturedBrandAdapter(
-    var mDataList: ArrayList<GetOurMemoriesResponse.Data.FeaturedProduct>,
+    var mDataList: ArrayList<FeaturedBrandProductResponse.Data.FeaturedProduct>,
     var listener: FeaturedBrandsClickListener
 ) : RecyclerView.Adapter<FeaturedBrandAdapter.ViewHolder>() {
 
@@ -42,7 +41,7 @@ class FeaturedBrandAdapter(
                 .placeholder(R.drawable.blackbg).into(itemView.img_user_firstfragment)
 
             itemView.img_user_firstfragment.setOnClickListener {
-                listener.OnFeaturedBrandsClicked(mDataList[adapterPosition])
+//                listener.OnFeaturedBrandsClicked(mDataList[adapterPosition])
             }
         }
 

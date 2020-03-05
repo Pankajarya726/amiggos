@@ -104,10 +104,10 @@ class StepTwo: BaseActivity(), StepTwoPresenter.StepTwoPresenterMainView {
         }else if(binding!!.tlastname.text.toString().trim().isEmpty()){
             Toast.makeText(applicationContext,"Last name can not be blank...",Toast.LENGTH_LONG).show()
             return false
-        } else if(binding!!.tstate.text.toString().trim().isEmpty()){
+        } else if(stateId!!.isEmpty()){
             Toast.makeText(applicationContext,"State can not be blank...",Toast.LENGTH_LONG).show()
             return false
-        }else if(binding!!.tcity.text.toString().trim().isEmpty()){
+        }else if(cityId!!.isEmpty()){
             Toast.makeText(applicationContext,"City can not be blank...",Toast.LENGTH_LONG).show()
             return false
         }else if(binding!!.tphone.text.toString().trim().isEmpty()){
@@ -144,6 +144,7 @@ class StepTwo: BaseActivity(), StepTwoPresenter.StepTwoPresenterMainView {
     override fun onSignupSuccess(data: UserData.Data) {
         startActivity(Intent(applicationContext,ALogin::class.java))
         finishAffinity()
+        Animatoo.animateSlideRight(this)
     }
 
     override fun onSignUpFailure(message: String) {
@@ -160,6 +161,8 @@ class StepTwo: BaseActivity(), StepTwoPresenter.StepTwoPresenterMainView {
             override fun onClick(position: Int, searchListItem: SearchListItem) {
                 binding!!.tstate.setText(searchListItem.title)
                 stateId = searchListItem.id.toString()
+                cityId =""
+                binding!!.tcity.setText("")
                 searchableDialogState.dismiss()
             }
         }) // implement 'OnSearchItemSelected'in your Activity

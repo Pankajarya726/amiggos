@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
+import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.BookingInvitations
+import com.tekzee.amiggos.ui.bookings_new.bookings.ABooking
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.adapter.ViewPagerAdapter
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.FirstFragment
 import com.tekzee.amiggos.ui.mybooking.MyBookingActivity
@@ -61,14 +64,14 @@ class BookingFragment : BaseFragment(){
     ) {
         val fragmentManager = getChildFragmentManager()
         val adapter = ViewPagerAdapter(fragmentManager)
-        adapter.addFragment(FirstFragment(), languageData!!.PUpcoming)
-        adapter.addFragment(MyBookingActivity(), languageData!!.PInvites)
+        adapter.addFragment(ABooking(), languageData!!.PUpcoming)
+        adapter.addFragment(BookingInvitations(), languageData!!.PInvites)
         viewPager.adapter = adapter
         tabs.setupWithViewPager(viewPager)
     }
 
     override fun validateError(message: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+       Toast.makeText(activity,message,Toast.LENGTH_LONG).show()
     }
 
     private fun setupViews(view: View?) {

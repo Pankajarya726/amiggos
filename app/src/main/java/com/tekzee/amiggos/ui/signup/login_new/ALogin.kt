@@ -83,6 +83,7 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
         sharedPreferences!!.save(ConstantLib.PROFILE_IMAGE, responseData.profile)
         sharedPreferences!!.save(ConstantLib.ISAGREE, false)
         startActivity(Intent(applicationContext, AHomeScreen::class.java))
+        finishAffinity()
     }
 
 
