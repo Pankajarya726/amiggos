@@ -36,7 +36,7 @@ class RealAmiggosPresenterImplementation(
             mainView.showProgressbar()
         }
         if (mainView.checkInternet()) {
-            disposable = ApiClient.instance.doCallRealFriendApiV2(input,createHeaders)
+            disposable = ApiClient.instance.doCallRealFriendAmiggosApiV2(input,createHeaders)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->

@@ -1,7 +1,6 @@
 package com.tekzee.amiggos.ui.favoritevenues
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +17,6 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.RealFriendFragmentBinding
 import com.tekzee.amiggos.ui.favoritevenues.adapter.AFavoriteVenueAdapter
 import com.tekzee.amiggos.ui.favoritevenues.model.FavoriteVenueResponse
-import com.tekzee.amiggos.ui.friendprofile.FriendProfile
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
@@ -28,7 +26,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-class AFavoriteVenues: BaseFragment(), AFavoriteVenuePresenter.AFavoriteVenuePresenterMainView, InfiniteScrollRecyclerView.RecyclerViewAdapterCallback ,AFavoriteVenueAdapter.HomeItemClick{
+class AFavoriteVenues(var friendId: String?) : BaseFragment(), AFavoriteVenuePresenter.AFavoriteVenuePresenterMainView, InfiniteScrollRecyclerView.RecyclerViewAdapterCallback ,AFavoriteVenueAdapter.HomeItemClick{
 
 
 
@@ -83,9 +81,8 @@ class AFavoriteVenues: BaseFragment(), AFavoriteVenuePresenter.AFavoriteVenuePre
 
 
         val input: JsonObject = JsonObject()
-        input.addProperty("userid", activity!!.intent.getStringExtra(ConstantLib.FRIEND_ID))
-//        input.addProperty("name", searchvalue)
-//        input.addProperty("page_no", realFriendPageNo)
+        input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
+        input.addProperty("freind_id", friendId)
         realFriendPresenterImplementation!!.doCallFavoriteVenueApi(
             input,
             Utility.createHeaders(sharedPreference),

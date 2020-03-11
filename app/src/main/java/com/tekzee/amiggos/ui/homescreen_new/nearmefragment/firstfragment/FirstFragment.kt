@@ -2,23 +2,29 @@ package com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.easywaylocation.EasyWayLocation
+import com.example.easywaylocation.Listener
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.JsonObject
 import com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView
+import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.adapter.FirstFragmentAdapter
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
-import com.tekzee.amiggos.util.*
+import com.tekzee.amiggos.util.RxSearchObservable
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
@@ -30,10 +36,11 @@ import java.util.concurrent.TimeUnit
 
 
 class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresenterMainView,
-    InfiniteScrollRecyclerView.RecyclerViewAdapterCallback, FirstFragmentAdapter.HomeItemClick {
+    InfiniteScrollRecyclerView.RecyclerViewAdapterCallback, FirstFragmentAdapter.HomeItemClick,
+    Listener {
 
+    private var errorLayout: LinearLayout? = null
     private var searchView: HiddenSearchWithRecyclerView? = null
-    private var refreshView: SwipeRefreshLayout? = null
     private val mLoadingData = NearByV2Response.Data.NearestFreind(loadingStatus = true)
     private var sharedPreference: SharedPreference? = null
     private var lastLocation: LatLng? = null
@@ -42,7 +49,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
     private var mydataList = ArrayList<NearByV2Response.Data.NearestFreind>()
     private var adapter: FirstFragmentAdapter? = null
     private var isFragmentVisible = false;
-
+    private var easyWayLocation: EasyWayLocation? = null
     companion object {
         private val firstFragment: FirstFragment? = null
 
@@ -55,36 +62,18 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         }
     }
 
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        startLocationUpdate()
+    override fun onPause() {
+        super.onPause()
+        easyWayLocation!!.endUpdates()
     }
+
 
     override fun onStart() {
         super.onStart()
         isFragmentVisible = true
     }
 
-    override fun onResume() {
-        super.onResume()
 
-    }
-
-
-    private fun startLocationUpdate() {
-
-        InitGeoLocationUpdate.locationInit(activity!!, object :
-            SimpleCallback<LatLng> {
-            override fun callback(mCurrentLatLng: LatLng) {
-                lastLocation = mCurrentLatLng
-                onlineFriendPageNo = 0
-                mydataList.clear()
-                adapter!!.notifyDataSetChanged()
-                callOnlineFriendApi(false, "",isFragmentVisible)
-            }
-        })
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -99,7 +88,23 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
             FirstFragmentPresenterImplementation(this, activity!!)
         setupViews(view)
         setupRecyclerFirstFragment(view)
+        easyWayLocation = EasyWayLocation(activity,false,this)
+        easyWayLocation!!.startLocation()
+
+        setupClickListener()
+
+
+
         return view
+    }
+
+    private fun setupClickListener() {
+        errorLayout!!.setOnClickListener {
+            onlineFriendPageNo = 0
+            mydataList.clear()
+            adapter!!.notifyDataSetChanged()
+            callOnlineFriendApi(false, "",isFragmentVisible)
+        }
     }
 
 
@@ -127,7 +132,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         fragmentVisible: Boolean
     ) {
         hideKeyboard()
-        InitGeoLocationUpdate.stopLocationUpdate(activity!!)
+        easyWayLocation!!.endUpdates()
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("name", searchvalue)
@@ -147,6 +152,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         onlineFriendPageNo++
         mydataList.addAll(responseData)
         adapter!!.notifyDataSetChanged()
+        setupErrorVisibility()
     }
 
     override fun onOnlineFriendInfiniteSuccess(responseData: List<NearByV2Response.Data.NearestFreind>) {
@@ -155,6 +161,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         mydataList.removeAt(mydataList.size - 1)
         mydataList.addAll(responseData)
         adapter?.notifyDataSetChanged()
+        setupErrorVisibility()
     }
 
     override fun onOnlineFriendFailure(responseData: String) {
@@ -162,6 +169,18 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
             adapter?.setLoadingStatus(false)
             mydataList.removeAt(mydataList.size - 1)
             adapter?.notifyDataSetChanged()
+        }
+
+        setupErrorVisibility()
+    }
+
+    fun setupErrorVisibility(){
+        if(mydataList.size == 0){
+            errorLayout!!.visibility = View.VISIBLE
+            searchView!!.visibility = View.GONE
+        }else{
+            searchView!!.visibility = View.VISIBLE
+            errorLayout!!.visibility = View.GONE
         }
     }
 
@@ -173,7 +192,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
     @SuppressLint("CheckResult")
     private fun setupViews(view: View?) {
         searchView = view!!.findViewById<HiddenSearchWithRecyclerView>(R.id.hidden_search_with_recycler)
-
+        errorLayout = view.findViewById(R.id.error)
 
         RxSearchObservable.fromView(searchView!!.searchBarSearchView)
             .debounce(500,TimeUnit.MILLISECONDS)
@@ -219,6 +238,8 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
     override fun itemClickCallback(position: Int) {
         val intent = Intent(activity, AProfileDetails::class.java)
         intent.putExtra(ConstantLib.FRIEND_ID, mydataList[position].userid.toString())
+        intent.putExtra(ConstantLib.IS_MY_FRIEND, mydataList[position].isMyFriend)
+        intent.putExtra(ConstantLib.IS_MY_FRIEND_BLOCKED, mydataList[position].isMyFriendBlocked)
         intent.putExtra(ConstantLib.PROFILE_IMAGE, mydataList[position].profile)
         intent.putExtra(ConstantLib.NAME, mydataList[position].name)
         intent.putExtra(ConstantLib.ADDRESS, mydataList[position].address)
@@ -235,5 +256,22 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
     override fun onStop() {
         super.onStop()
         firstFragmentPresenterImplementation!!.onStop()
+    }
+
+    override fun locationCancelled() {
+        Logger.d("locationCancelled on called")
+    }
+
+    override fun locationOn() {
+        Logger.d("locationOn on called")
+    }
+
+    override fun currentLocation(location: Location?) {
+        lastLocation = LatLng(location!!.latitude,location.longitude)
+        onlineFriendPageNo = 0
+        mydataList.clear()
+        adapter!!.notifyDataSetChanged()
+        callOnlineFriendApi(false, "",isFragmentVisible)
+
     }
 }

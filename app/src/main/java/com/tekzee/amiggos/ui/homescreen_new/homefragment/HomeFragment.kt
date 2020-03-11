@@ -9,6 +9,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
+import android.location.Location
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
@@ -17,10 +18,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.collection.valueIterator
-import androidx.fragment.app.Fragment
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
+import com.example.easywaylocation.EasyWayLocation
+import com.example.easywaylocation.Listener
+import com.google.android.gms.location.LocationRequest
 import com.google.gson.JsonObject
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
@@ -39,18 +42,23 @@ import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
+import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.camera.CameraPreview
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeApiResponse
-import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.FirstFragment
-import com.tekzee.amiggos.util.*
+import com.tekzee.amiggos.ui.venuedetailsnew.AVenueDetails
+import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubData
+import com.tekzee.amiggos.util.OnSwipeTouchListener
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 
 class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallback,
-    PermissionsListener {
+    PermissionsListener, Listener {
 
     private var placesApi: PlaceAPI? = null
     private var symbolManager: SymbolManager? =null
@@ -67,7 +75,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
     private var categoryId: String = ""
     private var searchkeyword: String = ""
     private var languageData: LanguageData? = null
-
+    private var easyWayLocation: EasyWayLocation? = null
 
     companion object {
         private val homefragment: HomeFragment? = null
@@ -76,11 +84,14 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
           if(homefragment == null ){
               return HomeFragment()
           }
-
             return homefragment
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        easyWayLocation!!.endUpdates()
+    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -94,14 +105,24 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
     ): View? {
         Mapbox.getInstance(this.context!!, resources.getString(R.string.mapbox_token))
         val view = inflater.inflate(R.layout.home_fragment, container, false)
+
+        homepresenterImplementation = HomePresenterImplementation(this, activity!!)
         sharedPreference = SharedPreference(activity!!)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        homepresenterImplementation = HomePresenterImplementation(this, activity!!)
         mapView = view!!.findViewById(R.id.mapView)
         mapView!!.onCreate(savedInstanceState)
         mapView!!.getMapAsync(this)
+
+        easyWayLocation = EasyWayLocation(activity,false,this)
+        easyWayLocation!!.startLocation()
         return view
     }
+
+
+
+
+
+
 
     private fun setupGestures(view: View?) {
 
@@ -193,8 +214,6 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
                     hideKeyboard()
                     val position = CameraPosition.Builder().target(LatLng(latitude!!.toDouble(),longitude!!.toDouble())).zoom(12.0).bearing(0.0).tilt(30.0).build()
                     mmapboxMap!!.animateCamera(CameraUpdateFactory.newCameraPosition(position),3000)
-
-
                     callHomeApi(0)
                 })
 
@@ -203,20 +222,6 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         })
     }
 
-    private fun startLocationUpdate() {
-        if(activity!=null){
-            InitGeoLocationUpdate.locationInit(activity!!, object :
-                SimpleCallback<com.google.android.gms.maps.model.LatLng> {
-                override fun callback(mCurrentLatLng: com.google.android.gms.maps.model.LatLng) {
-                    InitGeoLocationUpdate.stopLocationUpdate(activity!!)
-                    latitude = mCurrentLatLng.latitude.toString()
-                    longitude = mCurrentLatLng.longitude.toString()
-                    callHomeApi(0)
-                }
-            })
-        }
-
-    }
 
 
     private fun callHomeApi(callFrom: Int) {
@@ -320,8 +325,23 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         }
 
         symbolManager!!.addClickListener { t: Symbol? ->
+            val dataObject = t!!.data!!.asJsonObject
+            val intent = Intent(activity,AVenueDetails::class.java)
+            val clubdata = ClubData()
+            clubdata.clubName = dataObject.get("clubName").asString
+            clubdata.clubBasicDetails = dataObject.get("clubId").asString
+            clubdata.clubStateCity = dataObject.get("clubId").asString
+            clubdata.clubType = dataObject.get("clubType").asString
+            clubdata.clubId = dataObject.get("clubId").asString
+            clubdata.clubImage = dataObject.get("clubImage").asString
+            clubdata.address = dataObject.get("address").asString
+            clubdata.agelimit = dataObject.get("agelimit").asString
+            clubdata.isFavoriteVenue = dataObject.get("isFavoriteVenue").asBoolean
+            clubdata.dress = dataObject.get("dress").asString
+            clubdata.club_description = dataObject.get("club_description").asString
 
-            Log.d("id --->", "" + t!!.data.toString())
+            intent.putExtra(ConstantLib.VENUE_DATA,clubdata)
+            startActivity(intent)
         }
 
     }
@@ -379,6 +399,13 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
                     jsonData.addProperty("isAmigoClub",items.isAmigoClub)
                     jsonData.addProperty("latitude",items.latitude)
                     jsonData.addProperty("longitude",items.longitude)
+                    jsonData.addProperty("clubType",items.clubType)
+                    jsonData.addProperty("clubImage",items.image)
+                    jsonData.addProperty("address",items.address)
+                    jsonData.addProperty("isFavoriteVenue",items.isFavoriteVenue)
+                    jsonData.addProperty("agelimit",items.agelimit)
+                    jsonData.addProperty("dress",items.dress)
+                    jsonData.addProperty("club_description",items.club_description)
                     symbolManager.create(
                         SymbolOptions()
                             .withLatLng(LatLng(latitude, longitude))
@@ -405,7 +432,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
     override fun onMapReady(mapboxMap: MapboxMap) {
         mmapboxMap = mapboxMap
         mapboxMap.setStyle(Style.MAPBOX_STREETS, fun(style: Style) {
-            enableLocationComponent(style)
+            //enableLocationComponent(style)
             mstyle = style
         })
 
@@ -415,7 +442,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         setupClickListener(view!!)
         setUpLanguage(view!!)
         setupGestures(view)
-        startLocationUpdate()
+
     }
 
     override fun onRequestPermissionsResult(
@@ -474,6 +501,25 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
             activity!!.finish()
         }
     }
+
+    override fun locationCancelled() {
+        Logger.d("Location cancelled called")
+    }
+
+    override fun locationOn() {
+        Logger.d("Location on called")
+    }
+
+    override fun currentLocation(location: Location?) {
+        latitude = location!!.latitude.toString()
+        longitude = location.longitude.toString()
+        easyWayLocation!!.endUpdates()
+        Logger.d("Location updates--->"+latitude+"----"+longitude)
+        callHomeApi(0)
+    }
+
+
+
 
 
 }

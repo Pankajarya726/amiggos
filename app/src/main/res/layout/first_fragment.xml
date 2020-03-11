@@ -5,6 +5,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include android:id="@+id/error"
+        layout="@layout/error_layout"/>
+
+
     <com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView
         android:id="@+id/hidden_search_with_recycler"
         android:layout_width="match_parent"

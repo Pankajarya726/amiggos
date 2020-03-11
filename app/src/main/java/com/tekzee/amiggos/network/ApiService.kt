@@ -44,6 +44,7 @@ import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendResponse
 import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
+import com.tekzee.amiggos.ui.profiledetails.model.GetFriendProfileDetailsResponse
 import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponse
 import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponseV2
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendResponse
@@ -58,6 +59,7 @@ import com.tekzee.amiggos.ui.signup.steptwo.model.CityResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.StateResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.UserData
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
+import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewResponse
@@ -105,6 +107,22 @@ interface ApiService {
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<TurningUpResponse>>
+
+
+
+    @POST("user/getVenueDetails_V2")
+    fun callGetVenueDetails(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<ClubDetailResponse>>
+
+
+
+    @POST("user/create_favoriteVenue_V2")
+    fun callLikeUnlikeApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
 
 
 
@@ -319,8 +337,21 @@ interface ApiService {
     ): Observable<Response<RealFriendV2Response>>
 
 
+    @POST("user/freindRealFreind_V2")
+    fun doCallRealFriendAmiggosApiV2(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<RealFriendV2Response>>
+
+
     @POST("user/get_favorite_venue")
     fun doCallFavoriteVenueV2(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<FavoriteVenueResponse>>
+
+    @POST("user/get_Freinffavorite_venue")
+    fun doCallFriendsFavoriteVenueV2(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<FavoriteVenueResponse>>
@@ -576,11 +607,19 @@ interface ApiService {
 
 
 
-    @POST("user/getFriendsProfile")
+    @POST("user/getFreindProfile")
     fun doCallGetFriendProfileApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<FriendProfileResponse>>
+
+
+
+    @POST("user/getFreindProfile_V2")
+    fun doCallGetFriendProfileApiV2(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<GetFriendProfileDetailsResponse>>
 
 
 
@@ -602,7 +641,7 @@ interface ApiService {
 
 
 
-    @POST("user/acceptPartyInvitaion")
+    @POST("user/acceptPartyInvitaion_V2")
     fun doCallJoinPartyInvites(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>

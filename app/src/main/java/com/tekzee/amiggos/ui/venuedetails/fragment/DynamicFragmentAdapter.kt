@@ -5,13 +5,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.orhanobut.logger.Logger
-import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailResponse
+import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 class DynamicFragmentAdapter(
     fm: FragmentManager,
     var NumOfTabs: Int,
-    var data: VenueDetailResponse,
+    var data: ClubDetailResponse.Data,
     var clubid: String
 ) : FragmentStatePagerAdapter(fm,NumOfTabs) {
 
@@ -20,8 +20,8 @@ class DynamicFragmentAdapter(
         val bundle: Bundle = Bundle()
         bundle.putInt("position",position)
         bundle.putString(ConstantLib.CLUB_ID,clubid)
-        Logger.d("Position----------->"+position)
-        bundle.putSerializable(ConstantLib.VENUE_DATA,data.data[position])
+
+        bundle.putSerializable(ConstantLib.VENUE_DATA,data.clubData[position])
         val fragment: DynamicFragment = DynamicFragment.newInstance()
         fragment.arguments = bundle
         return fragment

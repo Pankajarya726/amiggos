@@ -115,6 +115,8 @@ class OurMemorieFragment : BaseFragment(), OurMemoriePresenter.OurMemoriePresent
     }
 
     private fun setupClickListener() {
+
+
         addMemories!!.setOnClickListener {
             val pDialog = SweetAlertDialog(activity)
             pDialog.titleText = languageData!!.klAddStoryAlert
@@ -219,4 +221,7 @@ class OurMemorieFragment : BaseFragment(), OurMemoriePresenter.OurMemoriePresent
 //        if(noPaginate!=null)
 //        noPaginate!!.unbind()
     }
+
+
+
 }

@@ -25,13 +25,16 @@
 
     </TextView>
 
-    <Switch
+    <com.suke.widget.SwitchButton
         android:id="@+id/s_switch"
+        app:sb_checked_color="#f0d774"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        app:sb_checkline_color="#f0d774"
+        app:sb_show_indicator="false"
         android:layout_marginBottom="3dp"
         android:layout_weight="2"
         app:layout_constraintBottom_toBottomOf="parent"

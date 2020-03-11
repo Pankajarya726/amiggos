@@ -24,6 +24,10 @@ data class InvitationResponseV2(
             var userid: Int = 0,
             @SerializedName("real_freind_count")
             var real_freind_count: String = "",
+            @SerializedName("isMyFriend")
+            var isMyFriend: Boolean = false,
+            @SerializedName("isMyFriendBlocked")
+            var isMyFriendBlocked: Boolean = false,
             @SerializedName("address")
             var address: String = ""
         )

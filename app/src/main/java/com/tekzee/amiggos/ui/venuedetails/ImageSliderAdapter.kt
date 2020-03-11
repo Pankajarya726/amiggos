@@ -9,11 +9,11 @@ import com.bogdwellers.pinchtozoom.ImageMatrixTouchHandler
 import com.bumptech.glide.Glide
 import com.smarteist.autoimageslider.SliderViewAdapter
 import com.tekzee.amiggos.R
-import com.tekzee.amiggos.ui.imagepanaroma.model.ImageVideoData
+import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
 
 
 class ImageSliderAdapter(
-    var data: List<ImageVideoData>,
+    var data: List<ClubDetailResponse.Data.ClubData.ImageVideoData>,
     var listener: ImageClickListener
 ): SliderViewAdapter<ImageSliderAdapter.SliderViewHolder>() {
     private var context: Context? = null

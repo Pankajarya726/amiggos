@@ -20,7 +20,7 @@
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/htab_collapse_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="256dp"
+                android:layout_height="300dp"
                 android:fitsSystemWindows="true"
                 app:contentScrim="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
@@ -129,6 +129,7 @@
                     tools:text="Columbus, Ohio" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/txt_invite_friend"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -142,110 +143,159 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:id="@+id/txt_done"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/edit_profile_bg"
+                    android:fontFamily="@font/opensans_regular"
+                    android:padding="3dp"
+                    android:text="Done"
+                    android:textColor="@android:color/black"
+                    app:layout_constraintBottom_toTopOf="@+id/view3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+
             <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <TextView
+                <LinearLayout
+                    android:id="@+id/booking_detail_layout"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:fontFamily="@font/opensans_bold"
-                    android:text="Booking Details"
-                    android:textColor="@android:color/black"
-                    android:textSize="16dp" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Booking Details"
+                        android:textColor="@android:color/black"
+                        android:textSize="16dp" />
 
 
-                <TextView
-                    android:id="@+id/bookingid"
+                    <TextView
+                        android:id="@+id/bookingid"
 
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginRight="8dp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:textColor="@android:color/black"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginRight="8dp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:textColor="@android:color/black"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/starttime"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginRight="8dp"
+                        android:fontFamily="@font/opensans_regular"
+
+                        android:textColor="@android:color/black"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/endtime"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginRight="8dp"
+                        android:fontFamily="@font/opensans_regular"
+
+                        android:textColor="@android:color/black"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginRight="8dp"
+                        android:fontFamily="@font/opensans_regular"
+
+                        android:textColor="@android:color/black"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/cost"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginRight="8dp"
+                        android:fontFamily="@font/opensans_regular"
+
+                        android:textColor="@android:color/black"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/guest"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginRight="8dp"
+                        android:fontFamily="@font/opensans_regular"
+
+                        android:textColor="@android:color/black"
+                        android:textSize="14dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/recyclerviewlayout"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginRight="8dp"
-                    android:fontFamily="@font/opensans_regular"
-                    android:textColor="@android:color/black"
-                    android:textSize="14dp" />
+                    android:layout_height="match_parent">
+                    <com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView
+                        android:id="@+id/hidden_search_with_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:filterWhileTyping="false"
+                        app:scrollToBottomBeforeHide="true"
+                        app:scrollToTopBeforeShow="true"
+                        app:hideAtScroll="false"
+                        app:visibleAtInit="true">
 
-                <TextView
-                    android:id="@+id/date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginRight="8dp"
-                    android:fontFamily="@font/opensans_regular"
-                    android:textColor="@android:color/black"
-                    android:textSize="14dp" />
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/nearfriendrecycler"/>
+                    </com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView>
+                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/starttime"
 
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginRight="8dp"
-                    android:fontFamily="@font/opensans_regular"
-                    
-                    android:textColor="@android:color/black"
-                    android:textSize="14dp" />
-
-                <TextView
-                    android:id="@+id/endtime"
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginRight="8dp"
-                    android:fontFamily="@font/opensans_regular"
-                    
-                    android:textColor="@android:color/black"
-                    android:textSize="14dp" />
-
-                <TextView
-                    android:id="@+id/address"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginRight="8dp"
-                    android:fontFamily="@font/opensans_regular"
-                    
-                    android:textColor="@android:color/black"
-                    android:textSize="14dp" />
-
-                <TextView
-                    android:id="@+id/cost"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginRight="8dp"
-                    android:fontFamily="@font/opensans_regular"
-                    
-                    android:textColor="@android:color/black"
-                    android:textSize="14dp" />
-
-                <TextView
-                    android:id="@+id/guest"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginRight="8dp"
-                    android:fontFamily="@font/opensans_regular"
-                    
-                    android:textColor="@android:color/black"
-                    android:textSize="14dp" />
 
             </LinearLayout>
+
 
 
         </LinearLayout>

@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout
+        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -27,6 +28,42 @@
 
         </androidx.appcompat.widget.Toolbar>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:fontFamily="@font/opensans_bold"
+                    android:id="@+id/notificationtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="15dp"
+                    android:padding="2dp"
+                    android:text="Customize your package"
+                    android:textColor="@android:color/black"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/black" />
+
+
         <androidx.cardview.widget.CardView
             android:layout_margin="10dp"
             android:layout_width="match_parent"
@@ -35,7 +72,7 @@
             <com.applandeo.materialcalendarview.CalendarView
                 android:id="@+id/calendarView"
                 app:headerLabelColor="@color/colorPrimary"
-                app:headerColor="@android:color/white"
+                app:headerColor="#e6e6e6"
                 app:abbreviationsLabelsColor="@color/colorPrimary"
                 app:previousButtonSrc="@drawable/left_arrow"
                 app:forwardButtonSrc="@drawable/right_arrow"

@@ -136,7 +136,6 @@ class BookingInvitations : BaseFragment(), BookingInvitationPresenter.BookingInv
     }
 
     override fun validateError(message: String) {
-
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
@@ -145,6 +144,7 @@ class BookingInvitations : BaseFragment(), BookingInvitationPresenter.BookingInv
         adapter.notifyDataSetChanged()
         items.addAll(responseData!!.data.bookingDetails)
         adapter.notifyDataSetChanged()
+        setupErrorVisibility()
     }
 
 
@@ -161,11 +161,24 @@ class BookingInvitations : BaseFragment(), BookingInvitationPresenter.BookingInv
     override fun onInvitationFailure(responseData: String) {
         items.clear()
         adapter.notifyDataSetChanged()
+        setupErrorVisibility()
     }
 
 
     override fun onStop() {
         super.onStop()
         bookingPresenterImplementation!!.onStop()
+    }
+
+
+
+    fun setupErrorVisibility(){
+        if(items.size == 0){
+            binding.error.errorLayout.visibility = View.VISIBLE
+            binding.invitationRecyclerview.visibility = View.GONE
+        }else{
+            binding.invitationRecyclerview.visibility = View.VISIBLE
+            binding.error.errorLayout.visibility = View.GONE
+        }
     }
 }

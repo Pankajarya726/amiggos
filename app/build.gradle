@@ -215,4 +215,10 @@ dependencies {
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
 
     implementation 'ru.alexbykov:nopaginate:0.9.9'
+
+    implementation 'com.github.prabhat1707:EasyWayLocation:2.0'
+
+    implementation 'com.github.jd-alexander:LikeButton:0.2.3'
+
+    implementation 'com.github.zcweng:switch-button:0.0.3@aar'
 }

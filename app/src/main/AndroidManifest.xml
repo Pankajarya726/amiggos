@@ -75,7 +75,18 @@
 
 
         <activity
+            android:name=".ui.venuedetailsnew.AVenueDetails"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+
+        <activity
             android:name=".ui.signup.stepone.StepOne"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ui.friendinviteconfirmation.FriendInviteConfirmation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 

@@ -24,6 +24,10 @@ data class BlockedUserResponse(
             var userid: Int = 0,
             @SerializedName("address")
             var address: String = "",
+            @SerializedName("isMyFriend")
+            var isMyFriend: Boolean = false,
+            @SerializedName("isMyFriendBlocked")
+            var isMyFriendBlocked: Boolean = false,
             @SerializedName("real_freind_count")
             var real_freind_count: String = "0"
         )

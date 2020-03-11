@@ -8,11 +8,11 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.smarteist.autoimageslider.SliderViewAdapter
 import com.tekzee.amiggos.R
-import com.tekzee.amiggos.ui.imagepanaroma.model.ImageVideoData
+import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
 
 
 class SliderAdapter(
-    var data: List<ImageVideoData>,
+    var data: List<ClubDetailResponse.Data.ClubData.ImageVideoData>,
     var listener: ImageClickListener
 ): SliderViewAdapter<SliderAdapter.SliderViewHolder>() {
     private var context: Context? = null

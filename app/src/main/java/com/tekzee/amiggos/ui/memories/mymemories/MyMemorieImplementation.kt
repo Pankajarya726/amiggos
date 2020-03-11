@@ -50,7 +50,7 @@ class MyMemorieImplementation(
                         }
                     }
                 }, { error ->
-                    //                    mainView.hideProgressbar()
+                    mainView.hideProgressbar()
                     mainView.onMyMemorieFailure(error.message.toString())
                 })
         } else {

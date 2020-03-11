@@ -32,6 +32,16 @@ data class HomeApiResponse(
             var latitude: String = "",
             @SerializedName("longitude")
             var longitude: String = "",
+            @SerializedName("agelimit")
+            var agelimit: String = "",
+            @SerializedName("address")
+            var address: String = "",
+            @SerializedName("dress")
+            var dress: String = "",
+            @SerializedName("club_description")
+            var club_description: String = "",
+            @SerializedName("isFavoriteVenue")
+            var isFavoriteVenue: Boolean = false,
             @SerializedName("venue_type")
             var venueType: String = ""
         )

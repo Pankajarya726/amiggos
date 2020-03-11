@@ -4,9 +4,9 @@ import android.content.Context
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
-import com.tekzee.amiggos.ui.friendprofile.model.FriendProfileResponse
 import com.tekzee.amiggos.ui.notification.model.StorieResponse
 import com.tekzee.amiggos.network.ApiClient
+import com.tekzee.amiggos.ui.profiledetails.model.GetFriendProfileDetailsResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -61,16 +61,16 @@ class FriendProfilePresenterImplementation(private var mainView: FriendProfilePr
 
         mainView.showProgressbar()
         if (mainView.checkInternet()) {
-            disposable = ApiClient.instance.doCallGetFriendProfileApi(input, createHeaders)
+            disposable = ApiClient.instance.doCallGetFriendProfileApiV2(input, createHeaders)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
                     mainView.hideProgressbar()
                     when (response.code()) {
                         200 -> {
-                            val responseData: FriendProfileResponse? = response.body()
+                            val responseData: GetFriendProfileDetailsResponse? = response.body()
                             if (responseData!!.status) {
-                                mainView.onFriendProfileSuccess(responseData)
+                                mainView.onFriendProfileV2Success(responseData)
                             } else {
                                 mainView.validateError(responseData.message)
                             }

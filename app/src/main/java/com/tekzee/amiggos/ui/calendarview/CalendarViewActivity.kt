@@ -107,7 +107,7 @@ class CalendarViewActivity: BaseActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        binding.title.text = languageData!!.klVenues
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

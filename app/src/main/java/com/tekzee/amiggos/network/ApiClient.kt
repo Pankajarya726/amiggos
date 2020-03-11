@@ -47,6 +47,7 @@ import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendResponse
 import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
+import com.tekzee.amiggos.ui.profiledetails.model.GetFriendProfileDetailsResponse
 import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponse
 import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponseV2
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendResponse
@@ -61,6 +62,7 @@ import com.tekzee.amiggos.ui.signup.steptwo.model.CityResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.StateResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.UserData
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
+import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewResponse
@@ -268,6 +270,20 @@ class ApiClient {
         return apiService.callTurningUpApi(input, createHeaders)
     }
 
+    fun callGetVenueDetails(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<ClubDetailResponse>> {
+        return apiService.callGetVenueDetails(input, createHeaders)
+    }
+
+    fun callLikeUnlikeApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.callLikeUnlikeApi(input, createHeaders)
+    }
+
     fun callGetProfile(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
@@ -353,12 +369,29 @@ class ApiClient {
         return apiService.doCallRealFriendApiV2(input, createHeaders)
     }
 
+    fun doCallRealFriendAmiggosApiV2(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<RealFriendV2Response>> {
+        return apiService.doCallRealFriendAmiggosApiV2(input, createHeaders)
+    }
+
 
     fun doCallFavoriteVenueV2(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<FavoriteVenueResponse>> {
         return apiService.doCallFavoriteVenueV2(input, createHeaders)
+    }
+
+
+
+
+    fun doCallFriendsFavoriteVenueV2(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<FavoriteVenueResponse>> {
+        return apiService.doCallFriendsFavoriteVenueV2(input, createHeaders)
     }
 
 
@@ -651,6 +684,13 @@ class ApiClient {
         createHeaders: HashMap<String, String?>
     ): Observable<Response<FriendProfileResponse>> {
         return apiService.doCallGetFriendProfileApi(input, createHeaders)
+    }
+
+    fun doCallGetFriendProfileApiV2(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<GetFriendProfileDetailsResponse>> {
+        return apiService.doCallGetFriendProfileApiV2(input, createHeaders)
     }
 
     fun doCallGetNotification(

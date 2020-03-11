@@ -12,6 +12,7 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.BookingInvitations
 import com.tekzee.amiggos.ui.bookings_new.bookings.ABooking
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.adapter.ViewPagerAdapter
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.FirstFragment
 import com.tekzee.amiggos.ui.mybooking.MyBookingActivity
@@ -42,7 +43,7 @@ class BookingFragment : BaseFragment(){
 
 
         val view = inflater.inflate(R.layout.booking_fragment, container, false)
-        sharedPreference = SharedPreference(activity!!)
+       sharedPreference = SharedPreference(activity!!)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
 
         setupViews(view)

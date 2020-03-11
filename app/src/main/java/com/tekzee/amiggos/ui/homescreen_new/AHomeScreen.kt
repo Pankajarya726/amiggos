@@ -1,22 +1,28 @@
 package com.tekzee.amiggos.ui.homescreen_new
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
+import com.example.easywaylocation.EasyWayLocation
+import com.example.easywaylocation.Listener
+import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.AHomeScreenBinding
+import com.tekzee.amiggos.enums.Actions
+import com.tekzee.amiggos.services.UpdateUserLocationToServer
 import com.tekzee.amiggos.ui.bookings_new.BookingFragment
 import com.tekzee.amiggos.ui.camera.CameraPreview
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.MyFriendChatActivity
@@ -35,7 +41,15 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
     lateinit var binding: AHomeScreenBinding
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
-    private var bottomNavigation: BottomNavigationView? = null
+
+
+
+    companion object{
+        var bottomNavigation: BottomNavigationView? = null
+    }
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.a_home_screen)
@@ -43,10 +57,45 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         bottomNavigation = binding.bottomNavigation
         bottomNavigation!!.setOnNavigationItemSelectedListener(this)
-        setHeaders(R.id.navigation_home)
-        openFragment(HomeFragment.newInstance(),"1")
+
+
+
         setupLanguage()
         setupClickListener()
+
+        //check permissions
+        askPermission(Manifest.permission.ACCESS_FINE_LOCATION){
+            setHeaders(R.id.navigation_home)
+            openFragment(HomeFragment.newInstance(),"1")
+        }.onDeclined {
+                e ->
+            if (e.hasDenied()) {
+
+                AlertDialog.Builder(this)
+                    .setMessage("Please accept our permissions")
+                    .setPositiveButton("yes") { dialog, which ->
+                        e.askAgain()
+                    } //ask again
+                    .setNegativeButton("no") { dialog, which ->
+                        dialog.dismiss()
+                    }
+                    .show()
+            }
+
+            if(e.hasForeverDenied()) {
+                e.goToSettings()
+            }
+        }
+
+        Intent(this, UpdateUserLocationToServer::class.java).also { intent ->
+            intent.action = Actions.START.name
+            startService(intent)
+        }
+
+    }
+
+    override fun onStart() {
+        super.onStart()
 
     }
 
@@ -120,7 +169,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
                 return true
             }
             R.id.navigation_my_lifestyle -> {
-                openFragment(HomeFragment.newInstance(),"3")
+                openFragment(AMemoriesFragment.newInstance(),"3")
                 return true
             }
             R.id.navigation_memories -> {
@@ -176,6 +225,12 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
         }
 
     }
+
+    override fun onResume() {
+        super.onResume()
+
+    }
+
 
 
 }

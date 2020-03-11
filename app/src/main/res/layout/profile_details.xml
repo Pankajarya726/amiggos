@@ -47,7 +47,7 @@
                     android:id="@+id/img_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/back" />
+                    app:srcCompat="@drawable/ic_back" />
 
                 <!--<androidx.appcompat.widget.Toolbar
                     android:id="@+id/htab_toolbar"
@@ -95,16 +95,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="8dp"
-                    android:text="TextView"
+                    android:text="himanshu.verma@tekzee.com"
                     android:textColor="@android:color/black"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
+                    android:singleLine="true"
+                    android:maxLines="1"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/guideline4"
                     app:layout_constraintEnd_toStartOf="@+id/txt_realfriends"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.8"
-                    tools:text="Jane Smith" />
+               />
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline4"

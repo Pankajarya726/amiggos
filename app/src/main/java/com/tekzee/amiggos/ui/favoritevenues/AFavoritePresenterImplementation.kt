@@ -37,7 +37,7 @@ class AFavoritePresenterImplementation(
             mainView.showProgressbar()
         }
         if (mainView.checkInternet()) {
-            disposable = ApiClient.instance.doCallFavoriteVenueV2(input,createHeaders)
+            disposable = ApiClient.instance.doCallFriendsFavoriteVenueV2(input,createHeaders)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->

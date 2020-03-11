@@ -30,7 +30,7 @@ class BookingAdapter(
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind() {
-            itemView.txt_booking_id.text = mDataList[adapterPosition].bookingId.toString()
+            itemView.txt_booking_id.text = mDataList[adapterPosition].clubName
             itemView.txt_zone.text = mDataList[adapterPosition].startTime +" - "+ mDataList[adapterPosition].endTime
             itemView.txt_date.text = mDataList[adapterPosition].partyDate
             itemView.mainlayout.setOnClickListener {

@@ -49,7 +49,14 @@ class VenueFragment : BaseFragment(), VenueFragmentPresenter.VenueFragmentPresen
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         setupVenueTaggedRecycler()
         callTaggedVenueApi()
+        setupClickListener()
         return binding.root
+    }
+
+    private fun setupClickListener() {
+        binding.error.errorLayout.setOnClickListener {
+            callTaggedVenueApi()
+        }
     }
 
     private fun setupVenueTaggedRecycler() {
@@ -74,20 +81,32 @@ class VenueFragment : BaseFragment(), VenueFragmentPresenter.VenueFragmentPresen
         adapter!!.notifyDataSetChanged()
         data.addAll(taggedVenue)
         adapter!!.notifyDataSetChanged()
+        setupErrorVisibility()
     }
 
     override fun onVenueFailure(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+        setupErrorVisibility()
     }
 
 
     override fun validateError(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+        setupErrorVisibility()
     }
 
     override fun onStop() {
         super.onStop()
         venueFragmentPresenterImplementation!!.onStop()
+    }
+
+
+    fun setupErrorVisibility(){
+        if(data.size == 0){
+            binding.error.errorLayout.visibility = View.VISIBLE
+            binding.aVenueRecyclerview.visibility = View.GONE
+        }else{
+            binding.aVenueRecyclerview.visibility = View.VISIBLE
+            binding.error.errorLayout.visibility = View.GONE
+        }
     }
 
 }

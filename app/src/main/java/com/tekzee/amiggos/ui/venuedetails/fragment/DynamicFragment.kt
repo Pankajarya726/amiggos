@@ -15,12 +15,11 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.DynamicFragmentBinding
 import com.tekzee.amiggos.ui.chooseweek.ChooseWeekActivity
-import com.tekzee.amiggos.ui.imagepanaroma.model.ImageVideoData
-import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailData
 import com.tekzee.amiggos.ui.venuedetails.ImageClickListener
 import com.tekzee.amiggos.ui.venuedetails.SliderAdapter
 import com.tekzee.amiggos.ui.venuedetails.fragment.adapter.DataAdapter
 import com.tekzee.amiggos.ui.venuedetails.imageslider.ImageSliderActivity
+import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
 import com.tekzee.amiggos.ui.videoplayer.MyPlayerActivity
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.amiggos.util.SharedPreference
@@ -37,7 +36,7 @@ class DynamicFragment: BaseFragment() {
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
     var sliderAdapter: SliderAdapter? = null
-    var dataItem: VenueDetailData? =null
+    var dataItem: ClubDetailResponse.Data.ClubData? =null
     companion object{
         fun newInstance(): DynamicFragment {
             return DynamicFragment()
@@ -58,11 +57,11 @@ class DynamicFragment: BaseFragment() {
 
 
         val bundle = arguments
-        dataItem = bundle!!.getSerializable(ConstantLib.VENUE_DATA) as VenueDetailData
+        dataItem = bundle!!.getSerializable(ConstantLib.VENUE_DATA) as ClubDetailResponse.Data.ClubData
         clubId = bundle.getString(ConstantLib.CLUB_ID)
         //Logger.d(dataItem.toString())
         sliderAdapter = SliderAdapter(dataItem!!.imageVideoData,object : ImageClickListener {
-            override fun onItemClick(imageVideoData: ImageVideoData) {
+            override fun onItemClick(imageVideoData: ClubDetailResponse.Data.ClubData.ImageVideoData) {
                 if(imageVideoData.isImage==1){
                     val intent = Intent(activity,ImageSliderActivity::class.java)
                     intent.putExtra(ConstantLib.IMAGE_DATA,dataItem)
@@ -108,7 +107,7 @@ class DynamicFragment: BaseFragment() {
         }
     }
 
-    private fun setupReyclerView(dataItem: VenueDetailData) {
+    private fun setupReyclerView(dataItem: ClubDetailResponse.Data.ClubData) {
 
         binding.dataReyclerview.setHasFixedSize(true)
         binding.dataReyclerview.layoutManager = LinearLayoutManager(activity)
@@ -121,8 +120,8 @@ class DynamicFragment: BaseFragment() {
         }
     }
 
-    private fun setupViewData(dataItem: VenueDetailData) {
-        binding.txtNameVenue.text = dataItem.clubName
+    private fun setupViewData(dataItem: ClubDetailResponse.Data.ClubData) {
+        binding.txtNameVenue.text = this.dataItem!!.clubName
     }
 
     override fun validateError(message: String) {

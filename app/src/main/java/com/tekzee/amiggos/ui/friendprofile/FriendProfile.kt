@@ -23,6 +23,7 @@ import com.tekzee.amiggos.ui.home.model.StoriesData
 import com.tekzee.amiggos.ui.notification.model.StorieResponse
 import com.tekzee.amiggos.ui.storieview.StorieViewActivity
 import com.tekzee.amiggos.base.BaseActivity
+import com.tekzee.amiggos.ui.profiledetails.model.GetFriendProfileDetailsResponse
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
@@ -338,6 +339,10 @@ class FriendProfile : BaseActivity(), FriendProfilePresenter.FriendProfileMainVi
         }
 
 
+    }
+
+    override fun onFriendProfileV2Success(responseData: GetFriendProfileDetailsResponse?) {
+        Toast.makeText(this,responseData!!.message,Toast.LENGTH_LONG).show()
     }
 
     override fun onAcceptInvitation(responseData: CommonResponse?) {

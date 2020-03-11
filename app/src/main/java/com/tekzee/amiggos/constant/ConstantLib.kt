@@ -25,6 +25,8 @@ object ConstantLib {
     const val USER_DATA = "user_data"
     const val FROM = "from"
     const val FRIEND_ID = "friend_id"
+    const val IS_MY_FRIEND = "is_my_friend"
+    const val IS_MY_FRIEND_BLOCKED = "is_my_friend_blocked"
     const val FRIENDNAME = "friendname"
     const val FRIENDIMAGE = "friendimage"
     const val BOOKING_ID = "booking_id"

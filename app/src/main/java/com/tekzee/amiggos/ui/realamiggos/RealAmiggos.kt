@@ -17,7 +17,6 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.RealFriendFragmentBinding
 import com.tekzee.amiggos.ui.realamiggos.adapter.RealAmiggosAdapter
-import com.tekzee.amiggos.ui.friendprofile.FriendProfile
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendV2Response
 import com.tekzee.mallortaxi.base.BaseFragment
@@ -27,9 +26,10 @@ import com.tekzee.mallortaxiclient.constant.ConstantLib
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.myprofile_activity.*
 import java.util.concurrent.TimeUnit
 
-class RealAmiggos: BaseFragment(), RealAmiggosPresenter.RealAmiggosPresenterMainView, InfiniteScrollRecyclerView.RecyclerViewAdapterCallback ,RealAmiggosAdapter.HomeItemClick{
+class RealAmiggos(var friendId: String?) : BaseFragment(), RealAmiggosPresenter.RealAmiggosPresenterMainView, InfiniteScrollRecyclerView.RecyclerViewAdapterCallback ,RealAmiggosAdapter.HomeItemClick{
 
 
 
@@ -84,7 +84,8 @@ class RealAmiggos: BaseFragment(), RealAmiggosPresenter.RealAmiggosPresenterMain
 
 
         val input: JsonObject = JsonObject()
-        input.addProperty("userid",activity!!.intent.getStringExtra(ConstantLib.FRIEND_ID))
+        input.addProperty("userid",sharedPreference!!.getValueInt(ConstantLib.USER_ID))
+        input.addProperty("freind_id",friendId)
         input.addProperty("name", searchvalue)
         input.addProperty("page_no", realFriendPageNo)
         realFriendPresenterImplementation!!.doCallRealFriendApi(
@@ -155,6 +156,8 @@ class RealAmiggos: BaseFragment(), RealAmiggosPresenter.RealAmiggosPresenterMain
         val intent = Intent(activity, AProfileDetails::class.java)
         intent.putExtra(ConstantLib.FRIEND_ID, mydataList[position].userid.toString())
         intent.putExtra(ConstantLib.PROFILE_IMAGE,mydataList[position].profile)
+        intent.putExtra(ConstantLib.IS_MY_FRIEND, mydataList[position].isMyFriend)
+        intent.putExtra(ConstantLib.IS_MY_FRIEND_BLOCKED, mydataList[position].isMyFriendBlocked)
         intent.putExtra(ConstantLib.NAME, mydataList[position].name)
         intent.putExtra(ConstantLib.ADDRESS, mydataList[position].address)
         intent.putExtra(ConstantLib.REAL_FREIND_COUNT, mydataList[position].real_freind_count)

@@ -1,25 +1,30 @@
 package com.tekzee.amiggos.ui.venuedetails
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.tabs.TabLayout
+import com.google.gson.JsonObject
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.VenueDetailsActivityBinding
-import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailResponse
 import com.tekzee.amiggos.ui.venuedetails.fragment.DynamicFragmentAdapter
 import com.tekzee.amiggos.base.BaseActivity
+import com.tekzee.amiggos.ui.calendarview.CalendarViewActivity
+import com.tekzee.amiggos.ui.chooseweek.model.ChooseWeekResponse
+import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
 import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 
 class VenueDetailsActivity: BaseActivity(), VenueDetailsPresenter.VenueDetailsMainView {
-
-    private lateinit var data: VenueDetailResponse
+    private var response: ChooseWeekResponse? = null
+    private var data: ClubDetailResponse.Data?=null
     private lateinit var binding: VenueDetailsActivityBinding
     private var sharedPreferences: SharedPreference? = null
     private var languageData: LanguageData? = null
@@ -31,9 +36,30 @@ class VenueDetailsActivity: BaseActivity(), VenueDetailsPresenter.VenueDetailsMa
         sharedPreferences = SharedPreference(this)
         languageData = sharedPreferences!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         venueDetailsPresenterImplementation = VenueDetailsPresenterImplementation(this,this)
-        data =intent.getSerializableExtra(ConstantLib.VENUE_DATA) as VenueDetailResponse
+        data =intent.getSerializableExtra(ConstantLib.VENUE_DATA) as ClubDetailResponse.Data
+        callChooseWeekApi()
         setupToolBar()
+        setupClickListener()
         initView()
+    }
+
+    private fun callChooseWeekApi() {
+        val input: JsonObject = JsonObject()
+        input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
+        input.addProperty("club_id", intent.getStringExtra(ConstantLib.CLUB_ID))
+        venueDetailsPresenterImplementation!!.doCallWeekApi(
+            input,
+            Utility.createHeaders(sharedPreferences)
+        )
+    }
+
+    private fun setupClickListener() {
+        binding.txtBook.setOnClickListener{
+            val intentActivity = Intent(applicationContext, CalendarViewActivity::class.java)
+            intentActivity.putExtra(ConstantLib.CALENDAR_DATA,response)
+            intentActivity.putExtra(ConstantLib.CLUB_ID,intent.getStringExtra(ConstantLib.CLUB_ID))
+            startActivity(intentActivity)
+        }
     }
 
     private fun setupToolBar() {
@@ -81,13 +107,18 @@ class VenueDetailsActivity: BaseActivity(), VenueDetailsPresenter.VenueDetailsMa
     }
 
     private fun setDynamicFragmentToTabLayout() {
-        for (item in data.data){
+        for (item in data!!.clubData){
             binding.tabs.addTab(binding.tabs.newTab().setText(item.value))
         }
 
-        val dynamicFragmentAdapter: DynamicFragmentAdapter = DynamicFragmentAdapter(supportFragmentManager,binding.tabs.tabCount,data,intent.getStringExtra(ConstantLib.CLUB_ID))
+        val dynamicFragmentAdapter: DynamicFragmentAdapter = DynamicFragmentAdapter(supportFragmentManager,binding.tabs.tabCount,data!!,intent.getStringExtra(ConstantLib.CLUB_ID))
         binding.viewpager.adapter = dynamicFragmentAdapter
         binding.viewpager.currentItem = 0
+    }
+
+    override fun onChooseWeekSuccess(responseData: ChooseWeekResponse?) {
+        response = responseData
+
     }
 
     override fun validateError(message: String) {

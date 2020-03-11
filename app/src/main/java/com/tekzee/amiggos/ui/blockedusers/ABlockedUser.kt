@@ -61,6 +61,8 @@ class ABlockedUser: BaseActivity() , ABlockedUserPresenter.ABlockedUserPresenter
             override fun onItemClicked(blockedUser: BlockedUserResponse.Data.BlockedUser) {
                 val intent = Intent(applicationContext, AProfileDetails::class.java)
                 intent.putExtra(ConstantLib.FRIEND_ID, blockedUser.userid.toString())
+                intent.putExtra(ConstantLib.IS_MY_FRIEND, blockedUser.isMyFriend)
+                intent.putExtra(ConstantLib.IS_MY_FRIEND_BLOCKED, blockedUser.isMyFriend)
                 intent.putExtra(ConstantLib.PROFILE_IMAGE, blockedUser.profile)
                 intent.putExtra(ConstantLib.NAME, blockedUser.name)
                 intent.putExtra(ConstantLib.ADDRESS, blockedUser.address)

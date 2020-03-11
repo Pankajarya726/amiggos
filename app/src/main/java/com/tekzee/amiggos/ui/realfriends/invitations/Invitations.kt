@@ -65,8 +65,15 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         invitationPresenterImplementation = InvitationPresenterImplementation(this, activity!!)
         setupRecyclerView()
+        setupClickListener()
         callInvitationApi()
         return myView
+    }
+
+    private fun setupClickListener() {
+        binding.error.errorLayout.setOnClickListener {
+            callInvitationApi()
+        }
     }
 
     private fun setupRecyclerView() {
@@ -88,6 +95,8 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
                     3 -> {
                         val intent = Intent(activity, AProfileDetails::class.java)
                         intent.putExtra(ConstantLib.FRIEND_ID, invitationData.userid.toString())
+                        intent.putExtra(ConstantLib.IS_MY_FRIEND, invitationData.isMyFriend)
+                        intent.putExtra(ConstantLib.IS_MY_FRIEND_BLOCKED, invitationData.isMyFriendBlocked)
                         intent.putExtra(ConstantLib.PROFILE_IMAGE,invitationData.profile)
                         intent.putExtra(ConstantLib.NAME, invitationData.name)
                         intent.putExtra(ConstantLib.ADDRESS, invitationData.address)
@@ -145,6 +154,7 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
         adapter.notifyDataSetChanged()
         items.addAll(responseData!!.data.freindRequest)
         adapter.notifyDataSetChanged()
+        setupErrorVisibility()
     }
 
 
@@ -161,11 +171,23 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
     override fun onInvitationFailure(responseData: String) {
         items.clear()
         adapter.notifyDataSetChanged()
+        setupErrorVisibility()
     }
 
 
     override fun onStop() {
         super.onStop()
         invitationPresenterImplementation!!.onStop()
+    }
+
+
+    fun setupErrorVisibility(){
+        if(items.size == 0){
+            binding.error.errorLayout.visibility = View.VISIBLE
+            binding.invitationRecyclerview.visibility = View.GONE
+        }else{
+            binding.invitationRecyclerview.visibility = View.VISIBLE
+            binding.error.errorLayout.visibility = View.GONE
+        }
     }
 }

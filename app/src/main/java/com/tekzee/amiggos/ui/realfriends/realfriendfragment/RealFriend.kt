@@ -76,6 +76,7 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
         realFriendPresenterImplementation = RealFriendPresenterImplementation(this,activity!!)
         onlineFriendRecyclerview = myView!!.findViewById(R.id.real_friend_fragment)
         setupRecyclerRealFriend()
+        setupClickListener()
 
         RxTextView.textChanges(binding.edtSearch) .filter { it.length > 2 }.debounce(500, TimeUnit.MILLISECONDS).subscribeOn(
             Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
@@ -90,6 +91,12 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
 
         return myView
 
+    }
+
+    private fun setupClickListener() {
+        binding.error.errorLayout.setOnClickListener {
+            callRealFriendApi(false, "", isFragmentVisible)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -127,6 +134,7 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
         realFriendPageNo++
         mydataList.addAll(responseData)
         adapter!!.notifyDataSetChanged()
+        setupErrorVisibility()
     }
 
     private fun setupRecyclerRealFriend() {
@@ -152,6 +160,7 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
         mydataList.removeAt(mydataList.size - 1)
         mydataList.addAll(responseData)
         adapter?.notifyDataSetChanged()
+        setupErrorVisibility()
     }
 
 
@@ -164,6 +173,8 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
             mydataList.clear()
             adapter!!.notifyDataSetChanged()
         }
+
+        setupErrorVisibility()
     }
 
     override fun onLoadMoreData() {
@@ -183,6 +194,8 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
 
         val intent = Intent(activity, AProfileDetails::class.java)
         intent.putExtra(ConstantLib.FRIEND_ID, mydataList[position].userid.toString())
+        intent.putExtra(ConstantLib.IS_MY_FRIEND, mydataList[position].isMyFriend)
+        intent.putExtra(ConstantLib.IS_MY_FRIEND_BLOCKED, mydataList[position].isMyFriendBlocked)
         intent.putExtra(ConstantLib.PROFILE_IMAGE, mydataList[position].profile)
         intent.putExtra(ConstantLib.NAME, mydataList[position].name)
         intent.putExtra(ConstantLib.ADDRESS, mydataList[position].address)
@@ -195,6 +208,18 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
     override fun onStop() {
         super.onStop()
         realFriendPresenterImplementation!!.onStop()
+    }
+
+
+
+    fun setupErrorVisibility(){
+        if(mydataList.size == 0){
+            binding.error.errorLayout.visibility = View.VISIBLE
+            binding.mainlayout.visibility = View.GONE
+        }else{
+            binding.mainlayout.visibility = View.VISIBLE
+            binding.error.errorLayout.visibility = View.GONE
+        }
     }
 
 }

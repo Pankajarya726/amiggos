@@ -28,6 +28,10 @@ data class NearByV2Response(
             var address: String = "",
             @SerializedName("userid")
             var userid: Int = 0,
+            @SerializedName("isMyFriend")
+            var isMyFriend: Boolean = false,
+            @SerializedName("isMyFriendBlocked")
+            var isMyFriendBlocked: Boolean = false,
             val loadingStatus: Boolean = false
         )
     }

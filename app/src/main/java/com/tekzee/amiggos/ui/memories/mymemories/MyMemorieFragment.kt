@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,9 +20,11 @@ import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.mallortaxiclient.constant.ConstantLib
+import kotlinx.android.synthetic.main.message_activity.*
 
 class MyMemorieFragment:BaseFragment() ,MyMemoriePresenter.MyMemoriePresenterMainView{
 
+    private var errorLayout: LinearLayout?= null
     private val data = ArrayList<StoriesData>()
     private var adapter: OurMemorieWithoutProductAdapter?=null
     private var reyclerview: RecyclerView?=null
@@ -43,8 +46,15 @@ class MyMemorieFragment:BaseFragment() ,MyMemoriePresenter.MyMemoriePresenterMai
             MyMemorieImplementation(this, activity!!)
         setupViews(view)
         setupRecyclerMyMemorie()
+        setupClickListener()
         callGetMyMemories()
         return view
+    }
+
+    private fun setupClickListener() {
+        errorLayout!!.setOnClickListener {
+            callGetMyMemories()
+        }
     }
 
 
@@ -85,6 +95,7 @@ class MyMemorieFragment:BaseFragment() ,MyMemoriePresenter.MyMemoriePresenterMai
 
     private fun setupViews(view: View?) {
         reyclerview = view!!.findViewById<RecyclerView>(R.id.mymemorierecyclerview)
+        errorLayout = view!!.findViewById<LinearLayout>(R.id.error)
      }
     
     
@@ -95,14 +106,26 @@ class MyMemorieFragment:BaseFragment() ,MyMemoriePresenter.MyMemoriePresenterMai
         data.clear()
         adapter!!.notifyDataSetChanged()
         data.addAll(responseData)
+        setupErrorVisibility()
     }
 
     override fun onMyMemorieFailure(message: String) {
-        Toast.makeText(activity,"Testing",Toast.LENGTH_LONG).show()
+       setupErrorVisibility()
     }
 
 
     override fun validateError(message: String) {
         Toast.makeText(activity,message,Toast.LENGTH_LONG).show()
+    }
+
+
+    fun setupErrorVisibility(){
+        if(data.size == 0){
+            errorLayout!!.visibility = View.VISIBLE
+            reyclerview!!.visibility = View.GONE
+        }else{
+            reyclerview!!.visibility = View.VISIBLE
+            errorLayout!!.visibility = View.GONE
+        }
     }
 }

@@ -8,24 +8,23 @@ import com.smarteist.autoimageslider.IndicatorAnimations
 import com.smarteist.autoimageslider.IndicatorView.draw.controller.DrawController
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.databinding.ImageSliderActivityBinding
-import com.tekzee.amiggos.ui.imagepanaroma.model.ImageVideoData
-import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailData
 import com.tekzee.amiggos.ui.venuedetails.ImageClickListener
 import com.tekzee.amiggos.ui.venuedetails.ImageSliderAdapter
 import com.tekzee.amiggos.ui.videoplayer.MyPlayerActivity
 import com.tekzee.amiggos.base.BaseActivity
+import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 
 class ImageSliderActivity: BaseActivity() {
 
     private lateinit var binding:ImageSliderActivityBinding
     var sliderAdapter: ImageSliderAdapter? = null
-    lateinit var dataItem: VenueDetailData
+    lateinit var dataItem: ClubDetailResponse.Data.ClubData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.image_slider_activity)
-        dataItem = intent.getSerializableExtra(ConstantLib.IMAGE_DATA) as VenueDetailData
+        dataItem = intent.getSerializableExtra(ConstantLib.IMAGE_DATA) as ClubDetailResponse.Data.ClubData
         setupSlider()
 
         binding.imgClose.setOnClickListener{
@@ -37,7 +36,7 @@ class ImageSliderActivity: BaseActivity() {
     private fun setupSlider() {
 
         sliderAdapter = ImageSliderAdapter(dataItem.imageVideoData,object : ImageClickListener{
-            override fun onItemClick(imageVideoData: ImageVideoData) {
+            override fun onItemClick(imageVideoData: ClubDetailResponse.Data.ClubData.ImageVideoData) {
                 if(imageVideoData.isImage == 0){
                     val intent = Intent(applicationContext, MyPlayerActivity::class.java)
                     intent.putExtra(ConstantLib.IMAGE_DATA,imageVideoData)

@@ -88,20 +88,32 @@ class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
         adapter!!.notifyDataSetChanged()
         data.addAll(taggedVenue)
         adapter!!.notifyDataSetChanged()
+        setupErrorVisibility()
     }
 
     override fun onBookingFailure(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+        setupErrorVisibility()
     }
 
 
     override fun validateError(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+        setupErrorVisibility()
     }
 
     override fun onStop() {
         super.onStop()
         aBookingPresenterImplementation!!.onStop()
+    }
+
+
+    fun setupErrorVisibility(){
+        if(data.size == 0){
+            binding.error.errorLayout.visibility = View.VISIBLE
+            binding.aBookingRecyclerview.visibility = View.GONE
+        }else{
+            binding.aBookingRecyclerview.visibility = View.VISIBLE
+            binding.error.errorLayout.visibility = View.GONE
+        }
     }
 
 }

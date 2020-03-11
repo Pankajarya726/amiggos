@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tekzee.amiggos.R
-import com.tekzee.amiggos.ui.imagepanaroma.model.VenueData
-import kotlinx.android.synthetic.main.single_list_language.view.*
+import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
+import kotlinx.android.synthetic.main.single_data.view.*
 
-class DataAdapter(var venueData: List<VenueData>) : RecyclerView.Adapter<DataAdapter.PendingJobViewHolder>() {
+
+class DataAdapter(var venueData: List<ClubDetailResponse.Data.ClubData.VenueData>) : RecyclerView.Adapter<DataAdapter.PendingJobViewHolder>() {
 
     private var context:Context? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PendingJobViewHolder {
