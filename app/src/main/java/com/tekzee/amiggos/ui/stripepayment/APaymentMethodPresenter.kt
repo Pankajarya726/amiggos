@@ -1,0 +1,22 @@
+package com.tekzee.amiggos.ui.stripepayment
+
+import com.google.gson.JsonObject
+import com.tekzee.amiggos.ui.stripepayment.model.CardListResponse
+import com.tekzee.mallortaxi.base.BaseMainView
+
+class APaymentMethodPresenter {
+
+    interface APaymentMethodPresenterMain{
+        fun onStop()
+
+        fun getCardList(
+            input: JsonObject,
+            createHeaders: HashMap<String, String?>
+        )
+    }
+
+    interface APaymentMethodPresenterMainView: BaseMainView{
+        fun onCardListSuccess(cards: List<CardListResponse.Cards.Card>)
+
+    }
+}

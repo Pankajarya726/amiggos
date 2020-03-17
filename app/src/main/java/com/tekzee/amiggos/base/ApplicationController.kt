@@ -19,9 +19,9 @@ class ApplicationController: Application() {
         FacebookSdk.setIsDebugEnabled(true)
         FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS)
         PaymentConfiguration.init(
-            applicationContext,
+            getApplicationContext(),
             "pk_test_E5sEgimoA8T4SexAo1GnNPkJ00sG6jBcdG"
-        )
+        );
 
 
 

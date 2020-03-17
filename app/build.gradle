@@ -25,6 +25,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+        buildConfigField "String", "STRIPE_URL", "\"pk_test_E5sEgimoA8T4SexAo1GnNPkJ00sG6jBcdG\""//Live
     }
     buildTypes {
         release {
@@ -226,5 +227,9 @@ dependencies {
 
 
     implementation 'com.github.stfalcon:stfalcon-imageviewer:1.0.0'
+
+    implementation 'com.braintreepayments:card-form:4.2.1-SNAPSHOT'
+
+
 
 }

@@ -63,6 +63,7 @@ import com.tekzee.amiggos.ui.signup.login_new.model.ALoginResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.CityResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.StateResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.UserData
+import com.tekzee.amiggos.ui.stripepayment.model.CardListResponse
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
 import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
@@ -517,6 +518,21 @@ class ApiClient {
         createHeaders: HashMap<String, String?>
     ): Observable<Response<ChooseWeekResponse>> {
         return apiService.doCallWeekApi(input, createHeaders)
+    }
+
+    fun saveCard(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.saveCard(input, createHeaders)
+    }
+
+
+    fun getCardList(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CardListResponse>> {
+        return apiService.getCardList(input, createHeaders)
     }
 
     fun doCallPackageApi(

@@ -4,18 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.util.Base64
-import androidx.core.app.ActivityCompat.finishAffinity
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.orhanobut.logger.Logger
-import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
-import com.tekzee.amiggos.ui.splash.SplashActivity
 import com.tekzee.mallortaxiclient.constant.ConstantLib
 import org.json.JSONArray
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import java.util.*
 import java.util.regex.Pattern
+import kotlin.collections.HashMap
 
 
 class Utility {
@@ -90,7 +89,7 @@ class Utility {
             if(sharedPreferences!!.getValueString(ConstantLib.LANGUAGE_CODE).isNullOrEmpty()){
                 languageCode = "en"
             }else{
-                languageCode = sharedPreferences!!.getValueString(ConstantLib.LANGUAGE_CODE).toString()
+                languageCode = sharedPreferences.getValueString(ConstantLib.LANGUAGE_CODE).toString()
             }
             return languageCode
         }
@@ -148,11 +147,7 @@ class Utility {
         }
 
         fun checkNullorEmptyData(data: String?): String {
-            return if(data == null && data!!.isBlank()){
-                ""
-            }else{
-                data
-            }
+            return data ?: ""
         }
 
         fun addSelectedId(id: Int, isChecked: Boolean){
@@ -174,6 +169,26 @@ class Utility {
             }
 
             return false
+        }
+        fun expiryMonthValidator(expiryMonth: String): Boolean {
+            return try {
+                val month = expiryMonth.toInt()
+                if (month < 13) true else false
+            } catch (e: Exception) {
+                e.printStackTrace()
+                false
+            }
+        }
+
+        fun expiryYearValidator(expiryYear: String): Boolean {
+            return try {
+                val year = expiryYear.toInt()
+                val currentYear = Calendar.getInstance()[Calendar.YEAR]
+                if (currentYear >= year) true else false
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+                false
+            }
         }
 
     }

@@ -101,7 +101,7 @@ class CheckoutActivity : BaseActivity() , CheckOutActivityPresenter.CheckOutActi
         super.onActivityResult(requestCode, resultCode, data)
         val weakActivity = WeakReference<Activity>(this)
 
-        // Handle the result of stripe.confirmPayment
+//         Handle the result of stripe.confirmPayment
         stripe.onPaymentResult(requestCode, data, object : ApiResultCallback<PaymentIntentResult> {
             override fun onSuccess(result: PaymentIntentResult) {
                 val paymentIntent = result.intent

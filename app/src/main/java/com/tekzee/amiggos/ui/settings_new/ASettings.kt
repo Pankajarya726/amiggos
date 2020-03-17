@@ -19,6 +19,7 @@ import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
 import com.tekzee.amiggos.ui.mypreferences.MyPreferences
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.ui.settings.SettingsActivity
+import com.tekzee.amiggos.ui.stripepayment.APaymentMethod
 import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.util.SharedPreference
@@ -78,6 +79,12 @@ class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView 
     private fun setupClickListener() {
         binding!!.imgClose.setOnClickListener {
             onBackPressed()
+        }
+
+        binding!!.paymentMethod.setOnClickListener{
+            val intent = Intent(this, APaymentMethod::class.java);
+            startActivity(intent)
+            Animatoo.animateSlideLeft(this)
         }
 
         binding!!.settings.setOnClickListener {
