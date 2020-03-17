@@ -94,7 +94,7 @@ public class CameraPreview extends MyCanvas {
     private TextView counter;
     private ImageView EditCaptureSwitchBtn;
     private LinearLayout editTextBody;
-    private ImageView capturedImage;
+//    private ImageView capturedImage;
     private VideoView videoView;
     private View viewright;
     int VideoSeconds = 0;
@@ -153,7 +153,7 @@ public class CameraPreview extends MyCanvas {
         isFlashOn = false;
 
         EditCaptureSwitchBtn = (ImageView) findViewById(R.id.cancel_capture);
-        capturedImage = (ImageView) findViewById(R.id.captured_image);
+//        capturedImage = (ImageView) findViewById(R.id.captured_image);
         videoView = (VideoView) findViewById(R.id.captured_video);
 
         preview=(SurfaceView)findViewById(R.id.preview);
@@ -349,7 +349,7 @@ public class CameraPreview extends MyCanvas {
             txt_search.setVisibility(View.GONE);
             img_profile.setVisibility(View.GONE);
         }else{
-            txt_search.setVisibility(View.VISIBLE);
+            txt_search.setVisibility(View.GONE);
             img_profile.setVisibility(View.VISIBLE);
         }
 
@@ -381,7 +381,6 @@ public class CameraPreview extends MyCanvas {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), GroupFriendActivity.class);
-
                 startActivity(intent);
             }
         });
@@ -677,7 +676,7 @@ public class CameraPreview extends MyCanvas {
 
             try {
                 FileOutputStream fos = new FileOutputStream(file);
-                stickerView.createBitmap().compress(Bitmap.CompressFormat.PNG, 90, fos);
+//                stickerView.createBitmap().compress(Bitmap.CompressFormat.PNG, 90, fos);
                 refreshGallery(file);
                 Toast.makeText(this, "Saved!",Toast.LENGTH_LONG).show();
             } catch (FileNotFoundException e) {
@@ -744,12 +743,12 @@ public class CameraPreview extends MyCanvas {
 
             if (!isFlashOn) {
                 isFlashOn = true;
-                flashButton.setImageResource(R.drawable.share);
+                flashButton.setImageResource(R.drawable.flash_button);
                 Log.i("Flash", "Flash On");
 
             } else {
                 isFlashOn = false;
-                flashButton.setImageResource(R.drawable.share);
+                flashButton.setImageResource(R.drawable.flash_button);
                 Log.i("Flash", "Flash Off");
             }
         }
@@ -782,7 +781,7 @@ public class CameraPreview extends MyCanvas {
         captureMedia.setVisibility(View.VISIBLE);
         //capturedImage.setImageResource(android.R.color.transparent);
         startPreview(); //onResume();
-        capturedImage.setVisibility(View.GONE);
+//        capturedImage.setVisibility(View.GONE);
         editMedia.setVisibility(View.GONE);
         videoView.setVisibility(View.GONE);
     }

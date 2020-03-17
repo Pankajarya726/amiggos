@@ -11,8 +11,7 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.friendlist.FriendInviteListener
 import com.tekzee.amiggos.ui.friendlist.model.FriendListData
 import kotlinx.android.synthetic.main.single_friend_list.view.*
-import kotlinx.android.synthetic.main.single_list_language.view.img_flag
-import kotlinx.android.synthetic.main.single_list_language.view.txt_name
+
 
 class FriendListAdapter(
     private val items: ArrayList<FriendListData>,

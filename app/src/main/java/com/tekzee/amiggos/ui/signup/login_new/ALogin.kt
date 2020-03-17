@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -92,11 +94,31 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
     private fun checkIfFirebaseUserExist(responseData: ALoginResponse.Data) {
         val auth:FirebaseAuth = FirebaseAuth.getInstance()
         auth.signInWithEmailAndPassword(responseData.email, "amiggos@123")
-            .addOnCompleteListener(this) { task ->
-                val firebaseUser = FirebaseAuth.getInstance().currentUser
-                if (firebaseUser != null) {
-                    callUpdateFirebaseApi(responseData.userid)
-                    callHomePage(responseData)
+            .addOnCompleteListener(this) { task: Task<AuthResult> ->
+
+                if(task.isSuccessful){
+                    val firebaseUser = FirebaseAuth.getInstance().currentUser
+                    if (firebaseUser != null) {
+                        callUpdateFirebaseApi(responseData.userid)
+                        callHomePage(responseData)
+                    }else{
+                        auth.createUserWithEmailAndPassword(responseData.email, "amiggos@123")
+                            .addOnCompleteListener(this) { task ->
+                                if (task.isSuccessful) {
+                                    createFirebaseUser(responseData)
+                                    callUpdateFirebaseApi(responseData.userid)
+                                    callHomePage(responseData)
+                                }else{
+                                    SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                                        .setTitleText("Error login for chat module")
+                                        .setConfirmText(languageData!!.klOk)
+                                        .setConfirmClickListener { sDialog ->
+                                            sDialog.dismissWithAnimation()
+                                        }
+                                        .show()
+                                }
+                            }
+                    }
                 }else{
                     auth.createUserWithEmailAndPassword(responseData.email, "amiggos@123")
                         .addOnCompleteListener(this) { task ->
@@ -114,7 +136,16 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
                                     .show()
                             }
                         }
+//                    SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+//                        .setTitleText(task.exception!!.message)
+//                        .setConfirmText(languageData!!.klOk)
+//                        .setConfirmClickListener { sDialog ->
+//                            sDialog.dismissWithAnimation()
+//                        }
+//                        .show()
                 }
+
+
             }
     }
 

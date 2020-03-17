@@ -61,12 +61,25 @@ class BookingInvitations : BaseFragment(), BookingInvitationPresenter.BookingInv
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.invitations_fragment, container, false)
         myView = binding.root
-        sharedPreference = SharedPreference(activity!!.baseContext)
+        return myView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sharedPreference = SharedPreference(context!!)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        bookingPresenterImplementation = BookingPresenterImplementation(this, activity!!)
+        bookingPresenterImplementation = BookingPresenterImplementation(this, context!!)
         setupRecyclerView()
         callBookingApi()
-        return myView
+        setupClickListener()
+    }
+
+    private fun setupClickListener() {
+        binding.error.errorLayout.setOnClickListener {
+            items.clear()
+            adapter.notifyDataSetChanged()
+            callBookingApi()
+        }
     }
 
     private fun setupRecyclerView() {

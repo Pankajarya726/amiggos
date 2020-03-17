@@ -11,7 +11,7 @@ import java.util.*
 
 
 class BookingAdapter(
-    var mDataList: ArrayList<ABookingResponse.Data.UpcomingParty>,
+    var mDataList: ArrayList<ABookingResponse.Data.BookingData>,
     var listner: BookingClickedListener
 )
     : RecyclerView.Adapter<BookingAdapter.ViewHolder>(){

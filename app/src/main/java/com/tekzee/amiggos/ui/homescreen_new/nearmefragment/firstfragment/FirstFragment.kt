@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,8 +60,10 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
              return FirstFragment()
             }
             return firstFragment
+
         }
     }
+
 
     override fun onPause() {
         super.onPause()
@@ -86,16 +89,16 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         sharedPreference = SharedPreference(activity!!)
         firstFragmentPresenterImplementation =
             FirstFragmentPresenterImplementation(this, activity!!)
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setupViews(view)
         setupRecyclerFirstFragment(view)
         easyWayLocation = EasyWayLocation(activity,false,this)
         easyWayLocation!!.startLocation()
-
         setupClickListener()
-
-
-
-        return view
     }
 
     private fun setupClickListener() {
@@ -245,7 +248,18 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         intent.putExtra(ConstantLib.ADDRESS, mydataList[position].address)
         intent.putExtra(ConstantLib.REAL_FREIND_COUNT, mydataList[position].real_freind_count)
         intent.putExtra("from", "GroupFriendActivity")
-        startActivity(intent)
+        startActivityForResult(intent,100)
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 100 && resultCode ==2 ){
+            mydataList.clear()
+            adapter!!.notifyDataSetChanged()
+            easyWayLocation = EasyWayLocation(activity,false,this)
+            easyWayLocation!!.startLocation()
+        }
     }
 
     override fun storieClicked(position: Int) {

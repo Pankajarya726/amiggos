@@ -25,7 +25,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.cbr.gradienttextview.GradientTextView
+        <TextView
             android:id="@+id/txt_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -35,10 +35,7 @@
             android:maxLines="1"
             android:text="VENUES"
             android:textSize="12dp"
-            app:fontFamily="@font/eras_bold"
-            app:gt_color_list="@array/rainbow"
-            app:gt_gradient_angle="90"
-            app:gt_gradient_direction="right"
+            app:fontFamily="@font/opensans_regular"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/storie"
             app:layout_constraintStart_toEndOf="@+id/profile_image"
@@ -47,6 +44,7 @@
 
         <ImageView
             android:id="@+id/add"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
@@ -57,6 +55,7 @@
 
         <ImageView
             android:id="@+id/chat"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
@@ -67,6 +66,7 @@
 
         <ImageView
             android:id="@+id/storie"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"

@@ -38,7 +38,7 @@
             android:text="VENUES"
             android:textSize="14dp"
             android:textColor="@android:color/black"
-            app:fontFamily="@font/eras_bold"
+            app:fontFamily="@font/opensans_regular"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/txt_accept"
             app:layout_constraintHorizontal_bias="0.0"

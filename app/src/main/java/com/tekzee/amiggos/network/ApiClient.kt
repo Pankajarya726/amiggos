@@ -6,6 +6,7 @@ import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger.addLogAdapter
 import com.tekzee.amiggos.BuildConfig
 import com.tekzee.amiggos.base.model.CommonResponse
+import com.tekzee.amiggos.stripe.model.ClientSecretResponse
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
 import com.tekzee.amiggos.ui.blockedusers.model.BlockedUserResponse
@@ -43,6 +44,7 @@ import com.tekzee.amiggos.ui.mypreferences.model.PreferenceSavedResponse
 import com.tekzee.amiggos.ui.myprofile.model.MyProfileResponse
 import com.tekzee.amiggos.ui.notification.model.NotificationResponse
 import com.tekzee.amiggos.ui.notification.model.StorieResponse
+import com.tekzee.amiggos.ui.notification_new.model.ANotificationResponse
 import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendResponse
 import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesResponse
@@ -90,7 +92,7 @@ class ApiClient {
         val clientBuilder = OkHttpClient.Builder()
         if (BuildConfig.DEBUG) {
             val loggingInterceptor = HttpLoggingInterceptor()
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
             clientBuilder.addInterceptor(loggingInterceptor)
             addLogAdapter(AndroidLogAdapter())
         }
@@ -112,10 +114,11 @@ class ApiClient {
     }
 
     companion object {
-//        private val BASE_URL = "http://amiggos.com/Amiggos_tek/api/"
+        //        private val BASE_URL = "http://amiggos.com/Amiggos_tek/api/"
 //        private val BASE_URL = "http://dev.tekzee.in/Amiggos_new/api/"
         private val BASE_URL = "http://dev.tekzee.in/Amiggos_new/api/"
         private var apiClient: ApiClient? = null
+
         /**
          * Gets my app client.
          *
@@ -130,12 +133,12 @@ class ApiClient {
             }
     }
 
-        fun doValidateAppVersionApi(
-            input: JsonObject,
-            headers: HashMap<String, String?>
-        ): Observable<Response<ValidateAppVersionResponse>> {
-            return apiService.doValidateAppVersionApi(input, headers)
-        }
+    fun doValidateAppVersionApi(
+        input: JsonObject,
+        headers: HashMap<String, String?>
+    ): Observable<Response<ValidateAppVersionResponse>> {
+        return apiService.doValidateAppVersionApi(input, headers)
+    }
 
 
     fun doLanguageConstantApi(
@@ -154,14 +157,14 @@ class ApiClient {
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<SettingsResponse>> {
-        return apiService.doCallSettingsApi(input,createHeaders)
+        return apiService.doCallSettingsApi(input, createHeaders)
     }
 
     fun doCallLoginApi(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<ALoginResponse>> {
-        return apiService.doCallLoginApi(input,createHeaders)
+        return apiService.doCallLoginApi(input, createHeaders)
     }
 
 
@@ -169,7 +172,7 @@ class ApiClient {
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<StateResponse>> {
-        return apiService.doCallStateApi(input,createHeaders)
+        return apiService.doCallStateApi(input, createHeaders)
     }
 
 
@@ -177,28 +180,28 @@ class ApiClient {
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<UserData>> {
-        return apiService.doCallSignupApi(input,createHeaders)
+        return apiService.doCallSignupApi(input, createHeaders)
     }
 
     fun doCallCityApi(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<CityResponse>> {
-        return apiService.doCallCityApi(input,createHeaders)
+        return apiService.doCallCityApi(input, createHeaders)
     }
 
     fun docallunblockusers(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<UnBlockFriendResponse>> {
-        return apiService.docallunblockusers(input,createHeaders)
+        return apiService.docallunblockusers(input, createHeaders)
     }
 
     fun doCallBlockedUser(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<BlockedUserResponse>> {
-        return apiService.doCallBlockedUser(input,createHeaders)
+        return apiService.doCallBlockedUser(input, createHeaders)
     }
 
     fun doCallUpdateProfileApi(
@@ -212,8 +215,17 @@ class ApiClient {
         useridRequestBody: RequestBody,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<UpdateProfileResponse>> {
-        return apiService.doCallUpdateprofile(fileMultipartBody,firstnameRequestBody,lastnameRequestBody,dobRequestBody,cityIdRequestBody,stateIdRequestBody,
-            phonenumberRequestBody,useridRequestBody,createHeaders)
+        return apiService.doCallUpdateprofile(
+            fileMultipartBody,
+            firstnameRequestBody,
+            lastnameRequestBody,
+            dobRequestBody,
+            cityIdRequestBody,
+            stateIdRequestBody,
+            phonenumberRequestBody,
+            useridRequestBody,
+            createHeaders
+        )
     }
 
 
@@ -232,21 +244,21 @@ class ApiClient {
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<StorieViewResponse>> {
-        return apiService.docallViewFriendApi(input,createHeaders)
+        return apiService.docallViewFriendApi(input, createHeaders)
     }
 
     fun doCallHelpCenterApi(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<HelpCenterResponse>> {
-        return apiService.doCallHelpCenterApi(input,createHeaders)
+        return apiService.doCallHelpCenterApi(input, createHeaders)
     }
 
     fun doUpdateSettings(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<UpdateSettingsResponse>> {
-        return apiService.doUpdateSettings(input,createHeaders)
+        return apiService.doUpdateSettings(input, createHeaders)
     }
 
     fun doLoginApi(
@@ -291,14 +303,14 @@ class ApiClient {
         return apiService.callGetProfile(input, createHeaders)
     }
 
-  fun doCallDeleteStorie(
+    fun doCallDeleteStorie(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>> {
         return apiService.doCallDeleteStorie(input, createHeaders)
     }
 
-  fun doAcceptOurStoryInvite(
+    fun doAcceptOurStoryInvite(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>> {
@@ -339,6 +351,12 @@ class ApiClient {
         createHeaders: HashMap<String, String?>
     ): Observable<Response<OnlineFriendResponse>> {
         return apiService.doCallOnlineFriendApi(input, createHeaders)
+    }
+    fun doCallNotification(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<ANotificationResponse>> {
+        return apiService.doCallNotification(input, createHeaders)
     }
 
     fun getNearByUser(
@@ -385,15 +403,12 @@ class ApiClient {
     }
 
 
-
-
     fun doCallFriendsFavoriteVenueV2(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<FavoriteVenueResponse>> {
         return apiService.doCallFriendsFavoriteVenueV2(input, createHeaders)
     }
-
 
 
     fun doCallHomeApi(
@@ -438,6 +453,7 @@ class ApiClient {
     ): Observable<Response<GetMyStoriesResponse>> {
         return apiService.doGetMyStories(input, createHeaders)
     }
+
     fun doCallGetOurMemories(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
@@ -467,6 +483,7 @@ class ApiClient {
     ): Observable<Response<FeaturedBrandProductResponse>> {
         return apiService.doCallFeaturedProductFromMemory(input, createHeaders)
     }
+
     fun docallGetMyMemories(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
@@ -487,6 +504,7 @@ class ApiClient {
     ): Observable<Response<UpdateFriendCountResponse>> {
         return apiService.doUpdateFriendCount(input, createHeaders)
     }
+
     fun doGetBookingQrCode(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
@@ -507,12 +525,14 @@ class ApiClient {
     ): Observable<Response<PackageResponse>> {
         return apiService.doCallPackageApi(input, createHeaders)
     }
+
     fun doBookPackage(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<PackageBookResponse>> {
         return apiService.doBookPackage(input, createHeaders)
     }
+
     fun doGetFriendList(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
@@ -770,7 +790,7 @@ class ApiClient {
         file: MultipartBody.Part?,
         valueInt: RequestBody,
         createHeaders: HashMap<String, String?>
-    ) : Observable<Response<AttachIdResponse>> {
+    ): Observable<Response<AttachIdResponse>> {
         return apiService.doUploadFileToServer(file, valueInt, createHeaders)
     }
 
@@ -781,8 +801,14 @@ class ApiClient {
         friend_ids: RequestBody,
         our_story_id: RequestBody,
         createHeaders: HashMap<String, String?>
-    ) : Observable<Response<AttachIdResponse>> {
-        return apiService.doUploadFileOurStoryToServer(file, valueInt,friend_ids,our_story_id, createHeaders)
+    ): Observable<Response<AttachIdResponse>> {
+        return apiService.doUploadFileOurStoryToServer(
+            file,
+            valueInt,
+            friend_ids,
+            our_story_id,
+            createHeaders
+        )
     }
 
 
@@ -801,6 +827,20 @@ class ApiClient {
         return apiService.sendNotification(input, createHeaders)
     }
 
+    fun getPaymentIntentClientSecret(
+        apiParamMap: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<ClientSecretResponse>> {
+        return apiService.getPaymentIntentClientSecret(apiParamMap,createHeaders)
+    }
+
+
+    fun updatePaymentStatus(
+        apiParamMap: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.updatePaymentStatus(apiParamMap,createHeaders)
+    }
 
 
 }

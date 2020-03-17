@@ -4,5 +4,5 @@ import com.tekzee.amiggos.ui.bookings_new.bookings.model.ABookingResponse
 
 interface BookingClickedListener {
 
-    fun onBookingClicked(upcomingParty: ABookingResponse.Data.UpcomingParty)
+    fun onBookingClicked(upcomingParty: ABookingResponse.Data.BookingData)
 }

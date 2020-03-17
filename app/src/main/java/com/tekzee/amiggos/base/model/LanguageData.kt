@@ -407,6 +407,7 @@ class LanguageData {
     @SerializedName("PEDITPROFILE")val PEDITPROFILE : String = "Edit Profile"
     @SerializedName("PPAYMENTMETHOD")val PPAYMENTMETHOD : String = "Payment Method"
     @SerializedName("PNOTIFICATIONANDSETTINS")val PNOTIFICATIONANDSETTINS : String = "Notification and Settings"
+    @SerializedName("PNOTIFICATION")val PNOTIFICATION : String = "Notifications"
     @SerializedName("PBLOCKEDUSERS")val PBLOCKEDUSERS : String = "Blocked Users"
     @SerializedName("PCHANGELANGUAGE")val PCHANGELANGUAGE : String = "Language"
     @SerializedName("PMYID")val PMYID : String = "Myid"
@@ -415,4 +416,6 @@ class LanguageData {
     @SerializedName("PVIEWPROFILE")val PVIEWPROFILE : String = "View Profile"
     @SerializedName("PBLOCKEDUSER")val PBLOCKEDUSER : String = "Blocked users"
     @SerializedName("PUNBLOCK")val PUNBLOCK : String = "UNBLOCK"
+    @SerializedName("PPARTYINVITES")val PPARTYINVITES : String = "Party Invites"
+    @SerializedName("PFRIENDREQUEST")val PFRIENDREQUEST : String = "Friend Request"
 }

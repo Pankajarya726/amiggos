@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
+        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -38,6 +39,7 @@
                     app:textFontPath="font/eras.ttf" />
 
                 <ImageView
+                    android:visibility="gone"
                     android:id="@+id/img_share"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -61,15 +63,57 @@
         </androidx.appcompat.widget.Toolbar>
 
 
-        <EditText
+        <LinearLayout
+            android:id="@+id/headerlayout"
             android:layout_below="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:fontFamily="@font/opensans_bold"
+                    android:id="@+id/notificationtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="15dp"
+                    android:padding="2dp"
+                    android:text="Invite Friends"
+                    android:textColor="@android:color/black"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_below="@+id/headerlayout"
+            android:id="@+id/headerview"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/black" />
+
+
+
+        <EditText
+
+            android:layout_below="@+id/headerview"
             android:id="@+id/edt_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:layout_marginRight="15dp"
-            android:background="@drawable/btn_bg"
+            android:background="@drawable/edit_profile_bg"
             android:drawablePadding="10dp"
             android:gravity="left"
             android:textStyle="bold"
@@ -82,7 +126,7 @@
             android:textAllCaps="false"
             android:textColor="@color/colorPrimary"
             android:textColorHint="@color/colorPrimary"
-            android:fontFamily="@font/eras" />
+            android:fontFamily="@font/opensans_regular" />
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -95,20 +139,18 @@
             />
 
 
-        <com.cbr.gradienttextview.GradientTextView
+        <TextView
             android:id="@+id/btn_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/language_recyclerview"
             android:layout_margin="15dp"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/btn_bg"
+            android:background="@drawable/edit_profile_bg"
             android:gravity="center"
             android:padding="15dp"
-            app:fontFamily="@font/eras_bold"
-            app:gt_color_list="@array/rainbow"
-            app:gt_gradient_angle="90"
-            app:gt_gradient_direction="right"
+            android:textColor="@android:color/black"
+            app:fontFamily="@font/opensans_bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

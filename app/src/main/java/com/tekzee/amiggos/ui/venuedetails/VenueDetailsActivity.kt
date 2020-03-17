@@ -68,7 +68,7 @@ class VenueDetailsActivity: BaseActivity(), VenueDetailsPresenter.VenueDetailsMa
         supportActionBar?.setDisplayShowTitleEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        binding.title.text = languageData!!.klVenues
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

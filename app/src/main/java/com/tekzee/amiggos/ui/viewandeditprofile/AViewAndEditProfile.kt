@@ -3,11 +3,9 @@ package com.tekzee.amiggos.ui.viewandeditprofile
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import com.ajithvgiri.searchdialog.OnSearchItemSelected
 import com.ajithvgiri.searchdialog.SearchListItem
@@ -22,6 +20,7 @@ import com.tekzee.amiggos.databinding.ViewAndEditLayoutBinding
 import com.tekzee.amiggos.ui.signup.steptwo.model.CityResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.StateResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
+import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
 import com.tekzee.amiggos.util.ImagePickerUtils
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
@@ -31,6 +30,7 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import com.tsongkha.spinnerdatepicker.DatePicker
 import com.tsongkha.spinnerdatepicker.DatePickerDialog
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder
+import kotlinx.android.synthetic.main.myprofile_activity.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -123,6 +123,7 @@ class AViewAndEditProfile: BaseActivity(), AViewAndEditPresenter.AViewAndEditPre
             if(event.action == MotionEvent.ACTION_UP){
 
                 val todaysDate = Calendar.getInstance()
+                todaysDate.add(Calendar.YEAR,-18)
                 SpinnerDatePickerDialogBuilder()
                     .context(this)
                     .callback(this)
@@ -307,8 +308,9 @@ class AViewAndEditProfile: BaseActivity(), AViewAndEditPresenter.AViewAndEditPre
         createCityPopup()
     }
 
-    override fun onProfileUpdateSuccess(message: String) {
-        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+    override fun onProfileUpdateSuccess(data: UpdateProfileResponse?) {
+        sharedPreferences!!.save(ConstantLib.PROFILE_IMAGE,data!!.data.user_image)
+        Toast.makeText(applicationContext,data.message,Toast.LENGTH_LONG).show()
     }
 
     override fun onProfileUpdateFailure(message: String) {

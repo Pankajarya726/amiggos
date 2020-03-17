@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonObject
 import com.jakewharton.rxbinding2.widget.RxTextView
+import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.RealFriendFragmentBinding
@@ -57,9 +58,27 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
         }
     }
 
+
+
+    override fun onResume() {
+        super.onResume()
+        Logger.d("Onresume---> realfriend")
+    }
+
     override fun onStart() {
         super.onStart()
         isFragmentVisible = true
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 100 && resultCode ==2 ){
+            realFriendPageNo = 0
+            mydataList.clear()
+            adapter!!.notifyDataSetChanged()
+            callRealFriendApi(false, "", isFragmentVisible)
+        }
     }
 
 
@@ -71,9 +90,24 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.real_friend_fragment,container,false)
         myView = binding.root
-        sharedPreference = SharedPreference(activity!!.baseContext)
+        return myView
+
+    }
+
+
+    private fun setupClickListener() {
+        binding.error.errorLayout.setOnClickListener {
+            callRealFriendApi(false, "", isFragmentVisible)
+        }
+    }
+
+    @SuppressLint("CheckResult")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        sharedPreference = SharedPreference(context!!)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        realFriendPresenterImplementation = RealFriendPresenterImplementation(this,activity!!)
+        realFriendPresenterImplementation = RealFriendPresenterImplementation(this,context!!)
         onlineFriendRecyclerview = myView!!.findViewById(R.id.real_friend_fragment)
         setupRecyclerRealFriend()
         setupClickListener()
@@ -87,20 +121,6 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
                 callRealFriendApi(false, it.toString(),isFragmentVisible)
             }
         }
-
-
-        return myView
-
-    }
-
-    private fun setupClickListener() {
-        binding.error.errorLayout.setOnClickListener {
-            callRealFriendApi(false, "", isFragmentVisible)
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         callRealFriendApi(false, "", isFragmentVisible)
     }
 
@@ -201,7 +221,7 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
         intent.putExtra(ConstantLib.ADDRESS, mydataList[position].address)
         intent.putExtra(ConstantLib.REAL_FREIND_COUNT, mydataList[position].real_freind_count)
         intent.putExtra("from", "RealFriend")
-        startActivity(intent)
+        startActivityForResult(intent,100)
     }
 
 

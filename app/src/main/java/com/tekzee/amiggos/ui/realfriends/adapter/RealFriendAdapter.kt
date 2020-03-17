@@ -69,6 +69,12 @@ class RealFriendAdapter(
                 }
             }
 
+            if(mDataList[adapterPosition].isMyFriendBlocked){
+                itemView.imageView8.visibility = View.GONE
+            }else{
+                itemView.imageView8.visibility = View.VISIBLE
+            }
+
             itemView.imageView8.setOnClickListener {
                 val intentActivity = Intent(mContext, MessageActivity::class.java)
                 intentActivity.putExtra(ConstantLib.FRIEND_ID,mDataList[adapterPosition].userid.toString())

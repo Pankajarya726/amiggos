@@ -30,6 +30,7 @@ object ConstantLib {
     const val FRIENDNAME = "friendname"
     const val FRIENDIMAGE = "friendimage"
     const val BOOKING_ID = "booking_id"
+    const val BOOKING_AMOUNt = "booking_amount"
     const val USER_NAME = "user_name"
     const val VENUE_TYPE_SELECTED = "venue_type_selected"
     const val MUSIC_SELETED = "music_seleted"

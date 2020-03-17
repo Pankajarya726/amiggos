@@ -3,20 +3,17 @@ package com.tekzee.amiggos.ui.homescreen_new
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
-import com.example.easywaylocation.EasyWayLocation
-import com.example.easywaylocation.Listener
 import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
@@ -30,6 +27,7 @@ import com.tekzee.amiggos.ui.homescreen_new.homefragment.HomeFragment
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
 import com.tekzee.amiggos.ui.memories.AMemoriesFragment
 import com.tekzee.amiggos.ui.notification.NotificationActivity
+import com.tekzee.amiggos.ui.notification_new.ANotification
 import com.tekzee.amiggos.ui.settings_new.ASettings
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.mallortaxiclient.constant.ConstantLib
@@ -122,12 +120,12 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
         binding.addMemorie.setOnClickListener {
             val intent = Intent(applicationContext, CameraPreview::class.java)
             intent.putExtra(ConstantLib.FROM_ACTIVITY, "HOMEACTIVITY")
-            intent.putExtra(ConstantLib.PROFILE_IMAGE, "")
+            intent.putExtra(ConstantLib.PROFILE_IMAGE, sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE))
             startActivity(intent)
         }
 
         binding.notification.setOnClickListener {
-            val intent = Intent(this, NotificationActivity::class.java)
+            val intent = Intent(this, ANotification::class.java)
             startActivity(intent)
         }
 
@@ -153,7 +151,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
     }
 
     override fun validateError(message: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+       Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
@@ -169,7 +167,8 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
                 return true
             }
             R.id.navigation_my_lifestyle -> {
-                openFragment(AMemoriesFragment.newInstance(),"3")
+               // openFragment(AMemoriesFragment.newInstance(),"3")
+                Toast.makeText(applicationContext,"work in progress",Toast.LENGTH_LONG).show()
                 return true
             }
             R.id.navigation_memories -> {
@@ -201,8 +200,8 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             binding.checkincode.visibility = View.GONE
         } else if (navigationMemories == R.id.navigation_bookings) {
             binding.headerLogo.visibility = View.GONE
-            binding.notification.visibility = View.GONE
-            binding.checkincode.visibility = View.VISIBLE
+            binding.notification.visibility = View.VISIBLE
+            binding.checkincode.visibility = View.GONE
             binding.addMemorie.visibility = View.GONE
             binding.chaticon.visibility = View.GONE
         } else if (navigationMemories == R.id.navigation_near_me) {

@@ -12,5 +12,7 @@ data class UpdateProfileResponse(
     var status: Boolean = false
 ) {
     class Data(
+        @SerializedName("user_image")
+        var user_image: String = ""
     )
 }

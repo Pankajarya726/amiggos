@@ -67,10 +67,6 @@ class PostImageCapturedActivity : BaseActivity() {
                 saveVideo(bitmap)
             } else {
                 val imageUri: Uri = intent.getParcelableExtra("BitmapImage") as Uri
-                val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(
-                    this.contentResolver,
-                    Uri.fromFile(File(imageUri.path))
-                )
                 val contentResolver = contentResolver
                 saveImageToGallery(contentResolver,imageUri.path)
             }
@@ -197,6 +193,7 @@ class PostImageCapturedActivity : BaseActivity() {
     fun saveImageToGallery(cr: ContentResolver, imagePath: String?) {
         val title = "Saved From Glance"
         val values = ContentValues()
+
         values.put(MediaStore.Images.Media.TITLE, title)
         values.put(MediaStore.Images.Media.DISPLAY_NAME, title)
         values.put(MediaStore.Images.Media.DESCRIPTION, title)
@@ -297,6 +294,8 @@ class PostImageCapturedActivity : BaseActivity() {
         } catch (ex: IOException) {
             null
         }
+
+
     }
 
 

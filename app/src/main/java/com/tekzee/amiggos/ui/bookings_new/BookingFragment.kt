@@ -43,13 +43,15 @@ class BookingFragment : BaseFragment(){
 
 
         val view = inflater.inflate(R.layout.booking_fragment, container, false)
-       sharedPreference = SharedPreference(activity!!)
-        languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
+        return view
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sharedPreference = SharedPreference(context!!)
+        languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         setupViews(view)
         setupLanguage(view)
-
-        return view;
     }
 
 
@@ -63,9 +65,9 @@ class BookingFragment : BaseFragment(){
         viewPager: ViewPager,
         tabs: TabLayout
     ) {
-        val fragmentManager = getChildFragmentManager()
+        val fragmentManager = childFragmentManager
         val adapter = ViewPagerAdapter(fragmentManager)
-        adapter.addFragment(ABooking(), languageData!!.PUpcoming)
+        adapter.addFragment(ABooking(), "My Bookings")
         adapter.addFragment(BookingInvitations(), languageData!!.PInvites)
         viewPager.adapter = adapter
         tabs.setupWithViewPager(viewPager)

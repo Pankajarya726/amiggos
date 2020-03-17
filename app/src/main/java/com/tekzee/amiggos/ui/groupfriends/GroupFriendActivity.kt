@@ -15,12 +15,12 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.OnlineFriendActivityBinding
 import com.tekzee.amiggos.ui.camera.CameraPreview
-import com.tekzee.amiggos.ui.friendprofile.FriendProfile
 import com.tekzee.amiggos.ui.groupfriends.adapter.GroupFriendAdapter
 import com.tekzee.amiggos.util.InitGeoLocationUpdate
 import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendData
 import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendResponse
 import com.tekzee.amiggos.base.BaseActivity
+import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.SimpleCallback
 import com.tekzee.amiggos.util.Utility
@@ -111,7 +111,7 @@ class GroupFriendActivity : BaseActivity(), GroupFriendPresenter.GroupFriendMain
         supportActionBar?.setDisplayShowTitleEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        binding.title.text = languageData!!.klAmiggosNearMe
+        binding.notificationtitle.text = languageData!!.klAmiggosNearMe
     }
 
 
@@ -172,9 +172,19 @@ class GroupFriendActivity : BaseActivity(), GroupFriendPresenter.GroupFriendMain
     override fun itemClickCallback(
         adapterPosition: Int
     ) {
-        val intent = Intent(applicationContext,FriendProfile::class.java)
-        intent.putExtra(ConstantLib.FRIEND_ID,mydataList[adapterPosition].userid.toString())
-        intent.putExtra("from","GroupFriendActivity")
+//        val intent = Intent(applicationContext,AProfileDetails::class.java)
+//        intent.putExtra(ConstantLib.FRIEND_ID,mydataList[adapterPosition].userid.toString())
+//        intent.putExtra("from","GroupFriendActivity")
+//        startActivity(intent)
+
+        val intent = Intent(applicationContext, AProfileDetails::class.java)
+        intent.putExtra(ConstantLib.FRIEND_ID, mydataList[adapterPosition].userid.toString())
+        intent.putExtra(ConstantLib.IS_MY_FRIEND, false)
+        intent.putExtra(ConstantLib.IS_MY_FRIEND_BLOCKED, false)
+        intent.putExtra(ConstantLib.PROFILE_IMAGE, mydataList[adapterPosition].profile)
+        intent.putExtra(ConstantLib.NAME, mydataList[adapterPosition].name)
+        intent.putExtra(ConstantLib.ADDRESS, mydataList[adapterPosition].dob)
+        intent.putExtra(ConstantLib.REAL_FREIND_COUNT, "0")
         startActivity(intent)
     }
 

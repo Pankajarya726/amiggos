@@ -64,10 +64,15 @@ class OurMemorieFragment : BaseFragment(), OurMemoriePresenter.OurMemoriePresent
 
 
         val view = inflater.inflate(R.layout.our_memories_fragment, container, false)
-        sharedPreference = SharedPreference(activity!!)
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sharedPreference = SharedPreference(context!!)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         ourMemoriePresenterImplementation =
-            OurMemoriePresenterImplementation(this, activity!!)
+            OurMemoriePresenterImplementation(this, context!!)
         setupViews(view)
         setupRecyclerOurMemorie()
         setupFeaturedBrandRecyclerView()
@@ -76,8 +81,6 @@ class OurMemorieFragment : BaseFragment(), OurMemoriePresenter.OurMemoriePresent
 
         callGetOurMemories()
         callGetFeaturedProductForMemory()
-
-        return view
     }
 
     private fun callGetFeaturedProductForMemory() {

@@ -162,8 +162,8 @@ class MessageActivity : BaseActivity() {
             chatListArray!!,
             sharedPreferences!!.getValueString(ConstantLib.PROFILE_IMAGE),
             sharedPreferences!!.getValueString(ConstantLib.USER_NAME),
-            intent.getStringExtra(ConstantLib.FRIENDNAME),
-            intent.getStringExtra(ConstantLib.FRIENDIMAGE)
+            intent.getStringExtra(ConstantLib.FRIENDNAME)!!,
+            intent.getStringExtra(ConstantLib.FRIENDIMAGE)!!
         )
         binding.recyclerViewData.adapter = adapter
     }
@@ -177,7 +177,7 @@ class MessageActivity : BaseActivity() {
             if (binding.etChat.text.trim().isEmpty()) {
                 Toast.makeText(applicationContext, "Please enter message", Toast.LENGTH_LONG).show()
             } else {
-                ChatHelper.getReceiverFirebaseId(intent.getStringExtra(ConstantLib.FRIEND_ID),
+                ChatHelper.getReceiverFirebaseId(intent.getStringExtra(ConstantLib.FRIEND_ID)!!,
                     object : ReceiverIdInterface {
                         override fun getReceiverId(
                             receiverId: String,

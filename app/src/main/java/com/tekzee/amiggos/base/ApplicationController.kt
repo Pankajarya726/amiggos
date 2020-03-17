@@ -3,21 +3,27 @@ package com.tekzee.mallortaxi.base
 import android.app.Application
 import android.content.Context
 import androidx.multidex.MultiDex
-import com.orhanobut.logger.Logger
-import com.tekzee.amiggos.util.SharedPreference
 import com.facebook.FacebookSdk
 import com.facebook.LoggingBehavior
 import com.facebook.appevents.AppEventsLogger
+import com.orhanobut.logger.Logger
+import com.stripe.android.PaymentConfiguration
 
 
 class ApplicationController: Application() {
 
-    private var sharedPreference: SharedPreference? = null
+
     override fun onCreate() {
         super.onCreate()
         AppEventsLogger.activateApp(this);
         FacebookSdk.setIsDebugEnabled(true)
         FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS)
+        PaymentConfiguration.init(
+            applicationContext,
+            "pk_test_E5sEgimoA8T4SexAo1GnNPkJ00sG6jBcdG"
+        )
+
+
 
     }
 

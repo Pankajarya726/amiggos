@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit
 
 class FriendListActivity: BaseActivity(), FriendListPresenter.FriendListMainView {
 
+    private var searchItems: String? = ""
     private var data = ArrayList<FriendListData>()
     private lateinit var adapter: FriendListAdapter
     private lateinit var binding: FriendlistActivityBinding
@@ -42,7 +43,7 @@ class FriendListActivity: BaseActivity(), FriendListPresenter.FriendListMainView
         sharedPreferences = SharedPreference(this)
         languageData = sharedPreferences!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         friendListPresenterImplementation = FriendListPresenterImplementation(this,this)
-        callFriendList("")
+        callFriendList(searchItems!!)
         setupToolBar()
         setupRecyclerView()
 
@@ -52,9 +53,10 @@ class FriendListActivity: BaseActivity(), FriendListPresenter.FriendListMainView
         RxTextView.textChanges(binding.edtSearch) .filter { it.length > 2 }.debounce(500, TimeUnit.MILLISECONDS).subscribeOn(
             Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
             if(it.isEmpty()){
-                callFriendList("")
+                callFriendList(searchItems!!)
             }else{
-                callFriendList(it.toString())
+                searchItems =it.toString()
+                callFriendList(searchItems!!)
             }
         }
 
@@ -75,11 +77,7 @@ class FriendListActivity: BaseActivity(), FriendListPresenter.FriendListMainView
         supportActionBar?.setDisplayShowTitleEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.setDisplayShowHomeEnabled(false)
-        binding.title.text = languageData!!.klVenues
-
         binding.btnSave.text = languageData!!.klDone
-
-
         binding.imgShare.setOnClickListener{
             shareIntent()
         }
@@ -157,7 +155,7 @@ class FriendListActivity: BaseActivity(), FriendListPresenter.FriendListMainView
 
     override fun onFriendInviteSuccess(responseData: CommonResponse?) {
         Toast.makeText(applicationContext,responseData!!.message,Toast.LENGTH_LONG).show()
-        callFriendList("")
+        callFriendList(searchItems!!)
     }
 
 

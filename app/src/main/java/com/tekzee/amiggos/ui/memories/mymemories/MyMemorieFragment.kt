@@ -40,17 +40,22 @@ class MyMemorieFragment:BaseFragment() ,MyMemoriePresenter.MyMemoriePresenterMai
 
 
         val view = inflater.inflate(R.layout.my_memories_fragment, container, false)
-        sharedPreference = SharedPreference(activity!!)
+       
+        return view
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sharedPreference = SharedPreference(context!!)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         myMemorieImplementation =
-            MyMemorieImplementation(this, activity!!)
+            MyMemorieImplementation(this, context!!)
         setupViews(view)
         setupRecyclerMyMemorie()
         setupClickListener()
         callGetMyMemories()
-        return view
     }
-
     private fun setupClickListener() {
         errorLayout!!.setOnClickListener {
             callGetMyMemories()

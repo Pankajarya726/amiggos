@@ -3,6 +3,7 @@ package com.tekzee.amiggos.ui.profiledetails
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.JsonObject
 import com.kcode.bottomlib.BottomDialog
+import com.stfalcon.imageviewer.StfalconImageViewer
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.CommonResponse
@@ -27,9 +29,11 @@ import com.tekzee.amiggos.ui.profiledetails.model.GetFriendProfileDetailsRespons
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
+import kotlinx.android.synthetic.main.referal_activity.*
 
 class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMainView {
-    private var sharedPreference: SharedPreference? = null
+    private var imageBuilder: StfalconImageViewer<String>?=null
+     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
     private var friendProfilePresenterImplementation: FriendProfilePresenterImplementation? = null
 
@@ -37,23 +41,63 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
     private var isMyFriend: Boolean = false
     private var isMyFriendBlocked: Boolean  = false
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.profile_details)
         sharedPreference = SharedPreference(this)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         friendProfilePresenterImplementation = FriendProfilePresenterImplementation(this, this)
-        setupViews()
+        Glide.with(applicationContext).load(intent.getStringExtra(ConstantLib.PROFILE_IMAGE)).placeholder(R.drawable.blackbg).into(binding!!.htabHeader)
         setupClickListener()
+
+        callFriendProfileApi(intent.getStringExtra(ConstantLib.FRIEND_ID)!!)
+        if(intent.getStringExtra(ConstantLib.FRIEND_ID).equals(sharedPreference!!.getValueInt(ConstantLib.USER_ID).toString(),true)){
+            binding!!.imageoptions.visibility = View.GONE
+        }else{
+            binding!!.imageoptions.visibility = View.VISIBLE
+        }
+
     }
+
+
+    override fun onBackPressed() {
+        val intent = Intent()
+        setResult(2,intent)
+        finish()
+    }
+
+
 
     private fun setupClickListener() {
         binding!!.imgBack.setOnClickListener {
             onBackPressed()
         }
 
+        binding!!.htabHeader.setOnClickListener {
+            val image = arrayOf(intent.getStringExtra(ConstantLib.PROFILE_IMAGE))
+            imageBuilder =
+                StfalconImageViewer.Builder<String>(this, image) { imageView, image ->
+                        Glide.with(this).load(image).into(imageView)
+                    }.withTransitionFrom(imageView)
+                    .withBackgroundColor(resources.getColor(R.color.black))
+                    .allowSwipeToDismiss(true)
+                    .withOverlayView(PosterOverlayView(this).apply {
+
+                        onDeleteClick = {
+                            imageBuilder!!.dismiss()
+                        }
+
+
+                    }).show(true)
+
+
+
+        }
+
 
         binding!!.imageoptions.setOnClickListener {
+
 
             if (!isMyFriend) {
                 val dialog: BottomDialog = BottomDialog.newInstance(
@@ -122,6 +166,26 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
 
                     }
                 }
+            } else if (!isMyFriend && isMyFriendBlocked) {
+                val dialog: BottomDialog = BottomDialog.newInstance(
+                    "",
+                    arrayOf(
+                        languageData!!.klUnblocked,
+                        languageData!!.lblBtnReport
+                    )
+                )
+                dialog.show(supportFragmentManager, "dialog")
+                dialog.setListener { position: Int ->
+                    when (position) {
+                        0 -> {
+                            callUnBlock()
+                        }
+                        1 -> {
+                            callReport()
+                        }
+
+                    }
+                }
             }
 
         }
@@ -139,11 +203,11 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
     }
 
 
-    private fun setupViews() {
-        Glide.with(applicationContext).load(intent.getStringExtra(ConstantLib.PROFILE_IMAGE)).placeholder(R.drawable.blackbg).into(binding!!.htabHeader)
-        binding!!.txtName.text = intent.getStringExtra(ConstantLib.NAME)
-        binding!!.txtLocation.text = intent.getStringExtra(ConstantLib.ADDRESS)
-        binding!!.txtCount.text = intent.getStringExtra(ConstantLib.REAL_FREIND_COUNT)
+    private fun setupViews(data: GetFriendProfileDetailsResponse.Data) {
+
+        binding!!.txtName.text = data.name
+        binding!!.txtLocation.text = data.address
+        binding!!.txtCount.text = data.real_freind_count
         val tabs =binding!!.htabTabs
         val viewPager = binding!!.htabViewpager
         setupAdapter(viewPager, tabs)
@@ -169,6 +233,8 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
     override fun onFriendProfileV2Success(responseData: GetFriendProfileDetailsResponse?) {
         isMyFriend = responseData!!.data.isMyFriend.toBoolean()
         isMyFriendBlocked = responseData.data.isMyFriendBlocked.toBoolean()
+
+        setupViews(responseData.data)
     }
 
     override fun onAcceptInvitation(responseData: CommonResponse?) {

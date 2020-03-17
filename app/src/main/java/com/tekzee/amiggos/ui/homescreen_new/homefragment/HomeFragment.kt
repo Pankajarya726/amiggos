@@ -105,17 +105,21 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
     ): View? {
         Mapbox.getInstance(this.context!!, resources.getString(R.string.mapbox_token))
         val view = inflater.inflate(R.layout.home_fragment, container, false)
+        return view
+    }
 
-        homepresenterImplementation = HomePresenterImplementation(this, activity!!)
-        sharedPreference = SharedPreference(activity!!)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        homepresenterImplementation = HomePresenterImplementation(this, context!!)
+        sharedPreference = SharedPreference(context!!)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        mapView = view!!.findViewById(R.id.mapView)
+        mapView = view.findViewById(R.id.mapView)
         mapView!!.onCreate(savedInstanceState)
         mapView!!.getMapAsync(this)
 
         easyWayLocation = EasyWayLocation(activity,false,this)
         easyWayLocation!!.startLocation()
-        return view
     }
 
 

@@ -28,6 +28,8 @@ data class GetFriendProfileDetailsResponse(
         var socialLogin: String = "",
         @SerializedName("typeoflogin")
         var typeoflogin: String = "",
+        @SerializedName("real_freind_count")
+        var real_freind_count: String = "",
         @SerializedName("userid")
         var userid: Int = 0,
         @SerializedName("1")

@@ -53,19 +53,19 @@ class GroupFriendAdapter(
         fun bind() {
             Glide.with(itemView.context).load(mDataList[adapterPosition].profile).placeholder(R.drawable.user).into(itemView.profile_image)
             itemView.txt_name.text = mDataList[adapterPosition].name
-            if(mDataList[adapterPosition].isRelate ==4 && mDataList[adapterPosition].isRelate== 5){
-                itemView.add.visibility = View.VISIBLE
-            }else{
-                itemView.add.visibility = View.GONE
-            }
+//            if(mDataList[adapterPosition].isRelate ==4 && mDataList[adapterPosition].isRelate== 5){
+//                itemView.add.visibility = View.VISIBLE
+//            }else{
+//                itemView.add.visibility = View.GONE
+//            }
             itemView.setOnClickListener {
                 mItemClickCallback?.let {
                     mItemClickCallback.itemClickCallback(adapterPosition)
                 }
             }
-            itemView.storie.setOnClickListener{
-                mItemClickCallback!!.storieClicked(adapterPosition)
-            }
+//            itemView.storie.setOnClickListener{
+//                mItemClickCallback!!.storieClicked(adapterPosition)
+//            }
         }
     }
 

@@ -8,23 +8,24 @@ import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
+import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.ChoosePackageBinding
+import com.tekzee.amiggos.stripe.CheckoutActivity
 import com.tekzee.amiggos.ui.attachid.AttachIdActivity
 import com.tekzee.amiggos.ui.choosepackage.adapter.ChoosePackageAdapter
 import com.tekzee.amiggos.ui.choosepackage.interfaces.ChoosePackageInterface
 import com.tekzee.amiggos.ui.choosepackage.model.PackageBookResponse
 import com.tekzee.amiggos.ui.choosepackage.model.PackageData
 import com.tekzee.amiggos.ui.choosepackage.model.PackageResponse
-import com.tekzee.amiggos.ui.friendlist.FriendListActivity
 import com.tekzee.amiggos.ui.statusview.StatusViewActivity
-
-import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
+
 
 class ChoosePackageActivity : BaseActivity(), ChoosePackagePresenter.ChoosePackageMainView {
 
@@ -46,11 +47,13 @@ class ChoosePackageActivity : BaseActivity(), ChoosePackagePresenter.ChoosePacka
         callChoosePackageApi()
         setupRecyclerView()
         initView()
+
+
     }
 
     private fun initView() {
 
-        binding.txtSelectYourDay.text = languageData!!.kllblChoosPkgTitle
+        binding.headerTitle.text = languageData!!.kllblChoosPkgTitle
 
 
     }
@@ -64,35 +67,36 @@ class ChoosePackageActivity : BaseActivity(), ChoosePackagePresenter.ChoosePacka
         binding.chooseRecyclerview.layoutManager = layoutManager
         adapter = ChoosePackageAdapter(data, languageData!!, object : ChoosePackageInterface {
             override fun onClickWeek(packageData: PackageData) {
-                if(response!!.data.userFirstPackage.equals("1")){
-                    var intent: Intent?= null
-                    when(response!!.data.userDocumentStatus){
-                        "0"->{
-                             intent = Intent(applicationContext, AttachIdActivity::class.java)
-                            startActivity(intent)
-                        }
-                        "1"->{
-                            intent = Intent(applicationContext, StatusViewActivity::class.java)
-                            startActivity(intent)
-                        }
-                        "2"->{
-                            val pDialog =
-                                SweetAlertDialog(this@ChoosePackageActivity, SweetAlertDialog.WARNING_TYPE)
-                            pDialog.titleText = languageData!!.klAlertmessageBooking
-                            pDialog.setCancelable(false)
-                            pDialog.setCancelButton(languageData!!.klCancel) {
-                                pDialog.dismiss()
-                            }
-                            pDialog.setConfirmButton(languageData!!.klOk) {
-                                pDialog.dismiss()
-                                callBookPackage(packageData.packageId, packageData.clubId)
-                            }
-                            pDialog.show()
-                        }
-
-                    }
-
-                }else{
+//                if(response!!.data.userFirstPackage.equals("1")){
+//                    var intent: Intent?= null
+//                    when(response!!.data.userDocumentStatus){
+//                        "0"->{
+//                             intent = Intent(applicationContext, AttachIdActivity::class.java)
+//                            startActivity(intent)
+//                        }
+//                        "1"->{
+//                            intent = Intent(applicationContext, StatusViewActivity::class.java)
+//                            startActivity(intent)
+//                        }
+//                        "2"->{
+//                            val pDialog =
+//                                SweetAlertDialog(this@ChoosePackageActivity, SweetAlertDialog.WARNING_TYPE)
+//                            pDialog.titleText = languageData!!.klAlertmessageBooking
+//                            pDialog.setCancelable(false)
+//                            pDialog.setCancelButton(languageData!!.klCancel) {
+//                                pDialog.dismiss()
+//                            }
+//                            pDialog.setConfirmButton(languageData!!.klOk) {
+//                                pDialog.dismiss()
+//                                callBookPackage(packageData.packageId, packageData.clubId)
+//                            }
+//                            pDialog.show()
+//                        }
+//
+//                    }
+//
+//                }else
+//                {
                     val pDialog =
                         SweetAlertDialog(this@ChoosePackageActivity, SweetAlertDialog.WARNING_TYPE)
                     pDialog.titleText = languageData!!.klAlertmessageBooking
@@ -105,7 +109,7 @@ class ChoosePackageActivity : BaseActivity(), ChoosePackagePresenter.ChoosePacka
                         callBookPackage(packageData.packageId, packageData.clubId)
                     }
                     pDialog.show()
-                }
+//                }
 
             }
         })
@@ -125,6 +129,7 @@ class ChoosePackageActivity : BaseActivity(), ChoosePackagePresenter.ChoosePacka
         )
     }
 
+
     private fun callChoosePackageApi() {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
@@ -142,7 +147,7 @@ class ChoosePackageActivity : BaseActivity(), ChoosePackagePresenter.ChoosePacka
         supportActionBar?.setDisplayShowTitleEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        binding.title.text = languageData!!.klVenues
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -165,10 +170,14 @@ class ChoosePackageActivity : BaseActivity(), ChoosePackagePresenter.ChoosePacka
 
     override fun onBookPackageSuccess(responseData: PackageBookResponse?) {
         Toast.makeText(applicationContext, responseData!!.message, Toast.LENGTH_LONG).show()
-        val intent = Intent(applicationContext, FriendListActivity::class.java)
-        intent.putExtra(ConstantLib.BOOKING_ID, responseData.data.bookingId.toString())
+        val intent = Intent(this,CheckoutActivity::class.java)
+        intent.putExtra(ConstantLib.BOOKING_ID,responseData.data.bookingId)
+        intent.putExtra(ConstantLib.BOOKING_AMOUNt,responseData.data.amount)
         startActivity(intent)
+        Animatoo.animateSlideLeft(this)
+
     }
+
 
 
 }

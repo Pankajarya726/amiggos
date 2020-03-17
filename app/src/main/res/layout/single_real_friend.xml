@@ -36,7 +36,7 @@
             android:text="VENUES"
             android:textColor="@android:color/black"
             android:textSize="12dp"
-            app:fontFamily="@font/eras_bold"
+            app:fontFamily="@font/opensans_regular"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageView8"
             app:layout_constraintStart_toEndOf="@+id/profile_image"

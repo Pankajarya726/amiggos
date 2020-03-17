@@ -68,6 +68,7 @@ import com.tekzee.amiggos.ui.realfriends.RealFriendsActivity
 import com.tekzee.amiggos.ui.settings.SettingsActivity
 import com.tekzee.amiggos.ui.turningup.TurningUpActivity
 import com.tekzee.amiggos.base.BaseActivity
+import com.tekzee.amiggos.ui.notification_new.ANotification
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.SimpleCallback
 import com.tekzee.amiggos.util.Utility
@@ -648,7 +649,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
             if (!checkFriedRequestSent()) {
                 drawer.closeDrawer(GravityCompat.START)
-                val intent = Intent(this, NotificationActivity::class.java)
+                val intent = Intent(this, ANotification::class.java)
                 startActivity(intent)
             }
 

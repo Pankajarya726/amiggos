@@ -3,6 +3,7 @@ package com.tekzee.amiggos.network
 
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.base.model.CommonResponse
+import com.tekzee.amiggos.stripe.model.ClientSecretResponse
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
 import com.tekzee.amiggos.ui.blockedusers.model.BlockedUserResponse
@@ -40,6 +41,7 @@ import com.tekzee.amiggos.ui.mypreferences.model.PreferenceSavedResponse
 import com.tekzee.amiggos.ui.myprofile.model.MyProfileResponse
 import com.tekzee.amiggos.ui.notification.model.NotificationResponse
 import com.tekzee.amiggos.ui.notification.model.StorieResponse
+import com.tekzee.amiggos.ui.notification_new.model.ANotificationResponse
 import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendResponse
 import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesResponse
@@ -74,7 +76,10 @@ interface ApiService {
 
     //This api is changed from validateAppVersion to validateAppVersion_V1 by sumit sir on 2/12/2019
     @POST("auth/validateAppVersion_V1")
-    fun doValidateAppVersionApi(@Body input: JsonObject, @HeaderMap headers: HashMap<String, String?>): Observable<Response<ValidateAppVersionResponse>>
+    fun doValidateAppVersionApi(
+        @Body input: JsonObject,
+        @HeaderMap headers: HashMap<String, String?>
+    ): Observable<Response<ValidateAppVersionResponse>>
 
 
     @GET("getLanguageConstant")
@@ -101,13 +106,11 @@ interface ApiService {
     ): Observable<Response<LoginResponse>>
 
 
-
     @POST("user/turningUp")
     fun callTurningUpApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<TurningUpResponse>>
-
 
 
     @POST("user/getVenueDetails_V2")
@@ -117,13 +120,11 @@ interface ApiService {
     ): Observable<Response<ClubDetailResponse>>
 
 
-
     @POST("user/create_favoriteVenue_V2")
     fun callLikeUnlikeApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>>
-
 
 
     @POST("user/getUserProfile_V2")
@@ -168,13 +169,11 @@ interface ApiService {
     ): Observable<Response<SettingsResponse>>
 
 
-
     @POST("auth/login_V2")
     fun doCallLoginApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<ALoginResponse>>
-
 
 
     @POST("auth/get_state")
@@ -184,7 +183,6 @@ interface ApiService {
     ): Observable<Response<StateResponse>>
 
 
-
     @POST("auth/register_V2")
     fun doCallSignupApi(
         @Body input: JsonObject,
@@ -192,13 +190,11 @@ interface ApiService {
     ): Observable<Response<UserData>>
 
 
-
     @POST("auth/get_city")
     fun doCallCityApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<CityResponse>>
-
 
 
     @POST("user/unblockFriend_V2")
@@ -218,7 +214,7 @@ interface ApiService {
     @Multipart
     @POST("user/updateProfile_V2")
     fun doCallUpdateprofile(
-        @Part filesMultipart:  MultipartBody.Part?,
+        @Part filesMultipart: MultipartBody.Part?,
         @Part("first_name") first_name: RequestBody,
         @Part("last_name") last_name: RequestBody,
         @Part("date_of_birth") date_of_birth: RequestBody,
@@ -227,7 +223,7 @@ interface ApiService {
         @Part("phone_number") phone_number: RequestBody,
         @Part("userid") userid: RequestBody,
         @HeaderMap createHeaders: HashMap<String, String?>
-        ): Observable<Response<UpdateProfileResponse>>
+    ): Observable<Response<UpdateProfileResponse>>
 
 
     @POST("user/getMemoryViewedUserList")
@@ -284,7 +280,7 @@ interface ApiService {
     ): Observable<Response<VenueTaggedResponse>>
 
 
-    @POST("user/userUpcomingParties_V2")
+    @POST("user/getBookingList_V2")
     fun docallGetBookings(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
@@ -310,6 +306,12 @@ interface ApiService {
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<OnlineFriendResponse>>
+
+    @POST("user/getAllNotification_V2")
+    fun doCallNotification(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<ANotificationResponse>>
 
     @POST("user/getNearByUser")
     fun getNearByUser(
@@ -421,7 +423,7 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<PackageResponse>>
 
-    @POST("user/bookPackage")
+    @POST("user/bookPackage_V2")
     fun doBookPackage(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
@@ -460,14 +462,11 @@ interface ApiService {
     ): Observable<Response<PartyInvitesResponse>>
 
 
-
     @POST("user/getRequestList")
     fun doCallInvitationApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<InvitationResponse>>
-
-
 
 
     @POST("user/getRequestList_V2")
@@ -477,13 +476,11 @@ interface ApiService {
     ): Observable<Response<InvitationResponseV2>>
 
 
-
     @POST("user/userPartyInvites_V2")
     fun doCallBookingInvitationApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<BookingInvitationResponse>>
-
 
 
 //    @POST("user/acceptFriendRequest")
@@ -493,15 +490,11 @@ interface ApiService {
 //    ): Observable<Response<CommonResponse>>
 
 
-
-
     @POST("user/acceptFriendRequest_V2")
     fun doAcceptInvitationApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>>
-
-
 
 
     @POST("user/acceptPartyInvitaion_V2")
@@ -511,14 +504,11 @@ interface ApiService {
     ): Observable<Response<CommonResponse>>
 
 
-
     @POST("user/rejectPartyInvitaion_V2")
     fun doRejectBookingInvitationApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>>
-
-
 
 
     @POST("user/sendFriendRequest")
@@ -528,8 +518,6 @@ interface ApiService {
     ): Observable<Response<CommonResponse>>
 
 
-
-
     @POST("user/unFriendUser")
     fun callunFriend(
         @Body input: JsonObject,
@@ -537,15 +525,11 @@ interface ApiService {
     ): Observable<Response<CommonResponse>>
 
 
-
-
-
-    @POST("user/unblockFriend")
+    @POST("user/unblockFriend_V2")
     fun callUnBlock(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>>
-
 
 
     @POST("user/clearNotification")
@@ -583,7 +567,6 @@ interface ApiService {
     ): Observable<Response<CommonResponse>>
 
 
-
     @POST("user/unFriendUser")
     fun callReport(
         @Body input: JsonObject,
@@ -598,13 +581,11 @@ interface ApiService {
     ): Observable<Response<CommonResponse>>
 
 
-
     @POST("user/getGuestList")
     fun doCallGuestListApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<GuestListResponse>>
-
 
 
     @POST("user/getFreindProfile")
@@ -614,14 +595,11 @@ interface ApiService {
     ): Observable<Response<FriendProfileResponse>>
 
 
-
     @POST("user/getFreindProfile_V2")
     fun doCallGetFriendProfileApiV2(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<GetFriendProfileDetailsResponse>>
-
-
 
 
     @POST("user/getAllNotification")
@@ -631,8 +609,6 @@ interface ApiService {
     ): Observable<Response<NotificationResponse>>
 
 
-
-
     @POST("user/getOurStoryById")
     fun doCallStorieViewApi(
         @Body input: JsonObject,
@@ -640,13 +616,11 @@ interface ApiService {
     ): Observable<Response<StorieResponse>>
 
 
-
     @POST("user/acceptPartyInvitaion_V2")
     fun doCallJoinPartyInvites(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>>
-
 
 
     @POST("user/rejectPartyInvitaion")
@@ -661,7 +635,6 @@ interface ApiService {
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<PastPartyResponse>>
-
 
 
     @POST("user/userUpcomingParties")
@@ -727,11 +700,21 @@ interface ApiService {
     ): Observable<Response<AttachIdResponse>>
 
 
-
     @POST("user/updateLatLangUser")
-
     fun sendNotification(
         @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
+    @POST("user/create_stripepayment")
+    fun getPaymentIntentClientSecret(
+        @Body apiParamMap: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<ClientSecretResponse>>
+
+ @POST("user/update_payment_status")
+    fun updatePaymentStatus(
+        @Body apiParamMap: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>>
 

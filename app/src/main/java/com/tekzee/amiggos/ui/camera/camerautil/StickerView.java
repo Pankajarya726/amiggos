@@ -35,9 +35,9 @@ import java.util.List;
 
 public class StickerView extends FrameLayout {
 
-  private final boolean showIcons;
-  private final boolean showBorder;
-  private final boolean bringToFrontCurrentSticker;
+  private final boolean showIcons= false;
+  private final boolean showBorder= false;
+  private final boolean bringToFrontCurrentSticker= false;
 
   @IntDef({
       ActionMode.NONE, ActionMode.DRAG, ActionMode.ZOOM_WITH_TWO_FINGER, ActionMode.ICON,
@@ -114,15 +114,6 @@ public class StickerView extends FrameLayout {
     touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
     TypedArray a = null;
     try {
-      a = context.obtainStyledAttributes(attrs, R.styleable.StickerView);
-      showIcons = a.getBoolean(R.styleable.StickerView_showIcons, false);
-      showBorder = a.getBoolean(R.styleable.StickerView_showBorder, false);
-      bringToFrontCurrentSticker =
-          a.getBoolean(R.styleable.StickerView_bringToFrontCurrentSticker, false);
-
-      borderPaint.setAntiAlias(true);
-      borderPaint.setColor(a.getColor(R.styleable.StickerView_borderColor, Color.BLACK));
-      borderPaint.setAlpha(a.getInteger(R.styleable.StickerView_borderAlpha, 128));
 
       configDefaultIcons();
     } finally {

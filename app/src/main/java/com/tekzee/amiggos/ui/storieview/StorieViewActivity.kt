@@ -32,6 +32,7 @@ import com.tekzee.amiggos.ui.home.model.Content
 import com.tekzee.amiggos.ui.home.model.StoriesData
 import com.tekzee.amiggos.ui.viewfriends.ViewFriendsActivity
 import com.tekzee.amiggos.base.BaseActivity
+import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxiclient.constant.ConstantLib
@@ -68,10 +69,12 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
 
         img_profile.setOnClickListener{
             if(data!!.userid!=sharedPreferences!!.getValueInt(ConstantLib.USER_ID)){
-                val intent = Intent(this, FriendProfile::class.java)
-                intent.putExtra(ConstantLib.FRIEND_ID,data!!.userid.toString())
-                intent.putExtra("from","StorieView")
+
+                val intent = Intent(this, AProfileDetails::class.java)
+                intent.putExtra(ConstantLib.FRIEND_ID, data!!.userid.toString())
+                intent.putExtra(ConstantLib.PROFILE_IMAGE,data!!.imageUrl)
                 startActivity(intent)
+
             }
 
         }

@@ -37,14 +37,14 @@
             app:srcCompat="@drawable/active" />
 
 
-        <com.an.customfontview.CustomTextView
+        <TextView
 
             android:id="@+id/txt_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="5dp"
-            android:fontFamily="@font/eras_bold"
+            android:fontFamily="@font/opensans_regular"
             android:maxLines="1"
             android:singleLine="true"
             android:textColor="@android:color/black"

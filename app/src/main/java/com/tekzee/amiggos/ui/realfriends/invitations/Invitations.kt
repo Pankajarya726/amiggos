@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.easywaylocation.EasyWayLocation
 import com.google.gson.JsonObject
+import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
@@ -25,7 +27,7 @@ import com.tekzee.mallortaxiclient.constant.ConstantLib
 class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
 
 
-    private val pageNo: Int? =0
+    private var pageNo: Int? =0
     private val searchName: String? =""
     lateinit var binding: InvitationsFragmentBinding
     private var myView: View? = null
@@ -54,6 +56,12 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
     }
 
 
+
+    override fun onResume() {
+        super.onResume()
+        Logger.d("Onresume---> Invitation")
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -61,17 +69,24 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.invitations_fragment, container, false)
         myView = binding.root
-        sharedPreference = SharedPreference(activity!!.baseContext)
+        return myView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sharedPreference = SharedPreference(context!!)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        invitationPresenterImplementation = InvitationPresenterImplementation(this, activity!!)
+        invitationPresenterImplementation = InvitationPresenterImplementation(this, context!!)
         setupRecyclerView()
         setupClickListener()
         callInvitationApi()
-        return myView
     }
 
     private fun setupClickListener() {
         binding.error.errorLayout.setOnClickListener {
+            pageNo = 0
+            items.clear()
+            adapter.notifyDataSetChanged()
             callInvitationApi()
         }
     }
@@ -102,7 +117,7 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
                         intent.putExtra(ConstantLib.ADDRESS, invitationData.address)
                         intent.putExtra(ConstantLib.REAL_FREIND_COUNT, invitationData.real_freind_count)
                         intent.putExtra("from", "Invitation")
-                        startActivity(intent)
+                        startActivityForResult(intent,100)
                     }
                 }
             }
@@ -110,6 +125,17 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
         })
         binding.invitationRecyclerview.adapter = adapter
 
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 100 && resultCode ==2 ){
+            items.clear()
+            adapter.notifyDataSetChanged()
+            pageNo = 0
+            callInvitationApi()
+        }
     }
 
     private fun callRejectApi(invitationData: InvitationResponseV2.Data.FreindRequest) {

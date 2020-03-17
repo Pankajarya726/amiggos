@@ -29,6 +29,42 @@
         </androidx.appcompat.widget.Toolbar>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:fontFamily="@font/opensans_bold"
+                    android:id="@+id/notificationtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="15dp"
+                    android:padding="2dp"
+                    android:text="Ammigos near me"
+                    android:textColor="@android:color/black"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/black" />
+
+
         <EditText
             android:id="@+id/edt_search"
             android:layout_width="match_parent"
@@ -36,20 +72,18 @@
             android:layout_marginLeft="25dp"
             android:layout_marginTop="15dp"
             android:layout_marginRight="25dp"
-            android:background="@drawable/btn_bg"
+            android:background="@drawable/edit_profile_bg"
             android:drawablePadding="10dp"
+            android:fontFamily="@font/opensans_bold"
             android:gravity="left"
-            android:textStyle="bold"
+            android:hint="Search Friend"
             android:padding="10dp"
             android:paddingLeft="12dp"
-            android:textSize="18dp"
-            android:hint="Search Friend"
             android:textAllCaps="false"
             android:textColor="@color/colorPrimary"
             android:textColorHint="@color/colorPrimary"
-            android:fontFamily="@font/eras" />
-
-
+            android:textSize="18dp"
+            android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="8dp"

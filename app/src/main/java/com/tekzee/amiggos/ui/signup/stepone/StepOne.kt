@@ -65,6 +65,7 @@ class StepOne: BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
            if(event.action == MotionEvent.ACTION_UP){
 
                val todaysDate = Calendar.getInstance()
+               todaysDate.add(Calendar.YEAR,-18)
                SpinnerDatePickerDialogBuilder()
                    .context(this)
                    .callback(this)

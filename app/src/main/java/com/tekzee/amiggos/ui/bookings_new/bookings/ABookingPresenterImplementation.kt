@@ -37,7 +37,7 @@ class ABookingPresenterImplementation (private var mainView: ABookingPresenter.A
                             200 -> {
                                 val responseData: ABookingResponse? = response.body()
                                 if (responseData!!.status) {
-                                    mainView.onBookingSuccess(responseData.data.upcomingParties)
+                                    mainView.onBookingSuccess(responseData.data.bookingData)
                                 } else {
                                     mainView.onBookingFailure(responseData.message)
                                 }

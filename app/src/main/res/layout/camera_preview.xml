@@ -20,7 +20,7 @@
             android:layout_margin="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/rback"/>
+            android:src="@drawable/ic_back"/>
 
 
 
@@ -49,6 +49,7 @@
 
             <com.cbr.gradienttextview.GradientTextView
                 android:id="@+id/txt_search"
+                android:visibility="gone"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -69,27 +70,28 @@
 
             <ImageView
                 android:id="@+id/img_switch_camera"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/ic_camera_flip"
+                android:src="@drawable/change_camera_button"
                  />
 
             <ImageView
-                android:onClick="FlashControl"
                 android:id="@+id/img_flash_control"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
+                android:onClick="FlashControl"
+                android:src="@drawable/flash_button"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/img_switch_camera"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/flash"/>
+                app:layout_constraintStart_toEndOf="@+id/img_profile"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -118,14 +120,14 @@
 
             <ImageView
                 android:id="@+id/custom_square"
-                android:layout_width="60dp"
+                android:layout_width="wrap_content"
                 android:visibility="invisible"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerInParent="true"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_stories"
+                android:src="@drawable/capture_button"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -139,6 +141,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
                 android:padding="10dp"
+                android:visibility="gone"
                 android:src="@drawable/rotate"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -152,7 +155,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:padding="10dp"
-                android:src="@drawable/users"
+                android:src="@drawable/icon_user_nearby"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/custom_progressBar"
                 app:layout_constraintStart_toStartOf="parent"

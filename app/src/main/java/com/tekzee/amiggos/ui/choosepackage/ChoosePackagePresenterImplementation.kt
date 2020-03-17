@@ -52,6 +52,8 @@ class ChoosePackagePresenterImplementation(private var mainView: ChoosePackagePr
     }
 
 override fun doBookPackage(input: JsonObject, createHeaders: HashMap<String, String?>) {
+
+
         mainView.showProgressbar()
         if (mainView.checkInternet()) {
             disposable = ApiClient.instance.doBookPackage(input, createHeaders)

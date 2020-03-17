@@ -44,13 +44,18 @@ class VenueFragment : BaseFragment(), VenueFragmentPresenter.VenueFragmentPresen
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater,R.layout.venue_fragment, container, false)
-        venueFragmentPresenterImplementation = VenueFragmentPresenterImplementation(this,activity!!)
-        sharedPreference = SharedPreference(activity!!)
+       
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        venueFragmentPresenterImplementation = VenueFragmentPresenterImplementation(this,context!!)
+        sharedPreference = SharedPreference(context!!)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         setupVenueTaggedRecycler()
         callTaggedVenueApi()
         setupClickListener()
-        return binding.root
     }
 
     private fun setupClickListener() {

@@ -5,5 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PackageBookData(
     @SerializedName("booking_id")
-    val bookingId: String = ""
+    val bookingId: String = "",
+    @SerializedName("amount")
+    val amount: String = ""
 )

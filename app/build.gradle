@@ -221,4 +221,10 @@ dependencies {
     implementation 'com.github.jd-alexander:LikeButton:0.2.3'
 
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
+    // Stripe Android SDK
+    implementation 'com.stripe:stripe-android:14.1.1'
+
+
+    implementation 'com.github.stfalcon:stfalcon-imageviewer:1.0.0'
+
 }

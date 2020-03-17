@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.google.gson.JsonObject
@@ -27,7 +24,7 @@ import java.util.*
 class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
 {
 
-    private val data: ArrayList<ABookingResponse.Data.UpcomingParty> = ArrayList()
+    private val data: ArrayList<ABookingResponse.Data.BookingData> = ArrayList()
     private lateinit var binding: ABookingFragmentBinding
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
@@ -49,12 +46,26 @@ class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater,R.layout.a_booking_fragment, container, false)
-        aBookingPresenterImplementation = ABookingPresenterImplementation(this,activity!!)
-        sharedPreference = SharedPreference(activity!!)
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        aBookingPresenterImplementation = ABookingPresenterImplementation(this,context!!)
+        sharedPreference = SharedPreference(context!!)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         setupVenueTaggedRecycler()
         callGetBookings()
-        return binding.root
+        setupClickListener()
+    }
+
+    private fun setupClickListener() {
+        binding.error.errorLayout.setOnClickListener {
+            data.clear()
+            adapter!!.notifyDataSetChanged()
+            callGetBookings()
+        }
     }
 
     private fun setupVenueTaggedRecycler() {
@@ -62,10 +73,10 @@ class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
         val layoutManager = LinearLayoutManager(activity)
         binding.aBookingRecyclerview.layoutManager = layoutManager
         adapter = BookingAdapter(data, object : BookingClickedListener {
-            override fun onBookingClicked(upcomingParty: ABookingResponse.Data.UpcomingParty) {
+            override fun onBookingClicked(bookingData: ABookingResponse.Data.BookingData) {
                 val intent = Intent(activity,ABookingDetails::class.java)
-                intent.putExtra(ConstantLib.BOOKING_DATA,upcomingParty)
-                activity!!.startActivity(intent)
+                intent.putExtra(ConstantLib.BOOKING_DATA,bookingData)
+                context!!.startActivity(intent)
                 Animatoo.animateSlideRight(activity)
             }
         })
@@ -83,7 +94,7 @@ class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
 
 
 
-    override fun onBookingSuccess(taggedVenue: List<ABookingResponse.Data.UpcomingParty>) {
+    override fun onBookingSuccess(taggedVenue: List<ABookingResponse.Data.BookingData>) {
         data.clear()
         adapter!!.notifyDataSetChanged()
         data.addAll(taggedVenue)
@@ -104,6 +115,7 @@ class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
         super.onStop()
         aBookingPresenterImplementation!!.onStop()
     }
+
 
 
     fun setupErrorVisibility(){

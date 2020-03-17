@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.ui.signup.steptwo.model.CityResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.StateResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
+import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
 import com.tekzee.mallortaxi.base.BaseMainView
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -43,7 +44,7 @@ class AViewAndEditPresenter  {
         fun onGetProfileSuccess(responseData: GetUserProfileResponse?)
         fun onStateSuccess(responseData: List<StateResponse.Data.States>)
         fun onCitySuccess(responseData: List<CityResponse.Data.City>)
-        fun onProfileUpdateSuccess(message: String)
+        fun onProfileUpdateSuccess(message: UpdateProfileResponse?)
         fun onProfileUpdateFailure(message: String)
         fun onStateFailure(responseData: String)
         fun onCityFailure(responseData: String)

@@ -145,7 +145,7 @@ class AViewAndEditImplementation(private var mainView: AViewAndEditPresenter.AVi
                         200 -> {
                             val responseData: UpdateProfileResponse? = response.body()
                             if (responseData!!.status) {
-                                mainView.onProfileUpdateSuccess(responseData.message)
+                                mainView.onProfileUpdateSuccess(responseData)
                             } else {
                                 mainView.validateError(responseData.message.toString())
                             }

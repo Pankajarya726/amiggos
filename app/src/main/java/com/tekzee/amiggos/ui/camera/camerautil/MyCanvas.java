@@ -33,9 +33,6 @@ import com.tekzee.amiggos.R;
 import java.io.File;
 import java.util.Arrays;
 
-/**
- * Created by Abdul Haq (it.haq.life) on 11-07-2017.
- */
 
 public class MyCanvas extends Activity {
 

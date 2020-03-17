@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.tekzee.amiggos.R
@@ -43,13 +44,15 @@ class AMemoriesFragment : BaseFragment() {
 
 
         val view = inflater.inflate(R.layout.amemories_fragment, container, false)
-        sharedPreference = SharedPreference(activity!!)
-        languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
+        return view;
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sharedPreference = SharedPreference(context!!)
+        languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         setupViews(view)
         setupLanguage(view)
-
-        return view;
     }
 
     private fun setupLanguage(view: View?) {
@@ -64,17 +67,17 @@ class AMemoriesFragment : BaseFragment() {
         val fragmentManager = getChildFragmentManager()
         val adapter = ViewPagerAdapter(fragmentManager)
 
-        adapter.addFragment(OurMemorieFragment(), languageData!!.POURMEMORIES)
+        adapter.addFragment(OurMemorieFragment(), "Memories")
         adapter.addFragment(MyMemorieFragment(), languageData!!.POURMEMORIES)
         adapter.addFragment(VenueFragment(), languageData!!.PVenue)
         viewPager.adapter = adapter
-        viewPager.offscreenPageLimit = 1;
+        viewPager.offscreenPageLimit = 1
         tabs.setupWithViewPager(viewPager)
 
     }
 
     override fun validateError(message: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(activity,message,Toast.LENGTH_LONG).show()
     }
 
     private fun setupViews(view: View?) {
