@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <ScrollView
-        android:background="@android:color/black"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/black">
+
         <LinearLayout
-            android:layout_gravity="center"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,93 +45,91 @@
                     tools:layout_editor_absoluteX="20dp">
 
                     <EditText
-                        android:fontFamily="@font/opensans_regular"
-                        android:textColor="@android:color/white"
                         android:id="@+id/lusername"
-                        android:backgroundTint="@android:color/white"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/_40sdp"
                         android:layout_margin="5dp"
+                        android:backgroundTint="@android:color/white"
+                        android:fontFamily="@font/opensans_regular"
                         android:hint="Username"
-                        android:textColorHint="@android:color/white" />
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/white"
+                        android:textSize="@dimen/_15sdp" />
 
                     <EditText
                         android:id="@+id/lpassword"
-                        android:fontFamily="@font/opensans_regular"
-                        android:textColor="@android:color/white"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@android:color/white"
+                        android:layout_height="@dimen/_40sdp"
                         android:layout_margin="5dp"
+
+                        android:backgroundTint="@android:color/white"
+                        android:fontFamily="@font/opensans_regular"
                         android:hint="Password"
                         android:inputType="textPassword"
-                        android:textColorHint="@android:color/white" />
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/white"
+                        android:textSize="@dimen/_15sdp" />
 
                 </LinearLayout>
 
-                <Button
+                <com.google.android.material.button.MaterialButton
+                    android:background="@android:color/white"
                     android:id="@+id/btn_signin"
-                    android:layout_width="0dp"
-                    android:fontFamily="@font/opensans_regular"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+
+                    android:layout_height="@dimen/_40sdp"
                     android:layout_marginStart="80dp"
                     android:layout_marginTop="50dp"
                     android:layout_marginEnd="80dp"
-                    android:background="@android:color/white"
-                    android:paddingLeft="50dp"
-                    android:paddingTop="5dp"
-                    android:paddingRight="50dp"
-                    android:paddingBottom="5dp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:gravity="center"
+                    android:padding="@dimen/_5sdp"
                     android:text="SIGN IN"
                     android:textAllCaps="true"
                     android:textColor="@android:color/black"
-                    android:textSize="12dp"
+                    android:textSize="@dimen/_12sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
+                    app:strokeColor="@color/red" />
 
                 <Button
-
                     android:id="@+id/btn_createaccount"
-                    android:layout_width="0dp"
-                    android:fontFamily="@font/opensans_regular"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
                     android:layout_marginStart="80dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="80dp"
+
                     android:background="@drawable/create_an_account"
-                    android:paddingLeft="50dp"
-                    android:paddingTop="5dp"
-                    android:paddingRight="50dp"
-                    android:paddingBottom="5dp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:gravity="center"
+                    android:padding="@dimen/_5sdp"
                     android:text="Create an account"
                     android:textAllCaps="true"
                     android:textColor="@android:color/white"
-                    android:textSize="12dp"
+                    android:textSize="@dimen/_12sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btn_signin" />
 
 
                 <Button
-
                     android:id="@+id/btn_forgetpassword"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
                     android:layout_marginStart="80dp"
-                    android:fontFamily="@font/opensans_regular"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="80dp"
                     android:layout_marginBottom="20dp"
+
                     android:background="@drawable/create_an_account"
-                    android:paddingLeft="50dp"
-                    android:paddingTop="5dp"
-                    android:paddingRight="50dp"
-                    android:paddingBottom="5dp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:padding="@dimen/_5sdp"
                     android:text="Forget Password"
                     android:textAllCaps="true"
                     android:textColor="@android:color/white"
-                    android:textSize="12dp"
+                    android:textSize="@dimen/_12sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -140,7 +139,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>
-
 
 
 </layout>

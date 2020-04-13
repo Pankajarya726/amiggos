@@ -5,9 +5,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:background="@android:color/white"
         android:layout_height="match_parent"
+        android:background="@android:color/white"
         android:orientation="vertical">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -42,12 +43,12 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:fontFamily="@font/opensans_bold"
                     android:id="@+id/notificationtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="15dp"
+                    android:fontFamily="@font/opensans_bold"
                     android:padding="2dp"
                     android:text="Payment"
                     android:textColor="@android:color/black"
@@ -81,14 +82,52 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
+                android:id="@+id/cardlayout"
+                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:orientation="horizontal"
+                android:layout_height="0dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardInputWidget">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="5dp"
+                    android:background="@android:color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Choose saved cards..."
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/opensans_bold"
+                    android:layout_margin="10dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+
+                    android:id="@+id/card_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:elevation="8dp"
+                android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/cardInputWidget"
-                app:layout_constraintStart_toStartOf="@+id/cardInputWidget"
-                android:layout_height="wrap_content">
+                app:layout_constraintStart_toStartOf="@+id/cardInputWidget">
 
                 <Button
                     android:id="@+id/payButton"
@@ -99,8 +138,8 @@
                     android:layout_marginEnd="15dp"
                     android:layout_marginBottom="5dp"
                     android:background="@drawable/edit_profile_bg"
-                    android:text="Pay"
                     android:fontFamily="@font/opensans_bold"
+                    android:text="Pay"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -122,7 +161,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-          
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

@@ -5,10 +5,10 @@
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="false"/>
+        android:required="false" />
     <uses-feature
         android:name="android.hardware.camera.autofocus"
-        android:required="false"/>
+        android:required="false" />
 
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -32,18 +32,19 @@
 
 
     <application
+        android:requestLegacyExternalStorage="true"
         android:name="com.tekzee.mallortaxi.base.ApplicationController"
+        android:allowBackup="false"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:allowBackup="false"
-        tools:replace="android:allowBackup"
-        android:hardwareAccelerated="true"
         android:largeHeap="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:allowBackup">
         <activity
             android:name=".ui.mainsplash.MainSplashActivity"
             android:configChanges="orientation|screenSize"
@@ -72,14 +73,34 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity
+            android:name=".cameranew.CameraActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+
+        <activity
+            android:name=".cameranew.VideoPreviewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+
+        <activity
+            android:name=".cameranew.PicturePreviewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+
+        <activity
+            android:name=".ui.newpreferences.ANewPreferences"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
 
 
         <activity
             android:name=".ui.signup.login_new.ALogin"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
-
 
 
         <activity
@@ -149,22 +170,22 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
-      <activity
+        <activity
             android:name=".ui.searchamiggos.SearchActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
-      <activity
+        <activity
             android:name=".ui.groupfriends.GroupFriendActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
-       <activity
+        <activity
             android:name=".ui.friendlist.FriendListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
-       <activity
+        <activity
             android:name=".ui.blockedusers.ABlockedUser"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -185,12 +206,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
 
-         <activity
+        <activity
             android:name=".ui.ourmemories.OurMemoriesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
-          <activity
+        <activity
             android:name=".ui.storieview.StorieViewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -339,10 +360,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
-            <activity
-                android:name=".ui.agegroup.AgeGroupActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.agegroup.AgeGroupActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.home.HomeActivity"
             android:screenOrientation="portrait"
@@ -397,16 +418,19 @@
         </activity>
 
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
-        <activity android:name=".ui.notification_new.ANotification"
+        <activity
+            android:name=".ui.notification_new.ANotification"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".ui.stripepayment.APaymentMethod"
+        <activity
+            android:name=".ui.stripepayment.APaymentMethod"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ui.stripepayment.addnewcard.AAddCard"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.stripepayment.addnewcard.AAddCard"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/> <!-- optional (needed if default theme has no action bar) -->
+            android:theme="@style/AppTheme.NoActionBar" /> <!-- optional (needed if default theme has no action bar) -->
 
         <!--metadata tag for instagram-->
         <meta-data
@@ -420,15 +444,13 @@
         <service
             android:name=".services.UpdateUserLocationToServer"
             android:enabled="true"
-            android:exported="false">
-        </service>
+            android:exported="false"></service>
 
         <service android:name=".services.FirebasePushNotificationService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
 
 
         <provider
@@ -440,6 +462,8 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_provider_paths" />
         </provider>
+
+        <receiver android:name=".broadcasts.NotificationBroadcastReceiver"/>
 
     </application>
 

@@ -12,13 +12,10 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.BookingInvitations
 import com.tekzee.amiggos.ui.bookings_new.bookings.ABooking
-import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.adapter.ViewPagerAdapter
-import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.FirstFragment
-import com.tekzee.amiggos.ui.mybooking.MyBookingActivity
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.mallortaxi.base.BaseFragment
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 
 class BookingFragment : BaseFragment(){

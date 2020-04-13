@@ -4,9 +4,8 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 class DynamicFragmentAdapter(
     fm: FragmentManager,

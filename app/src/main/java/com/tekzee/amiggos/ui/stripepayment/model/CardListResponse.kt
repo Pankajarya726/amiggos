@@ -4,16 +4,16 @@ package com.tekzee.amiggos.ui.stripepayment.model
 import com.google.gson.annotations.SerializedName
 
 data class CardListResponse(
-    @SerializedName("cards")
-    var cards: Cards = Cards(),
     @SerializedName("customer_stripId")
     var customerStripId: String = "",
+    @SerializedName("data")
+    var `data`: Data = Data(),
     @SerializedName("message")
     var message: String = "",
     @SerializedName("success")
     var success: Boolean = false
 ) {
-    data class Cards(
+    data class Data(
         @SerializedName("cards")
         var cards: List<Card> = listOf()
     ) {
@@ -33,7 +33,8 @@ data class CardListResponse(
             @SerializedName("is_default")
             var isDefault: Int = 0,
             @SerializedName("last4")
-            var last4: String = ""
+            var last4: String = "",
+            var isSelected: Boolean = false
         )
     }
 }

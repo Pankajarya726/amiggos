@@ -22,7 +22,7 @@ import com.tekzee.amiggos.ui.friendlist.model.FriendListResponse
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit

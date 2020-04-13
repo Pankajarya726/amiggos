@@ -21,7 +21,7 @@ import com.tekzee.amiggos.databinding.AAddcardActivityBinding
 import com.tekzee.amiggos.ui.chooseweek.model.ChooseWeekResponse
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 class AAddCard : BaseActivity(), AAddCardPresenter.AAddCardPresenterMainView {
 

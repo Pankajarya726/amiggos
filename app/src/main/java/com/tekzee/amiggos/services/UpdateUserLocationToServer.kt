@@ -19,7 +19,7 @@ import com.tekzee.amiggos.network.ApiClient
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 import io.nlopez.smartlocation.SmartLocation
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

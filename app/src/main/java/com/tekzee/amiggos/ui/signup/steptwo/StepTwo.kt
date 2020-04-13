@@ -10,7 +10,6 @@ import com.ajithvgiri.searchdialog.OnSearchItemSelected
 import com.ajithvgiri.searchdialog.SearchListItem
 import com.ajithvgiri.searchdialog.SearchableDialog
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
-import com.facebook.login.Login
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
@@ -23,7 +22,7 @@ import com.tekzee.amiggos.ui.signup.steptwo.model.StateResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.UserData
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 class StepTwo: BaseActivity(), StepTwoPresenter.StepTwoPresenterMainView {
 
@@ -86,7 +85,7 @@ class StepTwo: BaseActivity(), StepTwoPresenter.StepTwoPresenterMainView {
         input.addProperty("state",stateId)
         input.addProperty("city",cityId)
         input.addProperty("phone_number",binding!!.tphone.text.toString().trim())
-        input.addProperty("device_type",ConstantLib.DEVICETYPE)
+        input.addProperty("device_type", ConstantLib.DEVICETYPE)
         input.addProperty("device_id",sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN))
         stepTwoImplementation!!.doCallSignupApi(input, Utility.createHeaders(sharedPreferences))
     }

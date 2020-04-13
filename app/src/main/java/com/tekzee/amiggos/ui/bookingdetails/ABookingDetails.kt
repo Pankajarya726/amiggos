@@ -2,7 +2,6 @@ package com.tekzee.amiggos.ui.bookingdetails
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.media.Image
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -28,7 +27,7 @@ import com.tekzee.amiggos.ui.profiledetails.PosterOverlayView
 import com.tekzee.amiggos.util.RxSearchObservable
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import io.reactivex.functions.Predicate

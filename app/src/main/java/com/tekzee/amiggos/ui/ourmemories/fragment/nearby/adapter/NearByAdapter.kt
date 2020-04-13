@@ -64,11 +64,11 @@ class NearByAdapter(
                 itemView.img_check.visibility = View.GONE
             }
 
-            if(mDataList[adapterPosition].ourStoryInvite==1){
-                itemView.mainlayout.setBackgroundResource(R.drawable.bg_real_friend_dark)
-            }else{
-                itemView.mainlayout.setBackgroundResource(R.drawable.bg_real_friend)
-            }
+//            if(mDataList[adapterPosition].ourStoryInvite==1){
+//                itemView.mainlayout.setBackgroundResource(R.drawable.bg_real_friend_dark)
+//            }else{
+//                itemView.mainlayout.setBackgroundResource(R.drawable.bg_real_friend)
+//            }
 
             itemView.setOnClickListener {
                 if(mDataList[adapterPosition].ourStoryInvite==1){

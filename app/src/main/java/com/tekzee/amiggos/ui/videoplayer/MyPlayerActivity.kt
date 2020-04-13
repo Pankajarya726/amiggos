@@ -7,7 +7,7 @@ import com.khizar1556.mkvideoplayer.MKPlayer
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.imagepanaroma.model.ImageVideoData
 import com.tekzee.amiggos.base.BaseActivity
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 
 

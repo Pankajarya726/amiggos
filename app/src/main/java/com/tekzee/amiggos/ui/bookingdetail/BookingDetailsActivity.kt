@@ -12,7 +12,7 @@ import com.tekzee.amiggos.databinding.BookingDetailsBinding
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingData
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 class BookingDetailsActivity: BaseActivity() {
 

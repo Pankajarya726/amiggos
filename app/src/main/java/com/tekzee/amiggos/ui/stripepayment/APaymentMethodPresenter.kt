@@ -13,10 +13,18 @@ class APaymentMethodPresenter {
             input: JsonObject,
             createHeaders: HashMap<String, String?>
         )
+        fun deleteCardApi(
+            input: JsonObject,
+            createHeaders: HashMap<String, String?>
+        )
     }
 
     interface APaymentMethodPresenterMainView: BaseMainView{
-        fun onCardListSuccess(cards: List<CardListResponse.Cards.Card>)
+        fun onCardListSuccess(
+            cards: List<CardListResponse.Data.Card>,
+            customerStripId: String
+        )
+        fun onCardDeleteSuccess(message: String)
 
     }
 }

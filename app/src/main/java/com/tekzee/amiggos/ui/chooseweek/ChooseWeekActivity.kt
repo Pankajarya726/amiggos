@@ -20,7 +20,7 @@ import com.tekzee.amiggos.ui.chooseweek.model.DayData
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 class ChooseWeekActivity: BaseActivity(), ChooseWeekPresenter.ChooseWeekMainView {
 

@@ -14,10 +14,10 @@ import com.tekzee.amiggos.ui.myprofile.model.MyProfileResponse
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 import android.content.Intent
 import cn.pedant.SweetAlert.SweetAlertDialog
-import com.tekzee.amiggos.ui.camera.CameraPreview
+import com.tekzee.amiggos.cameranew.CameraActivity
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.MyFriendChatActivity
 import com.tekzee.amiggos.ui.imageviewer.ImageViewerActivity
 import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
@@ -81,7 +81,7 @@ class MyProfileActivity : BaseActivity(), MyProfilePresenter.MyProfileMainView {
         }
 
         binding.addmemory.setOnClickListener {
-            val intent = Intent(applicationContext, CameraPreview::class.java)
+            val intent = Intent(applicationContext, CameraActivity::class.java)
             intent.putExtra(
                 ConstantLib.PROFILE_IMAGE,
                 sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE)

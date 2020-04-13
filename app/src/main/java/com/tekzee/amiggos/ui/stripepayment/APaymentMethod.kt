@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
@@ -18,17 +19,18 @@ import com.tekzee.amiggos.ui.stripepayment.addnewcard.AAddCard
 import com.tekzee.amiggos.ui.stripepayment.model.CardListResponse
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 import java.util.*
 
 class APaymentMethod: BaseActivity(), APaymentMethodPresenter.APaymentMethodPresenterMainView {
 
+    private var customStripeId: String? = ""
     private var adapter: PaymentAdapter? = null
     private var binding: APaymentActivityBinding?=null
     private var sharedPreferences: SharedPreference? = null
     private var languageData: LanguageData? = null
     private var aPaymentMehtodImplementation: APaymentMehtodImplementation? =null
-    private val data = ArrayList<CardListResponse.Cards.Card>()
+    private val data = ArrayList<CardListResponse.Data.Card>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +62,7 @@ class APaymentMethod: BaseActivity(), APaymentMethodPresenter.APaymentMethodPres
             )
         )
         adapter = PaymentAdapter(data, object : PaymentClick {
-            override fun onRowClick(model: CardListResponse.Cards.Card) {
+            override fun onRowClick(model: CardListResponse.Data.Card) {
                 //                val intent = Intent(
 //                    this,
 //                    CardDetailsActivity::class.java
@@ -74,11 +76,38 @@ class APaymentMethod: BaseActivity(), APaymentMethodPresenter.APaymentMethodPres
 //                intent.putExtra("Expiry_Year", model.getExpiryYear())
 //                startActivity(intent)
             }
+
+            override fun onDeleteCard(model: CardListResponse.Data.Card?) {
+                val pDialog =
+                    SweetAlertDialog(this@APaymentMethod, SweetAlertDialog.WARNING_TYPE)
+                pDialog.titleText = languageData!!.PDELETECARD
+                pDialog.setCancelable(false)
+                pDialog.setCancelButton(languageData!!.klCancel) {
+                    pDialog.dismiss()
+                }
+                pDialog.setConfirmButton(languageData!!.klOk) {
+                    pDialog.dismiss()
+                     callDeleteCard(model)
+                }
+                pDialog.show()
+            }
         })
         binding!!.cardRecyclerview.adapter = adapter
 
     }
 
+
+    fun callDeleteCard(model: CardListResponse.Data.Card?) {
+        val input: JsonObject = JsonObject()
+        input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
+        input.addProperty("strip_customerId", customStripeId)
+        input.addProperty("card_Id", model!!.id)
+        input.addProperty("finger_print", model.fingerPrint)
+        aPaymentMehtodImplementation!!.deleteCardApi(
+            input,
+            Utility.createHeaders(sharedPreferences)
+        )
+    }
 
     override fun onBackPressed() {
         super.onBackPressed()
@@ -119,11 +148,22 @@ class APaymentMethod: BaseActivity(), APaymentMethodPresenter.APaymentMethodPres
         )
     }
 
-    override fun onCardListSuccess(responseData: List<CardListResponse.Cards.Card>) {
+    override fun onCardListSuccess(
+        responseData: List<CardListResponse.Data.Card>,
+        customerStripId: String
+    ) {
+        customStripeId = customerStripId;
         data.clear()
         adapter!!.notifyDataSetChanged()
         data.addAll(responseData)
         adapter!!.notifyDataSetChanged()
+    }
+
+    override fun onCardDeleteSuccess(message: String) {
+        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+        data.clear()
+        adapter!!.notifyDataSetChanged()
+        callGetCardList()
     }
 
 

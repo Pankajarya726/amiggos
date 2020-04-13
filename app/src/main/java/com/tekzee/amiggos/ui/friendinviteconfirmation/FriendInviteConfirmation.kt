@@ -11,9 +11,8 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.FriendInviteConfirmationBinding
 import com.tekzee.amiggos.ui.friendlist.FriendListActivity
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
-import com.tekzee.amiggos.ui.invitefriend.InviteFriendActivity
 import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 class FriendInviteConfirmation : BaseActivity() {
 

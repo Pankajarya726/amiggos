@@ -28,7 +28,7 @@ import com.tekzee.amiggos.ui.notification.model.StorieResponse
 import com.tekzee.amiggos.ui.profiledetails.model.GetFriendProfileDetailsResponse
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 import kotlinx.android.synthetic.main.referal_activity.*
 
 class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMainView {
@@ -52,7 +52,8 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
         setupClickListener()
 
         callFriendProfileApi(intent.getStringExtra(ConstantLib.FRIEND_ID)!!)
-        if(intent.getStringExtra(ConstantLib.FRIEND_ID).equals(sharedPreference!!.getValueInt(ConstantLib.USER_ID).toString(),true)){
+        if(intent.getStringExtra(ConstantLib.FRIEND_ID).equals(sharedPreference!!.getValueInt(
+                ConstantLib.USER_ID).toString(),true)){
             binding!!.imageoptions.visibility = View.GONE
         }else{
             binding!!.imageoptions.visibility = View.VISIBLE
@@ -231,6 +232,7 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
     }
 
     override fun onFriendProfileV2Success(responseData: GetFriendProfileDetailsResponse?) {
+        binding!!.htabMaincontent.visibility = View.VISIBLE
         isMyFriend = responseData!!.data.isMyFriend.toBoolean()
         isMyFriendBlocked = responseData.data.isMyFriendBlocked.toBoolean()
 
@@ -274,6 +276,7 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
     }
 
     override fun validateError(message: String) {
+        binding!!.htabMaincontent.visibility = View.VISIBLE
         Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
     }
 

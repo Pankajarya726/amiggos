@@ -1,4 +1,4 @@
-package com.tekzee.mallortaxiclient.constant
+package com.tekzee.amiggos.constant
 
 object ConstantLib {
     const val DRIVER_ID = "driver_id"
@@ -10,6 +10,8 @@ object ConstantLib {
     const val OURSTORYID = "ourstoryid"
     const val FROM_ACTIVITY = "from_activity"
     const val COUNT = "count"
+    const val EXTRA_NOTIFICATION_ID = "EXTRA_NOTIFICATION_ID"
+    const val SUB_TAB = "SUB_TAB"
     const val NOTIFICAION_ID = "notificaion_id"
     const val CONTENT = "content"
     const val FILEURI = "fileuri"

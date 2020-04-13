@@ -19,7 +19,7 @@ import com.tekzee.amiggos.ui.chooseweek.model.ChooseWeekResponse
 import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 
 class VenueDetailsActivity: BaseActivity(), VenueDetailsPresenter.VenueDetailsMainView {
@@ -111,7 +111,8 @@ class VenueDetailsActivity: BaseActivity(), VenueDetailsPresenter.VenueDetailsMa
             binding.tabs.addTab(binding.tabs.newTab().setText(item.value))
         }
 
-        val dynamicFragmentAdapter: DynamicFragmentAdapter = DynamicFragmentAdapter(supportFragmentManager,binding.tabs.tabCount,data!!,intent.getStringExtra(ConstantLib.CLUB_ID))
+        val dynamicFragmentAdapter: DynamicFragmentAdapter = DynamicFragmentAdapter(supportFragmentManager,binding.tabs.tabCount,data!!,intent.getStringExtra(
+            ConstantLib.CLUB_ID))
         binding.viewpager.adapter = dynamicFragmentAdapter
         binding.viewpager.currentItem = 0
     }

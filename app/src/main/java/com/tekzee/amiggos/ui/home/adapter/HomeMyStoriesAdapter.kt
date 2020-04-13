@@ -10,7 +10,7 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.home.StorieClickListener
 import com.tekzee.amiggos.ui.home.model.StoriesData
 import com.tekzee.amiggos.ui.storieview.StorieViewActivity
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 import kotlinx.android.synthetic.main.infinite_loading_progress_bar_layout.view.*
 import kotlinx.android.synthetic.main.single_list_stories.view.*
 

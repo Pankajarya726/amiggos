@@ -13,7 +13,7 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.chooseweek.ChooseWeekActivity
 import com.tekzee.amiggos.ui.home.model.NearestClub
 import com.tekzee.amiggos.ui.imagepanaroma.ImagePanaromaActivity
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 
 class HomeVenueAdapter(var venueListData: ArrayList<NearestClub>) : RecyclerView.Adapter<HomeVenueAdapter.ViewHolder>() {

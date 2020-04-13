@@ -22,7 +22,7 @@ import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvite
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMainView {
 

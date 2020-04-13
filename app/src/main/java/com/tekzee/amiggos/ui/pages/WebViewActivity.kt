@@ -8,12 +8,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.databinding.WebviewActivityBinding
-import com.tekzee.mallortaxiclient.constant.ConstantLib
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import com.tekzee.amiggos.constant.ConstantLib
 import com.orhanobut.logger.Logger
-import java.net.URL
 
 
 class WebViewActivity: AppCompatActivity(){

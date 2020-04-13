@@ -231,5 +231,11 @@ dependencies {
     implementation 'com.braintreepayments:card-form:4.2.1-SNAPSHOT'
 
 
+    api 'com.otaliastudios:cameraview:2.6.2'
+    implementation 'com.github.iammert:CameraVideoButton:0.2'
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
 
+
+    //new material design
+    implementation 'com.google.android.material:material:1.2.0-alpha05'
 }

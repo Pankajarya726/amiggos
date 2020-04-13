@@ -17,7 +17,7 @@ import com.tekzee.amiggos.ui.mybooking.model.MyBookingData
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingResponse
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.tekzee.amiggos.ui.bookingqrcode.GetBookingQrCodeActivity
 import com.tekzee.mallortaxi.base.BaseFragment

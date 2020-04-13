@@ -3,6 +3,7 @@ package com.tekzee.amiggos.network
 
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.base.model.CommonResponse
+import com.tekzee.amiggos.stripe.model.APaymentSuccessResponse
 import com.tekzee.amiggos.stripe.model.ClientSecretResponse
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
@@ -39,6 +40,8 @@ import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesRe
 import com.tekzee.amiggos.ui.mypreferences.model.MyPreferenceResponse
 import com.tekzee.amiggos.ui.mypreferences.model.PreferenceSavedResponse
 import com.tekzee.amiggos.ui.myprofile.model.MyProfileResponse
+import com.tekzee.amiggos.ui.newpreferences.amusictypefragment.model.AMusicTypeResponse
+import com.tekzee.amiggos.ui.newpreferences.avenuetypefragment.model.AVenueTypeResponse
 import com.tekzee.amiggos.ui.notification.model.NotificationResponse
 import com.tekzee.amiggos.ui.notification.model.StorieResponse
 import com.tekzee.amiggos.ui.notification_new.model.ANotificationResponse
@@ -61,6 +64,7 @@ import com.tekzee.amiggos.ui.signup.steptwo.model.CityResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.StateResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.UserData
 import com.tekzee.amiggos.ui.stripepayment.model.CardListResponse
+import com.tekzee.amiggos.ui.stripepayment.model.DeleteCardResponse
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
 import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
@@ -378,6 +382,18 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<OurFriendListResponse>>
 
+    @POST("user/get_venueType")
+    fun doCallVenueTypeApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<AVenueTypeResponse>>
+
+    @POST("user/get_musicType")
+    fun doCallMusicTypeApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<AMusicTypeResponse>>
+
     @POST("user/getNearByUser")
     fun doCallNearBy(
         @Body input: JsonObject,
@@ -431,6 +447,13 @@ interface ApiService {
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<CardListResponse>>
+
+
+    @POST("user/deleteCard")
+    fun deleteCardApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<DeleteCardResponse>>
 
 
     @POST("user/getPakageList_V1")
@@ -727,6 +750,18 @@ interface ApiService {
         @Body apiParamMap: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<ClientSecretResponse>>
+
+    @POST("user/stripePayment")
+    fun chargeUserApi(
+        @Body apiParamMap: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<APaymentSuccessResponse>>
+
+    @POST("user/create_stripeSavedCard")
+    fun callPaymentByCardId(
+        @Body apiParamMap: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<APaymentSuccessResponse>>
 
  @POST("user/update_payment_status")
     fun updatePaymentStatus(

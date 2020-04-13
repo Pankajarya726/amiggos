@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +26,7 @@ import com.tekzee.amiggos.util.RxSearchObservable
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.base.BaseFragment
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
@@ -179,8 +178,8 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
 
     fun setupErrorVisibility(){
         if(mydataList.size == 0){
-            errorLayout!!.visibility = View.VISIBLE
-            searchView!!.visibility = View.GONE
+            errorLayout!!.visibility = View.GONE
+            searchView!!.visibility = View.VISIBLE
         }else{
             searchView!!.visibility = View.VISIBLE
             errorLayout!!.visibility = View.GONE

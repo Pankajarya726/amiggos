@@ -22,7 +22,7 @@ import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 import com.wafflecopter.multicontactpicker.ContactResult
 import com.wafflecopter.multicontactpicker.LimitColumn
 import com.wafflecopter.multicontactpicker.MultiContactPicker
@@ -150,7 +150,8 @@ class InviteFriendActivity : BaseActivity(), InviteFriendActivityPresenter.Invit
 
     private fun setupViewNames() {
         binding.txtITitile.text = languageData!!.klINViteFRiends
-        binding.txtMessage.text = languageData!!.klnewInvitemsg1 +" "+ sharedPreference!!.getValueInt(ConstantLib.INVITE_FRIEND).toString()
+        binding.txtMessage.text = languageData!!.klnewInvitemsg1 +" "+ sharedPreference!!.getValueInt(
+            ConstantLib.INVITE_FRIEND).toString()
         binding.txtMessageTwo.text = languageData!!.klnewInvitemsg2
         binding.btnInviteFriend.text = languageData!!.klINViteFRiends
     }

@@ -13,8 +13,6 @@ import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.OurMemoriesU
 import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListData
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import kotlinx.android.synthetic.main.real_friend_upload.view.*
-import kotlinx.android.synthetic.main.single_online_friend.view.profile_image
-import kotlinx.android.synthetic.main.single_online_friend.view.txt_name
 
 
 class OurMemoriesUploadAdapter(
@@ -74,11 +72,11 @@ class OurMemoriesUploadAdapter(
                 itemView.img_check.visibility = View.GONE
             }
 
-            if(mDataList[adapterPosition].ourStoryInvite==1){
-                 itemView.mainlayout.setBackgroundResource(R.drawable.bg_real_friend_dark)
-            }else{
-                itemView.mainlayout.setBackgroundResource(R.drawable.bg_real_friend)
-            }
+//            if(mDataList[adapterPosition].ourStoryInvite==1){
+//                 itemView.mainlayout.setBackgroundResource(R.drawable.bg_real_friend_dark)
+//            }else{
+//                itemView.mainlayout.setBackgroundResource(R.drawable.bg_real_friend)
+//            }
 
             itemView.setOnClickListener {
                 if(mDataList[adapterPosition].ourStoryInvite==1){

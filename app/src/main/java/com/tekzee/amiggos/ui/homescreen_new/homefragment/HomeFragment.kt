@@ -23,7 +23,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.example.easywaylocation.EasyWayLocation
 import com.example.easywaylocation.Listener
-import com.google.android.gms.location.LocationRequest
 import com.google.gson.JsonObject
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
@@ -45,8 +44,7 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
-import com.tekzee.amiggos.ui.camera.CameraPreview
-import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
+import com.tekzee.amiggos.cameranew.CameraActivity
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeApiResponse
 import com.tekzee.amiggos.ui.venuedetailsnew.AVenueDetails
 import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubData
@@ -54,7 +52,7 @@ import com.tekzee.amiggos.util.OnSwipeTouchListener
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.base.BaseFragment
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 
 class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallback,
@@ -137,9 +135,11 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
                 }
 
                 override fun onSwipeRight() {
-                    val intent = Intent(activity, CameraPreview::class.java)
+                    val intent = Intent(activity, CameraActivity::class.java)
                     intent.putExtra(ConstantLib.FROM_ACTIVITY, "HOMEACTIVITY")
-                    intent.putExtra(ConstantLib.PROFILE_IMAGE, sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE))
+                    intent.putExtra(
+                        ConstantLib.PROFILE_IMAGE, sharedPreference!!.getValueString(
+                            ConstantLib.PROFILE_IMAGE))
                     startActivity(intent)
                     Animatoo.animateSlideRight(context);  //fire the zoom animation
                 }
@@ -184,7 +184,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
 
     private fun setupPlaceAutoComplete(view: View) {
         placesApi =
-            PlaceAPI.Builder().apiKey("AIzaSyCBAPM9f4Xzl_Bmv-pqaYi_UAbn5JISYU4").build(activity!!)
+            PlaceAPI.Builder().apiKey(resources.getString(R.string.placeapi)).build(activity!!)
         view.findViewById<AutoCompleteTextView>(R.id.autoCompleteEditText).setAdapter(
             PlacesAutoCompleteAdapter(activity!!, placesApi!!)
         )

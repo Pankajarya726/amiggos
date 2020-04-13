@@ -8,7 +8,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 import org.json.JSONArray
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException

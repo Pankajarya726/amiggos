@@ -12,14 +12,11 @@ import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.ANotificationBinding
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.adapter.ViewPagerAdapter
-import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.FirstFragment
 import com.tekzee.amiggos.ui.notification_new.fragments.friendrequestnotification.FriendRequestNotificationFragment
 import com.tekzee.amiggos.ui.notification_new.fragments.memoriesnotification.MemorieNotificationFragment
 import com.tekzee.amiggos.ui.notification_new.fragments.partyinvites.PartyInvitesFragment
-import com.tekzee.amiggos.ui.realfriends.invitations.Invitations
-import com.tekzee.amiggos.ui.realfriends.realfriendfragment.RealFriend
 import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 class ANotification : BaseActivity() {
     private var sharedPreference: SharedPreference? = null

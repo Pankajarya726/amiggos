@@ -14,8 +14,8 @@ import com.google.gson.JsonObject
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
+import com.tekzee.amiggos.cameranew.CameraActivity
 import com.tekzee.amiggos.databinding.MemoriesFragmentBinding
-import com.tekzee.amiggos.ui.camera.CameraPreview
 import com.tekzee.amiggos.ui.home.model.StoriesData
 import com.tekzee.amiggos.ui.mymemories.fragment.memories.adapter.MemoriesAdapter
 import com.tekzee.amiggos.ui.mymemories.fragment.memories.model.MyMemoriesResponse
@@ -24,7 +24,7 @@ import com.tekzee.amiggos.ui.storieview.StorieViewActivity
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -159,7 +159,7 @@ class Memories: BaseFragment(), MemoriesPresenter.MemoriesMainView, InfiniteScro
                 }
                 pDialog.setConfirmButton(languageData!!.kllblAddStoryTitle) {
                     pDialog.dismiss()
-                    val intent = Intent(activity, CameraPreview::class.java)
+                    val intent = Intent(activity, CameraActivity::class.java)
                     intent.putExtra(ConstantLib.FROM_ACTIVITY,"MEMORIES")
                     intent.putExtra(ConstantLib.PROFILE_IMAGE,mydataList[position].imageUrl)
                     startActivity(intent)

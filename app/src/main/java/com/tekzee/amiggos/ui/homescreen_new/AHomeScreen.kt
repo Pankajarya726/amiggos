@@ -17,20 +17,21 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
+import com.tekzee.amiggos.cameranew.CameraActivity
 import com.tekzee.amiggos.databinding.AHomeScreenBinding
 import com.tekzee.amiggos.enums.Actions
 import com.tekzee.amiggos.services.UpdateUserLocationToServer
 import com.tekzee.amiggos.ui.bookings_new.BookingFragment
-import com.tekzee.amiggos.ui.camera.CameraPreview
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.MyFriendChatActivity
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.HomeFragment
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
 import com.tekzee.amiggos.ui.memories.AMemoriesFragment
-import com.tekzee.amiggos.ui.notification.NotificationActivity
+import com.tekzee.amiggos.ui.mylifestyle.AMyLifeStyle
 import com.tekzee.amiggos.ui.notification_new.ANotification
 import com.tekzee.amiggos.ui.settings_new.ASettings
 import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.enums.FriendsAction
 
 
 class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
@@ -41,11 +42,9 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
     private var languageData: LanguageData? = null
 
 
-
-    companion object{
+    companion object {
         var bottomNavigation: BottomNavigationView? = null
     }
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,11 +61,20 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
         setupClickListener()
 
         //check permissions
-        askPermission(Manifest.permission.ACCESS_FINE_LOCATION){
-            setHeaders(R.id.navigation_home)
-            openFragment(HomeFragment.newInstance(),"1")
-        }.onDeclined {
-                e ->
+        askPermission(Manifest.permission.ACCESS_FINE_LOCATION) {
+
+            if (intent.action == FriendsAction.CLICK.action) {
+                bottomNavigation!!.menu.getItem(1).isChecked = true
+                setHeaders(R.id.navigation_near_me)
+                openFragment(NearMeFragment.newInstance(intent), "2")
+            } else {
+                setHeaders(R.id.navigation_home)
+                openFragment(HomeFragment.newInstance(), "1")
+
+            }
+
+
+        }.onDeclined { e ->
             if (e.hasDenied()) {
 
                 AlertDialog.Builder(this)
@@ -80,7 +88,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
                     .show()
             }
 
-            if(e.hasForeverDenied()) {
+            if (e.hasForeverDenied()) {
                 e.goToSettings()
             }
         }
@@ -96,7 +104,6 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
         super.onStart()
 
     }
-
 
 
     private fun setupLanguage() {
@@ -118,9 +125,12 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
         }
 
         binding.addMemorie.setOnClickListener {
-            val intent = Intent(applicationContext, CameraPreview::class.java)
+            val intent = Intent(applicationContext, CameraActivity::class.java)
             intent.putExtra(ConstantLib.FROM_ACTIVITY, "HOMEACTIVITY")
-            intent.putExtra(ConstantLib.PROFILE_IMAGE, sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE))
+            intent.putExtra(
+                ConstantLib.PROFILE_IMAGE,
+                sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE)
+            )
             startActivity(intent)
         }
 
@@ -144,41 +154,41 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
     private fun openFragment(fragment: Fragment, fragmentName: String) {
         Handler().postDelayed({
             val transaction = supportFragmentManager.beginTransaction().apply {
-                replace(R.id.container, fragment,fragmentName)
+                replace(R.id.container, fragment, fragmentName)
             }
             transaction.commit()
         }, 200)
     }
 
     override fun validateError(message: String) {
-       Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.navigation_home -> {
                 setHeaders(R.id.navigation_home)
-                openFragment(HomeFragment.newInstance(),"1")
+                openFragment(HomeFragment.newInstance(), "1")
                 return true
             }
             R.id.navigation_near_me -> {
                 setHeaders(R.id.navigation_near_me)
-                openFragment(NearMeFragment.newInstance(),"2")
+                openFragment(NearMeFragment.newInstance(intent), "2")
                 return true
             }
             R.id.navigation_my_lifestyle -> {
-               // openFragment(AMemoriesFragment.newInstance(),"3")
-                Toast.makeText(applicationContext,"work in progress",Toast.LENGTH_LONG).show()
+                setHeaders(R.id.navigation_my_lifestyle)
+                openFragment(AMyLifeStyle.newInstance(), "3")
                 return true
             }
             R.id.navigation_memories -> {
                 setHeaders(R.id.navigation_memories)
-                openFragment(AMemoriesFragment.newInstance(),"4")
+                openFragment(AMemoriesFragment.newInstance(), "4")
                 return true
             }
             R.id.navigation_bookings -> {
                 setHeaders(R.id.navigation_bookings)
-                openFragment(BookingFragment.newInstance(),"5")
+                openFragment(BookingFragment.newInstance(), "5")
                 return true
             }
         }
@@ -210,16 +220,22 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             binding.checkincode.visibility = View.GONE
             binding.addMemorie.visibility = View.GONE
             binding.chaticon.visibility = View.VISIBLE
+        } else if (navigationMemories == R.id.navigation_my_lifestyle) {
+            binding.headerLogo.visibility = View.VISIBLE
+            binding.notification.visibility = View.VISIBLE
+            binding.checkincode.visibility = View.GONE
+            binding.addMemorie.visibility = View.GONE
+            binding.chaticon.visibility = View.GONE
         }
     }
 
 
     override fun onBackPressed() {
-        if(bottomNavigation!!.menu.getItem(0).isChecked){
+        if (bottomNavigation!!.menu.getItem(0).isChecked) {
             onBackPressed()
-        }else{
+        } else {
             bottomNavigation!!.menu.getItem(0).isChecked = true
-            openFragment(HomeFragment.newInstance(),"1")
+            openFragment(HomeFragment.newInstance(), "1")
 
         }
 
@@ -229,7 +245,6 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
         super.onResume()
 
     }
-
 
 
 }

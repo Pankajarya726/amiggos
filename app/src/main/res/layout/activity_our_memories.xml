@@ -42,7 +42,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
 
-        <RadioGroup
+        <!--<RadioGroup
             android:id="@+id/radiogroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -84,39 +84,56 @@
                 android:text="Ammigos Near Me" />
 
 
-        </RadioGroup>
+        </RadioGroup>-->
+
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/our_memories_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabBackground="@android:color/white"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@android:color/black"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/black"
+            app:tabTextAppearance="@style/CustomTextAppearanceTab"
+            app:tabTextColor="@color/grey_underline" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+
+            android:background="@android:color/black" />
 
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <FrameLayout
-                android:id="@+id/container"
-                android:layout_width="match_parent"
-                android:layout_above="@id/btn_save"
-                android:layout_height="match_parent"/>
 
-            <com.cbr.gradienttextview.GradientTextView
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/memorie_viewPager"
+                android:layout_width="match_parent"
+                android:layout_above="@+id/btn_save"
+                android:layout_height="match_parent" />
+
+            <Button
                 android:id="@+id/btn_save"
-                android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
                 android:layout_marginStart="35dp"
                 android:layout_marginLeft="35dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="35dp"
                 android:layout_marginRight="35dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/btn_bg"
+                android:background="@drawable/edit_profile_bg"
                 android:gravity="center"
                 android:padding="15dp"
                 android:text="save"
-                app:fontFamily="@font/eras_bold"
-                app:gt_color_list="@array/rainbow"
-                app:gt_gradient_angle="90"
-                app:gt_gradient_direction="right"
-               />
 
+
+                />
 
 
         </RelativeLayout>

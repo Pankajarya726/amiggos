@@ -10,7 +10,6 @@
         android:id="@+id/mainlayout"
         android:layout_margin="5dp"
         android:layout_width="match_parent"
-        android:background="@drawable/bg_real_friend"
         android:layout_height="wrap_content">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -28,7 +27,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.cbr.gradienttextview.GradientTextView
+        <TextView
             android:id="@+id/txt_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -40,10 +39,7 @@
             android:maxLines="1"
             android:text="VENUES"
             android:textSize="12dp"
-            app:fontFamily="@font/eras_bold"
-            app:gt_color_list="@array/rainbow"
-            app:gt_gradient_angle="90"
-            app:gt_gradient_direction="right"
+            android:fontFamily="@font/eras"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/img_check"
             app:layout_constraintStart_toEndOf="@+id/profile_image"

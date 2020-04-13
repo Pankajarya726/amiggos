@@ -34,15 +34,16 @@
                     app:srcCompat="@drawable/header_logo" />
 
                 <TextView
-                    android:fontFamily="@font/opensans_regular"
                     android:id="@+id/txt_step_two"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
+                    android:fontFamily="@font/opensans_regular"
                     android:gravity="center"
                     android:text="Step 2"
+                    android:textAllCaps="true"
                     android:textColor="@android:color/white"
-                    android:textSize="18dp"
+                    android:textSize="@dimen/_18sdp"
                     app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -59,106 +60,107 @@
                     tools:layout_editor_absoluteX="20dp">
 
                     <EditText
-                        android:fontFamily="@font/opensans_regular"
                         android:id="@+id/tfirstname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:backgroundTint="@android:color/white"
+                        android:fontFamily="@font/opensans_regular"
                         android:hint="First Name"
                         android:inputType="text|textCapWords"
                         android:textColor="@android:color/white"
-                        android:textColorHint="@android:color/white" />
+                        android:textColorHint="@android:color/white"
+                        android:textSize="@dimen/_15sdp" />
 
                     <EditText
-                        android:fontFamily="@font/opensans_regular"
                         android:id="@+id/tlastname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:backgroundTint="@android:color/white"
+                        android:fontFamily="@font/opensans_regular"
                         android:hint="Last Name"
                         android:inputType="text|textCapWords"
                         android:textColor="@android:color/white"
-                        android:textColorHint="@android:color/white" />
+                        android:textColorHint="@android:color/white"
+                        android:textSize="@dimen/_15sdp" />
 
                     <EditText
-                        android:fontFamily="@font/opensans_regular"
-                        android:clickable="false"
                         android:id="@+id/tstate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:backgroundTint="@android:color/white"
+                        android:clickable="false"
+                        android:fontFamily="@font/opensans_regular"
                         android:hint="State"
                         android:textColor="@android:color/white"
-                        android:textColorHint="@android:color/white" />
-
+                        android:textColorHint="@android:color/white"
+                        android:textSize="@dimen/_15sdp" />
 
 
                     <EditText
-                        android:fontFamily="@font/opensans_regular"
-                        android:clickable="false"
                         android:id="@+id/tcity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:backgroundTint="@android:color/white"
+                        android:clickable="false"
+                        android:fontFamily="@font/opensans_regular"
                         android:hint="City"
                         android:inputType="text"
                         android:textColor="@android:color/white"
-                        android:textColorHint="@android:color/white" />
+                        android:textColorHint="@android:color/white"
+                        android:textSize="@dimen/_15sdp" />
 
-                      <EditText
-                          android:fontFamily="@font/opensans_regular"
+                    <EditText
                         android:id="@+id/tphone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:backgroundTint="@android:color/white"
+                        android:fontFamily="@font/opensans_regular"
                         android:hint="Phone Number"
                         android:inputType="phone"
                         android:textColor="@android:color/white"
-                        android:textColorHint="@android:color/white" />
+                        android:textColorHint="@android:color/white"
+                        android:textSize="@dimen/_15sdp" />
 
 
                 </LinearLayout>
 
                 <Button
-                    android:fontFamily="@font/opensans_regular"
                     android:id="@+id/btn_done_step_two"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="80dp"
                     android:layout_marginTop="15dp"
+                    android:layout_marginEnd="80dp"
                     android:background="@android:color/white"
-                    android:paddingLeft="50dp"
-                    android:paddingTop="5dp"
-                    android:paddingRight="50dp"
-                    android:paddingBottom="5dp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:padding="@dimen/_5sdp"
                     android:text="DONE"
                     android:textAllCaps="true"
                     android:textColor="@android:color/black"
-                    android:textSize="14dp"
+                    android:textSize="@dimen/_12sdp"
                     app:layout_constraintEnd_toEndOf="@+id/btn_back_step_two"
                     app:layout_constraintStart_toStartOf="@+id/btn_back_step_two"
                     app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
 
                 <Button
-                    android:fontFamily="@font/opensans_regular"
                     android:id="@+id/btn_back_step_two"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="80dp"
                     android:layout_marginTop="15dp"
+                    android:layout_marginEnd="80dp"
                     android:layout_marginBottom="20dp"
                     android:background="@android:color/black"
-                    android:paddingLeft="60dp"
-                    android:paddingTop="5dp"
-                    android:paddingRight="60dp"
-                    android:paddingBottom="5dp"
+                    android:fontFamily="@font/opensans_semibold"
                     android:text="BACK"
                     android:textAllCaps="true"
                     android:textColor="@android:color/white"
-                    android:textSize="14dp"
+                    android:textSize="@dimen/_12sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.498"

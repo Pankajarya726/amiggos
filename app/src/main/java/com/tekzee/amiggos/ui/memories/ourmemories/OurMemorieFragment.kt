@@ -14,7 +14,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
-import com.tekzee.amiggos.ui.camera.CameraPreview
+import com.tekzee.amiggos.cameranew.CameraActivity
 import com.tekzee.amiggos.ui.home.model.StoriesData
 import com.tekzee.amiggos.ui.memories.ourmemories.adapter.FeaturedBrandAdapter
 import com.tekzee.amiggos.ui.memories.ourmemories.adapter.MemorieAdapter
@@ -25,7 +25,7 @@ import com.tekzee.amiggos.ui.storieview.StorieViewActivity
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.base.BaseFragment
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 import ru.alexbykov.nopaginate.paginate.NoPaginate
 
 
@@ -129,9 +129,11 @@ class OurMemorieFragment : BaseFragment(), OurMemoriePresenter.OurMemoriePresent
             }
             pDialog.setConfirmButton(languageData!!.kllblAddStoryTitle) {
                 pDialog.dismiss()
-                val intent = Intent(activity, CameraPreview::class.java)
+                val intent = Intent(activity, CameraActivity::class.java)
                 intent.putExtra(ConstantLib.FROM_ACTIVITY, "HOMEACTIVITY")
-                intent.putExtra(ConstantLib.PROFILE_IMAGE, sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE))
+                intent.putExtra(
+                    ConstantLib.PROFILE_IMAGE, sharedPreference!!.getValueString(
+                        ConstantLib.PROFILE_IMAGE))
                 startActivity(intent)
             }
             pDialog.show()
@@ -178,7 +180,6 @@ class OurMemorieFragment : BaseFragment(), OurMemoriePresenter.OurMemoriePresent
     override fun onOurMemorieSuccess(myStoryList: List<StoriesData>) {
         ourMemorieData.addAll(myStoryList)
         adapter.notifyDataSetChanged()
-
         setupPagination()
 
     }

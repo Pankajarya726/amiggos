@@ -11,17 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.tekzee.amiggos.databinding.PaymentRowDataBinding;
 import com.tekzee.amiggos.ui.stripepayment.PaymentClick;
 import com.tekzee.amiggos.ui.stripepayment.model.CardListResponse;
-import com.tekzee.amiggos.ui.stripepayment.model.CardListResponse.Cards.Card;
+
 
 import java.util.ArrayList;
 
 public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.MyViewHolder> {
     private Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<CardListResponse.Cards.Card> data;
+    private ArrayList<CardListResponse.Data.Card> data;
     private PaymentClick listener;
 
-    public PaymentAdapter(ArrayList<CardListResponse.Cards.Card> data, PaymentClick listener) {
+    public PaymentAdapter(ArrayList<CardListResponse.Data.Card> data, PaymentClick listener) {
         this.data = data;
         this.listener = listener;
     }
@@ -39,28 +39,35 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        CardListResponse.Cards.Card model = data.get(position);
+        CardListResponse.Data.Card model = data.get(position);
         holder.bindConnection(model);
         final PaymentRowDataBinding dataBinding = holder.getBinding();
 
         holder.getBinding().tvCardNumber.setText(model.getBrand() + " ending in " + model.getLast4());
 
         if (model.isDefault()==1) {
-            holder.getBinding().ivDefault.setVisibility(View.VISIBLE);
+            holder.getBinding().ivDefault.setVisibility(View.GONE);
 
         } else {
             holder.getBinding().ivDefault.setVisibility(View.GONE);
         }
 
-
-        holder.getBinding().mainlayout.setOnClickListener(new View.OnClickListener() {
+        holder.getBinding().mainlayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View view) {
-
-                listener.onRowClick(model);
-
+            public boolean onLongClick(View v) {
+                listener.onDeleteCard(model);
+                return false;
             }
         });
+
+//        holder.getBinding().mainlayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                listener.onRowClick(model);
+//
+//            }
+//        });
         holder.getBinding().executePendingBindings();
     }
 
@@ -82,7 +89,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.MyViewHo
             return binding;
         }
 
-        public void bindConnection(CardListResponse.Cards.Card model) {
+        public void bindConnection(CardListResponse.Data.Card model) {
             binding.setPaymentRowResponse(model);
         }
     }

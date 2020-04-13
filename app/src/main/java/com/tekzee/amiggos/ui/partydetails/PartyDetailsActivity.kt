@@ -14,7 +14,7 @@ import com.tekzee.amiggos.ui.partydetails.fragment.upcommingparty.UpcommingParty
 
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 class PartyDetailsActivity: BaseActivity() {
 

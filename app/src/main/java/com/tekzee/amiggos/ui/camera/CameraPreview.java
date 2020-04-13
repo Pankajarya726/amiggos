@@ -47,7 +47,7 @@ import com.tekzee.amiggos.ui.mymemories.MyMemoriesActivity;
 import com.tekzee.amiggos.ui.searchamiggos.SearchActivity;
 import com.tekzee.amiggos.util.OnSwipeTouchListener;
 import com.tekzee.amiggos.util.SharedPreference;
-import com.tekzee.mallortaxiclient.constant.ConstantLib;
+import com.tekzee.amiggos.constant.ConstantLib;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -510,7 +510,6 @@ public class CameraPreview extends MyCanvas {
                     Intent intentActivity = new Intent(getApplicationContext(), PostImageCapturedActivity.class);
                     intentActivity.putExtra("BitmapImage", filepath);
                     intentActivity.putExtra(ConstantLib.FROM,"IMAGE");
-                    Logger.d("inside Camerapreview"+getIntent().getStringExtra(ConstantLib.OURSTORYID));
                     intentActivity.putExtra(ConstantLib.OURSTORYID,getIntent().getStringExtra(ConstantLib.OURSTORYID));
                     intentActivity.putExtra(ConstantLib.FROM_ACTIVITY,getIntent().getStringExtra(ConstantLib.FROM_ACTIVITY));
                     startActivity(intentActivity);

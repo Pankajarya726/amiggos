@@ -418,4 +418,8 @@ class LanguageData {
     @SerializedName("PUNBLOCK")val PUNBLOCK : String = "UNBLOCK"
     @SerializedName("PPARTYINVITES")val PPARTYINVITES : String = "Party Invites"
     @SerializedName("PFRIENDREQUEST")val PFRIENDREQUEST : String = "Friend Request"
+    @SerializedName("PPDELETECARD")val PDELETECARD : String = "Are you sure you want to delete this card."
+    @SerializedName("PVENUES")val PVENUES : String = "Venues"
+    @SerializedName("PMUSIC")val PMUSIC : String = "Music"
+    @SerializedName("PCHOOSEYOURPREFERENCES")val PCHOOSEYOURPREFERENCES : String = "Choose your prefrences"
 }

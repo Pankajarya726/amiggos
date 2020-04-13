@@ -26,16 +26,15 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.StorieViewBinding
-import com.tekzee.amiggos.ui.camera.CameraPreview
-import com.tekzee.amiggos.ui.friendprofile.FriendProfile
 import com.tekzee.amiggos.ui.home.model.Content
 import com.tekzee.amiggos.ui.home.model.StoriesData
 import com.tekzee.amiggos.ui.viewfriends.ViewFriendsActivity
 import com.tekzee.amiggos.base.BaseActivity
+import com.tekzee.amiggos.cameranew.CameraActivity
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 import kotlinx.android.synthetic.main.storie_view.*
 
 
@@ -136,7 +135,8 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
             .load(intent.getStringExtra(ConstantLib.PROFILE_IMAGE)).placeholder(R.drawable.user).into(img_profile)
         binding.txtName.text = intent.getStringExtra(ConstantLib.USER_NAME)
         binding.join.text = languageData!!.klJoin
-        if(sharedPreferences!!.getValueInt(ConstantLib.USER_ID).toString().equals(intent.getStringExtra(ConstantLib.USER_ID))){
+        if(sharedPreferences!!.getValueInt(ConstantLib.USER_ID).toString().equals(intent.getStringExtra(
+                ConstantLib.USER_ID))){
             binding.imgDelete.visibility = View.VISIBLE
         }else{
             binding.imgDelete.visibility = View.GONE
@@ -181,7 +181,8 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
                 storieId = urlList[index].id.toString()
             } else if ((view is ImageView) && (view.drawable == null)) {
                 momentz.pause(true)
-                Log.d("image--->",""+urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/"+urlList[index].id+"/0");
+                Log.d("image--->",""+urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(
+                    ConstantLib.USER_ID)+"/"+urlList[index].id+"/0");
 
                 Glide.with(view)
                     .load(urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/"+urlList[index].id+"/0")
@@ -238,7 +239,7 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
 
 
     override fun onAcceptStoriesSuccess(responseData: CommonResponse?) {
-        val intent = Intent(applicationContext, CameraPreview::class.java)
+        val intent = Intent(applicationContext, CameraActivity::class.java)
         intent.putExtra(ConstantLib.PROFILE_IMAGE,sharedPreferences!!.getValueString(ConstantLib.PROFILE_IMAGE))
         intent.putExtra(ConstantLib.FROM_ACTIVITY,"STORIEVIEWACTIVITY")
         intent.putExtra(ConstantLib.OURSTORYID,data!!.our_story_id.toString())

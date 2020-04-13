@@ -9,7 +9,7 @@
 
         <variable
             name="PaymentRowResponse"
-            type="com.tekzee.amiggos.ui.stripepayment.model.CardListResponse.Cards.Card" />
+            type="com.tekzee.amiggos.ui.stripepayment.model.CardListResponse.Data.Card" />
 
     </data>
 

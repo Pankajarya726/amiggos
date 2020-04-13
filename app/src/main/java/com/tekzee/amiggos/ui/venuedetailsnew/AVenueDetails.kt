@@ -2,7 +2,6 @@ package com.tekzee.amiggos.ui.venuedetailsnew
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
@@ -20,7 +19,7 @@ import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubData
 import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 import kotlinx.android.synthetic.main.referal_activity.*
 
 

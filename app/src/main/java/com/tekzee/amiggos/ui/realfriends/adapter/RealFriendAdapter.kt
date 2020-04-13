@@ -7,17 +7,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.chat.MessageActivity
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.RealFriend
-import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendData
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendV2Response
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
-import kotlinx.android.synthetic.main.single_online_friend.view.*
 import kotlinx.android.synthetic.main.single_online_friend.view.profile_image
-import kotlinx.android.synthetic.main.single_online_friend.view.txt_name
 import kotlinx.android.synthetic.main.single_real_friend.view.*
 
 

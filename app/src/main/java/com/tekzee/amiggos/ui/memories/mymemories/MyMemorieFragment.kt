@@ -14,13 +14,11 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.home.model.StoriesData
 import com.tekzee.amiggos.ui.memories.mymemories.adapter.OurMemorieWithoutProductAdapter
-import com.tekzee.amiggos.ui.memories.mymemories.model.OurMemoriesWithoutProductsResponse
 import com.tekzee.amiggos.ui.storieview.StorieViewActivity
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.base.BaseFragment
-import com.tekzee.mallortaxiclient.constant.ConstantLib
-import kotlinx.android.synthetic.main.message_activity.*
+import com.tekzee.amiggos.constant.ConstantLib
 
 class MyMemorieFragment:BaseFragment() ,MyMemoriePresenter.MyMemoriePresenterMainView{
 

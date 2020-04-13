@@ -26,7 +26,7 @@ import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.ui.profiledetails.model.GetFriendProfileDetailsResponse
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 
 class FriendProfile : BaseActivity(), FriendProfilePresenter.FriendProfileMainView {

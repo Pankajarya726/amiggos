@@ -21,7 +21,7 @@ import com.tekzee.amiggos.ui.chat.myfriendchatlist.adapter.MyFriendChatAdapter
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.model.MyFriendChatModel
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 class MyFriendChatActivity : BaseActivity() {
 

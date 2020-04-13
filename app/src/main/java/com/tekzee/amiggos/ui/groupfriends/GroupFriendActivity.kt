@@ -14,17 +14,17 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.OnlineFriendActivityBinding
-import com.tekzee.amiggos.ui.camera.CameraPreview
 import com.tekzee.amiggos.ui.groupfriends.adapter.GroupFriendAdapter
 import com.tekzee.amiggos.util.InitGeoLocationUpdate
 import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendData
 import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendResponse
 import com.tekzee.amiggos.base.BaseActivity
+import com.tekzee.amiggos.cameranew.CameraActivity
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.SimpleCallback
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -200,7 +200,7 @@ class GroupFriendActivity : BaseActivity(), GroupFriendPresenter.GroupFriendMain
 
     override fun storieClicked(position: Int) {
 
-            val intent = Intent(applicationContext, CameraPreview::class.java)
+            val intent = Intent(applicationContext, CameraActivity::class.java)
             intent.putExtra(ConstantLib.FROM_ACTIVITY,"GROUPFRIENDACTIVITY")
             intent.putExtra(ConstantLib.PROFILE_IMAGE,mydataList[position].profile)
             startActivity(intent)

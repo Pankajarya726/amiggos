@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.easywaylocation.EasyWayLocation
 import com.google.gson.JsonObject
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
@@ -22,7 +21,7 @@ import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponseV2
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
 

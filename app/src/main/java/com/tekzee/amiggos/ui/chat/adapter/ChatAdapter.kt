@@ -8,16 +8,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.tekzee.amiggos.R
-import com.tekzee.amiggos.firebasemodel.User
 import com.tekzee.amiggos.ui.chat.ChatHelper
-import com.tekzee.amiggos.ui.chat.MessageActivity
 import com.tekzee.amiggos.ui.chat.interfaces.FirebaseUserInterface
-import com.tekzee.amiggos.ui.chat.interfaces.ReceiverIdInterface
 import com.tekzee.amiggos.ui.chat.model.Message
 import com.tekzee.amiggos.ui.friendprofile.FriendProfile
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 import kotlinx.android.synthetic.main.row_chat_left.view.*
 import kotlinx.android.synthetic.main.row_chat_right.view.*
 

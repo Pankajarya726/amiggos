@@ -9,26 +9,28 @@ import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
+import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.enums.FriendsAction
 import com.tekzee.amiggos.ui.attachid.AttachIdActivity
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.MyFriendChatActivity
-import com.tekzee.amiggos.ui.friendprofile.FriendProfile
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.partydetails.PartyDetailsActivity
 import com.tekzee.amiggos.ui.realfriends.RealFriendsActivity
 import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.mallortaxiclient.constant.ConstantLib
 import org.json.JSONObject
 
 
 class FirebasePushNotificationService : FirebaseMessagingService() {
 
-    private var alarmSound: Uri?=null
+    private val TAG: String? = FirebasePushNotificationService::class.simpleName
+    private var alarmSound: Uri? = null
     private var sharedPreferences: SharedPreference? = null
     val CHANNEL_ID = "AMIGGOS"
     override fun onCreate() {
@@ -36,28 +38,27 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
         sharedPreferences = SharedPreference(this)
         alarmSound =
             RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
-
-//        Uri.parse(
-//            ContentResolver.SCHEME_ANDROID_RESOURCE
-//                + "://" + getPackageName() + "/raw/coin.aiff");
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Logger.d("From: " + remoteMessage.from!!)
-
-        // Check if message contains a data payload.
         if (remoteMessage.data.isNotEmpty()) {
-            Logger.d("Message data payload: " + remoteMessage.data)
+            val jsonData = JSONObject(remoteMessage.data as Map<String, String>)
+            Log.d(TAG, "Message Notification Body: " + jsonData);
             handleNotifications(remoteMessage)
+        }
+
+        if (remoteMessage.notification != null) {
+            Log.d(TAG, "title : " + remoteMessage.notification!!.title)
+            Log.d(TAG, "body : " + remoteMessage.notification!!.body)
+            Log.d(TAG, "body : " + remoteMessage.notification!!)
         }
     }
 
     private fun handleNotifications(remoteMessage: RemoteMessage?) {
 
         val jsonData = JSONObject(remoteMessage!!.data as Map<String, String>)
+
+
         var userid = if (jsonData.has("userid")) {
             jsonData.getString("userid")
         } else {
@@ -128,14 +129,6 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
         }
 
         sharedPreferences!!.save(ConstantLib.REJECTION_MESSAGE, rejectionMessage!!)
-
-        /*    doc_verification  : 1
-             doc_reject  : 6
-             friend_request    : 2 ( friend_id (s) , user_id (r))
-             friend_req_accept : 3 { friend_id (a), user_id (s) }
-             our_memory_invite : 4 {our_story_id, creator_id , sender_id ,user_id}
-             send_party_invite : 5 {booking_id , creator_id , user_id} */
-
         when (notiKey) {
             "0" -> {
                 Logger.d("do nothing")
@@ -144,52 +137,32 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
                 sharedPreferences!!.save(ConstantLib.INVITE_FRIEND, invitefrnd)
                 sharedPreferences!!.save(ConstantLib.USER_AGE, userAgeis1!!)
                 gotoDocVerification(userid!!, friendid!!, title, body)
-
-
             }
             "2" -> {
-                gotoFriendRequest(title, body,userid)
+                gotoFriendRequest(title, body, userid)
             }
             "3" -> {
-                gotoFriendRequestAccept(title, body)
+                gotoFriendRequest(title, body, userid)
             }
             "4" -> {
-//               SenderID = senderid
-//               UserID = userid
-//               OurStoryID = storyid
-//               kUserDefault.setValue(storyid, forKey:StoriesKey.OurStoryID.rawValue)
-//               kUserDefault.setValue(senderid, forKey: StoriesKey.NotifierUserId.rawValue)
-//               requestToOurStorisBYID(getOurStoryID: storyid, getUserID: userid, getSenderID: senderid, notificationID:notificationId)
-
                 createDefaultNotification(title, body)
             }
             "5" -> {
                 gotoSendPartyInvitation(title, body)
             }
             "6" -> {
-//              gotoDocRejected(userid!!, friendid!!)
                 createDefaultNotification(title, body)
             }
             "7" -> {
-//               print("Update Our Memory and Rejoin it")
-//               SenderID = creatorid
-//               OurStoryID = storyid
-//               kUserDefault.setValue(storyid, forKey:StoriesKey.OurStoryID.rawValue)
-//               kUserDefault.setValue(senderid, forKey: StoriesKey.NotifierUserId.rawValue)
-//               requestToOurStorisBYID(getOurStoryID: storyid, getUserID: userid, getSenderID: senderid, notificationID:notificationId)
                 createDefaultNotification(title, body)
             }
             "8" -> {
-//                gotoPartyDetailsScreen()
                 createDefaultNotification(title, body)
             }
             "9" -> {
-//                print("Party Invitation reject")
-//                createDefaultNotification(title, body)
-                goToAttachidActivity(title,body)
+                goToAttachidActivity(title, body)
             }
             "10" -> {
-//                gotoBookingScreen()
                 createDefaultNotification(title, body)
             }
             "22" -> {
@@ -199,7 +172,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
                 showChatNotification(title, body)
             }
             else -> { // Note the block
-                 createDefaultNotification(title, body)
+                createDefaultNotification(title, body)
             }
 
         }
@@ -218,7 +191,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
 
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
-        var builder = NotificationCompat.Builder(this, CHANNEL_ID)
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setContentTitle(body)
             .setContentText(title)
@@ -228,7 +201,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
             )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
-           
+
             .setAutoCancel(true)
         with(NotificationManagerCompat.from(this)) {
             // notificationId is a unique int for each notification that you must define
@@ -254,7 +227,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
             )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
-           
+
             .setAutoCancel(true)
         with(NotificationManagerCompat.from(this)) {
             // notificationId is a unique int for each notification that you must define
@@ -280,7 +253,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
             )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
-           
+
             .setAutoCancel(true)
         with(NotificationManagerCompat.from(this)) {
             // notificationId is a unique int for each notification that you must define
@@ -355,7 +328,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
             )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
-           
+
             .setAutoCancel(true)
         with(NotificationManagerCompat.from(this)) {
             // notificationId is a unique int for each notification that you must define
@@ -370,7 +343,6 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
         val intent = Intent(this, RealFriendsActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
@@ -383,10 +355,9 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
             )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
-           
+
             .setAutoCancel(true)
         with(NotificationManagerCompat.from(this)) {
-            // notificationId is a unique int for each notification that you must define
             notify(System.currentTimeMillis().toInt(), builder.build())
         }
     }
@@ -395,16 +366,21 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
         createNotificationChannel()
         playSound()
 
-
-        val intent = Intent(this, FriendProfile::class.java).apply {
+        val notificationId = System.currentTimeMillis().toInt()
+        val intent = Intent(this, AHomeScreen::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra("from","Notification")
+            action = FriendsAction.CLICK.action
+            putExtra(packageName, notificationId)
+            putExtra(ConstantLib.FRIEND_ID, muserid)
+            putExtra(ConstantLib.EXTRA_NOTIFICATION_ID, notificationId)
+            putExtra(ConstantLib.SUB_TAB, 2)
         }
 
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setSmallIcon(R.drawable.ic_notification_icon)
+            .setShowWhen(true)
             .setContentTitle(body)
             .setContentText(title)
             .setStyle(
@@ -413,12 +389,12 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
             )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
-           
             .setAutoCancel(true)
+
         with(NotificationManagerCompat.from(this)) {
-            // notificationId is a unique int for each notification that you must define
-            notify(System.currentTimeMillis().toInt(), builder.build())
+            notify(notificationId, builder.build())
         }
+
     }
 
     private fun gotoDocVerification(uid: Any, fid: Any, title: String?, body: String?) {
@@ -442,7 +418,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
             )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
-           
+
             .setAutoCancel(true)
 
 
@@ -456,12 +432,11 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-     //   Logger.d("Refreshed token: " + token!!)
+        //   Logger.d("Refreshed token: " + token!!)
         sharedPreferences!!.save(ConstantLib.FCMTOKEN, token)
     }
 
-    private fun createNotificationChannel()
-        {
+    private fun createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

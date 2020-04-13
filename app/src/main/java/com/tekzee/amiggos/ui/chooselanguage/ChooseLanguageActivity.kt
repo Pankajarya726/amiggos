@@ -15,13 +15,11 @@ import com.tekzee.amiggos.ui.chooselanguage.adapter.LanguageAdapter
 import com.tekzee.amiggos.ui.chooselanguage.interfaces.LanguageClicked
 import com.tekzee.amiggos.ui.chooselanguage.model.Language
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
-import com.tekzee.amiggos.ui.login.LoginActivity
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
-import com.tekzee.amiggos.ui.splash.SplashActivity
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 class ChooseLanguageActivity: BaseActivity(),ChooseLanguagePresenter.ChooseLanguageMainView {
 

@@ -16,7 +16,7 @@ import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.ui.blockedusers.ABlockedUser
 import com.tekzee.amiggos.ui.chooselanguage.ChooseLanguageActivity
 import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
-import com.tekzee.amiggos.ui.mypreferences.MyPreferences
+import com.tekzee.amiggos.ui.newpreferences.ANewPreferences
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.ui.settings.SettingsActivity
 import com.tekzee.amiggos.ui.stripepayment.APaymentMethod
@@ -24,7 +24,7 @@ import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView {
 
@@ -108,9 +108,10 @@ class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView 
 
 
         binding!!.txtLifestylePreference.setOnClickListener {
-            val intent = Intent(this, MyPreferences::class.java)
+            val intent = Intent(this, ANewPreferences::class.java)
             startActivity(intent)
         }
+
 
 
 

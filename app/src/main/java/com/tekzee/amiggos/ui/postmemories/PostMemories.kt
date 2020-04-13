@@ -16,7 +16,7 @@ import com.tekzee.amiggos.ui.ourmemories.OurMemoriesActivity
 import com.tekzee.amiggos.ui.postmemories.service.FileUploadService
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 
 class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView {

@@ -15,16 +15,14 @@ import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.ChoosePackageBinding
 import com.tekzee.amiggos.stripe.CheckoutActivity
-import com.tekzee.amiggos.ui.attachid.AttachIdActivity
 import com.tekzee.amiggos.ui.choosepackage.adapter.ChoosePackageAdapter
 import com.tekzee.amiggos.ui.choosepackage.interfaces.ChoosePackageInterface
 import com.tekzee.amiggos.ui.choosepackage.model.PackageBookResponse
 import com.tekzee.amiggos.ui.choosepackage.model.PackageData
 import com.tekzee.amiggos.ui.choosepackage.model.PackageResponse
-import com.tekzee.amiggos.ui.statusview.StatusViewActivity
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 
 class ChoosePackageActivity : BaseActivity(), ChoosePackagePresenter.ChoosePackageMainView {

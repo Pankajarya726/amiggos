@@ -44,7 +44,6 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.HomeActivityBinding
 import com.tekzee.amiggos.enums.Actions
 import com.tekzee.amiggos.services.UpdateUserLocationToServer
-import com.tekzee.amiggos.ui.camera.CameraPreview
 import com.tekzee.amiggos.ui.chat.model.Message
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.MyFriendChatActivity
 import com.tekzee.amiggos.ui.friendprofile.FriendProfile
@@ -61,18 +60,18 @@ import com.tekzee.amiggos.ui.mybooking.MyBookingActivity
 import com.tekzee.amiggos.ui.mymemories.MyMemoriesActivity
 import com.tekzee.amiggos.ui.mypreferences.MyPreferences
 import com.tekzee.amiggos.ui.myprofile.MyProfileActivity
-import com.tekzee.amiggos.ui.notification.NotificationActivity
 import com.tekzee.amiggos.ui.onlinefriends.OnlineFriendActivity
 import com.tekzee.amiggos.ui.partydetails.PartyDetailsActivity
 import com.tekzee.amiggos.ui.realfriends.RealFriendsActivity
 import com.tekzee.amiggos.ui.settings.SettingsActivity
 import com.tekzee.amiggos.ui.turningup.TurningUpActivity
 import com.tekzee.amiggos.base.BaseActivity
+import com.tekzee.amiggos.cameranew.CameraActivity
 import com.tekzee.amiggos.ui.notification_new.ANotification
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.SimpleCallback
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 
 
 class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -201,7 +200,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         binding.imgCamera.setOnClickListener {
             if (!checkFriedRequestSent()) {
-                val intent = Intent(applicationContext, CameraPreview::class.java)
+                val intent = Intent(applicationContext, CameraActivity::class.java)
                 intent.putExtra(
                     ConstantLib.PROFILE_IMAGE,
                     sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE)
@@ -499,7 +498,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 }
                 pDialog.setConfirmButton(languageData!!.kllblAddStoryTitle) {
                     pDialog.dismiss()
-                    val intent = Intent(applicationContext, CameraPreview::class.java)
+                    val intent = Intent(applicationContext, CameraActivity::class.java)
                     intent.putExtra(ConstantLib.FROM_ACTIVITY, "HOMEACTIVITY")
                     intent.putExtra(ConstantLib.PROFILE_IMAGE, storiesData.imageUrl)
                     startActivity(intent)

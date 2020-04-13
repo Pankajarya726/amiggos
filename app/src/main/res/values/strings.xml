@@ -21,6 +21,7 @@
     //sandbox- d8c5f41fdb0b41ca8cf66380b5bae63c
     //live - 897a7a7fdde5493d9be0a303e75f0d93
     <string name="client_id">897a7a7fdde5493d9be0a303e75f0d93</string>
+    <string name="placeapi">AIzaSyCBAPM9f4Xzl_Bmv-pqaYi_UAbn5JISYU4</string>
     <string name="callback_url">http://www.amiggos.com/</string>
     <string name="base_url">https://api.instagram.com/</string>
     <string name="redirect_url">http://www.amiggos.com</string>

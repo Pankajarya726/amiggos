@@ -19,7 +19,7 @@ import com.tekzee.amiggos.ui.chat.model.Message
 
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.mallortaxiclient.constant.ConstantLib
+import com.tekzee.amiggos.constant.ConstantLib
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
