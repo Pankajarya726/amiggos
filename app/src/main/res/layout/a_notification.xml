@@ -65,7 +65,7 @@
                     android:layout_marginTop="15dp"
                     android:padding="2dp"
                     android:textColor="@android:color/black"
-                    android:textSize="18dp"
+                    android:textSize="@dimen/_20sdp"
                     android:textStyle="bold" />
 
 
@@ -88,9 +88,10 @@
                 app:tabBackground="@android:color/white"
                 app:tabGravity="fill"
                 app:tabMode="fixed"
+                app:tabIndicatorFullWidth="false"
                 app:tabIndicatorColor="@android:color/black"
                 app:tabSelectedTextColor="@color/black"
-                app:tabTextAppearance="@style/CustomTextAppearanceTab"
+                app:tabTextAppearance="@style/CustomTextAppearanceTabMemories"
                 app:tabTextColor="@color/grey_underline" />
 
             <View

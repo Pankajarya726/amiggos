@@ -25,6 +25,7 @@ import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.SimpleCallback
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.databinding.NearbyFriendFragmentBinding
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -36,7 +37,7 @@ class NearBy : BaseFragment(), NearByPresenter.NearByMainView,
 
     private var lastLocation: LatLng? = null
     private val mLoadingData = OurFriendListData(loadingStatus = true)
-    lateinit var binding: RealFriendFragmentBinding
+    lateinit var binding: NearbyFriendFragmentBinding
     private var myView: View? = null
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
@@ -51,7 +52,7 @@ class NearBy : BaseFragment(), NearByPresenter.NearByMainView,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.real_friend_fragment, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.nearby_friend_fragment, container, false)
         myView = binding.root
         sharedPreference = SharedPreference(activity!!.baseContext)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)

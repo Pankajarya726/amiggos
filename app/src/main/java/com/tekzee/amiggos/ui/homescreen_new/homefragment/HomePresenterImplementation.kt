@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
+import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeApiResponse
 import com.tekzee.amiggos.network.ApiClient
 import com.tekzee.amiggos.util.Utility
@@ -46,6 +47,7 @@ class HomePresenterImplementation(
                         200 -> {
                             val responseData: HomeApiResponse = response.body()!!
                                 if (responseData.status) {
+                                    ConstantLib.NOTIFICATIONCOUNT = responseData.notificationcount
                                     mainView.onHomeApiSuccess(responseData)
                                 }else
                                 {

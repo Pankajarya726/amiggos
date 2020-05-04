@@ -84,6 +84,8 @@ class MyMemorieFragment:BaseFragment() ,MyMemoriePresenter.MyMemoriePresenterMai
             override fun onMemorieClicked(storiesData: StoriesData) {
                 if(storiesData.content.isNotEmpty()){
                     val intent = Intent(activity, StorieViewActivity::class.java)
+                    intent.putExtra(ConstantLib.FROM,"OURMEMORIES")
+                    intent.putExtra(ConstantLib.OURSTORYID,storiesData.our_story_id.toString())
                     intent.putExtra(ConstantLib.CONTENT, storiesData)
                     intent.putExtra(ConstantLib.PROFILE_IMAGE, storiesData.imageUrl)
                     intent.putExtra(ConstantLib.USER_ID, storiesData.userid.toString())

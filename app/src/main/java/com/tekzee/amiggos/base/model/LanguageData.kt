@@ -402,7 +402,7 @@ class LanguageData {
     @SerializedName("PSTEPTWO")val PSTEPTWO : String = "Step 2"
     @SerializedName("PSTEPONE")val PSTEPONE : String = "Step 1"
     @SerializedName("POURMEMORIES")val POURMEMORIES : String = "Our Memories"
-    @SerializedName("PAGE")val PAGE : String = "Age"
+    @SerializedName("PAGE")val PAGE : String = "Age : "
     @SerializedName("PLIFESTYLEPREFERENCE")val PLIFESTYLEPREFERENCE : String = "Lifestyle Preferences"
     @SerializedName("PEDITPROFILE")val PEDITPROFILE : String = "Edit Profile"
     @SerializedName("PPAYMENTMETHOD")val PPAYMENTMETHOD : String = "Payment Method"

@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.chooselanguage.interfaces.LanguageClicked
 import com.tekzee.amiggos.ui.chooselanguage.model.Language
 import com.tekzee.amiggos.util.SharedPreference
 import kotlinx.android.synthetic.main.single_list_language.view.*
+import kotlinx.android.synthetic.main.single_list_language.view.s_switch
 
 class LanguageAdapter(
     private val items: ArrayList<Language>,
@@ -31,17 +31,17 @@ class LanguageAdapter(
     }
 
     override fun onBindViewHolder(holder: PendingJobViewHolder, position: Int) {
-        if(items[position].isChecked){
-            holder.bindingdata.img_check_language.setBackgroundResource(R.drawable.check)
-        }else{
-            holder.bindingdata.img_check_language.setBackgroundResource(R.drawable.uncheck)
-        }
-        holder.bindingdata.txt_name.text = items[position].name
-        Glide.with(context!!).load(items[position].image).into(holder.bindingdata.img_flag)
-        holder.bindingdata.mainlayout.setOnClickListener{
-            listener.onLanguageClicked(position,items[position])
+
+        holder.bindingdata.s_switch.isChecked = items[position].isChecked
+
+        holder.bindingdata.s_switch.setOnCheckedChangeListener{
+                compoundButton, b ->
+            if(b){
+                listener.onLanguageClicked(position,b,items[position])
+            }
 
         }
+        holder.bindingdata.txt_name.text = items[position].name
 
     }
 

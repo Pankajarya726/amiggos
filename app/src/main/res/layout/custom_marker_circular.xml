@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+      <!--  <ImageView
+            android:id="@+id/marker_background"
+            android:layout_width="@dimen/_32sdp"
+            android:layout_height="@dimen/_32sdp"
+            android:src="@drawable/framlayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--    <tangxiaolv.com.library.EffectiveShapeView-->
+    <!--        android:id="@+id/marker_image"-->
+    <!--        android:layout_width="@dimen/_28sdp"-->
+    <!--        android:layout_height="@dimen/_28sdp"-->
+    <!--        android:layout_gravity="center"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/marker_background"-->
+    <!--        app:shape="rectangle" />-->
+
+
+
+
+    <com.github.siyamed.shapeimageview.BubbleImageView
+        android:id="@+id/marker_image"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:siArrowPosition="right"
+        app:siBorderColor="@android:color/white"
+        app:siBorderWidth="@dimen/_2sdp"
+        app:siRadius="@dimen/_2sdp"
+        app:siSquare="true" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

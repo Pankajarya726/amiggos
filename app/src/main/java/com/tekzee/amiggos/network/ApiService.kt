@@ -181,6 +181,13 @@ interface ApiService {
     ): Observable<Response<ALoginResponse>>
 
 
+    @POST("auth/forgotPassworduser_V2")
+    fun callForgetPasswordApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
+
     @POST("auth/get_state")
     fun doCallStateApi(
         @Body input: JsonObject,
@@ -363,7 +370,7 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<FavoriteVenueResponse>>
 
-    @POST("user/dashboard_club_V2")
+    @POST("user/dashboard_club_V3")
     fun docallHomeApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>

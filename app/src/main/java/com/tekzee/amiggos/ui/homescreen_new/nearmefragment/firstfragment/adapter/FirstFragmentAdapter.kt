@@ -60,7 +60,7 @@ class FirstFragmentAdapter(
 //            }else{
 //                itemView.add.visibility = View.GONE
 //            }
-            itemView.setOnClickListener {
+            itemView.img_layout.setOnClickListener {
                 mItemClickCallback?.let {
                     mItemClickCallback.itemClickCallback(adapterPosition)
                 }

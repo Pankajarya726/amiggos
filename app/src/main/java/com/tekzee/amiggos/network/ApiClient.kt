@@ -104,7 +104,7 @@ class ApiClient {
 
         val okHttpClient: OkHttpClient = clientBuilder
             .readTimeout(2, TimeUnit.MINUTES)
-            .connectTimeout(2, TimeUnit.SECONDS)
+            .connectTimeout(2, TimeUnit.MINUTES)
             .build();
 
 
@@ -170,6 +170,13 @@ class ApiClient {
         createHeaders: HashMap<String, String?>
     ): Observable<Response<ALoginResponse>> {
         return apiService.doCallLoginApi(input, createHeaders)
+    }
+
+    fun callForgetPasswordApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.callForgetPasswordApi(input, createHeaders)
     }
 
 

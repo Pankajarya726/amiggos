@@ -181,23 +181,41 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
                 storieId = urlList[index].id.toString()
             } else if ((view is ImageView) && (view.drawable == null)) {
                 momentz.pause(true)
-                Log.d("image--->",""+urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(
-                    ConstantLib.USER_ID)+"/"+urlList[index].id+"/0");
 
-                Glide.with(view)
-                    .load(urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/"+urlList[index].id+"/0")
-                    .listener(object : RequestListener<Drawable> {
-                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                            //TODO: something on exception
-                            return false
-                        }
-                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                            //do something when picture already loaded
-                            momentz.resume()
-                            return false
-                        }
-                    })
-                    .into(view)
+                if(intent.getStringExtra(ConstantLib.FROM).equals("OURMEMORIES",true)){
+                    Log.d("url ",urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/"+intent.getStringExtra(ConstantLib.OURSTORYID));
+                    Glide.with(view)
+                        .load(urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/"+intent.getStringExtra(ConstantLib.OURSTORYID)+"/"+urlList[index].id)
+                        .listener(object : RequestListener<Drawable> {
+                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                //TODO: something on exception
+                                return false
+                            }
+                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                                //do something when picture already loaded
+                                momentz.resume()
+                                return false
+                            }
+                        })
+                        .into(view)
+                }else{
+                    Glide.with(view)
+                        .load(urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/"+urlList[index].id+"/0")
+                        .listener(object : RequestListener<Drawable> {
+                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                //TODO: something on exception
+                                return false
+                            }
+                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                                //do something when picture already loaded
+                                momentz.resume()
+                                return false
+                            }
+                        })
+                        .into(view)
+                }
+
+
 
 
                 binding.txtView.text = urlList[index].viewCount.toString()
@@ -213,7 +231,13 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
 
 
     fun playVideo(videoView: VideoView, index: Int, momentz: Momentz) {
-        val str = urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/"+urlList[index].id+"/0"
+        var str:String?=null
+        if(intent.getStringExtra(ConstantLib.FROM).equals("OURMEMORIES",true)) {
+            str = urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/"+intent.getStringExtra(ConstantLib.OURSTORYID)+"/"+urlList[index].id
+        }else{
+            str = urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/"+urlList[index].id+"/0"
+        }
+
 //        val str = urlList[index].url
         val videoUrl= java.net.URLDecoder.decode(str, "UTF-8");
         val uri = Uri.parse(videoUrl)

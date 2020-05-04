@@ -47,7 +47,7 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_gravity="bottom|center"
-            app:cvb_recording_color="#D438A2"
+            app:cvb_recording_color="#000000"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

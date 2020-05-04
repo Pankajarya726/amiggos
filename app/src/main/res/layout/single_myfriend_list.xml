@@ -15,42 +15,42 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/g_user_image"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
                 android:layout_gravity="center_vertical"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/_5sdp"
                 android:contentDescription="@string/nav_header_desc"
                 android:src="@drawable/attachid"
                 app:civ_border_color="@color/colorPrimary"
-                app:civ_border_width="2dp"
+                app:civ_border_width="@dimen/_2sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/spread" />
 
 
-            <com.an.customfontview.CustomTextView
+            <TextView
                 android:id="@+id/g_txt_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/eras_bold"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:fontFamily="@font/opensans_semibold"
                 android:text=" Terms and Services"
                 android:textColor="@android:color/black"
-                android:textSize="12dp"
+                android:textSize="@dimen/_12sdp"
                 app:layout_constraintStart_toEndOf="@+id/g_user_image"
                 app:layout_constraintTop_toTopOf="@+id/g_user_image" />
 
-            <com.an.customfontview.CustomTextView
-                android:textSize="11dp"
+            <TextView
+                android:textSize="@dimen/_12sdp"
                 android:textColor="@android:color/black"
-                android:fontFamily="@font/eras"
+                android:fontFamily="@font/opensans_regular"
                 android:id="@+id/txt_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
                 android:text="TextView"
                 android:singleLine="true"
                 android:maxLines="1"
@@ -60,38 +60,38 @@
 
             <TextView
                 android:id="@+id/txt_unread"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/img_group"
                 android:background="@drawable/circle_bg"
                 android:gravity="center"
                 android:src="@drawable/notification"
                 android:textColor="@color/white"
-                android:textSize="8dp"
+                android:textSize="@dimen/_5sdp"
                 app:layout_constraintBottom_toTopOf="@+id/txt_timestamp"
                 app:layout_constraintEnd_toEndOf="@+id/txt_timestamp"
                 app:layout_constraintStart_toStartOf="@+id/txt_timestamp"/>
 
 
 
-            <com.an.customfontview.CustomTextView
+            <TextView
                 android:textColor="@android:color/black"
-                android:textSize="12dp"
-                android:fontFamily="@font/eras"
+                android:textSize="@dimen/_12sdp"
+                android:fontFamily="@font/opensans_regular"
                 android:id="@+id/txt_timestamp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
                 android:text="TextView"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
                 android:background="@color/grey_underline"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

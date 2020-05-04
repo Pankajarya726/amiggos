@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/htab_maincontent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:visibility="visible">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/htab_appbar"
@@ -21,7 +21,7 @@
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/htab_collapse_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="256dp"
+                android:layout_height="@dimen/_300sdp"
                 android:fitsSystemWindows="true"
                 app:contentScrim="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
@@ -44,10 +44,11 @@
                     android:fitsSystemWindows="true" />
 
                 <ImageView
-                    android:layout_margin="15dp"
                     android:id="@+id/img_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     app:srcCompat="@drawable/ic_back" />
 
                 <!--<androidx.appcompat.widget.Toolbar
@@ -59,25 +60,22 @@
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />-->
 
 
-
-
-
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_height="match_parent">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_gravity="top"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
-                app:layout_collapseMode="pin"
-                android:background="@android:color/white">
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:background="@android:color/white"
+                app:layout_collapseMode="pin">
 
                 <View
                     android:layout_width="match_parent"
@@ -90,24 +88,24 @@
                 </View>
 
                 <TextView
-                    android:fontFamily="@font/opensans_bold"
                     android:id="@+id/txt_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:text="himanshu.verma@tekzee.com"
-                    android:textColor="@android:color/black"
-                    android:textSize="16dp"
-                    android:singleLine="true"
+                    android:fontFamily="@font/opensans_bold"
                     android:maxLines="1"
+                    android:singleLine="true"
+                    tools:text="himanshu.verma@tekzee.com"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/_20sdp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/guideline4"
                     app:layout_constraintEnd_toStartOf="@+id/txt_realfriends"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.8"
-               />
+                    app:layout_constraintVertical_bias="0.8" />
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline4"
@@ -117,15 +115,14 @@
                     app:layout_constraintGuide_percent="0.5" />
 
                 <TextView
-                    android:fontFamily="@font/opensans_regular"
                     android:id="@+id/txt_location"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="8dp"
-                    android:text="TextView"
-                    android:textColor="@android:color/black"
-                    android:textSize="14dp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="@dimen/_12sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/txt_count"
                     app:layout_constraintStart_toStartOf="parent"
@@ -144,14 +141,14 @@
                     app:srcCompat="@drawable/settings" />
 
                 <TextView
-                    android:fontFamily="@font/opensans_semibold"
                     android:id="@+id/txt_realfriends"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="30dp"
+                    android:fontFamily="@font/opensans_semibold"
                     android:text="Real Friends"
                     android:textColor="@android:color/black"
-                    android:textSize="14dp"
+                    android:textSize="@dimen/_14sdp"
                     app:layout_constraintBottom_toTopOf="@+id/guideline4"
                     app:layout_constraintEnd_toStartOf="@+id/imageoptions"
                     app:layout_constraintTop_toTopOf="parent"
@@ -159,14 +156,13 @@
 
                 <TextView
                     android:id="@+id/txt_count"
-                    android:fontFamily="@font/opensans_regular"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="30dp"
+                    android:fontFamily="@font/opensans_regular"
                     android:gravity="center"
-                    android:text="TextView"
                     android:textColor="@android:color/black"
-                    android:textSize="14dp"
+                    android:textSize="@dimen/_14sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/imageoptions"
                     app:layout_constraintStart_toStartOf="@+id/txt_realfriends"
@@ -176,24 +172,27 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+
+
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/htab_tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabBackground="@android:color/white"
+                app:tabBackground="@color/tabcolor"
                 app:tabGravity="fill"
-                app:tabMode="fixed"
+                app:tabRippleColor="@color/black"
                 app:tabIndicatorColor="@android:color/transparent"
+                app:tabMode="fixed"
                 app:tabSelectedTextColor="@color/black"
                 app:tabTextAppearance="@style/CustomTextAppearanceTab"
                 app:tabTextColor="@color/grey_underline" />
 
 
             <androidx.viewpager.widget.ViewPager
+                android:background="@color/tabcolor"
                 android:id="@+id/htab_viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
+                android:layout_height="match_parent" />
         </LinearLayout>
 
 

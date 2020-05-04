@@ -107,8 +107,10 @@ class AViewAndEditProfile: BaseActivity(), AViewAndEditPresenter.AViewAndEditPre
 
         binding!!.back.setOnClickListener {
            onBackPressed()
-            Animatoo.animateSlideLeft(this)
+
         }
+
+
 
         binding!!.btnSave.setOnClickListener {
             if(validateFields()){
@@ -401,4 +403,9 @@ class AViewAndEditProfile: BaseActivity(), AViewAndEditPresenter.AViewAndEditPre
 
     }
 
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        Animatoo.animateSlideLeft(this)
+    }
 }

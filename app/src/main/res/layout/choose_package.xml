@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center|left"
                 android:textColor="@android:color/black"
-                android:textSize="18dp"
+                android:textSize="@dimen/_18sdp"
                 app:fontFamily="@font/eras" />
 
         </androidx.appcompat.widget.Toolbar>
@@ -46,12 +46,12 @@
                     android:id="@+id/header_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="15dp"
-                    android:padding="2dp"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:padding="@dimen/_2sdp"
                     android:text="Notifications and Settings"
                     android:textColor="@android:color/black"
-                    android:textSize="18dp"
+                    android:textSize="@dimen/_20sdp"
                     android:textStyle="bold" />
 
 
@@ -61,12 +61,12 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="@dimen/_1sdp"
             android:background="@android:color/black" />
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="@dimen/_15sdp"
             android:id="@+id/choose_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

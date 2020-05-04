@@ -3,14 +3,18 @@ package com.tekzee.amiggos.ui.homescreen_new
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
+import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import com.allenliu.badgeview.BadgeFactory
+import com.allenliu.badgeview.BadgeView
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -18,8 +22,10 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.cameranew.CameraActivity
+import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.AHomeScreenBinding
 import com.tekzee.amiggos.enums.Actions
+import com.tekzee.amiggos.enums.FriendsAction
 import com.tekzee.amiggos.services.UpdateUserLocationToServer
 import com.tekzee.amiggos.ui.bookings_new.BookingFragment
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.MyFriendChatActivity
@@ -30,8 +36,6 @@ import com.tekzee.amiggos.ui.mylifestyle.AMyLifeStyle
 import com.tekzee.amiggos.ui.notification_new.ANotification
 import com.tekzee.amiggos.ui.settings_new.ASettings
 import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.amiggos.constant.ConstantLib
-import com.tekzee.amiggos.enums.FriendsAction
 
 
 class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
@@ -97,6 +101,18 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             intent.action = Actions.START.name
             startService(intent)
         }
+
+//        try {
+//            if(intent.getStringExtra(ConstantLib.FROM).equals("FRIENDNOTIFICATION")){
+//                setHeaders(R.id.navigation_near_me)
+//                openFragment(NearMeFragment.newInstance(intent), "2")
+//            }else{
+//
+//            }
+//        }catch (e:Exception){
+//            e.printStackTrace()
+//        }
+
 
     }
 
@@ -203,6 +219,19 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             binding.chaticon.visibility = View.GONE
             binding.checkincode.visibility = View.GONE
         } else if (navigationMemories == R.id.navigation_home) {
+
+
+            BadgeFactory.create(this)
+                .setTextColor(Color.WHITE)
+                .setWidthAndHeight(25, 25)
+                .setBadgeBackground(Color.RED)
+                .setTextSize(10)
+                .setBadgeGravity(Gravity.RIGHT or Gravity.TOP)
+                .setBadgeCount(ConstantLib.NOTIFICATIONCOUNT)
+                .setShape(BadgeView.SHAPE_CIRCLE)
+                .setSpace(10, 10)
+                .bind(binding.notification)
+
             binding.headerLogo.visibility = View.VISIBLE
             binding.notification.visibility = View.VISIBLE
             binding.addMemorie.visibility = View.GONE

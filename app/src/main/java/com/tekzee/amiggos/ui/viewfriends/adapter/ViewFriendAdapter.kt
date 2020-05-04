@@ -32,7 +32,6 @@ class ViewFriendAdapter(
 
     override fun onBindViewHolder(holder: PendingJobViewHolder, position: Int) {
         holder.bindingdata.txt_name.text = items[position].name
-        Glide.with(context!!).load(items[position].profile).placeholder(R.drawable.user).into(holder.bindingdata.img_flag)
         holder.bindingdata.mainlayout.setOnClickListener{
             listener.onFriendClicked(position,items[position])
 

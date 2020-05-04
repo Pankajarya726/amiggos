@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.JsonObject
@@ -63,9 +64,11 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
 
 
     override fun onBackPressed() {
+
         val intent = Intent()
         setResult(2,intent)
         finish()
+        Animatoo.animateSlideLeft(this)
     }
 
 
@@ -206,7 +209,7 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
 
     private fun setupViews(data: GetFriendProfileDetailsResponse.Data) {
 
-        binding!!.txtName.text = data.name
+        binding!!.txtName.text = data.name +" "+ data.lastName
         binding!!.txtLocation.text = data.address
         binding!!.txtCount.text = data.real_freind_count
         val tabs =binding!!.htabTabs
@@ -235,7 +238,7 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
         binding!!.htabMaincontent.visibility = View.VISIBLE
         isMyFriend = responseData!!.data.isMyFriend.toBoolean()
         isMyFriendBlocked = responseData.data.isMyFriendBlocked.toBoolean()
-
+        Glide.with(applicationContext).load(responseData.data.profile).placeholder(R.drawable.blackbg).into(binding!!.htabHeader)
         setupViews(responseData.data)
     }
 

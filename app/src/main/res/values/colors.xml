@@ -8,6 +8,7 @@
     <color name="facebook">#304a83</color>
     <color name="instagram">#832e81</color>
     <color name="white">#FFFFFF</color>
+    <color name="tabcolor">#f7f7f7</color>
     <color name="google">#f82c2d</color>
     <color name="black">#000000</color>
     <color name="bottom_lib_dialog_item_text_color">#a17226</color>

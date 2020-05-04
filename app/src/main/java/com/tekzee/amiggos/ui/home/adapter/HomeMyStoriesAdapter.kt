@@ -67,6 +67,7 @@ class HomeMyStoriesAdapter(
                     listener.onStorieClick(mDataList!![adapterPosition])
                 }else{
                     val intent =Intent(itemView.context, StorieViewActivity::class.java)
+                    intent.putExtra(ConstantLib.FROM,"HOME")
                     intent.putExtra(ConstantLib.CONTENT,mDataList!![adapterPosition])
                     intent.putExtra(ConstantLib.PROFILE_IMAGE,mDataList!![adapterPosition].imageUrl)
                     intent.putExtra(ConstantLib.USER_ID,mDataList!![adapterPosition].userid.toString())

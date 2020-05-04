@@ -7,15 +7,25 @@
 
 
 
-        <tangxiaolv.com.library.EffectiveShapeView
-            android:layout_margin="4dp"
-            android:id="@+id/img_user_firstfragment"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/img_layout"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:adjustViewBounds="true"
-            android:src="@drawable/search"
-            app:shape="round_rectangle"
-            app:sides="4"/>
+            app:cardElevation="@dimen/_4sdp"
+            app:rippleColor="@color/black"
+            app:cardUseCompatPadding="true"
+            app:cardCornerRadius="@dimen/_5sdp"
+            android:layout_height="wrap_content">
+                <tangxiaolv.com.library.EffectiveShapeView
+                    android:id="@+id/img_user_firstfragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/search"
+                    app:shape="rectangle"
+                    app:sides="4"/>
+
+        </com.google.android.material.card.MaterialCardView>
 
 
 

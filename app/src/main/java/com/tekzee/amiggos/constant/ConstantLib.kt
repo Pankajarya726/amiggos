@@ -1,7 +1,9 @@
 package com.tekzee.amiggos.constant
 
 object ConstantLib {
+
     const val DRIVER_ID = "driver_id"
+    var NOTIFICATIONCOUNT = "0"
     const val NO_DAY_REGISTER = "no_day_register"
     const val IS_REGULAR_IMAGE = "is_regular_image"
     const val VIP_TABLE = "vip_table"

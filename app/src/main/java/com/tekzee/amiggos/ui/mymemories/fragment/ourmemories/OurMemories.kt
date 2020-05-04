@@ -162,6 +162,7 @@ class OurMemories: BaseFragment(), OurMemoriesPresenter.OurMemoriesMainView, Inf
                 pDialog.show()
             }else{
                 val intent =Intent(activity, StorieViewActivity::class.java)
+                intent.putExtra(ConstantLib.FROM,"OURMEMORIES")
                 intent.putExtra(ConstantLib.CONTENT, mydataList[position])
                 intent.putExtra(ConstantLib.PROFILE_IMAGE, mydataList[position].imageUrl)
                 intent.putExtra(ConstantLib.USER_ID, mydataList[position].userid.toString())
@@ -171,6 +172,7 @@ class OurMemories: BaseFragment(), OurMemoriesPresenter.OurMemoriesMainView, Inf
 
         }else{
             val intent =Intent(activity, StorieViewActivity::class.java)
+            intent.putExtra(ConstantLib.FROM,"OURMEMORIES")
             intent.putExtra(ConstantLib.CONTENT, mydataList[position])
             intent.putExtra(ConstantLib.PROFILE_IMAGE, mydataList[position].imageUrl)
             intent.putExtra(ConstantLib.USER_ID, mydataList[position].userid.toString())

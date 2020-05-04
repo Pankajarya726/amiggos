@@ -94,7 +94,6 @@ class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView 
 
         binding!!.viewprofile.setOnClickListener {
             val intent = Intent(this, AProfileDetails::class.java)
-
             intent.putExtra(ConstantLib.FRIEND_ID, sharedPreference!!.getValueInt(ConstantLib.USER_ID).toString())
             intent.putExtra(ConstantLib.PROFILE_IMAGE, sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE))
             startActivity(intent)

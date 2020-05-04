@@ -2,19 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@android:color/white"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:orientation="vertical">
 
     <TextView
-        android:fontFamily="@font/opensans_bold"
         android:id="@+id/memories_heading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="15dp"
+        android:fontFamily="@font/opensans_bold"
+        android:padding="@dimen/_15sdp"
         android:text="Memories"
         android:textColor="@android:color/black"
-        android:textSize="18dp"
+        android:textSize="@dimen/_20sdp"
         android:textStyle="bold" />
 
     <LinearLayout
@@ -29,18 +29,18 @@
             android:layout_height="wrap_content"
             app:tabBackground="@android:color/white"
             app:tabGravity="fill"
-            app:tabMode="fixed"
             app:tabIndicatorColor="@android:color/black"
+            app:tabIndicatorFullWidth="false"
+            app:tabMode="fixed"
             app:tabSelectedTextColor="@color/black"
-            app:tabTextAppearance="@style/CustomTextAppearanceTab"
+            app:tabTextAppearance="@style/CustomTextAppearanceTabMemories"
             app:tabTextColor="@color/grey_underline" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="@dimen/_1sdp"
 
-            android:background="@android:color/black"/>
-
+            android:background="@android:color/black" />
 
 
         <androidx.viewpager.widget.ViewPager

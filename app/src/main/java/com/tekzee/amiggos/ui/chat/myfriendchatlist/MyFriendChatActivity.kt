@@ -250,7 +250,7 @@ class MyFriendChatActivity : BaseActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        binding.title.text = languageData!!.klBtnChatTitle
+//        binding.title.text = languageData!!.klBtnChatTitle
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

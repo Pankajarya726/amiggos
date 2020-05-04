@@ -73,6 +73,7 @@ class MyProfileActivity : BaseActivity(), MyProfilePresenter.MyProfileMainView {
 
         binding.pMyMemories.setOnClickListener {
             val intent = Intent(applicationContext, StorieViewActivity::class.java)
+            intent.putExtra(ConstantLib.FROM,"MYPROFILE")
             intent.putExtra(ConstantLib.CONTENT,responseMyProfileData!!.data[0])
             intent.putExtra(ConstantLib.PROFILE_IMAGE,responseMyProfileData!!.data[0].imageUrl)
             intent.putExtra(ConstantLib.USER_ID, responseMyProfileData!!.data[0].userid.toString())

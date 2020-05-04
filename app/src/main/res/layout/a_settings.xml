@@ -10,25 +10,27 @@
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
-            android:layout_height="40dp">
+            android:layout_height="40dp"
+            android:layout_marginTop="@dimen/_15sdp">
 
             <ImageView
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:id="@+id/img_close"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="@dimen/_15sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/close" />
 
             <ImageView
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:id="@+id/img_mail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
+                android:layout_marginEnd="@dimen/_15sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -48,63 +50,81 @@
                 android:layout_weight="2"
                 android:orientation="vertical">
 
-                <TextView
-                    android:fontFamily="@font/opensans_bold"
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/txt_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="15dp"
-                    android:padding="2dp"
-
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_25sdp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:padding="@dimen/_2sdp"
+                    android:singleLine="true"
                     android:textColor="@android:color/black"
-                    android:textSize="18dp"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/_25sdp"
+                    android:textStyle="bold"
+                    tools:text="John Ceena" />
 
                 <TextView
-                    android:fontFamily="@font/opensans_regular"
                     android:id="@+id/address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:padding="2dp"
-                />
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:maxLines="1"
+                    android:padding="@dimen/_2sdp"
+                    android:singleLine="true"
+                    android:textSize="@dimen/_12sdp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginLeft="@dimen/_10sdp"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:fontFamily="@font/opensans_bold"
                         android:id="@+id/txt_age"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="2dp"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/opensans_bold"
+                        android:gravity="center|left"
+                        android:maxLines="1"
+                        android:padding="@dimen/_2sdp"
+                        android:singleLine="true"
                         android:text="Age : "
                         android:textColor="@android:color/black"
+                        android:textSize="@dimen/_12sdp"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:textColor="@android:color/black"
                         android:id="@+id/age"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="2dp"
-                         />
+                        android:layout_height="match_parent"
+                        android:gravity="center|left"
+                        android:maxLines="1"
+                        android:padding="@dimen/_2sdp"
+                        android:singleLine="true"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/_12sdp" />
                 </LinearLayout>
 
-                <TextView
-                    android:fontFamily="@font/opensans_semibold"
-                    android:textColor="@android:color/black"
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/viewprofile"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginBottom="15dp"
-                    android:padding="2dp"
-                    android:text="View Profile" />
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_15sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:padding="0sp"
+                    android:minWidth="0sp"
+                    android:minHeight="0dp"
+
+                    android:text="View Profile"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/_12sdp"
+                    app:backgroundTint="@android:color/white"
+                    app:rippleColor="@color/black" />
 
 
             </LinearLayout>
@@ -116,22 +136,24 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/img_user"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/_110sdp"
+                    android:layout_height="@dimen/_110sdp"
                     android:src="@drawable/attachid"
                     app:civ_border_color="@android:color/black"
-                    app:civ_border_width="2dp"
+                    app:civ_border_width="@dimen/_2sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.492"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.20999998"
                     app:srcCompat="@drawable/attachid" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -140,170 +162,213 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <LinearLayout
-                android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
                 android:orientation="vertical">
 
 
-
-                <TextView
-                    android:fontFamily="@font/opensans_regular"
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/txt_lifestyle_preference"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="12dp"
-                    android:padding="5dp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="left|center"
                     android:text="Lifestyle Preferences"
-                    android:textSize="14dp" />
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/_12sdp"
+                    app:rippleColor="@color/black" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="@dimen/_12sdp"
+                    android:layout_marginRight="@dimen/_12sdp"
                     android:background="@color/grey_underline" />
 
-                <TextView
-                    android:fontFamily="@font/opensans_regular"
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/edit_profile"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="12dp"
-                    android:padding="5dp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="left|center"
+
+
                     android:text="Edit Profile"
-                    android:textSize="14dp" />
+
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/_12sdp"
+                    app:rippleColor="@color/black" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="@dimen/_12sdp"
+                    android:layout_marginRight="@dimen/_12sdp"
                     android:background="@color/grey_underline" />
 
 
-                <TextView
-                    android:fontFamily="@font/opensans_regular"
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/payment_method"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="12dp"
-                    android:padding="5dp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="left|center"
+
+
                     android:text="Payment Method"
-                    android:textSize="14dp" />
+
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/_12sdp"
+                    app:rippleColor="@color/black" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="@dimen/_12sdp"
+                    android:layout_marginRight="@dimen/_12sdp"
                     android:background="@color/grey_underline" />
 
 
-
-                <TextView
-                    android:fontFamily="@font/opensans_regular"
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/settings"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="12dp"
-                    android:padding="5dp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="left|center"
+
+
                     android:text="Notification and Settings"
-                    android:textSize="14dp" />
+                    android:textAllCaps="false"
+
+                    android:textSize="@dimen/_12sdp"
+                    app:rippleColor="@color/black" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="@dimen/_12sdp"
+                    android:layout_marginRight="@dimen/_12sdp"
                     android:background="@color/grey_underline" />
 
 
-
-                <TextView
-                    android:fontFamily="@font/opensans_regular"
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/blockeduser"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="12dp"
-                    android:padding="5dp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="left|center"
+
+
                     android:text="Blocked Users"
-                    android:textSize="14dp" />
+
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/_12sdp"
+                    app:rippleColor="@color/black" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="@dimen/_12sdp"
+                    android:layout_marginRight="@dimen/_12sdp"
                     android:background="@color/grey_underline" />
 
 
-
-                <TextView
-                    android:fontFamily="@font/opensans_regular"
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/change_langauge"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="12dp"
-                    android:padding="5dp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="center|left"
+
+
                     android:text="Language"
-                    android:textSize="14dp" />
+
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/_12sdp"
+                    app:rippleColor="@color/black" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="@dimen/_12sdp"
+                    android:layout_marginRight="@dimen/_12sdp"
                     android:background="@color/grey_underline" />
 
 
-
-                <TextView
-                    android:fontFamily="@font/opensans_regular"
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/my_id"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="12dp"
-                    android:padding="5dp"
-                    android:text="My Id"
-                    android:textSize="14dp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:background="@color/grey_underline" />
-
-
-
-
-                <TextView
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
                     android:fontFamily="@font/opensans_regular"
-                    android:id="@+id/n_logout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="12dp"
-                    android:padding="5dp"
-                    android:text="Logout"
-                    android:textSize="14dp" />
+                    android:gravity="center|left"
+
+
+                    android:text="My Id"
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/_12sdp"
+                    app:rippleColor="@color/black" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="@dimen/_12sdp"
+                    android:layout_marginRight="@dimen/_12sdp"
+                    android:background="@color/grey_underline" />
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/n_logout"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="center|left"
+
+
+                    android:text="Logout"
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/_12sdp"
+                    app:rippleColor="@color/black" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="@dimen/_12sdp"
+                    android:layout_marginRight="@dimen/_12sdp"
                     android:background="@color/grey_underline" />
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="25dp"/>
+                    android:layout_height="25dp" />
 
             </LinearLayout>
         </ScrollView>
-
-
 
 
     </LinearLayout>

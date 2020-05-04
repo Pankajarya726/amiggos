@@ -1,13 +1,16 @@
 package com.tekzee.amiggos.ui.postmemories
 
+import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.PostMemoriesBinding
@@ -35,43 +38,65 @@ class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView 
         setupToolBar()
         setupViewData()
         setupClickListerner()
+        askPermission(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE) {
+
+
+        }.onDeclined { e ->
+            if (e.hasDenied()) {
+                AlertDialog.Builder(this)
+                    .setMessage("Please allow permission to upload your story")
+                    .setPositiveButton("yes") { dialog, which ->
+                        e.askAgain();
+                    } //ask again
+                    .setNegativeButton("no") { dialog, which ->
+                        finish()
+                    }
+                    .show();
+            }
+
+            if(e.hasForeverDenied()) {
+                // you need to open setting manually if you really need it
+                e.goToSettings();
+            }
+        }
     }
 
     private fun setupClickListerner() {
-        binding.layoutmymemories.setOnClickListener{
-            val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-            pDialog.titleText = "Your memory will be uploaded in backgroud and will take few moments to get updated"
-            pDialog.setCancelable(false)
-            pDialog.setCancelButton(languageData!!.klCancel) {
-                pDialog.dismiss()
-            }
-            pDialog.setConfirmButton(languageData!!.klOk) {
-                pDialog.dismiss()
-                callUploadImageToMyMemories()
-            }
-            pDialog.show()
+            binding.layoutmymemories.setOnClickListener{
+                val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                pDialog.titleText = "Your memory will be uploaded in backgroud and will take few moments to get updated"
+                pDialog.setCancelable(false)
+                pDialog.setCancelButton(languageData!!.klCancel) {
+                    pDialog.dismiss()
+                }
+                pDialog.setConfirmButton(languageData!!.klOk) {
+                    pDialog.dismiss()
+                    callUploadImageToMyMemories()
+                }
+                pDialog.show()
 
-        }
-
-        binding.layoutourmemories.setOnClickListener{
-
-            if (intent.getStringExtra(ConstantLib.FROM).equals("VIDEO", true)) {
-                val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
-                val intent = Intent(applicationContext, OurMemoriesActivity::class.java)
-                intent.putExtra(ConstantLib.FILEURI, imageUri)
-                intent.putExtra(ConstantLib.OURSTORYID,"");
-                intent.putExtra(ConstantLib.FROM, "VIDEO")
-                startActivity(intent)
-            } else {
-                val imageUri: Uri = intent.getParcelableExtra(ConstantLib.FILEURI) as Uri
-                val intent = Intent(applicationContext, OurMemoriesActivity::class.java)
-                intent.putExtra(ConstantLib.FILEURI, imageUri)
-                intent.putExtra(ConstantLib.OURSTORYID,"");
-                intent.putExtra(ConstantLib.FROM, "IMAGE")
-                startActivity(intent)
             }
 
-        }
+            binding.layoutourmemories.setOnClickListener{
+
+                if (intent.getStringExtra(ConstantLib.FROM).equals("VIDEO", true)) {
+                    val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
+                    val intent = Intent(applicationContext, OurMemoriesActivity::class.java)
+                    intent.putExtra(ConstantLib.FILEURI, imageUri)
+                    intent.putExtra(ConstantLib.OURSTORYID,"");
+                    intent.putExtra(ConstantLib.FROM, "VIDEO")
+                    startActivity(intent)
+                } else {
+                    val imageUri: Uri = intent.getParcelableExtra(ConstantLib.FILEURI) as Uri
+                    val intent = Intent(applicationContext, OurMemoriesActivity::class.java)
+                    intent.putExtra(ConstantLib.FILEURI, imageUri)
+                    intent.putExtra(ConstantLib.OURSTORYID,"");
+                    intent.putExtra(ConstantLib.FROM, "IMAGE")
+                    startActivity(intent)
+                }
+
+            }
+
     }
 
     private fun callUploadImageToMyMemories() {

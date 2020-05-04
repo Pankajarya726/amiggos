@@ -40,26 +40,26 @@ class ChooseLanguageActivity: BaseActivity(),ChooseLanguagePresenter.ChooseLangu
         setupViewName()
         callLanguageApi()
         setupRecyclerView()
-        setupClickListener()
+//        setupClickListener()
     }
 
-    private fun setupClickListener() {
-
-        binding.btnSave.setOnClickListener{
-
-
-            if(languageCode == null){
-                   Toast.makeText(applicationContext,"Please select language",Toast.LENGTH_LONG).show()
-            }else{
-                sharedPreferences!!.save(ConstantLib.LANGUAGE_CODE,languageCode!!)
-                chooseLanguagePresenterImplementation!!.doLanguageConstantApi(Utility.createHeaders(sharedPreferences))
-            }
-
-        }
-    }
+//    private fun setupClickListener() {
+//
+//        binding.btnSave.setOnClickListener{
+//
+//
+//            if(languageCode == null){
+//                   Toast.makeText(applicationContext,"Please select language",Toast.LENGTH_LONG).show()
+//            }else{
+//                sharedPreferences!!.save(ConstantLib.LANGUAGE_CODE,languageCode!!)
+//                chooseLanguagePresenterImplementation!!.doLanguageConstantApi(Utility.createHeaders(sharedPreferences))
+//            }
+//
+//        }
+//    }
 
     private fun setupViewName() {
-        binding.txtLanguageTitle.text = languageData!!.klChooseLanguage
+        binding.txtLanguageTitle.text = languageData!!.klLanguage
         binding.btnSave.text = languageData!!.klSAVE
     }
 
@@ -69,7 +69,7 @@ class ChooseLanguageActivity: BaseActivity(),ChooseLanguagePresenter.ChooseLangu
         supportActionBar?.setDisplayShowTitleEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        binding.title.text = languageData!!.klLanguage
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -84,20 +84,13 @@ class ChooseLanguageActivity: BaseActivity(),ChooseLanguagePresenter.ChooseLangu
         binding.languageRecyclerview.setHasFixedSize(true)
         binding.languageRecyclerview.layoutManager = LinearLayoutManager(this)
         languageAdapter = LanguageAdapter(data,sharedPreferences, object : LanguageClicked {
-            override fun onLanguageClicked(position: Int, selectedData: Language) {
-                data[position].isChecked = true
-                languageAdapter!!.notifyItemChanged(position)
-                sharedPreferences!!.save(ConstantLib.LANGUAGE_NAME,selectedData.name)
-                languageCode = selectedData.iso2_code
-                for (i in 0 until data.size)
-                {
-                    if(i!=position)
-                    {
-                        data[i].isChecked = false
-                        languageAdapter!!.notifyItemChanged(i)
-                    }
-                }
-
+            override fun onLanguageClicked(
+                position: Int,
+                switchclicked: Boolean,
+                selectedData: Language
+            ) {
+                sharedPreferences!!.save(ConstantLib.LANGUAGE_CODE,selectedData.iso2_code)
+                chooseLanguagePresenterImplementation!!.doLanguageConstantApi(Utility.createHeaders(sharedPreferences))
             }
         })
         binding.languageRecyclerview.adapter = languageAdapter
@@ -116,7 +109,10 @@ class ChooseLanguageActivity: BaseActivity(),ChooseLanguagePresenter.ChooseLangu
     override fun onLanguageSuccess(responseData: LanguageResponse) {
         data.clear()
         languageAdapter!!.notifyDataSetChanged()
-        data.addAll(responseData.data.language)
+        for(item in responseData.data.language){
+            item.isChecked = item.iso2_code == sharedPreferences!!.getValueString(ConstantLib.LANGUAGE_CODE)
+            data.add(item)
+        }
         languageAdapter!!.notifyDataSetChanged()
     }
 

@@ -150,6 +150,8 @@ class OurMemorieFragment : BaseFragment(), OurMemoriePresenter.OurMemoriePresent
             override fun OnMemorieClicked(memorieData: StoriesData) {
                 if(memorieData.content.isNotEmpty()){
                     val intent =Intent(activity, StorieViewActivity::class.java)
+                    intent.putExtra(ConstantLib.FROM,"MYMEMORIES")
+                    intent.putExtra(ConstantLib.OURSTORYID,memorieData.our_story_id.toString())
                     intent.putExtra(ConstantLib.CONTENT, memorieData)
                     intent.putExtra(ConstantLib.PROFILE_IMAGE, memorieData.imageUrl)
                     intent.putExtra(ConstantLib.USER_ID, memorieData.userid.toString())
@@ -192,7 +194,7 @@ class OurMemorieFragment : BaseFragment(), OurMemoriePresenter.OurMemoriePresent
     }
 
     override fun onFeaturedBrandFailure(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+       // Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
 
@@ -200,12 +202,12 @@ class OurMemorieFragment : BaseFragment(), OurMemoriePresenter.OurMemoriePresent
     override fun onOurMemorieFailure(message: String) {
         noPaginate!!.showLoading(false)
         noPaginate!!.setNoMoreItems(true)
-        Toast.makeText(activity,message,Toast.LENGTH_LONG).show()
+       // Toast.makeText(activity,message,Toast.LENGTH_LONG).show()
     }
 
 
     override fun validateError(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+       // Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
     private fun setupViews(view: View?) {

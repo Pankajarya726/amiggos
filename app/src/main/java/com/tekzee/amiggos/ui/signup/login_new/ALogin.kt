@@ -25,6 +25,7 @@ import com.tekzee.amiggos.ui.signup.stepone.StepOne
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.ui.forgetpassword.AForgetPassword
 
 class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
 
@@ -58,6 +59,12 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
             startActivity(Intent(applicationContext,StepOne::class.java))
             Animatoo.animateSlideLeft(this)
         }
+
+        binding!!.btnForgetpassword.setOnClickListener {
+            startActivity(Intent(applicationContext,AForgetPassword::class.java))
+            Animatoo.animateSlideLeft(this)
+        }
+
         binding!!.btnSignin.setOnClickListener{
             if(validateFields()){
                 callLoginApi()

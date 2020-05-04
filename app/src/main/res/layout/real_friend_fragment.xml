@@ -39,6 +39,7 @@
             android:textColorHint="@color/colorPrimary"
             android:fontFamily="@font/eras" />
 
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/real_friend_fragment"
             android:layout_width="match_parent"

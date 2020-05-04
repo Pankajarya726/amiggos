@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.example.easywaylocation.EasyWayLocation
 import com.example.easywaylocation.Listener
+import com.google.android.gms.maps.model.Marker
 import com.google.gson.JsonObject
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
@@ -41,6 +42,8 @@ import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
+import com.mapbox.mapboxsdk.style.layers.RasterLayer
+import com.mapbox.mapboxsdk.style.sources.ImageSource
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
@@ -53,19 +56,22 @@ import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallback,
     PermissionsListener, Listener {
 
     private var placesApi: PlaceAPI? = null
-    private var symbolManager: SymbolManager? =null
+    private var symbolManager: SymbolManager? = null
     private var dataResponse = ArrayList<HomeApiResponse.Data.NearestClub>()
     private var longitude: String? = " 0.0"
     private var latitude: String? = "0.0"
     private lateinit var homepresenterImplementation: HomePresenterImplementation
-    private var mstyle: Style? =null
-    private var mmapboxMap: MapboxMap? =null
+    private var mstyle: Style? = null
+    private var mmapboxMap: MapboxMap? = null
     private var mapView: MapView? = null
     private var permissionsManager: PermissionsManager? = null
     private var img_my_location: ImageView? = null
@@ -78,10 +84,10 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
     companion object {
         private val homefragment: HomeFragment? = null
 
-        fun newInstance():HomeFragment{
-          if(homefragment == null ){
-              return HomeFragment()
-          }
+        fun newInstance(): HomeFragment {
+            if (homefragment == null) {
+                return HomeFragment()
+            }
             return homefragment
         }
     }
@@ -116,14 +122,9 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         mapView!!.onCreate(savedInstanceState)
         mapView!!.getMapAsync(this)
 
-        easyWayLocation = EasyWayLocation(activity,false,this)
+        easyWayLocation = EasyWayLocation(activity, false, this)
         easyWayLocation!!.startLocation()
     }
-
-
-
-
-
 
 
     private fun setupGestures(view: View?) {
@@ -131,7 +132,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         view!!.findViewById<View>(R.id.viewleft).setOnTouchListener(
             object : OnSwipeTouchListener(activity) {
                 override fun onSwipeLeft() {
-                    Log.d("onSwipeLeft","onSwipeLeft")
+                    Log.d("onSwipeLeft", "onSwipeLeft")
                 }
 
                 override fun onSwipeRight() {
@@ -139,7 +140,9 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
                     intent.putExtra(ConstantLib.FROM_ACTIVITY, "HOMEACTIVITY")
                     intent.putExtra(
                         ConstantLib.PROFILE_IMAGE, sharedPreference!!.getValueString(
-                            ConstantLib.PROFILE_IMAGE))
+                            ConstantLib.PROFILE_IMAGE
+                        )
+                    )
                     startActivity(intent)
                     Animatoo.animateSlideRight(context);  //fire the zoom animation
                 }
@@ -151,7 +154,8 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
 
     private fun setUpLanguage(view: View) {
         view.findViewById<TextView>(R.id.search_txt).text = languageData!!.PWhatWouldYouLikeToDo
-        view.findViewById<AutoCompleteTextView>(R.id.autoCompleteEditText).hint = languageData!!.PCurrentLocation
+        view.findViewById<AutoCompleteTextView>(R.id.autoCompleteEditText).hint =
+            languageData!!.PCurrentLocation
     }
 
 
@@ -188,8 +192,9 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         view.findViewById<AutoCompleteTextView>(R.id.autoCompleteEditText).setAdapter(
             PlacesAutoCompleteAdapter(activity!!, placesApi!!)
         )
-        view.findViewById<AutoCompleteTextView>(R.id.autoCompleteEditText).setOnClickListener{
-            view.findViewById<AutoCompleteTextView>(R.id.autoCompleteEditText).setSelectAllOnFocus(true)
+        view.findViewById<AutoCompleteTextView>(R.id.autoCompleteEditText).setOnClickListener {
+            view.findViewById<AutoCompleteTextView>(R.id.autoCompleteEditText)
+                .setSelectAllOnFocus(true)
             view.findViewById<AutoCompleteTextView>(R.id.autoCompleteEditText).selectAll()
         }
 
@@ -216,8 +221,13 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
                 longitude = placeDetails.lng.toString()
                 activity!!.runOnUiThread(Runnable {
                     hideKeyboard()
-                    val position = CameraPosition.Builder().target(LatLng(latitude!!.toDouble(),longitude!!.toDouble())).zoom(12.0).bearing(0.0).tilt(30.0).build()
-                    mmapboxMap!!.animateCamera(CameraUpdateFactory.newCameraPosition(position),3000)
+                    val position = CameraPosition.Builder()
+                        .target(LatLng(latitude!!.toDouble(), longitude!!.toDouble())).zoom(12.0)
+                        .bearing(0.0).tilt(30.0).build()
+                    mmapboxMap!!.animateCamera(
+                        CameraUpdateFactory.newCameraPosition(position),
+                        3000
+                    )
                     callHomeApi(0)
                 })
 
@@ -225,7 +235,6 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
 
         })
     }
-
 
 
     private fun callHomeApi(callFrom: Int) {
@@ -238,7 +247,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         homepresenterImplementation.doCallHomeApi(
             input,
             Utility.createHeaders(sharedPreference),
-           languageData,
+            languageData,
             callFrom
         )
     }
@@ -246,7 +255,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
     private fun setupViews(view: View?) {
 
 
-    img_my_location = view!!.findViewById(R.id.img_my_location)
+        img_my_location = view!!.findViewById(R.id.img_my_location)
         img_my_location!!.setOnClickListener {
             enableLocationComponent(mstyle!!)
         }
@@ -280,18 +289,41 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
 
     override fun onHomeApiSuccess(responseData: HomeApiResponse?) {
 
-        if(dataResponse.isNotEmpty()){
+        if (dataResponse.isNotEmpty()) {
             removeAllMarkers()
             dataResponse.clear()
         }
         dataResponse.addAll(responseData!!.data.nearestClubs)
-        if(dataResponse.isNotEmpty()){
+        for (userData in responseData.data.nearestUser) {
+            dataResponse.add(
+                HomeApiResponse.Data.NearestClub(
+                    userData.userid, 2, userData.name, "", userData.distanceFromMylocation,
+                    userData.profile, "", userData.latitude, userData.longitude, "", "", "", "", false
+                    , ""
+                )
+            )
+        }
+
+
+        Collections.sort(dataResponse,MarkerCompartor())
+
+        if (dataResponse.isNotEmpty()) {
             setMarkersOnMap(dataResponse)
             val latLngBounds = LatLngBounds.Builder()
-                .include(LatLng(dataResponse[0].latitude.toDouble(),dataResponse[0].longitude.toDouble()))
-                .include(LatLng(dataResponse[dataResponse.size-1].latitude.toDouble(),dataResponse[dataResponse.size-1].longitude.toDouble()))
+                .include(
+                    LatLng(
+                        dataResponse[0].latitude.toDouble(),
+                        dataResponse[0].longitude.toDouble()
+                    )
+                )
+                .include(
+                    LatLng(
+                        dataResponse[dataResponse.size - 1].latitude.toDouble(),
+                        dataResponse[dataResponse.size - 1].longitude.toDouble()
+                    )
+                )
                 .build()
-            mmapboxMap!!.easeCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds,200),3000)
+            mmapboxMap!!.easeCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200), 3000)
 
 
         }
@@ -301,14 +333,14 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
     private fun removeAllMarkers() {
         val listOfSymbols = ArrayList<Symbol>()
         val symbolArray: androidx.collection.LongSparseArray<Symbol>? = symbolManager!!.annotations
-        for (item in symbolArray!!.valueIterator()){
+        for (item in symbolArray!!.valueIterator()) {
             listOfSymbols.add(item)
         }
         symbolManager!!.delete(listOfSymbols)
     }
 
     private fun setMarkersOnMap(nearestClubs: List<HomeApiResponse.Data.NearestClub>) {
-        if(symbolManager!=null){
+        if (symbolManager != null) {
             removeAllMarkers()
         }
 
@@ -330,26 +362,34 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
 
         symbolManager!!.addClickListener { t: Symbol? ->
             val dataObject = t!!.data!!.asJsonObject
-            val intent = Intent(activity,AVenueDetails::class.java)
-            val clubdata = ClubData()
-            clubdata.clubName = dataObject.get("clubName").asString
-            clubdata.clubBasicDetails = dataObject.get("clubId").asString
-            clubdata.clubStateCity = dataObject.get("clubId").asString
-            clubdata.clubType = dataObject.get("clubType").asString
-            clubdata.clubId = dataObject.get("clubId").asString
-            clubdata.clubImage = dataObject.get("clubImage").asString
-            clubdata.address = dataObject.get("address").asString
-            clubdata.agelimit = dataObject.get("agelimit").asString
-            clubdata.isFavoriteVenue = dataObject.get("isFavoriteVenue").asBoolean
-            clubdata.dress = dataObject.get("dress").asString
-            clubdata.club_description = dataObject.get("club_description").asString
+           if(dataObject.get("type").toString() == "2"){
+               val intent = Intent(activity, AProfileDetails::class.java)
+               intent.putExtra(ConstantLib.FRIEND_ID, dataObject.get("clubId").toString())
+               intent.putExtra(ConstantLib.PROFILE_IMAGE, dataObject.get("clubImage").toString())
+               startActivity(intent)
+               Animatoo.animateSlideRight(activity)
+           }else{
+               val intent = Intent(activity, AVenueDetails::class.java)
+               val clubdata = ClubData()
+               clubdata.clubName = dataObject.get("clubName").asString
+               clubdata.clubBasicDetails = dataObject.get("clubId").asString
+               clubdata.clubStateCity = dataObject.get("clubId").asString
+               clubdata.clubType = dataObject.get("clubType").asString
+               clubdata.clubId = dataObject.get("clubId").asString
+               clubdata.clubImage = dataObject.get("clubImage").asString
+               clubdata.address = dataObject.get("address").asString
+               clubdata.agelimit = dataObject.get("agelimit").asString
+               clubdata.isFavoriteVenue = dataObject.get("isFavoriteVenue").asBoolean
+               clubdata.dress = dataObject.get("dress").asString
+               clubdata.club_description = dataObject.get("club_description").asString
 
-            intent.putExtra(ConstantLib.VENUE_DATA,clubdata)
-            startActivity(intent)
+               intent.putExtra(ConstantLib.VENUE_DATA, clubdata)
+               startActivity(intent)
+           }
+
         }
 
     }
-
 
 
     private fun addSymbolOnMap(
@@ -361,12 +401,16 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         clubName: String,
         items: HomeApiResponse.Data.NearestClub
     ) {
-
-
-
+        var marker: View? = null
+        var imageview: ImageView? = null
         val layoutInflater: LayoutInflater = LayoutInflater.from(context)
-        val marker: View = layoutInflater.inflate(R.layout.custom_marker, null)
-        val imageview: ImageView = marker.findViewById(R.id.marker_image) as ImageView
+        if (items.type == 2) {
+            marker = layoutInflater.inflate(R.layout.custom_marker_circular, null)
+            imageview = marker.findViewById(R.id.marker_image) as ImageView
+        } else {
+            marker = layoutInflater.inflate(R.layout.custom_marker_circular_user, null)
+            imageview = marker.findViewById(R.id.marker_image) as ImageView
+        }
         Glide.with(this)
             .asBitmap()
             .load(image)
@@ -380,12 +424,12 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
                     resource: Bitmap,
                     transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
                 ) {
-                    imageview.setImageBitmap(resource)
+                    imageview!!.setImageBitmap(resource)
                     val displayMetrics = DisplayMetrics()
                     activity!!.windowManager.defaultDisplay.getMetrics(displayMetrics)
-                    marker.layoutParams =
+                    marker!!.layoutParams =
                         ViewGroup.LayoutParams(52, ViewGroup.LayoutParams.WRAP_CONTENT)
-                    marker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels)
+                    marker!!.measure(displayMetrics.widthPixels, displayMetrics.heightPixels)
                     marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
                     marker.buildDrawingCache()
                     val bitmap = Bitmap.createBitmap(
@@ -397,25 +441,27 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
                     marker.draw(canvas)
                     mstyle.addImage(clubName, bitmap)
                     val jsonData = JsonObject()
-                    jsonData.addProperty("clubId",items.clubId)
-                    jsonData.addProperty("clubName",items.clubName)
-                    jsonData.addProperty("clubType",items.clubType)
-                    jsonData.addProperty("isAmigoClub",items.isAmigoClub)
-                    jsonData.addProperty("latitude",items.latitude)
-                    jsonData.addProperty("longitude",items.longitude)
-                    jsonData.addProperty("clubType",items.clubType)
-                    jsonData.addProperty("clubImage",items.image)
-                    jsonData.addProperty("address",items.address)
-                    jsonData.addProperty("isFavoriteVenue",items.isFavoriteVenue)
-                    jsonData.addProperty("agelimit",items.agelimit)
-                    jsonData.addProperty("dress",items.dress)
-                    jsonData.addProperty("club_description",items.club_description)
+                    jsonData.addProperty("clubId", items.clubId)
+                    jsonData.addProperty("type", items.type)
+                    jsonData.addProperty("clubName", items.clubName)
+                    jsonData.addProperty("clubType", items.clubType)
+                    jsonData.addProperty("isAmigoClub", items.isAmigoClub)
+                    jsonData.addProperty("latitude", items.latitude)
+                    jsonData.addProperty("longitude", items.longitude)
+                    jsonData.addProperty("clubType", items.clubType)
+                    jsonData.addProperty("clubImage", items.image)
+                    jsonData.addProperty("address", items.address)
+                    jsonData.addProperty("isFavoriteVenue", items.isFavoriteVenue)
+                    jsonData.addProperty("agelimit", items.agelimit)
+                    jsonData.addProperty("dress", items.dress)
+                    jsonData.addProperty("club_description", items.club_description)
                     symbolManager.create(
                         SymbolOptions()
                             .withLatLng(LatLng(latitude, longitude))
                             .withIconImage(clubName)
                             .withData(jsonData)
                             .withIconSize(1.0f)
+
                     )
 
                 }
@@ -425,7 +471,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
 
 
     override fun onHomeApiFailure(message: String) {
-        Toast.makeText(context,message,Toast.LENGTH_LONG).show()
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
 
@@ -435,7 +481,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
 
     override fun onMapReady(mapboxMap: MapboxMap) {
         mmapboxMap = mapboxMap
-        mapboxMap.setStyle(Style.MAPBOX_STREETS, fun(style: Style) {
+        mapboxMap.setStyle(Style.DARK, fun(style: Style) {
             //enableLocationComponent(style)
             mstyle = style
         })
@@ -518,12 +564,9 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         latitude = location!!.latitude.toString()
         longitude = location.longitude.toString()
         easyWayLocation!!.endUpdates()
-        Logger.d("Location updates--->"+latitude+"----"+longitude)
+        Logger.d("Location updates--->" + latitude + "----" + longitude)
         callHomeApi(0)
     }
-
-
-
 
 
 }
