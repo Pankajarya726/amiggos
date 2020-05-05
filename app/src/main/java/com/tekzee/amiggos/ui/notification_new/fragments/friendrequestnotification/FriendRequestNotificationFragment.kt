@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.databinding.APartyInvitesFragmentBinding
-import com.tekzee.amiggos.ui.notification_new.adapter.ANotificationAdapter
+import com.tekzee.amiggos.ui.notification_new.adapter.ANotificationAdapterFriend
 import com.tekzee.amiggos.ui.notification_new.model.ANotificationResponse
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
@@ -23,7 +23,7 @@ class FriendRequestNotificationFragment: BaseFragment(), FriendRequestFragmentPr
     private var myView: View? = null
     private var binding: APartyInvitesFragmentBinding? = null
     private var sharedPreference: SharedPreference? = null
-    private var adapter: ANotificationAdapter? =null
+    private var adapter: ANotificationAdapterFriend? =null
 
     companion object {
         private val friendRequestNotificationFragment: FriendRequestNotificationFragment? = null
@@ -79,7 +79,7 @@ class FriendRequestNotificationFragment: BaseFragment(), FriendRequestFragmentPr
     private fun setupReyclerview() {
         binding!!.fragmentOneRecyclerview.setHasFixedSize(true)
         binding!!.fragmentOneRecyclerview.layoutManager = LinearLayoutManager(context)
-        adapter = ANotificationAdapter(data,sharedPreference)
+        adapter = ANotificationAdapterFriend(data,sharedPreference)
         binding!!.fragmentOneRecyclerview.adapter = adapter
     }
 

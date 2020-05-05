@@ -23,6 +23,7 @@ import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.databinding.RealAmiggosFragmentBinding
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -33,7 +34,7 @@ class RealAmiggos(var friendId: String?) : BaseFragment(), RealAmiggosPresenter.
 
 
     private val mLoadingData = RealFriendV2Response.Data.RealFreind(loadingStatus = true)
-    lateinit var binding: RealFriendFragmentBinding
+    lateinit var binding: RealAmiggosFragmentBinding
     private var myView: View? = null
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
@@ -51,7 +52,7 @@ class RealAmiggos(var friendId: String?) : BaseFragment(), RealAmiggosPresenter.
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.real_friend_fragment,container,false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.real_amiggos_fragment,container,false)
         myView = binding.root
         sharedPreference = SharedPreference(activity!!.baseContext)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
@@ -63,8 +64,13 @@ class RealAmiggos(var friendId: String?) : BaseFragment(), RealAmiggosPresenter.
             Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
             realFriendPageNo = 0
             if(it.isEmpty()){
+                mydataList.clear()
+                adapter!!.notifyDataSetChanged()
                 callRealFriendApi(false, "")
             }else{
+                mydataList.clear()
+                adapter!!.notifyDataSetChanged()
+
                 callRealFriendApi(false, it.toString())
             }
         }

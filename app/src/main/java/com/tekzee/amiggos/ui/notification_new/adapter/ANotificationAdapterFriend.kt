@@ -15,11 +15,11 @@ import com.tekzee.amiggos.util.SharedPreference
 import kotlinx.android.synthetic.main.single_notification.view.*
 
 
-class ANotificationAdapter(
+class ANotificationAdapterFriend(
     var data: ArrayList<ANotificationResponse.Data.UserNotification>,
     var sharedPreference: SharedPreference?
 )
-    : RecyclerView.Adapter<ANotificationAdapter.ViewHolder>(){
+    : RecyclerView.Adapter<ANotificationAdapterFriend.ViewHolder>(){
     var context: Context? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,9 +41,13 @@ class ANotificationAdapter(
             itemView.notification_description.text = data[adapterPosition].message
 
             itemView.setOnClickListener {
+//                val intent  = Intent(context,AHomeScreen::class.java)
+//                intent.putExtra(ConstantLib.FROM,"FRIENDNOTIFICATION")
+//                context!!.startActivity(intent)
+
                 val intent = Intent(context!!, AHomeScreen::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    action = "BOOKING"
+                    action = FriendsAction.CLICK.action
                     putExtra(ConstantLib.SUB_TAB, 2)
                 }
                 context!!.startActivity(intent)

@@ -5,12 +5,16 @@ import `in`.madapps.placesautocomplete.adapter.PlacesAutoCompleteAdapter
 import `in`.madapps.placesautocomplete.listener.OnPlacesDetailsListener
 import `in`.madapps.placesautocomplete.model.Place
 import `in`.madapps.placesautocomplete.model.PlaceDetails
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,8 +27,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.example.easywaylocation.EasyWayLocation
 import com.example.easywaylocation.Listener
-import com.google.android.gms.maps.model.Marker
 import com.google.gson.JsonObject
+import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.mapboxsdk.Mapbox
@@ -42,28 +46,37 @@ import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
-import com.mapbox.mapboxsdk.style.layers.RasterLayer
-import com.mapbox.mapboxsdk.style.sources.ImageSource
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.cameranew.CameraActivity
+import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
+import com.tekzee.amiggos.ui.homescreen_new.NotifyNotification
+import com.tekzee.amiggos.ui.homescreen_new.homefragment.adapter.AutoCompleteAdapter
+import com.tekzee.amiggos.ui.homescreen_new.homefragment.adapter.AutoSuggestAdapter
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeApiResponse
+import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.ui.venuedetailsnew.AVenueDetails
 import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubData
 import com.tekzee.amiggos.util.OnSwipeTouchListener
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.base.BaseFragment
-import com.tekzee.amiggos.constant.ConstantLib
-import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 
 class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallback,
     PermissionsListener, Listener {
-
+    private lateinit var notifylistner: NotifyNotification
+    private var finalDataList = ArrayList<HomeApiResponse.Data.NearestClub>()
+    val listOfData = ArrayList<String>()
+    private var autoSuggestAdapter: AutoSuggestAdapter? = null
+    private var searchText: AutoCompleteTextView? = null
     private var placesApi: PlaceAPI? = null
     private var symbolManager: SymbolManager? = null
     private var dataResponse = ArrayList<HomeApiResponse.Data.NearestClub>()
@@ -80,6 +93,8 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
     private var searchkeyword: String = ""
     private var languageData: LanguageData? = null
     private var easyWayLocation: EasyWayLocation? = null
+
+    private lateinit var arrayAdapter: AutoCompleteAdapter
 
     companion object {
         private val homefragment: HomeFragment? = null
@@ -153,34 +168,52 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
 
 
     private fun setUpLanguage(view: View) {
-        view.findViewById<TextView>(R.id.search_txt).text = languageData!!.PWhatWouldYouLikeToDo
+        view.findViewById<AutoCompleteTextView>(R.id.search_txt).hint =
+            languageData!!.PWhatWouldYouLikeToDo
         view.findViewById<AutoCompleteTextView>(R.id.autoCompleteEditText).hint =
             languageData!!.PCurrentLocation
+
+    }
+
+    private fun callApi(s: String) {
+        val input = JsonObject()
+        input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
+        input.addProperty("latitude", latitude)
+        input.addProperty("longitude", longitude)
+        input.addProperty("category_id", categoryId)
+        input.addProperty("search", s)
+        homepresenterImplementation.searchApi(
+            input,
+            Utility.createHeaders(sharedPreference),
+            languageData
+        )
+
     }
 
 
     private fun setupClickListener(view: View) {
-        view.findViewById<ImageView>(R.id.img_icon_two).setOnClickListener {
+        view.findViewById<RadioButton>(R.id.img_icon_two).setOnClickListener {
             categoryId = "12"
             callHomeApi(0)
+
         }
 
-        view.findViewById<ImageView>(R.id.img_icon_one).setOnClickListener {
+        view.findViewById<RadioButton>(R.id.img_icon_one).setOnClickListener {
             categoryId = "15"
             callHomeApi(0)
         }
 
-        view.findViewById<ImageView>(R.id.img_icon_three).setOnClickListener {
+        view.findViewById<RadioButton>(R.id.img_icon_three).setOnClickListener {
             categoryId = "14"
             callHomeApi(0)
         }
 
-        view.findViewById<ImageView>(R.id.img_icon_four).setOnClickListener {
+        view.findViewById<RadioButton>(R.id.img_icon_four).setOnClickListener {
             categoryId = "13"
             callHomeApi(0)
         }
 
-        view.findViewById<ImageView>(R.id.img_icon_five).setOnClickListener {
+        view.findViewById<RadioButton>(R.id.img_icon_five).setOnClickListener {
             categoryId = "16"
             callHomeApi(0)
         }
@@ -293,19 +326,33 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
             removeAllMarkers()
             dataResponse.clear()
         }
+        ConstantLib.NOTIFICATIONCOUNT = responseData!!.data.notificationcount
         dataResponse.addAll(responseData!!.data.nearestClubs)
         for (userData in responseData.data.nearestUser) {
             dataResponse.add(
                 HomeApiResponse.Data.NearestClub(
-                    userData.userid, 2, userData.name, "", userData.distanceFromMylocation,
-                    userData.profile, "", userData.latitude, userData.longitude, "", "", "", "", false
-                    , ""
+                    userData.userid,
+                    2,
+                    userData.name,
+                    "",
+                    userData.distanceFromMylocation,
+                    userData.profile,
+                    "",
+                    userData.latitude,
+                    userData.longitude,
+                    "",
+                    "",
+                    "",
+                    "",
+                    false
+                    ,
+                    ""
                 )
             )
         }
 
 
-        Collections.sort(dataResponse,MarkerCompartor())
+        Collections.sort(dataResponse, MarkerCompartor())
 
         if (dataResponse.isNotEmpty()) {
             setMarkersOnMap(dataResponse)
@@ -327,8 +374,14 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
 
 
         }
-
+        notifylistner.onNotify()
     }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        notifylistner = activity as NotifyNotification
+    }
+
 
     private fun removeAllMarkers() {
         val listOfSymbols = ArrayList<Symbol>()
@@ -362,30 +415,30 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
 
         symbolManager!!.addClickListener { t: Symbol? ->
             val dataObject = t!!.data!!.asJsonObject
-           if(dataObject.get("type").toString() == "2"){
-               val intent = Intent(activity, AProfileDetails::class.java)
-               intent.putExtra(ConstantLib.FRIEND_ID, dataObject.get("clubId").toString())
-               intent.putExtra(ConstantLib.PROFILE_IMAGE, dataObject.get("clubImage").toString())
-               startActivity(intent)
-               Animatoo.animateSlideRight(activity)
-           }else{
-               val intent = Intent(activity, AVenueDetails::class.java)
-               val clubdata = ClubData()
-               clubdata.clubName = dataObject.get("clubName").asString
-               clubdata.clubBasicDetails = dataObject.get("clubId").asString
-               clubdata.clubStateCity = dataObject.get("clubId").asString
-               clubdata.clubType = dataObject.get("clubType").asString
-               clubdata.clubId = dataObject.get("clubId").asString
-               clubdata.clubImage = dataObject.get("clubImage").asString
-               clubdata.address = dataObject.get("address").asString
-               clubdata.agelimit = dataObject.get("agelimit").asString
-               clubdata.isFavoriteVenue = dataObject.get("isFavoriteVenue").asBoolean
-               clubdata.dress = dataObject.get("dress").asString
-               clubdata.club_description = dataObject.get("club_description").asString
+            if (dataObject.get("type").toString() == "2") {
+                val intent = Intent(activity, AProfileDetails::class.java)
+                intent.putExtra(ConstantLib.FRIEND_ID, dataObject.get("clubId").toString())
+                intent.putExtra(ConstantLib.PROFILE_IMAGE, dataObject.get("clubImage").toString())
+                startActivity(intent)
+                Animatoo.animateSlideRight(activity)
+            } else {
+                val intent = Intent(activity, AVenueDetails::class.java)
+                val clubdata = ClubData()
+                clubdata.clubName = dataObject.get("clubName").asString
+                clubdata.clubBasicDetails = dataObject.get("clubId").asString
+                clubdata.clubStateCity = dataObject.get("clubId").asString
+                clubdata.clubType = dataObject.get("clubType").asString
+                clubdata.clubId = dataObject.get("clubId").asString
+                clubdata.clubImage = dataObject.get("clubImage").asString
+                clubdata.address = dataObject.get("address").asString
+                clubdata.agelimit = dataObject.get("agelimit").asString
+                clubdata.isFavoriteVenue = dataObject.get("isFavoriteVenue").asBoolean
+                clubdata.dress = dataObject.get("dress").asString
+                clubdata.club_description = dataObject.get("club_description").asString
 
-               intent.putExtra(ConstantLib.VENUE_DATA, clubdata)
-               startActivity(intent)
-           }
+                intent.putExtra(ConstantLib.VENUE_DATA, clubdata)
+                startActivity(intent)
+            }
 
         }
 
@@ -492,6 +545,50 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         setupClickListener(view!!)
         setUpLanguage(view!!)
         setupGestures(view)
+        setupSearchAutocomplete()
+
+
+    }
+
+    @SuppressLint("CheckResult")
+    private fun setupSearchAutocomplete() {
+        searchText = view!!.findViewById<AutoCompleteTextView>(R.id.search_txt)
+
+        RxTextView.textChanges(searchText!!).filter { it.length > 2 }
+            .debounce(500, TimeUnit.MILLISECONDS).subscribeOn(
+                Schedulers.io()
+            ).observeOn(AndroidSchedulers.mainThread()).subscribe {
+                callApi("")
+                if (it.isEmpty()) {
+                    view!!.findViewById<AutoCompleteTextView>(R.id.search_txt).hint =
+                        languageData!!.PWhatWouldYouLikeToDo
+                } else {
+                    if(it.toString().length!=0)
+                    callApi("")
+//                it.toString()
+                }
+            }
+
+        autoSuggestAdapter = AutoSuggestAdapter(
+            activity!!,
+            android.R.layout.simple_dropdown_item_1line
+        )
+        searchText!!.setThreshold(2)
+        searchText!!.setAdapter(autoSuggestAdapter)
+        searchText!!.setOnItemClickListener { parent, view, position, id ->
+            hideKeyboard()
+            searchText!!.setText("")
+            Log.d("result--->", ""+finalDataList.get(position))
+            removeAllMarkers()
+            setMarkersOnMap(listOf(finalDataList[position]))
+            val position = CameraPosition.Builder()
+                .target(LatLng(finalDataList[position].latitude.toDouble(), finalDataList[position].longitude.toDouble())).zoom(12.0)
+                .bearing(0.0).tilt(30.0).build()
+            mmapboxMap!!.animateCamera(
+                CameraUpdateFactory.newCameraPosition(position),
+                3000
+            )
+        }
 
     }
 
@@ -567,6 +664,21 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         Logger.d("Location updates--->" + latitude + "----" + longitude)
         callHomeApi(0)
     }
+
+    override fun onSearchApiSuccess(responseData: HomeApiResponse?) {
+        finalDataList.clear()
+        finalDataList.addAll(responseData!!.data.nearestClubs)
+        listOfData.clear()
+        autoSuggestAdapter!!.notifyDataSetChanged()
+        for (x in finalDataList.indices) {
+            listOfData.add(x.toString() + "-" + responseData.data.nearestClubs[x].clubName)
+        }
+
+        autoSuggestAdapter!!.setData(listOfData);
+        autoSuggestAdapter!!.notifyDataSetChanged()
+
+    }
+
 
 
 }

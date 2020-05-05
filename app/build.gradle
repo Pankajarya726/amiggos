@@ -241,4 +241,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.0-alpha05'
 //    implementation 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
     implementation 'com.allenliu.badgeview:library:1.1.1'
+
+    implementation 'com.devs:acr:1.0.1'
+    implementation("com.otaliastudios:autocomplete:1.1.0")
 }

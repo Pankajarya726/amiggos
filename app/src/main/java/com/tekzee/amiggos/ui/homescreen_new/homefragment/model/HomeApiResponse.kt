@@ -8,14 +8,14 @@ data class HomeApiResponse(
     var `data`: Data = Data(),
     @SerializedName("message")
     var message: String = "",
-    @SerializedName("notification_count")
-    var notificationcount: String = "",
     @SerializedName("status")
     var status: Boolean = false
 ) {
     data class Data(
+        @SerializedName("notification_count")
+        var notificationcount: String = "0",
         @SerializedName("nearest_clubs")
-        var nearestClubs: List<NearestClub> = listOf(),
+        var nearestClubs: List<NearestClub> = ArrayList(),
         @SerializedName("nearest_user")
     var nearestUser: List<NearestUser> = listOf()
     ) {

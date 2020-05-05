@@ -21,6 +21,7 @@ import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.databinding.RealFavoriteFragmentBinding
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -31,7 +32,7 @@ class AFavoriteVenues(var friendId: String?) : BaseFragment(), AFavoriteVenuePre
 
 
     private val mLoadingData = FavoriteVenueResponse.Data.FavoriteVenue(loadingStatus = true)
-    lateinit var binding: RealFriendFragmentBinding
+    lateinit var binding: RealFavoriteFragmentBinding
     private var myView: View? = null
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
@@ -49,7 +50,7 @@ class AFavoriteVenues(var friendId: String?) : BaseFragment(), AFavoriteVenuePre
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.real_friend_fragment,container,false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.real_favorite_fragment,container,false)
         myView = binding.root
         sharedPreference = SharedPreference(activity!!.baseContext)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
@@ -61,8 +62,12 @@ class AFavoriteVenues(var friendId: String?) : BaseFragment(), AFavoriteVenuePre
             Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
             realFriendPageNo = 0
             if(it.isEmpty()){
+                mydataList.clear()
+                adapter!!.notifyDataSetChanged()
                 callFavoriteVenue(false, "")
             }else{
+                mydataList.clear()
+                adapter!!.notifyDataSetChanged()
                 callFavoriteVenue(false, it.toString())
             }
         }

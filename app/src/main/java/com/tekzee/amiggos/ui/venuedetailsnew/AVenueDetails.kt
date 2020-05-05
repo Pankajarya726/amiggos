@@ -125,6 +125,8 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         binding!!.imgHeart.isLiked = dataClub!!.isFavoriteVenue
         binding!!.txtDescription.text = dataClub!!.club_description
         binding!!.txtDresscode.text = dataClub!!.dress
+        binding!!.txtAddress.text = dataClub!!.address
+        binding!!.txtPhone.text = "NA"
     }
 
     override fun onVenueDetailsSuccess(responseData: ClubDetailResponse.Data) {

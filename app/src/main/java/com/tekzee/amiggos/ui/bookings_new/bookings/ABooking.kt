@@ -1,5 +1,6 @@
 package com.tekzee.amiggos.ui.bookings_new.bookings
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,11 +20,13 @@ import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.ui.homescreen_new.NotifyNotification
 import java.util.*
 
 class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
 {
 
+    private lateinit var notifylistner: NotifyNotification
     private val data: ArrayList<ABookingResponse.Data.BookingData> = ArrayList()
     private lateinit var binding: ABookingFragmentBinding
     private var sharedPreference: SharedPreference? = null
@@ -67,6 +70,13 @@ class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
             callGetBookings()
         }
     }
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        notifylistner = activity as NotifyNotification
+    }
+
 
     private fun setupVenueTaggedRecycler() {
         binding.aBookingRecyclerview.setHasFixedSize(true)

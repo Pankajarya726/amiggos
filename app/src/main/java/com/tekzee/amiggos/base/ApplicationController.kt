@@ -1,8 +1,9 @@
-package com.tekzee.mallortaxi.base
+package com.tekzee.amiggos.base
 
 import android.app.Application
 import android.content.Context
 import androidx.multidex.MultiDex
+import com.devs.acr.AutoErrorReporter
 import com.facebook.FacebookSdk
 import com.facebook.LoggingBehavior
 import com.facebook.appevents.AppEventsLogger
@@ -23,7 +24,10 @@ class ApplicationController: Application() {
             "pk_test_E5sEgimoA8T4SexAo1GnNPkJ00sG6jBcdG"
         );
 
-
+        AutoErrorReporter.get(this)
+            .setEmailAddresses("himanshu.verma@tekzee.com")
+            .setEmailSubject("Auto Crash Report")
+            .start()
 
     }
 

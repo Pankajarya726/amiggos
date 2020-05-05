@@ -3,18 +3,14 @@ package com.tekzee.amiggos.ui.homescreen_new
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
-import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import com.allenliu.badgeview.BadgeFactory
-import com.allenliu.badgeview.BadgeView
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -39,15 +35,16 @@ import com.tekzee.amiggos.util.SharedPreference
 
 
 class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
-    BottomNavigationView.OnNavigationItemSelectedListener {
+    BottomNavigationView.OnNavigationItemSelectedListener,NotifyNotification {
 
-    lateinit var binding: AHomeScreenBinding
+    var binding: AHomeScreenBinding?= null
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
 
 
     companion object {
         var bottomNavigation: BottomNavigationView? = null
+
     }
 
 
@@ -56,7 +53,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
         binding = DataBindingUtil.setContentView(this, R.layout.a_home_screen)
         sharedPreference = SharedPreference(this)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        bottomNavigation = binding.bottomNavigation
+        bottomNavigation = binding!!.bottomNavigation
         bottomNavigation!!.setOnNavigationItemSelectedListener(this)
 
 
@@ -71,7 +68,11 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
                 bottomNavigation!!.menu.getItem(1).isChecked = true
                 setHeaders(R.id.navigation_near_me)
                 openFragment(NearMeFragment.newInstance(intent), "2")
-            } else {
+            } else  if (intent.action == "BOOKING") {
+                bottomNavigation!!.menu.getItem(4).isChecked = true
+                setHeaders(R.id.navigation_bookings)
+                openFragment(BookingFragment.newInstance(intent), "2")
+            }else {
                 setHeaders(R.id.navigation_home)
                 openFragment(HomeFragment.newInstance(), "1")
 
@@ -134,13 +135,13 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
 
 
     private fun setupClickListener() {
-        binding.menuDrawer.setOnClickListener {
+        binding!!.menuDrawer.setOnClickListener {
             val intent = Intent(this@AHomeScreen, ASettings::class.java)
             startActivity(intent)
             Animatoo.animateSlideRight(this)
         }
 
-        binding.addMemorie.setOnClickListener {
+        binding!!.addMemorie.setOnClickListener {
             val intent = Intent(applicationContext, CameraActivity::class.java)
             intent.putExtra(ConstantLib.FROM_ACTIVITY, "HOMEACTIVITY")
             intent.putExtra(
@@ -150,17 +151,17 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             startActivity(intent)
         }
 
-        binding.notification.setOnClickListener {
+        binding!!.notification.setOnClickListener {
             val intent = Intent(this, ANotification::class.java)
             startActivity(intent)
         }
 
-        binding.chaticon.setOnClickListener {
+        binding!!.chaticon.setOnClickListener {
             val intent = Intent(applicationContext, MyFriendChatActivity::class.java)
             startActivity(intent)
         }
 
-        binding.checkincode.setOnClickListener {
+        binding!!.checkincode.setOnClickListener {
 //            val intent = Intent(this, MyBookingActivity::class.java)
 //            startActivity(intent)
         }
@@ -204,7 +205,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             }
             R.id.navigation_bookings -> {
                 setHeaders(R.id.navigation_bookings)
-                openFragment(BookingFragment.newInstance(), "5")
+                openFragment(BookingFragment.newInstance(intent), "5")
                 return true
             }
         }
@@ -212,49 +213,47 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
     }
 
     private fun setHeaders(navigationMemories: Int) {
+
+
+
         if (navigationMemories == R.id.navigation_memories) {
-            binding.headerLogo.visibility = View.GONE
-            binding.notification.visibility = View.GONE
-            binding.addMemorie.visibility = View.VISIBLE
-            binding.chaticon.visibility = View.GONE
-            binding.checkincode.visibility = View.GONE
+            binding!!.headerLogo.visibility = View.GONE
+            binding!!.notification.visibility = View.GONE
+            binding!!.badge.visibility = View.GONE
+            binding!!.addMemorie.visibility = View.VISIBLE
+            binding!!.chaticon.visibility = View.GONE
+            binding!!.checkincode.visibility = View.GONE
         } else if (navigationMemories == R.id.navigation_home) {
-
-
-            BadgeFactory.create(this)
-                .setTextColor(Color.WHITE)
-                .setWidthAndHeight(25, 25)
-                .setBadgeBackground(Color.RED)
-                .setTextSize(10)
-                .setBadgeGravity(Gravity.RIGHT or Gravity.TOP)
-                .setBadgeCount(ConstantLib.NOTIFICATIONCOUNT)
-                .setShape(BadgeView.SHAPE_CIRCLE)
-                .setSpace(10, 10)
-                .bind(binding.notification)
-
-            binding.headerLogo.visibility = View.VISIBLE
-            binding.notification.visibility = View.VISIBLE
-            binding.addMemorie.visibility = View.GONE
-            binding.chaticon.visibility = View.GONE
-            binding.checkincode.visibility = View.GONE
+            binding!!.badge.visibility = View.VISIBLE
+            binding!!.badge.setNumber(Integer.parseInt(ConstantLib.NOTIFICATIONCOUNT))
+            binding!!.headerLogo.visibility = View.VISIBLE
+            binding!!.notification.visibility = View.VISIBLE
+            binding!!.addMemorie.visibility = View.GONE
+            binding!!.chaticon.visibility = View.GONE
+            binding!!.checkincode.visibility = View.GONE
         } else if (navigationMemories == R.id.navigation_bookings) {
-            binding.headerLogo.visibility = View.GONE
-            binding.notification.visibility = View.VISIBLE
-            binding.checkincode.visibility = View.GONE
-            binding.addMemorie.visibility = View.GONE
-            binding.chaticon.visibility = View.GONE
+            binding!!.badge.visibility = View.VISIBLE
+            binding!!.badge.setNumber(Integer.parseInt(ConstantLib.NOTIFICATIONCOUNT))
+            binding!!.headerLogo.visibility = View.GONE
+            binding!!.badge.visibility = View.GONE
+            binding!!.notification.visibility = View.VISIBLE
+            binding!!.checkincode.visibility = View.GONE
+            binding!!.addMemorie.visibility = View.GONE
+            binding!!.chaticon.visibility = View.GONE
         } else if (navigationMemories == R.id.navigation_near_me) {
-            binding.headerLogo.visibility = View.GONE
-            binding.notification.visibility = View.GONE
-            binding.checkincode.visibility = View.GONE
-            binding.addMemorie.visibility = View.GONE
-            binding.chaticon.visibility = View.VISIBLE
+            binding!!.headerLogo.visibility = View.GONE
+            binding!!.badge.visibility = View.GONE
+            binding!!.notification.visibility = View.GONE
+            binding!!.checkincode.visibility = View.GONE
+            binding!!.addMemorie.visibility = View.GONE
+            binding!!.chaticon.visibility = View.VISIBLE
         } else if (navigationMemories == R.id.navigation_my_lifestyle) {
-            binding.headerLogo.visibility = View.VISIBLE
-            binding.notification.visibility = View.VISIBLE
-            binding.checkincode.visibility = View.GONE
-            binding.addMemorie.visibility = View.GONE
-            binding.chaticon.visibility = View.GONE
+            binding!!.headerLogo.visibility = View.VISIBLE
+            binding!!.badge.visibility = View.GONE
+            binding!!.notification.visibility = View.VISIBLE
+            binding!!.checkincode.visibility = View.GONE
+            binding!!.addMemorie.visibility = View.GONE
+            binding!!.chaticon.visibility = View.GONE
         }
     }
 
@@ -273,6 +272,10 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
     override fun onResume() {
         super.onResume()
 
+    }
+
+    override fun onNotify() {
+        binding!!.badge.setNumber(Integer.parseInt(ConstantLib.NOTIFICATIONCOUNT))
     }
 
 

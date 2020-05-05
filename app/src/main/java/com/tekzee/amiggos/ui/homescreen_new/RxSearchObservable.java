@@ -1,9 +1,10 @@
-package com.tekzee.amiggos.ui.homescreen_new.homefragment;
+package com.tekzee.amiggos.ui.homescreen_new;
 
 import androidx.appcompat.widget.SearchView;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
+
 public class RxSearchObservable {
 
     public static Observable<String> fromView(SearchView searchView) {

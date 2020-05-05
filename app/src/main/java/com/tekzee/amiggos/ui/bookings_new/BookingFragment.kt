@@ -1,5 +1,6 @@
 package com.tekzee.amiggos.ui.bookings_new
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,8 @@ import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.adapter.ViewPagerAdap
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.enums.FriendsAction
+import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
 
 
 class BookingFragment : BaseFragment(){
@@ -25,10 +28,16 @@ class BookingFragment : BaseFragment(){
 
 
     companion object {
-
-        fun newInstance(): BookingFragment {
-            return BookingFragment()
+        private lateinit var mIntent: Intent
+        private val fragment: BookingFragment? = null
+        fun newInstance(intent: Intent): BookingFragment{
+            mIntent = intent
+            if(fragment == null){
+                return BookingFragment()
+            }
+            return fragment
         }
+
     }
 
 
@@ -68,6 +77,9 @@ class BookingFragment : BaseFragment(){
         adapter.addFragment(BookingInvitations(), languageData!!.PInvites)
         viewPager.adapter = adapter
         tabs.setupWithViewPager(viewPager)
+        if(mIntent.action == "BOOKING"){
+            viewPager.currentItem = 2
+        }
     }
 
     override fun validateError(message: String) {

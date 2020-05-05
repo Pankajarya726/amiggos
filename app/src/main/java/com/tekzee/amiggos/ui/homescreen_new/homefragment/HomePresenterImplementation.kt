@@ -42,12 +42,10 @@ class HomePresenterImplementation(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response: Response<HomeApiResponse> ->
-
                     when (response.code()) {
                         200 -> {
                             val responseData: HomeApiResponse = response.body()!!
                                 if (responseData.status) {
-                                    ConstantLib.NOTIFICATIONCOUNT = responseData.notificationcount
                                     mainView.onHomeApiSuccess(responseData)
                                 }else
                                 {
@@ -66,6 +64,44 @@ class HomePresenterImplementation(
                 })
         } else {
             mainView.hideProgressbar()
+            mainView.validateError(context!!.getString(R.string.check_internet))
+        }
+    }
+
+    override fun searchApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>,
+        languageData: LanguageData?
+    ) {
+
+        if (mainView.checkInternet()) {
+
+            disposable = ApiClient.instance.doCallHomeApi(input,createHeaders)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response: Response<HomeApiResponse> ->
+                    when (response.code()) {
+                        200 -> {
+                            val responseData: HomeApiResponse = response.body()!!
+                                if (responseData.status) {
+
+                                    mainView.onSearchApiSuccess(responseData)
+                                }else
+                                {
+                                    mainView.onHomeApiFailure(responseData.message)
+                                }
+
+                        }
+                        404 -> {
+                                Utility.showLogoutPopup(context!!,"your Session has been expired,please logout")
+                        }
+                    }
+
+                }, { error ->
+                    mainView.onHomeApiFailure(error.message.toString())
+                })
+        } else {
+
             mainView.validateError(context!!.getString(R.string.check_internet))
         }
     }
