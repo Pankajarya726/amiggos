@@ -25,6 +25,7 @@
         app:cameraGrid="off"
         app:cameraMode="picture"
         app:cameraPlaySounds="true"
+        app:cameraRequestPermissions="true"
         app:cameraPreview="glSurface"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,6 +33,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
+
+
+        <!-- Watermark! -->
+        <ImageView
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/amiggos"
+            app:layout_drawOnPreview="true"
+            app:layout_drawOnPictureSnapshot="true"
+            app:layout_drawOnVideoSnapshot="true"/>
 
     </com.otaliastudios.cameraview.CameraView>
 

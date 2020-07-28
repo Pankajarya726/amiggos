@@ -281,7 +281,7 @@ class MessageActivity : BaseActivity() {
             databaseReferenceMessage!!.addValueEventListener(object : ValueEventListener {
 
                 override fun onCancelled(p0: DatabaseError) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
                 }
 
                 override fun onDataChange(snapshot: DataSnapshot) {

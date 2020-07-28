@@ -68,7 +68,6 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
 
         img_profile.setOnClickListener{
             if(data!!.userid!=sharedPreferences!!.getValueInt(ConstantLib.USER_ID)){
-
                 val intent = Intent(this, AProfileDetails::class.java)
                 intent.putExtra(ConstantLib.FRIEND_ID, data!!.userid.toString())
                 intent.putExtra(ConstantLib.PROFILE_IMAGE,data!!.imageUrl)
@@ -214,8 +213,6 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
                         })
                         .into(view)
                 }
-
-
 
 
                 binding.txtView.text = urlList[index].viewCount.toString()

@@ -10,9 +10,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
 
-/**
- * Created by Divya on 28-11-2017.
- */
+
 
 public class ImagePickerUtils {
 

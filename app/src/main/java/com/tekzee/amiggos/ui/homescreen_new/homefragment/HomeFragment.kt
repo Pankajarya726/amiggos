@@ -137,7 +137,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         mapView!!.onCreate(savedInstanceState)
         mapView!!.getMapAsync(this)
 
-        easyWayLocation = EasyWayLocation(activity, false, this)
+        easyWayLocation   = EasyWayLocation(activity, false, this)
         easyWayLocation!!.startLocation()
     }
 
