@@ -18,18 +18,7 @@
             android:src="@drawable/ic_splash"/>
 
 
-        <com.an.customfontview.CustomTextView
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:text="@string/real_friends_venues_memories"
-            app:textFontPath="font/eras.ttf"
-            android:textSize="22dp"
-            android:gravity="center"
-            android:layout_below="@+id/logo"
-            android:layout_marginTop="15dp"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:layout_height="wrap_content"/>
+
 
     </RelativeLayout>
 

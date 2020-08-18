@@ -6,14 +6,14 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    signingConfigs {
-        release {
-            storeFile file('D:\\AndroidProjects\\Amiggos\\app\\src\\main\\assets\\keystorelive.jks')
-            storePassword 'amiggos'
-            keyPassword 'amiggos'
-            keyAlias = 'amiggos'
-        }
-    }
+//    signingConfigs {
+//        release {
+//            storeFile file('D:\\AndroidProjects\\Amiggos\\app\\src\\main\\assets\\keystorelive.jks')
+//            storePassword 'amiggos'
+//            keyPassword 'amiggos'
+//            keyAlias = 'amiggos'
+//        }
+//    }
     compileSdkVersion 29
     buildToolsVersion "28.0.3"
     defaultConfig {
@@ -32,7 +32,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             multiDexEnabled = true
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
             debuggable = true
             jniDebuggable = true
             renderscriptDebuggable = true

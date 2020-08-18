@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/amiggos" />
 
-    <com.an.customfontview.CustomTextView
+    <TextView
         android:id="@+id/s_text_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -38,5 +38,5 @@
         app:layout_constraintBottom_toBottomOf="@+id/user_image"
         app:layout_constraintEnd_toEndOf="@+id/user_image"
         app:layout_constraintStart_toStartOf="@+id/user_image"
-        app:textFontPath="font/eras.ttf" />
+        android:fontFamily="@font/opensans_regular" />
 </androidx.constraintlayout.widget.ConstraintLayout>
