@@ -1,29 +1,21 @@
 {
   "project_info": {
-    "project_number": "350203036410",
-    "firebase_url": "https://amiggos-1551344645945.firebaseio.com",
-    "project_id": "amiggos-1551344645945",
-    "storage_bucket": "amiggos-1551344645945.appspot.com"
+    "project_number": "848468466235",
+    "firebase_url": "https://amiggosvenueapp.firebaseio.com",
+    "project_id": "amiggosvenueapp",
+    "storage_bucket": "amiggosvenueapp.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:350203036410:android:9d8b408af3d8350b517f43",
+        "mobilesdk_app_id": "1:848468466235:android:4ae5b47538d318b7105a1e",
         "android_client_info": {
           "package_name": "com.tekzee.amiggos"
         }
       },
       "oauth_client": [
         {
-          "client_id": "350203036410-ahudl56f49gmp5g13bs4f89vgafht8if.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.tekzee.amiggos",
-            "certificate_hash": "827f6c063ee185e81bb88d55f9b7433b4d60d9fc"
-          }
-        },
-        {
-          "client_id": "350203036410-9gl0bt7gq3251o00ffo4ecf9u5u72op4.apps.googleusercontent.com",
+          "client_id": "848468466235-s1n6et6r77063ree8kl32krggu265nv8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.tekzee.amiggos",
@@ -31,36 +23,87 @@
           }
         },
         {
-          "client_id": "350203036410-m4jamkgagu10s010jfco2tijtgoi5dam.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.tekzee.amiggos",
-            "certificate_hash": "92d9ed996dae6456055c3123f13b4af34684ecdd"
-          }
-        },
-        {
-          "client_id": "350203036410-1n1m8vvq3ecmrpi89tck8n55q8sa9vvq.apps.googleusercontent.com",
+          "client_id": "848468466235-eoq146vra34hq7e1v0ers840quh96cpq.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAkurmx-lYNyTLmNovIpRulGpedBgWxzdE"
+          "current_key": "AIzaSyD6lZ8DfGwn9ZQUInVY-5Wy0Pje7fD5hqk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "350203036410-1n1m8vvq3ecmrpi89tck8n55q8sa9vvq.apps.googleusercontent.com",
+              "client_id": "848468466235-eoq146vra34hq7e1v0ers840quh96cpq.apps.googleusercontent.com",
               "client_type": 3
-            },
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:848468466235:android:b24ee35166d8fdbe105a1e",
+        "android_client_info": {
+          "package_name": "com.tekzee.amiggoss"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "848468466235-dcdg4gtourl4t9vbcm90e0gvjphi669t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tekzee.amiggoss",
+            "certificate_hash": "cfe19e8cc176cf3b8bcc2a10228f907d8f49450d"
+          }
+        },
+        {
+          "client_id": "848468466235-eoq146vra34hq7e1v0ers840quh96cpq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6lZ8DfGwn9ZQUInVY-5Wy0Pje7fD5hqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
             {
-              "client_id": "350203036410-0jp4ce96ds5o9kepb76hrplk83k7g033.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.amiggosuser.app"
-              }
+              "client_id": "848468466235-eoq146vra34hq7e1v0ers840quh96cpq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:848468466235:android:6e8a737a69cbf7c0105a1e",
+        "android_client_info": {
+          "package_name": "com.tekzee.amiggosvenueapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "848468466235-eoq146vra34hq7e1v0ers840quh96cpq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6lZ8DfGwn9ZQUInVY-5Wy0Pje7fD5hqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "848468466235-eoq146vra34hq7e1v0ers840quh96cpq.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         }

@@ -1,0 +1,19 @@
+package com.tekzee.amiggoss.ui.forgetpassword
+
+import com.google.gson.JsonObject
+import com.tekzee.mallortaxi.base.BaseMainView
+
+class AForgetPasswordPresenter {
+    interface AForgetPasswordPresenterMain{
+        fun onStop()
+        fun callForgetPasswordApi(
+            input: JsonObject,
+            createHeaders: HashMap<String, String?>
+        )
+
+    }
+
+    interface AForgetPasswordPresenterView: BaseMainView {
+        fun OnForgetPasswordSuccess(responseData: String)
+    }
+}
