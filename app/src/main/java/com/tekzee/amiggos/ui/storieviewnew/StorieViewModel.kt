@@ -47,4 +47,31 @@ class StorieViewModel(private val context: Context,
     }
 
 
+    fun callDeleteApi(memorieId: String) {
+        Coroutines.main {
+            storieEvent?.onAcceptDeclineCalled()
+            try {
+                val jsoninput = JsonObject()
+                jsoninput.addProperty("userid",prefs.getValueInt(ConstantLib.USER_ID))
+                jsoninput.addProperty("memory_id",memorieId)
+                jsoninput.addProperty("type",prefs.getValueString(ConstantLib.TYPE))
+//                jsoninput.addProperty("approval_status",status)
+                jsoninput.addProperty("venue_id",prefs.getValueString(ConstantLib.VENUE_ID))
+                val response =  repository.docallDeleteApi(jsoninput, Utility.createHeaders(prefs))
+                if(response.status){
+                    storieEvent?.onDeleteResponse(response.message)
+                }else{
+                    storieEvent?.onFailure(response.message)
+                }
+            }catch (e: ApiException) {
+                storieEvent?.onFailure(e.message!!)
+            } catch (e: NoInternetException) {
+                storieEvent?.onFailure(e.message!!)
+            }catch (e: Exception) {
+                storieEvent?.sessionExpired(e.message!!)
+            }
+        }
+    }
+
+
 }

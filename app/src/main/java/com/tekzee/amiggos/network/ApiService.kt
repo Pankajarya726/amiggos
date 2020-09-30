@@ -125,6 +125,14 @@ interface ApiService {
 
 
 
+    @POST("partner/approved_tagged_memory")
+    suspend fun docallDeleteApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Response<CommonResponse>
+
+
+
     @POST("guest/tagging_search_customer")
     suspend fun doGetTaggingApi(
         @Body input: JsonObject,

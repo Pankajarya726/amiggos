@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -203,6 +204,11 @@ class StoryDisplayFragment : Fragment(),
 
         txt_decline.setOnClickListener {
             viewModel.callAcceptDeclineApi(stories[counter].storieId, 2)
+        }
+
+
+        img_delete.setOnClickListener {
+            viewModel.callDeleteApi(stories[counter].storieId)
         }
 
 
@@ -423,6 +429,10 @@ class StoryDisplayFragment : Fragment(),
         requireActivity().hideProgressBar()
         requireActivity().toast(message)
         requireActivity().onBackPressed()
+    }
+
+    override fun onDeleteResponse(message: String) {
+        Toast.makeText(requireContext(),message,Toast.LENGTH_LONG).show()
     }
 
     override fun onFailure(message: String) {

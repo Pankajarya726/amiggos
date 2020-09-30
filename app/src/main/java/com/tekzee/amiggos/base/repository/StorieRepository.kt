@@ -15,6 +15,13 @@ class StorieRepository(private val apiService: ApiService): SafeApiRequest() {
         return apiRequest { apiService.docallAcceptDeclineApi(input,createHeaders) }
     }
 
+    suspend fun docallDeleteApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): CommonResponse {
+        return apiRequest { apiService.docallDeleteApi(input,createHeaders) }
+    }
+
 
 
 }
