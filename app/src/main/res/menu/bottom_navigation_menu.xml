@@ -11,7 +11,7 @@
          />
     <item
         android:id="@+id/navigation_my_lifestyle"
-        android:icon="@drawable/n_mylifestyle"
+        android:icon="@drawable/lifestyle"
 
         android:title="" />
     <item

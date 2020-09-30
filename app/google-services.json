@@ -45,43 +45,6 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:848468466235:android:b24ee35166d8fdbe105a1e",
-        "android_client_info": {
-          "package_name": "com.tekzee.amiggoss"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "848468466235-dcdg4gtourl4t9vbcm90e0gvjphi669t.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.tekzee.amiggoss",
-            "certificate_hash": "cfe19e8cc176cf3b8bcc2a10228f907d8f49450d"
-          }
-        },
-        {
-          "client_id": "848468466235-eoq146vra34hq7e1v0ers840quh96cpq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyD6lZ8DfGwn9ZQUInVY-5Wy0Pje7fD5hqk"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "848468466235-eoq146vra34hq7e1v0ers840quh96cpq.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:848468466235:android:6e8a737a69cbf7c0105a1e",
         "android_client_info": {
           "package_name": "com.tekzee.amiggosvenueapp"

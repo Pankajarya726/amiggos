@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        android:background="@android:color/white">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -58,7 +57,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_8sdp"
                         android:layout_marginTop="@dimen/_15sdp"
-                        android:fontFamily="@font/opensans_bold"
+                        android:fontFamily="@font/opensans_semibold"
                         android:padding="@dimen/_2sdp"
                         android:text="Payment Method"
                         android:textColor="@android:color/black"
@@ -75,6 +74,16 @@
                 android:layout_height="1dp"
                 android:background="@android:color/black" />
 
+            <TextView
+                android:id="@+id/saved_cards"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_regular"
+                android:padding="@dimen/_8sdp"
+                android:text="Saved Cards"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_18sdp" />
+
             <androidx.recyclerview.widget.RecyclerView
 
                 android:id="@+id/card_recyclerview"
@@ -90,28 +99,29 @@
         </LinearLayout>
 
 
-
         <LinearLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:orientation="vertical"
             android:background="@android:color/white"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent">
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/black"/>
+                android:background="@android:color/black" />
 
             <TextView
                 android:id="@+id/addcard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="+ Add new card..."
+                android:background="@color/black"
+                android:fontFamily="@font/opensans_bold"
                 android:gravity="center"
-                android:textSize="@dimen/_16sdp"
-                android:textColor="@android:color/black"
-                android:fontFamily="@font/opensans_bold"/>
+                android:text="Add Card"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/_16sdp" />
 
 
         </LinearLayout>

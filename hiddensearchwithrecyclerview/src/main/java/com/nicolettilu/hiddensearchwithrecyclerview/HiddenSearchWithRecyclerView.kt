@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -84,8 +85,17 @@ class HiddenSearchWithRecyclerView @JvmOverloads constructor(
         }
     }
 
+    public fun clearSearchview(){
+        searchBarSearchView.setQuery("",true)
+        searchBarSearchView.clearFocus()
+    }
+
     private fun setupViews() {
         searchBarSearchView = searchBarLinearLayout.findViewById(R.id.searchBarSearchView)
+
+
+
+
 
         val recyclerViewLayoutParams = recyclerView.layoutParams as? LayoutParams
         val searchBarLayoutParams = LayoutParams(

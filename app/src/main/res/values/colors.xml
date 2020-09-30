@@ -11,9 +11,20 @@
     <color name="tabcolor">#f7f7f7</color>
     <color name="google">#f82c2d</color>
     <color name="black">#000000</color>
-    <color name="bottom_lib_dialog_item_text_color">#a17226</color>
-    <color name="bottom_lib_dialog_cancel_text_color">#9F7228</color>
+
+    <color name="bottom_lib_dialog_item_text_color">#298dfa</color>
+    <color name="bottom_lib_dialog_cancel_text_color">#298dfa</color>
+
     <color name="grey_underline">#7E7C7C</color>
+    <color name="dark_grey">#606060</color>
+    <color name="light_grey">#A5A7A8</color>
+    <color name="customdialogtextcolor">#298dfa</color>
 
+    <!-- Story Display Progress-->
+    <color name="progress_primary">@color/white</color>
+    <color name="progress_secondary">@color/gray_scale</color>
+    <color name="progress_max_active">@color/white</color>
+    <color name="gray_scale">#8AFFFFFF</color>
 
+    <color name="grey">#a9a9a9</color>
 </resources>

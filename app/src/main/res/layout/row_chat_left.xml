@@ -23,9 +23,10 @@
             app:civ_border_width="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/user" />
+            app:srcCompat="@drawable/ic_send" />
 
-        <com.an.customfontview.CustomTextView
+        <TextView
+            android:visibility="gone"
             android:id="@+id/txt_receiver_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,15 +42,15 @@
 
     </LinearLayout>
 
-    <com.an.customfontview.CustomTextView
+    <TextView
         android:id="@+id/show_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
+        android:background="@drawable/chat_bg"
         android:layout_toRightOf="@+id/layoutprofile"
         android:autoLink="all"
-        android:background="@drawable/chat_left"
-        android:fontFamily="@font/eras"
+        android:fontFamily="@font/opensans_semibold"
         android:padding="8dp"
         android:text="@string/app_name"
         android:gravity="center|left"

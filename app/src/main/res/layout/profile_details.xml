@@ -26,8 +26,17 @@
                 app:contentScrim="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
                 app:titleEnabled="false">
-
+<!--
                 <ImageView
+                    android:id="@+id/htab_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimary"
+                    android:fitsSystemWindows="true"
+                    android:scaleType="centerCrop"
+                    app:layout_collapseMode="parallax" />-->
+
+                <com.smarteist.autoimageslider.SliderView
                     android:id="@+id/htab_header"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -91,21 +100,21 @@
                     android:id="@+id/txt_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
                     android:fontFamily="@font/opensans_bold"
                     android:maxLines="1"
                     android:singleLine="true"
-                    tools:text="himanshu.verma@tekzee.com"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/_20sdp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/guideline4"
-                    app:layout_constraintEnd_toStartOf="@+id/txt_realfriends"
+                    app:layout_constraintEnd_toStartOf="@+id/img_chat"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.8" />
+                    app:layout_constraintVertical_bias="0.8"
+                    tools:text="himanshu.verma@tekzee.com" />
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline4"
@@ -118,13 +127,14 @@
                     android:id="@+id/txt_location"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
                     android:fontFamily="@font/opensans_regular"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="@dimen/_12sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/txt_count"
+                    app:layout_constraintEnd_toStartOf="@+id/txt_realfriends"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/guideline4"
                     app:layout_constraintVertical_bias="0.19999999"
@@ -134,8 +144,10 @@
                     android:id="@+id/imageoptions"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="25dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:padding="@dimen/_8sdp"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline4"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/settings" />
@@ -144,31 +156,54 @@
                     android:id="@+id/txt_realfriends"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="30dp"
+                    android:layout_marginEnd="@dimen/_5sdp"
                     android:fontFamily="@font/opensans_semibold"
                     android:text="Real Friends"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/_14sdp"
-                    app:layout_constraintBottom_toTopOf="@+id/guideline4"
-                    app:layout_constraintEnd_toStartOf="@+id/imageoptions"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.8" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/txt_count"
+                    app:layout_constraintTop_toTopOf="@+id/guideline4"
+                    app:layout_constraintVertical_bias="0.19999999" />
 
                 <TextView
                     android:id="@+id/txt_count"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="30dp"
+                    android:layout_marginEnd="@dimen/_10sdp"
                     android:fontFamily="@font/opensans_regular"
                     android:gravity="center"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/_14sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/imageoptions"
-                    app:layout_constraintStart_toStartOf="@+id/txt_realfriends"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/guideline4"
-                    app:layout_constraintVertical_bias="0.20999998"
+                    app:layout_constraintVertical_bias="0.19999999"
                     tools:text="2.5k" />
+
+                <ImageView
+                    android:id="@+id/img_chat"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:padding="@dimen/_5sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/txt_name"
+                    app:layout_constraintEnd_toStartOf="@+id/img_like"
+                    app:layout_constraintTop_toTopOf="@+id/txt_name"
+                    app:layout_constraintVertical_bias="0.65"
+                    app:srcCompat="@drawable/chat_icon" />
+
+                <ImageView
+                    android:id="@+id/img_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:padding="@dimen/_5sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/txt_name"
+                    app:layout_constraintEnd_toStartOf="@+id/imageoptions"
+                    app:layout_constraintTop_toTopOf="@+id/txt_name"
+                    app:srcCompat="@drawable/heart_unliked" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

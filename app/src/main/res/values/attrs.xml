@@ -42,6 +42,9 @@
             <attr name="borderAlpha" format="integer"/>
         </declare-styleable>
 
+    <declare-styleable name="StoriesProgressView">
+        <attr name="progressCount" format="integer|reference" />
+    </declare-styleable>
 
 
 </resources>

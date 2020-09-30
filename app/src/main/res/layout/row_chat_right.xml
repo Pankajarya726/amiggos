@@ -13,20 +13,20 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true">
 
-        <com.an.customfontview.CustomTextView
+        <TextView
             android:id="@+id/show_message_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/layoutprofile"
             android:layout_marginRight="8dp"
             android:autoLink="all"
-            android:background="@drawable/chat_color"
+            android:background="@drawable/chat_bg"
             android:gravity="left|center"
             android:padding="8dp"
             android:text="sdf"
-            android:fontFamily="@font/eras"
+            android:fontFamily="@font/opensans_semibold"
             android:textColor="@android:color/black"
-            android:textColorLink="@android:color/white"
+            android:textColorLink="@android:color/black"
             android:textSize="14sp" />
 
         <LinearLayout
@@ -46,15 +46,16 @@
                 app:civ_border_width="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/user" />
+                app:srcCompat="@drawable/ic_send" />
 
-            <com.an.customfontview.CustomTextView
+            <TextView
                 android:id="@+id/txt_sender_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/eras"
                 android:maxLines="2"
                 android:text="fasdf"
+                android:visibility="gone"
                 android:gravity="center"
                 android:textColor="@android:color/black"
                 android:textSize="10dp"

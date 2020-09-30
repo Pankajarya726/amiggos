@@ -18,11 +18,13 @@
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchBarSearchView"
             android:layout_width="match_parent"
+            app:queryBackground="@android:color/transparent"
             android:background="@drawable/search_bg"
             android:layout_height="wrap_content"
             android:iconifiedByDefault="false"
             android:padding="1dp"
-            android:queryHint="Search Here"
+            app:queryHint="Search"
+            app:iconifiedByDefault="false"
             app:searchIcon="@drawable/ic_search" />
 
     </androidx.cardview.widget.CardView>

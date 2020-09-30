@@ -1,0 +1,225 @@
+package com.tekzee.amiggos.ui.signup.stepone
+
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.os.Bundle
+import android.view.MotionEvent
+import android.view.View
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import com.blogspot.atifsoftwares.animatoolib.Animatoo
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.gson.JsonObject
+import com.tekzee.amiggos.R
+import com.tekzee.amiggos.base.BaseActivity
+import com.tekzee.amiggos.base.model.LanguageData
+import com.tekzee.amiggos.databinding.StepOneBinding
+import com.tekzee.amiggos.ui.settings.model.UpdateSettingsResponse
+import com.tekzee.amiggos.ui.signup.StepOneModel
+import com.tekzee.amiggos.ui.signup.steptwo.StepTwo
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
+import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.firebasemodel.User
+import com.tekzee.amiggos.ui.settings.model.SettingsResponse
+import com.tekzee.amiggos.ui.signup.steptwo.model.UserData
+import com.tsongkha.spinnerdatepicker.DatePicker
+import com.tsongkha.spinnerdatepicker.DatePickerDialog
+import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder
+import java.util.*
+
+
+class StepOne: BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
+    DatePickerDialog.OnDateSetListener {
+
+    private var dateOfBirth: String?=""
+    private var binding: StepOneBinding? =null
+    private var sharedPreferences: SharedPreference? = null
+    private var languageData: LanguageData? = null
+    private var stepOneImplementation: StepOneImplementation? = null
+    private lateinit var database: DatabaseReference
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this, R.layout.step_one)
+        database = FirebaseDatabase.getInstance().reference
+        sharedPreferences = SharedPreference(this)
+        languageData = sharedPreferences!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
+        stepOneImplementation = StepOneImplementation(this,this)
+        setupLanguage()
+        setupClickListener()
+
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupClickListener() {
+        binding!!.btnCancelStepOne.setOnClickListener {
+            onBackPressed()
+        }
+
+        binding!!.btnNextStepOne.setOnClickListener {
+            if(validateFields()){
+                callSignUpActivity()
+            }
+        }
+
+
+
+        binding!!.sdateOfBirth.setOnTouchListener { v: View, event: MotionEvent ->
+           if(event.action == MotionEvent.ACTION_UP){
+
+               val todaysDate = Calendar.getInstance()
+               todaysDate.add(Calendar.YEAR,-18)
+               SpinnerDatePickerDialogBuilder()
+                   .context(this)
+                   .callback(this)
+                   .showTitle(true)
+                   .showDaySpinner(true)
+                   .spinnerTheme(R.style.NumberPickerStyle)
+                   .defaultDate(todaysDate.get(Calendar.YEAR), todaysDate.get(Calendar.MONTH), todaysDate.get(Calendar.DAY_OF_MONTH))
+                   .maxDate(todaysDate.get(Calendar.YEAR), todaysDate.get(Calendar.MONTH), todaysDate.get(Calendar.DAY_OF_MONTH))
+                   .minDate(1900, 0, 1)
+                   .build()
+                   .show()
+
+           }
+            true
+        }
+    }
+
+
+    private fun callSignUpActivity() {
+        val input = JsonObject()
+        input.addProperty("username",binding!!.susername.text.toString().trim())
+        input.addProperty("email",binding!!.semail.text.toString().trim())
+        input.addProperty("password",binding!!.spassword.text.toString().trim())
+        input.addProperty("date_of_birth",dateOfBirth)
+        input.addProperty("device_id",sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN))
+        input.addProperty("device_type", ConstantLib.DEVICETYPE)
+        input.addProperty("latitude", "")
+        input.addProperty("longitude", "")
+        stepOneImplementation!!.doCallSignupApi(input, Utility.createHeaders(sharedPreferences))
+    }
+
+    private fun validateFields(): Boolean {
+        if(binding!!.semail.text.toString().trim().isEmpty()){
+            Toast.makeText(applicationContext,"Email can not be blank..",Toast.LENGTH_LONG).show()
+            return false
+        }else if(!Utility.isEmailValid(binding!!.semail.text.toString().trim())){
+            Toast.makeText(applicationContext,"Please provide valid email..",Toast.LENGTH_LONG).show()
+            return false
+        }else if(binding!!.spassword.text.toString().trim().isEmpty()){
+            Toast.makeText(applicationContext,"Password can not be blank..",Toast.LENGTH_LONG).show()
+            return false
+        }else if(binding!!.sconfirmpassword.text.toString().trim().isEmpty()){
+            Toast.makeText(applicationContext,"Confirm password can not be blank..",Toast.LENGTH_LONG).show()
+            return false
+        }else if(binding!!.spassword.text.toString().trim()!= binding!!.sconfirmpassword.text.toString().trim()){
+            Toast.makeText(applicationContext,"Password and Confirm password should be same..",Toast.LENGTH_LONG).show()
+            return false
+        }else if(binding!!.susername.text.toString().trim().isEmpty()){
+            Toast.makeText(applicationContext,"Username can not be blank..",Toast.LENGTH_LONG).show()
+            return false
+        }else if(binding!!.sdateOfBirth.text.toString().trim().isEmpty()){
+            Toast.makeText(applicationContext,"Date of birth can not be blank..",Toast.LENGTH_LONG).show()
+            return false
+        }
+        return true
+    }
+
+    private fun setupLanguage() {
+        binding!!.semail.hint = languageData!!.pemail
+        binding!!.spassword.hint = languageData!!.ppassword
+        binding!!.sconfirmpassword.hint = languageData!!.pconfirmpassword
+        binding!!.susername.hint = languageData!!.pusername
+        binding!!.sdateOfBirth.hint = languageData!!.pdateofbirth
+        binding!!.btnNextStepOne.text = languageData!!.pnext
+        binding!!.btnCancelStepOne.text = languageData!!.pcancel
+        binding!!.txtStepOne.text = languageData!!.pstepone
+    }
+
+    override fun onSignupSuccess(data: UserData.Data) {
+        checkIfFirebaseUserExist(data)
+    }
+
+    private fun checkIfFirebaseUserExist(responseData: UserData.Data) {
+
+        val email = responseData.userid.toString().toLowerCase()+"_1" + "@amiggos.com"
+        val password = "amiggos@123"
+
+        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                createOrUpdateUserFirebaseUser(responseData,sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN)!!)
+            } else {
+                auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        createOrUpdateUserFirebaseUser(responseData,sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN)!!)
+                    } else {
+                        Toast.makeText(applicationContext,task.exception!!.message!!,Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+
+    }
+
+
+    private fun createOrUpdateUserFirebaseUser(
+        data: UserData.Data,
+        fcmToken: String
+    ) {
+        val firebaseUser = auth.currentUser
+        val user = User()
+        user.amiggosID = data.userid.toString()
+        user.deviceToken = data.apiToken
+        user.email = data.email
+        user.fcmToken = fcmToken
+        user.image = ""
+        user.name = ""
+        user.timestamp = System.currentTimeMillis()
+        database.child(ConstantLib.USER).child(firebaseUser!!.uid).setValue(user)
+
+        saveUserInfo(data)
+
+
+        val stepOneModel = StepOneModel(binding!!.semail.text.toString().trim(),binding!!.spassword.text.toString().trim(),binding!!.susername.text.toString().trim(),dateOfBirth)
+        val intent = Intent(applicationContext,StepTwo::class.java)
+        intent.putExtra("steponedata",stepOneModel)
+        startActivity(intent)
+        Animatoo.animateSlideRight(this)
+    }
+
+    private fun saveUserInfo(data: UserData.Data) {
+        sharedPreferences!!.save(ConstantLib.USER_ID, data.userid.toInt())
+        sharedPreferences!!.save(ConstantLib.USER_NAME, data.username)
+        sharedPreferences!!.save(ConstantLib.USER_EMAIL, data.email)
+        sharedPreferences!!.save(ConstantLib.USER_DOB, data.dob)
+        sharedPreferences!!.save(ConstantLib.API_TOKEN, data.apiToken)
+        sharedPreferences!!.save(ConstantLib.PROFILE_IMAGE, "")
+        sharedPreferences!!.save(ConstantLib.ISAGREE, false)
+    }
+
+
+    override fun onSignUpFailure(message: String) {
+        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+    }
+
+
+    override fun validateError(message: String) {
+        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        Animatoo.animateSlideRight(this)
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
+        val month = monthOfYear + 1
+        binding!!.sdateOfBirth.setText("$month/$dayOfMonth/$year")
+        dateOfBirth = "$month/$dayOfMonth/$year"
+    }
+}

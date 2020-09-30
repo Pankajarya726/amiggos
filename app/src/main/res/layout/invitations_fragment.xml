@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:orientation="vertical"
@@ -9,10 +10,20 @@
         <include android:id="@+id/error"
             layout="@layout/error_layout"/>
 
+        <com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView
+            android:id="@+id/hidden_search_with_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:filterWhileTyping="false"
+            app:scrollToBottomBeforeHide="true"
+            app:scrollToTopBeforeShow="false"
+            app:hideAtScroll="true"
+            app:visibleAtInit="true">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/invitation_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+        </com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView>
 
 
     </LinearLayout>

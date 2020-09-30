@@ -3,184 +3,209 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/black">
-
-        <LinearLayout
+        android:background="@android:color/black"
+        android:orientation="vertical">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_skip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/black"
+            android:fontFamily="@font/opensans_semibold"
+            android:layout_gravity="right"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_12sdp"
+            app:cornerRadius="0sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:rippleColor="@android:color/black"
+            app:strokeColor="@android:color/white"
+            app:strokeWidth="@dimen/_1sdp" />
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical">
+            >
 
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/black"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:orientation="vertical">
 
 
-                <ImageView
-                    android:id="@+id/logo"
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toTopOf="@+id/txt_step_one"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/header_logo" />
-
-                <TextView
-                    android:id="@+id/txt_step_two"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:fontFamily="@font/opensans_regular"
-                    android:gravity="center"
-                    android:text="Step 2"
-                    android:textAllCaps="true"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/_18sdp"
-                    app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-
-                <LinearLayout
-                    android:id="@+id/linearLayout5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="20dp">
-
-                    <EditText
-                        android:id="@+id/tfirstname"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:backgroundTint="@android:color/white"
-                        android:fontFamily="@font/opensans_regular"
-                        android:hint="First Name"
-                        android:inputType="text|textCapWords"
-                        android:textColor="@android:color/white"
-                        android:textColorHint="@android:color/white"
-                        android:textSize="@dimen/_15sdp" />
-
-                    <EditText
-                        android:id="@+id/tlastname"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:backgroundTint="@android:color/white"
-                        android:fontFamily="@font/opensans_regular"
-                        android:hint="Last Name"
-                        android:inputType="text|textCapWords"
-                        android:textColor="@android:color/white"
-                        android:textColorHint="@android:color/white"
-                        android:textSize="@dimen/_15sdp" />
-
-                    <EditText
-                        android:id="@+id/tstate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:backgroundTint="@android:color/white"
-                        android:clickable="false"
-                        android:fontFamily="@font/opensans_regular"
-                        android:hint="State"
-                        android:textColor="@android:color/white"
-                        android:textColorHint="@android:color/white"
-                        android:textSize="@dimen/_15sdp" />
-
-
-                    <EditText
-                        android:id="@+id/tcity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:backgroundTint="@android:color/white"
-                        android:clickable="false"
-                        android:fontFamily="@font/opensans_regular"
-                        android:hint="City"
-                        android:inputType="text"
-                        android:textColor="@android:color/white"
-                        android:textColorHint="@android:color/white"
-                        android:textSize="@dimen/_15sdp" />
-
-                    <EditText
-                        android:id="@+id/tphone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:backgroundTint="@android:color/white"
-                        android:fontFamily="@font/opensans_regular"
-                        android:hint="Phone Number"
-                        android:inputType="phone"
-                        android:textColor="@android:color/white"
-                        android:textColorHint="@android:color/white"
-                        android:textSize="@dimen/_15sdp" />
-
-
-                </LinearLayout>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_done_step_two"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="80dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="80dp"
-                    android:background="@android:color/white"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:padding="@dimen/_5sdp"
-                    android:text="DONE"
-                    android:textAllCaps="true"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/_12sdp"
-                    app:backgroundTint="@android:color/white"
-                    app:layout_constraintEnd_toEndOf="@+id/btn_back_step_two"
-                    app:layout_constraintStart_toStartOf="@+id/btn_back_step_two"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
-                    app:rippleColor="@android:color/black"
-                    app:shapeAppearance="@drawable/material_button" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_back_step_two"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="80dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="80dp"
-                    android:layout_marginBottom="20dp"
+                    android:layout_height="match_parent"
                     android:background="@android:color/black"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:text="BACK"
-                    android:textAllCaps="true"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/_12sdp"
-                    app:cornerRadius="0sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.498"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btn_done_step_two"
-                    app:rippleColor="@android:color/black"
-                    app:strokeColor="@android:color/white"
-                    app:strokeWidth="@dimen/_1sdp" />
+                    android:orientation="vertical">
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <ImageView
+                        android:id="@+id/logo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toTopOf="@+id/txt_step_one"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
 
-        </LinearLayout>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:srcCompat="@drawable/header_logo" />
+
+                    <TextView
+                        android:id="@+id/txt_step_two"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:gravity="center"
+                        android:text="Step 2"
+                        android:textAllCaps="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/_18sdp"
+                        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
 
 
-    </ScrollView>
+                    <LinearLayout
+                        android:id="@+id/linearLayout5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="20dp">
+
+                        <EditText
+                            android:id="@+id/tfirstname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:backgroundTint="@android:color/white"
+                            android:fontFamily="@font/opensans_regular"
+                            android:hint="First Name"
+                            android:inputType="text|textCapWords"
+                            android:textColor="@android:color/white"
+                            android:textColorHint="@android:color/white"
+                            android:textSize="@dimen/_15sdp" />
+
+                        <EditText
+                            android:id="@+id/tlastname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:backgroundTint="@android:color/white"
+                            android:fontFamily="@font/opensans_regular"
+                            android:hint="Last Name"
+                            android:inputType="text|textCapWords"
+                            android:textColor="@android:color/white"
+                            android:textColorHint="@android:color/white"
+                            android:textSize="@dimen/_15sdp" />
+
+                        <EditText
+                            android:id="@+id/tstate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:backgroundTint="@android:color/white"
+                            android:clickable="false"
+                            android:fontFamily="@font/opensans_regular"
+                            android:hint="State"
+                            android:textColor="@android:color/white"
+                            android:textColorHint="@android:color/white"
+                            android:textSize="@dimen/_15sdp" />
+
+
+                        <EditText
+                            android:id="@+id/tcity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:backgroundTint="@android:color/white"
+                            android:clickable="false"
+                            android:fontFamily="@font/opensans_regular"
+                            android:hint="City"
+                            android:inputType="text"
+                            android:textColor="@android:color/white"
+                            android:textColorHint="@android:color/white"
+                            android:textSize="@dimen/_15sdp" />
+
+                        <EditText
+                            android:id="@+id/tphone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:backgroundTint="@android:color/white"
+                            android:fontFamily="@font/opensans_regular"
+                            android:hint="Phone Number"
+                            android:inputType="phone"
+                            android:textColor="@android:color/white"
+                            android:textColorHint="@android:color/white"
+                            android:textSize="@dimen/_15sdp" />
+
+
+                    </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_done_step_two"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="80dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="80dp"
+                        android:background="@android:color/white"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:padding="@dimen/_5sdp"
+                        android:text="DONE"
+                        android:textAllCaps="true"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/_12sdp"
+                        app:backgroundTint="@android:color/white"
+                        app:layout_constraintEnd_toEndOf="@+id/btn_back_step_two"
+                        app:layout_constraintStart_toStartOf="@+id/btn_back_step_two"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
+                        app:rippleColor="@android:color/black"
+                        app:shapeAppearance="@drawable/material_button" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_back_step_two"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="80dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="80dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@android:color/black"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="BACK"
+                        android:textAllCaps="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/_12sdp"
+                        app:cornerRadius="0sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.498"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_done_step_two"
+                        app:rippleColor="@android:color/black"
+                        app:strokeColor="@android:color/white"
+                        app:strokeWidth="@dimen/_1sdp" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
+    </LinearLayout>
 
 
 </layout>

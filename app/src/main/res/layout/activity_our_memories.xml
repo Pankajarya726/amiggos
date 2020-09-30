@@ -2,126 +2,102 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
+        <ImageView
+            android:id="@+id/img_close"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:src="@drawable/ic_close_black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_image"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_100sdp"
+            android:src="@drawable/user"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.1" />
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:layout_constraintBottom_toTopOf="@+id/viewPager"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/btn_invite_friend"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/profile_image">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
+            <TextView
+                android:id="@+id/txt_title"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:gravity="center"
+                android:text="Invite Friends"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/_18sdp" />
 
-                android:layout_height="?attr/actionBarSize"
-                android:background="@android:color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:titleTextColor="@android:color/black">
+            <TextView
+                android:id="@+id/txt_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/opensans_semibold"
+                android:gravity="center"
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/title"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="@dimen/_15sdp" />
+
+
+            <com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView
+                android:id="@+id/hidden_search_with_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:filterWhileTyping="false"
+                app:hideAtScroll="true"
+                app:scrollToBottomBeforeHide="true"
+                app:scrollToTopBeforeShow="false"
+                app:visibleAtInit="true">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/real_friend_fragment"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center|left"
-                    android:textColor="@android:color/black"
-                    android:textSize="18dp"
-                    app:fontFamily="@font/eras" />
-
-            </androidx.appcompat.widget.Toolbar>
-
-        </com.google.android.material.appbar.AppBarLayout>
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/_5sdp" />
+            </com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView>
 
 
-        <RadioGroup
-            android:id="@+id/radiogroup"
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btn_invite_friend"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:background="@drawable/btn_bg"
-            android:orientation="horizontal"
-            android:padding="2dp"
-            android:layout_marginTop="20dp"
-            android:weightSum="2">
+            android:layout_height="@dimen/_40sdp"
+            android:background="@color/black"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="Done"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_15sdp"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
 
-            <RadioButton
-                android:id="@+id/radio1"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:padding="8dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:button="@null"
-                android:textSize="10dp"
-                android:textAllCaps="true"
-                android:background="@drawable/custom_btn_radio"
-                android:fontFamily="@font/eras_bold"
-                android:text="Favorites Friends" />
-
-            <RadioButton
-                android:id="@+id/radio2"
-                android:button="@null"
-                android:padding="8dp"
-                android:textSize="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAllCaps="true"
-                android:gravity="center"
-                android:background="@drawable/custom_btn_radio_right"
-                android:fontFamily="@font/eras_bold"
-                android:text="Ammigos Near Me" />
-
-
-        </RadioGroup>
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <FrameLayout
-                android:id="@+id/container"
-                android:layout_width="match_parent"
-                android:layout_above="@id/btn_save"
-                android:layout_height="match_parent"/>
-
-            <com.cbr.gradienttextview.GradientTextView
-                android:id="@+id/btn_save"
-                android:layout_alignParentBottom="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="35dp"
-                android:layout_marginLeft="35dp"
-                android:layout_marginEnd="35dp"
-                android:layout_marginRight="35dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/btn_bg"
-                android:gravity="center"
-                android:padding="15dp"
-                android:text="save"
-                app:fontFamily="@font/eras_bold"
-                app:gt_color_list="@array/rainbow"
-                app:gt_gradient_angle="90"
-                app:gt_gradient_direction="right"
-                />
-
-
-
-        </RelativeLayout>
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </layout>

@@ -46,7 +46,10 @@
     <string name="ok">OK</string>
     <string name="mapbox_token">pk.eyJ1IjoidmhpbWFuc2h1ODgiLCJhIjoiY2s2dW52bThhMDFvZTNlcGdmaGszazlseCJ9.jYLfMwclIPs1maytozjCLg</string>
 
-
-
+    <string name="in_progress">In Progress</string>
+    <string name="uploading">Uploading</string>
+    <string name="message_upload_success">Upload Success</string>
+    <string name="file_upload_successful">File upload success</string>
+    <string name="noti_channel_default">default</string>
 
 </resources>
