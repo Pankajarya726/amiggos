@@ -27,13 +27,11 @@ import com.tekzee.amiggos.ui.helpcenter.model.HelpCenterResponse
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.NearbyMeCountResponse
 import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
-import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeApiResponse
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
 import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailResponse
 import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
-import com.tekzee.amiggos.ui.memories.mymemoriesold.model.OurMemoriesWithoutProductsResponse
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 import com.tekzee.amiggos.ui.memories.venuefragment.model.VenueTaggedResponse
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingResponse
@@ -68,15 +66,17 @@ import com.tekzee.amiggos.ui.signup.login_new.model.ALoginResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.CityResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.StateResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.UserData
+import com.tekzee.amiggos.ui.menu.model.MenuResponse
 import com.tekzee.amiggos.ui.stripepayment.model.CardListResponse
 import com.tekzee.amiggos.ui.stripepayment.model.DeleteCardResponse
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
-import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
+import com.tekzee.amiggos.ui.venuedetailsnew.model.VenueDetails
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewResponse
 import com.tekzee.amiggos.util.NetworkConnectionInterceptor
 import com.tekzee.amiggosvenueapp.ui.addusers.model.AddUserResponse
+import com.tekzee.amiggos.ui.menu.commonfragment.model.CommonMenuResponse
 import com.tekzee.amiggosvenueapp.ui.tagging.model.TaggingResponse
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -95,6 +95,31 @@ import java.util.concurrent.TimeUnit
 
 const val FIRST_PAGE =0
 interface ApiService {
+
+
+
+    @POST("partner/staff_list")
+    suspend fun doStaffApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Response<MenuResponse>
+
+
+
+
+    @POST("partner/user_status")
+    suspend fun doChangeUserStaus(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Response<CommonResponse>
+
+
+    @POST("partner/staff_detail")
+    suspend fun doStaffByIdApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Response<CommonMenuResponse>
+
 
 
     @POST("guest/get_featured_product")
@@ -232,10 +257,10 @@ interface ApiService {
     fun callGetVenueDetails(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<ClubDetailResponse>>
+    ): Observable<Response<VenueDetails>>
 
 
-    @POST("user/create_favoriteVenue_V2")
+    @POST("guest/create_favoriteVenue")
     fun callLikeUnlikeApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>

@@ -1,8 +1,8 @@
 package com.tekzee.amiggos.ui.venuedetailsnew
 
 import com.google.gson.JsonObject
-import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
 import com.tekzee.amiggos.base.BaseMainView
+import com.tekzee.amiggos.ui.venuedetailsnew.model.VenueDetails
 
 class AVenueDetailsPresenter {
 
@@ -20,7 +20,7 @@ class AVenueDetailsPresenter {
     }
 
     interface AVenueDetailsPresenterMainView: BaseMainView {
-        fun onVenueDetailsSuccess(responseData: ClubDetailResponse.Data)
+        fun onVenueDetailsSuccess(responseData: VenueDetails.Data)
         fun onLikeUnlikeSuccess(message: String)
     }
 }

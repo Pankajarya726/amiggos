@@ -1,36 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <LinearLayout
-        android:background="@android:color/white"
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/white"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@android:color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:titleTextColor="@android:color/black">
+        <ImageView
+            android:id="@+id/img_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:srcCompat="@drawable/ic_back_black" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center|left"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/_18sdp"
-                app:fontFamily="@font/eras" />
-
-        </androidx.appcompat.widget.Toolbar>
 
         <LinearLayout
+            android:id="@+id/headinglayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/img_close"
             android:layout_marginTop="@dimen/_15sdp"
             android:layout_marginBottom="@dimen/_15sdp"
             android:orientation="horizontal">
@@ -41,12 +33,12 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:fontFamily="@font/opensans_bold"
                     android:id="@+id/notificationtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_8sdp"
                     android:layout_marginTop="@dimen/_15sdp"
+                    android:fontFamily="@font/opensans_bold"
                     android:padding="@dimen/_2sdp"
                     android:text="Customize your package"
                     android:textColor="@android:color/black"
@@ -59,28 +51,96 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/viewbetweendateandtime"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
+            android:layout_below="@+id/headinglayout"
             android:background="@android:color/black" />
 
-
-        <androidx.cardview.widget.CardView
-            android:layout_margin="10dp"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            app:cardUseCompatPadding="true"
-            android:layout_height="wrap_content">
-            <com.applandeo.materialcalendarview.CalendarView
-                android:id="@+id/calendarView"
-                app:headerLabelColor="@color/colorPrimary"
-                app:headerColor="#e6e6e6"
-                app:abbreviationsLabelsColor="@color/colorPrimary"
-                app:previousButtonSrc="@drawable/left_arrow"
-                app:forwardButtonSrc="@drawable/right_arrow"
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                app:daysLabelsColor="@android:color/black"
-                android:layout_height="wrap_content" />
-        </androidx.cardview.widget.CardView>
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btn_next"
+            android:layout_below="@+id/viewbetweendateandtime">
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/date_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_8sdp"
+                    android:fontFamily="@font/opensans_bold"
+                        android:text="Date"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/_15sdp" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    app:cardUseCompatPadding="true">
+
+                    <com.applandeo.materialcalendarview.CalendarView
+                        android:id="@+id/calendarView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        app:abbreviationsLabelsColor="@color/colorPrimary"
+                        app:daysLabelsColor="@android:color/black"
+                        app:forwardButtonSrc="@drawable/ic_right_arrow_black"
+                        app:headerColor="#e6e6e6"
+                        app:headerLabelColor="@color/colorPrimary"
+                        app:todayLabelColor="@color/black"
+                        app:previousButtonSrc="@drawable/ic_left_arrow_black" />
+                </androidx.cardview.widget.CardView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:background="@color/grey" />
+
+                <TextView
+                    android:id="@+id/time_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_8sdp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:gravity="center"
+                    android:text="Time"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/_15sdp" />
+
+                <TimePicker
+                    android:id="@+id/timepicker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:timePickerMode="spinner" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/time_recycler"
+                    android:layout_margin="@dimen/_8sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+
+        <TextView
+            android:id="@+id/btn_next"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/black"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="Next"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_15sdp"/>
+    </RelativeLayout>
 </layout>

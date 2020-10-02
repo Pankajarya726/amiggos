@@ -5,7 +5,10 @@ object ConstantLib {
 
 //    chat
     const val CONVERSATION = "conversation"
+    const val SELECTED_VENUE_DIN_TOGO = "SELECTED_VENUE_DIN_TOGO"
     const val OURMEMORIES = "OURMEMORIES"
+    const val TOGO = "TOGO"
+    const val RESERVATION = "RESERVATION"
     const val MESSAGE = "message"
     const val CHAT_DATA= "CHAT_DATA"
     const val USERNAME= "USERNAME"

@@ -492,7 +492,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
                 .setBadgeBackground(resources.getColor(R.color.red))
                 .setTextSize(8)
                 .setBadgeGravity(Gravity.RIGHT)
-                .setBadgeCount(0)
+                .setBadgeCount(items.nearByCount)
                 .setShape(BadgeView.SHAPE_CIRCLE)
                 .setSpace(10, 10)
                 .bind(imageview)
@@ -537,6 +537,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
                     jsonData.addProperty("longitude", items.longitude)
                     jsonData.addProperty("image", items.image)
                     jsonData.addProperty("agelimit", items.agelimit)
+                    jsonData.addProperty("nearbycount", items.nearByCount)
                     symbolManager.create(
                         SymbolOptions()
                             .withLatLng(LatLng(latitude, longitude))

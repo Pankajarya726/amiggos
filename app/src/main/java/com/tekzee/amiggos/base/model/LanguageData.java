@@ -1412,6 +1412,55 @@ public class LanguageData {
     private String profilecompletedata ="You need to fill your profile details before viewing other profile. Would you like to complete the profile?";
 
 
+    @SerializedName("togo")
+    private String togo = "To Go";
+
+
+    @SerializedName("dining")
+    private String dining = "Dining";
+
+
+    @SerializedName("address")
+    private String address ="Address";
+
+
+    @SerializedName("phonenumber")
+    private String phonenumber ="Phone Number" ;
+
+
+
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
+    }
+
+    public String getTogo() {
+        return togo;
+    }
+
+    public void setTogo(String togo) {
+        this.togo = togo;
+    }
+
+    public String getDining() {
+        return dining;
+    }
+
+    public void setDining(String dining) {
+        this.dining = dining;
+    }
 
     public String getProfilecompletedata() {
         return profilecompletedata;

@@ -1,49 +1,77 @@
 package com.tekzee.amiggos.ui.venuedetailsnew
 
-import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.google.gson.JsonObject
+import com.impulsiveweb.galleryview.GalleryView
 import com.like.LikeButton
 import com.like.OnLikeListener
+import com.smarteist.autoimageslider.SliderAnimations
+import com.smarteist.autoimageslider.SliderView
 import com.stfalcon.imageviewer.StfalconImageViewer
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
+import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.custom.BottomSheetFragment
 import com.tekzee.amiggos.databinding.AVenueDetailsBinding
-import com.tekzee.amiggos.ui.profiledetails.PosterOverlayView
-import com.tekzee.amiggos.ui.venuedetails.VenueDetailsActivity
+import com.tekzee.amiggos.ui.profiledetails.SliderClickListener
+import com.tekzee.amiggos.ui.profiledetails.model.SliderAdapterExample
 import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubData
-import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
+import com.tekzee.amiggos.ui.venuedetailsnew.model.VenueDetails
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.amiggos.constant.ConstantLib
-import kotlinx.android.synthetic.main.referal_activity.*
+import java.util.*
 
 
-
-class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresenterMainView {
-    private var imageBuilder: StfalconImageViewer<String>? =null
-    private var response: ClubDetailResponse.Data? = null
+class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresenterMainView,
+    SliderClickListener {
+    private var response: VenueDetails.Data? = null
     private var dataClub: ClubData? = null
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
     private var aVenueDetailsPresenterImplementation: AVenueDetailsPresenterImplementation? = null
     private var binding: AVenueDetailsBinding? = null
+    private lateinit var adapter: SliderAdapterExample
+    private lateinit var list: java.util.ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.a_venue_details)
+        adapter = SliderAdapterExample(this, this)
         sharedPreference = SharedPreference(this)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         aVenueDetailsPresenterImplementation = AVenueDetailsPresenterImplementation(this, this)
         dataClub = intent.getSerializableExtra(ConstantLib.VENUE_DATA) as ClubData
         setupClickListener()
         callVenueDetailsApi()
+        setupLangauge()
+        setupViewPager()
+    }
 
-        setupViews()
+
+    private fun setupViewPager() {
+        binding!!.htabHeader.sliderAdapter = adapter
+        //binding!!.htabHeader.setIndicatorAnimation(IndicatorAnimationType.WORM) //set indicator animation by using IndicatorAnimationType. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
+        binding!!.htabHeader.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
+        binding!!.htabHeader.autoCycleDirection = SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH
+        binding!!.htabHeader.indicatorSelectedColor = Color.WHITE
+        binding!!.htabHeader.indicatorUnselectedColor = Color.GRAY
+        binding!!.htabHeader.scrollTimeInSec = 4 //set scroll delay in seconds :
+        binding!!.htabHeader.startAutoCycle()
+
+
+    }
+
+
+    private fun setupLangauge() {
+        binding!!.venueDetail.text = languageData!!.klVenuedetails
+        binding!!.address.text = languageData!!.address
+        binding!!.phonenumber.text = languageData!!.phonenumber
     }
 
     private fun callVenueDetailsApi() {
@@ -61,36 +89,18 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
             onBackPressed()
         }
 
-
-
-        binding!!.htabHeader.setOnClickListener {
-            val image = arrayOf(dataClub!!.clubImage)
-            imageBuilder=StfalconImageViewer.Builder<String>(this, image) { imageView, image ->
-                    Glide.with(this).load(image).into(imageView)
-                }.withTransitionFrom(imageView)
-                .withBackgroundColor(resources.getColor(R.color.black))
-                .allowSwipeToDismiss(true)
-                .withOverlayView(PosterOverlayView(this).apply {
-
-                    onDeleteClick = {
-                        imageBuilder!!.dismiss()
-                    }
-
-
-                }).show(true)
-        }
-
-        binding!!.txtDetails.setOnClickListener {
-            if (response != null) {
-                val intentActivity = Intent(applicationContext, VenueDetailsActivity::class.java)
-                intentActivity.putExtra(ConstantLib.VENUE_DATA, response)
-                intentActivity.putExtra(ConstantLib.CLUB_ID, dataClub!!.clubId)
-                startActivity(intentActivity)
-            } else {
-                Toast.makeText(this, "No venue data found", Toast.LENGTH_LONG).show()
+        binding!!.bookNow.setOnClickListener{
+            if(response!!.clubData.goOrder ==1 && response!!.clubData.reservation ==1){
+                showCustomDialog(binding!!.bookNow)
+            }else if(response!!.clubData.goOrder ==1){
+                sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO,ConstantLib.TOGO)
+            }else if(response!!.clubData.reservation ==1){
+                sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO,ConstantLib.RESERVATION)
             }
 
         }
+
+
 
 
         binding!!.imgHeart.setOnLikeListener(object : OnLikeListener {
@@ -104,6 +114,8 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         })
     }
 
+
+
     private fun callLikeUnlikeApi() {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
@@ -115,22 +127,34 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
     }
 
 
-    private fun setupViews() {
-        Glide.with(applicationContext).load(dataClub!!.clubImage).placeholder(R.drawable.blackbg)
-            .into(binding!!.htabHeader)
-        binding!!.txtName.text = dataClub!!.clubName
-        binding!!.txtClubType.text = dataClub!!.clubType
-        binding!!.txtLocation.text = dataClub!!.address
-        binding!!.txtAgegroup.text = dataClub!!.agelimit
-        binding!!.imgHeart.isLiked = dataClub!!.isFavoriteVenue
-        binding!!.txtDescription.text = dataClub!!.club_description
-        binding!!.txtDresscode.text = dataClub!!.dress
-        binding!!.txtAddress.text = dataClub!!.address
-        binding!!.txtPhone.text = "NA"
+    private fun setupViews(response: VenueDetails.Data) {
+
+        binding!!.txtName.text = response.clubData.name
+        binding!!.txtClubType.text = response.clubData.menuTypeName
+        binding!!.txtLocation.text = response.clubData.clubState
+        binding!!.txtAgegroup.text = response.clubData.agelimit
+        binding!!.imgHeart.isLiked = response.clubData.isFavorite==1
+        binding!!.txtDescription.text = response.clubData.clubDescription
+        binding!!.txtAddress.text = response.clubData.address
+        binding!!.txtPhone.text = response.clubData.phoneNumber
+
+        if(response.clubData.maskReq==1){
+            binding!!.maskimage.visibility = View.VISIBLE
+            Glide.with(this).load(response.clubData.maskimage).placeholder(R.drawable.blackbg).into(
+                binding!!.maskimage
+            )
+        }else{
+            binding!!.maskimage.visibility = View.GONE
+        }
+
     }
 
-    override fun onVenueDetailsSuccess(responseData: ClubDetailResponse.Data) {
+    override fun onVenueDetailsSuccess(responseData: VenueDetails.Data) {
         response = responseData
+        setupViews(response!!)
+        list = ArrayList()
+        list.addAll(responseData.clubData.homeImage)
+        adapter.renewItems(list)
     }
 
     override fun onLikeUnlikeSuccess(message: String) {
@@ -142,5 +166,15 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun onSliderClicked() {
+        GalleryView.show(this, list)
+    }
+
+
+
+    fun showCustomDialog(view: View){
+        val bottomSheetDialog: BottomSheetFragment = BottomSheetFragment.newInstance()
+        bottomSheetDialog.show(supportFragmentManager, "Bottom Sheet Dialog Fragment")
+    }
 
 }

@@ -5,7 +5,7 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.network.ApiClient
-import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
+import com.tekzee.amiggos.ui.venuedetailsnew.model.VenueDetails
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -39,7 +39,7 @@ class AVenueDetailsPresenterImplementation(private var mainView: AVenueDetailsPr
                     val responseCode = response.code()
                     when (responseCode) {
                         200 -> {
-                            val responseData: ClubDetailResponse? = response.body()
+                            val responseData: VenueDetails? = response.body()
                             if (responseData!!.status) {
                                 mainView.onVenueDetailsSuccess(responseData.data)
                             } else {

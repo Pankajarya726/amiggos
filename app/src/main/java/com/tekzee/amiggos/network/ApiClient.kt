@@ -73,6 +73,7 @@ import com.tekzee.amiggos.ui.stripepayment.model.CardListResponse
 import com.tekzee.amiggos.ui.stripepayment.model.DeleteCardResponse
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
 import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
+import com.tekzee.amiggos.ui.venuedetailsnew.model.VenueDetails
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewResponse
@@ -320,7 +321,7 @@ class ApiClient {
     fun callGetVenueDetails(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
-    ): Observable<Response<ClubDetailResponse>> {
+    ): Observable<Response<VenueDetails>> {
         return apiService.callGetVenueDetails(input, createHeaders)
     }
 
