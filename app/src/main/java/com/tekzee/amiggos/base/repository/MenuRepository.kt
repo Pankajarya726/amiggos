@@ -8,13 +8,13 @@ import com.tekzee.amiggos.ui.menu.model.MenuResponse
 import com.tekzee.amiggos.ui.menu.commonfragment.model.CommonMenuResponse
 
 
-class StaffRepository(private val apiService: ApiService): SafeApiRequest() {
+class MenuRepository(private val apiService: ApiService): SafeApiRequest() {
 
-    suspend fun doStaffApi(
+    suspend fun doCallMenuApi(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): MenuResponse {
-        return apiRequest { apiService.doStaffApi(input,createHeaders) }
+        return apiRequest { apiService.doCallMenuApi(input,createHeaders) }
     }
 
     suspend fun doStaffByIdApi(

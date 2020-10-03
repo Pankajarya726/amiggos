@@ -66,7 +66,7 @@ class AMemoriesFragment : BaseFragment() {
         viewPager: ViewPager2,
         tabs: TabLayout
     ) {
-        val fragmentManager = getChildFragmentManager()
+        val fragmentManager = childFragmentManager
         val adapter = ViewPagerTwoAdapter(this)
 
         adapter.addFragment(MyMemoriesFragment(), languageData!!.klMemories)

@@ -31,17 +31,28 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         contentView.findViewById<Button>(R.id.cancel).text = languageData!!.klCancel
         contentView.findViewById<TextView>(R.id.txt_dinin).text = languageData!!.dining
         contentView.findViewById<TextView>(R.id.txt_togo).text = languageData!!.togo
-        contentView.findViewById<Button>(R.id.cancel).setOnClickListener { dialog.dismiss() }
+        contentView.findViewById<Button>(R.id.cancel).setOnClickListener {
+            dialog.dismiss()
+
+        }
         contentView.findViewById<View>(R.id.togo).setOnClickListener {
             dialog.dismiss()
+            sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO,ConstantLib.TOGO)
             val intent = Intent(requireContext(), CalendarViewActivity::class.java)
+            intent.putExtra(ConstantLib.VENUE_ID, venueid)
             startActivity(intent)
         }
-        contentView.findViewById<View>(R.id.dinin).setOnClickListener { dialog.dismiss() }
+        contentView.findViewById<View>(R.id.dinin).setOnClickListener { dialog.dismiss()
+            sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO,ConstantLib.RESERVATION)
+            val intent = Intent(requireContext(), CalendarViewActivity::class.java)
+            intent.putExtra(ConstantLib.VENUE_ID, venueid)
+            startActivity(intent)}
     }
 
     companion object {
-        fun newInstance(): BottomSheetFragment {
+        var venueid = ""
+        fun newInstance(clubId: Int): BottomSheetFragment {
+            venueid = clubId.toString()
             return BottomSheetFragment()
         }
     }

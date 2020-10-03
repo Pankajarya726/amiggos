@@ -98,8 +98,8 @@ interface ApiService {
 
 
 
-    @POST("partner/staff_list")
-    suspend fun doStaffApi(
+    @POST("guest/getMenu")
+    suspend fun doCallMenuApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Response<MenuResponse>

@@ -18,6 +18,7 @@ import com.stripe.android.PaymentConfiguration
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.base.repository.*
 import com.tekzee.amiggos.network.ApiService
+import com.tekzee.amiggos.room.dao.ItemDao
 import com.tekzee.amiggos.ui.chatnew.ChatViewModelFactory
 import com.tekzee.amiggos.ui.message.MessagesViewModelFactory
 import com.tekzee.amiggos.ui.storieviewnew.StorieViewModelFactory
@@ -27,6 +28,8 @@ import com.tekzee.amiggos.util.NetworkConnectionInterceptor
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.ui.addusers.AddUserViewModelFactory
 import com.tekzee.amiggos.ui.memories.mymemories.MyMemorieViewModelFactory
+import com.tekzee.amiggos.ui.menu.MenuModelFactory
+import com.tekzee.amiggos.ui.menu.commonfragment.CommonFragmentViewModelFactory
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.plugins.RxJavaPlugins
 import org.kodein.di.Kodein
@@ -68,6 +71,8 @@ class ApplicationController : Application(), KodeinAware {
         bind() from singleton { ChatRepository(instance(), instance()) }
         bind() from singleton { AddUserRepository(instance()) }
         bind() from singleton { MemorieFeaturedBrandRepository(instance()) }
+        bind() from singleton { MenuRepository(instance()) }
+
 
 //        bind() from singleton { ValidateAppVersionRespository(instance()) }
 //        bind() from singleton { LoginRepository(instance()) }
@@ -154,6 +159,24 @@ class ApplicationController : Application(), KodeinAware {
 
         bind() from singleton {
             MyMemorieViewModelFactory(
+                instance(),
+                instance(),
+                instance(),
+                instance()
+            )
+        }
+
+        bind() from singleton {
+            MenuModelFactory(
+                instance(),
+                instance(),
+                instance(),
+                instance()
+            )
+        }
+
+        bind() from singleton {
+            CommonFragmentViewModelFactory(
                 instance(),
                 instance(),
                 instance(),
@@ -369,10 +392,10 @@ class ApplicationController : Application(), KodeinAware {
             "pk_test_E5sEgimoA8T4SexAo1GnNPkJ00sG6jBcdG"
         );
 
-        AutoErrorReporter.get(this)
-            .setEmailAddresses("himanshu.verma@tekzee.com")
-            .setEmailSubject("Auto Crash Report")
-            .start()
+//        AutoErrorReporter.get(this)
+//            .setEmailAddresses("himanshu.verma@tekzee.com")
+//            .setEmailSubject("Auto Crash Report")
+//            .start()
 
 
         val leastRecentlyUsedCacheEvictor = LeastRecentlyUsedCacheEvictor(90 * 1024 * 1024)

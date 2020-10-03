@@ -5,12 +5,12 @@ import android.view.View
 import androidx.lifecycle.ViewModel
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.base.model.LanguageData
-import com.tekzee.amiggos.base.repository.StaffRepository
+import com.tekzee.amiggos.base.repository.MenuRepository
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.util.*
 
 class MenuViewModel(private val context: Context,
-                    private val repository: StaffRepository,
+                    private val repository: MenuRepository,
                     private val languageConstant: LanguageData,
                     private val prefs: SharedPreference
 ) : ViewModel() {
@@ -22,20 +22,30 @@ class MenuViewModel(private val context: Context,
     }
 
 
-    fun callStaffApi(){
+    fun callMenuApi(venueid: String?, date: String?, time: String?) {
         val input = JsonObject()
-        input.addProperty("userid", prefs.getValueString(ConstantLib.USER_ID))
-        input.addProperty("venue_id", prefs.getValueString(ConstantLib.VENUE_ID))
-        docallStaffApi(input)
+        input.addProperty("userid", prefs.getValueInt(ConstantLib.USER_ID))
+        input.addProperty("venue_id", venueid)
+        input.addProperty("date", date)
+        input.addProperty("time", time)
+        if(prefs.getValueString(ConstantLib.SELECTED_VENUE_DIN_TOGO).equals(ConstantLib.TOGO)){
+            input.addProperty("method", "To-Go")
+        }else  if(prefs.getValueString(ConstantLib.SELECTED_VENUE_DIN_TOGO).equals(ConstantLib.RESERVATION)){
+            input.addProperty("method", "Dine-in")
+        }else{
+            input.addProperty("method", "")
+        }
+
+        doCallMenuApi(input)
     }
 
-    private fun docallStaffApi(input: JsonObject) {
+    private fun doCallMenuApi(input: JsonObject) {
         Coroutines.main {
             menuEvent?.onStarted()
             try {
-                val response =  repository.doStaffApi(input, Utility.createHeaders(prefs))
+                val response =  repository.doCallMenuApi(input, Utility.createHeaders(prefs))
                 if(response.status){
-                    menuEvent?.onLoaded(response.data.staffList)
+                    menuEvent?.onLoaded(response.data.section)
                 }else{
                     menuEvent?.onFailure(response.message)
                 }

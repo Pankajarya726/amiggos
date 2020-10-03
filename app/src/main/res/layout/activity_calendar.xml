@@ -122,6 +122,7 @@
                     android:timePickerMode="spinner" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:visibility="gone"
                     android:id="@+id/time_recycler"
                     android:layout_margin="@dimen/_8sdp"
                     android:layout_width="match_parent"
@@ -142,5 +143,9 @@
             android:textAllCaps="true"
             android:textColor="@android:color/white"
             android:textSize="@dimen/_15sdp"/>
+
+
     </RelativeLayout>
+
+
 </layout>

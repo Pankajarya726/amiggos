@@ -64,9 +64,9 @@
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
 
-<!--        <service-->
-<!--            android:name="com.tekzee.amiggos.ui.ourmemories.service.FileOurMemoryUploadService"-->
-<!--            android:permission="android.permission.BIND_JOB_SERVICE" />-->
+        <!--        <service-->
+        <!--            android:name="com.tekzee.amiggos.ui.ourmemories.service.FileOurMemoryUploadService"-->
+        <!--            android:permission="android.permission.BIND_JOB_SERVICE" />-->
 
 
         <activity
@@ -151,10 +151,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
-<!--        <activity-->
-<!--            android:name="com.tekzee.amiggos.ui.chat.MessageActivity"-->
-<!--            android:screenOrientation="portrait"-->
-<!--            android:theme="@style/AppTheme.NoActionBar" />-->
+        <!--        <activity-->
+        <!--            android:name="com.tekzee.amiggos.ui.chat.MessageActivity"-->
+        <!--            android:screenOrientation="portrait"-->
+        <!--            android:theme="@style/AppTheme.NoActionBar" />-->
 
         <activity
             android:name="com.tekzee.amiggos.ui.login.LoginActivity"
@@ -451,18 +451,26 @@
             android:name="com.tekzee.amiggosvenueapp.ui.taggingvideo.TaggingVideoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.storieviewnew.StorieViewNew"
+        <activity
+            android:name=".ui.storieviewnew.StorieViewNew"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.message.MessageActivity"
+        <activity
+            android:name=".ui.message.MessageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ui.addusers.AddUserFragment"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.addusers.AddUserFragment"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ui.chatnew.ChatActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.chatnew.ChatActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/> <!-- optional (needed if default theme has no action bar) -->
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.menu.MenuActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!--metadata tag for instagram-->
         <meta-data

@@ -1356,6 +1356,19 @@ public class LanguageData {
     @Expose
     private String undo ="Undo";
 
+
+    @SerializedName("selectyourpacakge")
+    @Expose
+    private String selectyourpacakge ="Select Your Package";
+
+    public String getSelectyourpacakge() {
+        return selectyourpacakge;
+    }
+
+    public void setSelectyourpacakge(String selectyourpacakge) {
+        this.selectyourpacakge = selectyourpacakge;
+    }
+
     public String getInvite() {
         return invite;
     }

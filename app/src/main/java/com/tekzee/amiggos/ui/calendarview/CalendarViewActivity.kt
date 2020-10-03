@@ -1,23 +1,20 @@
 package com.tekzee.amiggos.ui.calendarview
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import android.provider.CalendarContract
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import cn.pedant.SweetAlert.SweetAlertDialog
-import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.ActivityCalendarBinding
 import com.tekzee.amiggos.ui.calendarview.adapter.TimeAdapter
-import com.tekzee.amiggos.ui.choosepackage.ChoosePackageActivity
+import com.tekzee.amiggos.ui.menu.MenuActivity
 import com.tekzee.amiggos.util.SharedPreference
 import java.util.*
 import kotlin.collections.ArrayList
@@ -33,8 +30,9 @@ class CalendarViewActivity : BaseActivity() {
     private var languageData: LanguageData? = null
     val disabledDates = ArrayList<Calendar>()
     var timedata = ArrayList<String>()
+    var selectedDate =""
 
-
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_calendar)
@@ -44,8 +42,9 @@ class CalendarViewActivity : BaseActivity() {
         val cal = Calendar.getInstance()
         cal.add(Calendar.DAY_OF_MONTH, -1)
         binding.calendarView.setMinimumDate(cal)
-
         setupClickListener()
+
+        binding.timepicker.setIs24HourView(true)
 
         timedata.add("2pm")
         timedata.add("2pm")
@@ -79,9 +78,20 @@ class CalendarViewActivity : BaseActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun setupClickListener() {
         binding.imgClose.setOnClickListener {
             onBackPressed()
+        }
+
+        binding.btnNext.setOnClickListener {
+            val intent = Intent(applicationContext, MenuActivity::class.java)
+            intent.putExtra(ConstantLib.VENUE_ID, getIntent().getStringExtra(ConstantLib.VENUE_ID))
+            intent.putExtra(ConstantLib.DATE, selectedDate)
+//            h:m:s
+            intent.putExtra(ConstantLib.TIME, ""+binding.timepicker.hour+":"+binding.timepicker.minute+":"+"0")
+            startActivity(intent)
+
         }
 
         binding.calendarView.setOnDayClickListener { eventDay ->
@@ -90,10 +100,16 @@ class CalendarViewActivity : BaseActivity() {
             val month = (eventDay.calendar.get(Calendar.MONTH) + 1).toString()
             val year = eventDay.calendar.get(Calendar.YEAR).toString()
 
+            selectedDate  =  ""+eventDay.calendar.get(Calendar.YEAR)+"-"+eventDay.calendar.get(
+                Calendar.MONTH
+            )+"-"+eventDay.calendar.get(Calendar.DAY_OF_MONTH)
+
             val cal: Calendar = Calendar.getInstance()
             cal.set(Calendar.YEAR, eventDay.calendar.get(Calendar.YEAR))
             cal.set(Calendar.MONTH, eventDay.calendar.get(Calendar.MONTH))
             cal.set(Calendar.DAY_OF_MONTH, eventDay.calendar.get(Calendar.DAY_OF_MONTH))
+
+
 
 //            val listofDate = ArrayList<Calendar>()
 //            listofDate.add(cal)

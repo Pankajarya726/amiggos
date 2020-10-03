@@ -12,7 +12,6 @@ import com.like.LikeButton
 import com.like.OnLikeListener
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
-import com.stfalcon.imageviewer.StfalconImageViewer
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
@@ -96,6 +95,8 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
                 sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO,ConstantLib.TOGO)
             }else if(response!!.clubData.reservation ==1){
                 sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO,ConstantLib.RESERVATION)
+            }else{
+                sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO,"")
             }
 
         }
@@ -173,7 +174,7 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
 
 
     fun showCustomDialog(view: View){
-        val bottomSheetDialog: BottomSheetFragment = BottomSheetFragment.newInstance()
+        val bottomSheetDialog: BottomSheetFragment = BottomSheetFragment.newInstance(response!!.clubData.clubId)
         bottomSheetDialog.show(supportFragmentManager, "Bottom Sheet Dialog Fragment")
     }
 

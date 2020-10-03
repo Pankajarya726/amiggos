@@ -2,8 +2,10 @@ package com.tekzee.amiggos.ui.homescreen_new.nearmefragment.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.tekzee.amiggos.ui.menu.MenuActivity
 
 class ViewPagerTwoAdapter (fragment: Fragment) : FragmentStateAdapter(fragment) {
+
     private val mFragmentList = ArrayList<Fragment>()
 
     override fun getItemCount(): Int {
