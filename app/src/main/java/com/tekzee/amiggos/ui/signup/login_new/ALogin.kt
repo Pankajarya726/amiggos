@@ -55,7 +55,6 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
 
     private fun setupClickListener() {
         binding!!.btnCreateaccount.setOnClickListener{
-
             startActivity(Intent(applicationContext,StepOne::class.java))
             Animatoo.animateSlideLeft(this)
         }
@@ -163,7 +162,6 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
         database.child(ConstantLib.USER).child(firebaseUser!!.uid).child("name").setValue(responseData.name)
         database.child(ConstantLib.USER).child(firebaseUser.uid).child("image").setValue(responseData.profile)
         database.child(ConstantLib.USER).child(firebaseUser.uid).child("deviceToken").setValue(responseData.apiToken)
-        database.child(ConstantLib.USER).child(firebaseUser.uid).child("deviceToken").setValue(responseData.apiToken)
         database.child(ConstantLib.USER).child(firebaseUser.uid).child("amiggosID").setValue(responseData.userid.toString())
         database.child(ConstantLib.USER).child(firebaseUser.uid).child("email").setValue(responseData.email)
         database.child(ConstantLib.USER).child(firebaseUser.uid).child("fcmToken").setValue(sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN))
@@ -180,6 +178,8 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
         sharedPreferences!!.save(ConstantLib.USER_TYPE, responseData.type)
         sharedPreferences!!.save(ConstantLib.ISAGREE, false)
         sharedPreferences!!.save(ConstantLib.ISPROFILECOMPLETE, responseData.is_profile_complete)
+        sharedPreferences!!.save(ConstantLib.MYID, responseData.myid)
+        sharedPreferences!!.save(ConstantLib.USER_AGE, responseData.age)
         startActivity(Intent(applicationContext, AHomeScreen::class.java))
         finishAffinity()
     }
@@ -190,12 +190,10 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
 
 
     private fun callUpdateFirebaseApi(userid: Int) {
-
         val input: JsonObject = JsonObject()
         input.addProperty("userid", userid.toString())
         input.addProperty("firebase_id", FirebaseAuth.getInstance().currentUser!!.uid)
         aLoginImplementation!!.doUpdateFirebaseApi(input, Utility.createHeaders(sharedPreferences))
-
     }
 
 

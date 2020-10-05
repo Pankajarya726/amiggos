@@ -160,7 +160,7 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
 
     private fun checkValidateVersionPerformAction(validateAppVersionResponse: ValidateAppVersionResponse?) {
         if(validateAppVersionResponse!!.data.age.isNotEmpty()){
-            sharedPreferences!!.save(ConstantLib.USER_AGE, validateAppVersionResponse.data.age)
+           // sharedPreferences!!.save(ConstantLib.USER_AGE, validateAppVersionResponse.data.age)
         }
         if(validateAppVersionResponse.data.inviteFriendCount!=null && validateAppVersionResponse.data.inviteFriendCount.isNotEmpty() && validateAppVersionResponse.data.inviteFriendCount.toInt()>0){
             sharedPreferences!!.save(ConstantLib.INVITE_FRIEND, validateAppVersionResponse.data.inviteFriendCount.toInt())

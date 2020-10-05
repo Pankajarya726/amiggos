@@ -1268,6 +1268,10 @@ public class LanguageData {
     @Expose
     private String editphoto = "Edit Photo";
 
+    @SerializedName("edit")
+    @Expose
+    private String edit ="Edit";
+
     @SerializedName("deletecard")
     @Expose
     private String deletecard = "Delete Card";
@@ -1441,7 +1445,28 @@ public class LanguageData {
     private String phonenumber ="Phone Number" ;
 
 
+    @SerializedName("upload")
+    private String upload ="Upload";
 
+    @SerializedName("agerestrictionmessage")
+    private String agerestrictionmessage ="To buy this product must \n upload your id";
+
+
+    public String getUpload() {
+        return upload;
+    }
+
+    public void setUpload(String upload) {
+        this.upload = upload;
+    }
+
+    public String getAgerestrictionmessage() {
+        return agerestrictionmessage;
+    }
+
+    public void setAgerestrictionmessage(String agerestrictionmessage) {
+        this.agerestrictionmessage = agerestrictionmessage;
+    }
 
     public String getAddress() {
         return address;
@@ -1481,6 +1506,14 @@ public class LanguageData {
 
     public void setProfilecompletedata(String profilecompletedata) {
         this.profilecompletedata = profilecompletedata;
+    }
+
+    public String getEdit() {
+        return edit;
+    }
+
+    public void setEdit(String edit) {
+        this.edit = edit;
     }
 
     public String getNewmember() {

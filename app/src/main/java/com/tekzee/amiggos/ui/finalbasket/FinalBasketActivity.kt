@@ -1,12 +1,10 @@
-package com.tekzee.amiggos.ui.menu.commonfragment
+package com.tekzee.amiggos.ui.finalbasket
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,104 +16,53 @@ import com.tekzee.amiggos.custom.MenuAgeSheetFragment
 import com.tekzee.amiggos.databinding.CommonFragmentBinding
 import com.tekzee.amiggos.room.database.AmiggoRoomDatabase
 import com.tekzee.amiggos.room.entity.Menu
-import com.tekzee.amiggos.ui.menu.commonfragment.adapter.CommonAdapter
+import com.tekzee.amiggos.ui.finalbasket.adapter.FinalBasketAdapter
 import com.tekzee.amiggos.ui.menu.commonfragment.model.CommonMenuResponse
 import com.tekzee.amiggos.ui.menu.model.MenuResponse
 import com.tekzee.amiggos.util.Coroutines
 import com.tekzee.amiggos.util.SharedPreference
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.closestKodein
+import org.kodein.di.android.closestKodein
 import org.kodein.di.generic.instance
 
 
-class CommonFragment() : Fragment(), CommonEvent, KodeinAware, CommonClickListener {
-
-    companion object {
-        fun newInstance(id: Int, item: MenuResponse.Data.Section): CommonFragment {
-            val fragment = CommonFragment()
-            val args = Bundle()
-            args.putString("id", id.toString())
-            args.putSerializable("data", item)
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
+class FinalBasketActivity : AppCompatActivity(), FinalBasketEvent, KodeinAware, FinalBasketClickListener {
 
     private lateinit var newlist: java.util.ArrayList<Menu>
     private var dataItem: MenuResponse.Data.Section? = null
 
     //    private lateinit var navController: NavController
-    private lateinit var adapter: CommonAdapter
+    private lateinit var adapter: FinalBasketAdapter
     override val kodein: Kodein by closestKodein()
     val languageConstant: LanguageData by instance<LanguageData>()
     val prefs: SharedPreference by instance<SharedPreference>()
-    val factory: CommonFragmentViewModelFactory by instance<CommonFragmentViewModelFactory>()
+    val factory: FinalBasketViewModelFactory by instance<FinalBasketViewModelFactory>()
     private var binding: CommonFragmentBinding? = null
     private var category_id: String? = null
-    private lateinit var viewModel: CommonViewModel
+    private lateinit var viewModel: FinalBasketViewModel
     private var repository: ItemRepository? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        category_id = arguments?.getString("id")
-        dataItem = arguments?.getSerializable("data") as MenuResponse.Data.Section
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.common_fragment, container, false)
-        val itemDao = AmiggoRoomDatabase.getDatabase(requireContext()).itemDao()
+        binding = DataBindingUtil.setContentView(this, R.layout.final_cart)
+        val itemDao = AmiggoRoomDatabase.getDatabase(this).itemDao()
         repository = ItemRepository(itemDao)
 
         if (dataItem != null) {
             setupAdapter()
             observeList()
         }
-
-        return binding!!.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this, factory).get(CommonViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(FinalBasketViewModel::class.java)
         viewModel.commonEvent = this
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
-
-//    private fun callStaffByIdApi() {
-//        Coroutines.main {
-//            viewModel.callStaffByIdApi(category_id)
-//        }
-//    }
-
-//    override fun onStarted() {
-//        binding!!.progressCircular.visibility = View.VISIBLE
-//        binding!!.recyclerCommon.visibility = View.GONE
-//    }
-//
-//    override fun onLoaded() {
-//        setupAdapter()
-//        observeList()
-//    }
-
-//    override fun onChangeStatusStarted() {
-//        requireActivity().showProgressBar()
-//    }
 
     private fun setupAdapter() {
         binding!!.progressCircular.visibility = View.VISIBLE
         binding!!.recyclerCommon.visibility = View.GONE
-        adapter = CommonAdapter(this, repository,prefs)
+        adapter = FinalBasketAdapter(this, repository,prefs)
         binding!!.recyclerCommon.layoutManager = LinearLayoutManager(
-            activity,
+            this,
             LinearLayoutManager.VERTICAL,
             false
         )
@@ -130,24 +77,6 @@ class CommonFragment() : Fragment(), CommonEvent, KodeinAware, CommonClickListen
         binding!!.recyclerCommon.visibility = View.VISIBLE
 
     }
-
-//    override fun onFailure(message: String) {
-//        binding!!.progressCircular.visibility = View.GONE
-//        binding!!.recyclerCommon.visibility = View.GONE
-//        requireActivity().Errortoast(message)
-//        requireActivity().hideProgressBar()
-//    }
-//
-//    override fun onStatusUpdated(message: String) {
-//        requireActivity().hideProgressBar()
-//        requireActivity().Successtoast(message)
-//    }
-//
-//    override fun sessionExpired(message: String) {
-//        requireActivity().hideProgressBar()
-//        requireActivity().Errortoast(message)
-//
-//    }
 
 
     override fun onItemClicked(position: Int, listItem: Menu, quantity: String) {
@@ -182,13 +111,13 @@ class CommonFragment() : Fragment(), CommonEvent, KodeinAware, CommonClickListen
         if(listItem!!.menuImage.isNotEmpty()){
             val paths: ArrayList<String> = ArrayList()
             paths.add(listItem!!.menuImage)
-            GalleryView.show(requireContext(), paths)
+            GalleryView.show(this, paths)
         }
 
     }
 
     fun showCustomDialog(view: View){
         val bottomSheetDialog: MenuAgeSheetFragment = MenuAgeSheetFragment.newInstance()
-        bottomSheetDialog.show(childFragmentManager, "AgeRestring fragment")
+        bottomSheetDialog.show(supportFragmentManager, "finalbasket fragment")
     }
 }

@@ -1,4 +1,4 @@
-package com.tekzee.amiggos.ui.menu.commonfragment.adapter
+package com.tekzee.amiggos.ui.finalbasket.adapter
 
 import android.content.Context
 import android.util.Log
@@ -13,19 +13,19 @@ import com.tekzee.amiggos.base.repository.ItemRepository
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.SingleCommonStaffListBinding
 import com.tekzee.amiggos.room.entity.Menu
-import com.tekzee.amiggos.ui.menu.commonfragment.CommonClickListener
+import com.tekzee.amiggos.ui.finalbasket.FinalBasketClickListener
 import com.tekzee.amiggos.util.Coroutines
 import com.tekzee.amiggos.util.SharedPreference
 import kotlinx.android.synthetic.main.single_common_staff_list.view.*
 
 
-class CommonAdapter(
-    private val listener: CommonClickListener,
+class FinalBasketAdapter(
+    private val listener: FinalBasketClickListener,
     private val repository: ItemRepository?,
     private val prefs: SharedPreference
 ) :
-    ListAdapter<Menu, CommonAdapter.CommonStaffViewHolder>(
-        CommonDiffutil()
+    ListAdapter<Menu, FinalBasketAdapter.CommonStaffViewHolder>(
+        FinalBasketDiffutil()
     ) {
 
     private var context: Context? = null

@@ -42,5 +42,7 @@ data class Data(
     @SerializedName("typeoflogin")
     var typeoflogin: String = "",
     @SerializedName("userid")
-    var userid: Int = 0
+    var userid: Int = 0,
+    @SerializedName("age")
+    var age: String = ""
 )

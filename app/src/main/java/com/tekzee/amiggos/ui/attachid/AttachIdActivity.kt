@@ -1,25 +1,25 @@
 package com.tekzee.amiggos.ui.attachid
 
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
+import com.bumptech.glide.Glide
+import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
-import com.tekzee.amiggos.databinding.AttachidActivityBinding
-import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
-import com.tekzee.amiggos.ui.statusview.StatusViewActivity
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
+import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.databinding.AttachidActivityBinding
+import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
+import com.tekzee.amiggos.ui.attachid.model.MyIdResponse
+import com.tekzee.amiggos.util.ImagePickerUtils
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.amiggos.constant.ConstantLib
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -27,9 +27,7 @@ import java.io.File
 import java.util.*
 
 
-class AttachIdActivity : BaseActivity(), AttachIdActivityPresenter.AttachIdMainView,
-    DatePickerDialog.OnDateSetListener {
-
+class AttachIdActivity : BaseActivity(), AttachIdActivityPresenter.AttachIdMainView {
 
 
     lateinit var binding: AttachidActivityBinding
@@ -38,8 +36,8 @@ class AttachIdActivity : BaseActivity(), AttachIdActivityPresenter.AttachIdMainV
     private var attachIdPresenterImplementation: AttachIdPresenterImplementation? = null
     private var file: File? = null
     private var dob: String = ""
-    private var userid: String ="";
-
+    private var userid: String = "";
+    private var imagePath: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,94 +46,48 @@ class AttachIdActivity : BaseActivity(), AttachIdActivityPresenter.AttachIdMainV
         languageData = sharedPreferences!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         attachIdPresenterImplementation = AttachIdPresenterImplementation(this, this)
 
-            if(intent.getStringExtra(ConstantLib.FROM) == ConstantLib.NOTIFICAION){
-                userid = intent.getStringExtra(ConstantLib.USER_DATA) as String
-            }else{
-                userid = sharedPreferences!!.getValueInt(ConstantLib.USER_ID).toString()
-            }
-
-
-
-        setupToolBar()
         setupClickListener()
         initViewData()
+        getMyId()
     }
 
-    override fun onDateSet(view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-        dob = "$dayOfMonth/${monthOfYear + 1}/$year"
-        binding.txtSelectDate.text = dob
+    private fun getMyId() {
+        val input: JsonObject = JsonObject()
+        input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
+        attachIdPresenterImplementation!!.getMyId(input, Utility.createHeaders(sharedPreferences))
     }
+
 
     private fun initViewData() {
-
-        binding.txtHeading.text = languageData!!.klTakePicOfID.split("\\n")[0]
-        binding.txtSubtitle.text = languageData!!.klTakePicOfID.split("\\n")[1]
-        binding.txtSelectDate.text = languageData!!.klSelectYourBirthDate
-        binding.btnSave.text = languageData!!.klSAVE
-
-
+        binding.title.text = languageData!!.pmyid
+        binding.txtUpload.text = languageData!!.klUploadID
+        binding.edit.text = languageData!!.edit
+        binding.delete.text = languageData!!.delete
     }
 
     private fun setupClickListener() {
-        binding.imgUser.setOnClickListener {
-            CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .start(this)
+        binding.back.setOnClickListener {
+            onBackPressed()
         }
 
-        binding.txtSelectDate.setOnClickListener {
-
-            val calendar = Calendar.getInstance()
-            calendar.add(Calendar.YEAR, -18)
-            val dpd = DatePickerDialog.newInstance(
-                this,
-                calendar.get(Calendar.YEAR), // Initial year selection
-                calendar.get(Calendar.MONTH), // Initial month selection
-                calendar.get(Calendar.DAY_OF_MONTH) // Inital day selection
-            )
-            dpd.maxDate = calendar
-            dpd.show(supportFragmentManager,"Datepickerdialog")
+        binding.txtUpload.setOnClickListener {
+            pickImage()
         }
 
-        binding.btnSave.setOnClickListener {
-            if (file == null) {
-                Toast.makeText(
-                    applicationContext,
-                    "Please upload ID",
-                    Toast.LENGTH_LONG
-                ).show()
-            } else {
-                val requestFile = RequestBody.create(
-                    "image/*".toMediaTypeOrNull(),
-                    file!!
-                )
-                val fileMultipartBody =
-                    MultipartBody.Part.createFormData("image", file!!.name, requestFile)
-                val useridRequestBody = RequestBody.create(
-                    MultipartBody.FORM,
-                   userid
-                )
-                val dobRequestBody = RequestBody.create(
-                    MultipartBody.FORM, dob
-                )
-                attachIdPresenterImplementation!!.doCallAttachIdApi(
-                    fileMultipartBody,
-                    useridRequestBody,
-                    dobRequestBody,
-                    Utility.createHeaders(sharedPreferences)
-                )
-            }
+        binding.edit.setOnClickListener {
+            pickImage()
+        }
 
+        binding.delete.setOnClickListener {
+            uploadUserImage("2")
         }
     }
 
-    private fun setupToolBar() {
-        val toolbar: Toolbar = binding.toolbar
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-        binding.title.text = languageData!!.klAttachId
+
+    private fun pickImage() {
+        CropImage.activity()
+            .setCropShape(CropImageView.CropShape.RECTANGLE)
+            .start(this)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -146,31 +98,117 @@ class AttachIdActivity : BaseActivity(), AttachIdActivityPresenter.AttachIdMainV
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onAttachIdSuccess(responseData: AttachIdResponse?, flag_save_or_delet: String) {
+        Toast.makeText(applicationContext, responseData!!.message, Toast.LENGTH_LONG).show()
+        getMyId()
+
+    }
+
+    override fun onMyIdSucess(responseData: MyIdResponse?) {
+        if(responseData!!.data.imageAvailable){
+            binding.myidlayout.visibility = View.VISIBLE
+            binding.txtUpload.visibility = View.GONE
+            sharedPreferences!!.save(ConstantLib.MYID, true)
+        }else{
+            binding.myidlayout.visibility = View.GONE
+            binding.txtUpload.visibility = View.VISIBLE
+            sharedPreferences!!.save(ConstantLib.MYID, false)
+        }
+        Glide.with(this).load(responseData.data.photoId).into(binding.myidPicture)
+    }
+
+
+    override fun onAttachIdFailure(message: String, flag_save_or_delet: String) {
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+        sharedPreferences!!.save(ConstantLib.MYID, false)
+        getMyId()
+
+    }
 
     override fun validateError(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
 
-    @SuppressLint("MissingSuperCall")
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            val result = CropImage.getActivityResult(data)
-            if (resultCode == Activity.RESULT_OK) {
-                val resultUri = result.uri
-                binding.imgUser.setImageURI(resultUri)
-                this.file = File(resultUri.path)
-
+            val result =
+                CropImage.getActivityResult(data)
+            if (resultCode == RESULT_OK) {
+                imagePath = ImagePickerUtils.getPath(this, result.uri)
+                uploadUserImage("1")
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                val error = result.error
+                Toast.makeText(
+                    this,
+                    "Cropping failed: " + result.error,
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
 
-    override fun onAttachIdSuccess(responseData: AttachIdResponse?) {
-        val intent = Intent(this, StatusViewActivity::class.java)
-        startActivity(intent)
-        finishAffinity()
+    //    1=save, 2= delete
+    private fun uploadUserImage(flag_save_or_delet: String) {
+        var file: File? = null
+        if (imagePath != null) {
+            file = File(imagePath)
+        }
+        var requestFile: RequestBody? = null
+        var fileMultipartBody: MultipartBody.Part? = null
+        if (file != null) {
+            requestFile = RequestBody.create(
+                "image/*".toMediaTypeOrNull(),
+                file
+            )
+            val imagearray = ArrayList<String>()
+            imagearray.add(file.name)
+            fileMultipartBody =
+                MultipartBody.Part.createFormData("image", imagearray.toString(), requestFile)
+
+        }
+
+        val useridRequestBody = RequestBody.create(
+            MultipartBody.FORM,
+            "" + sharedPreferences!!.getValueInt(ConstantLib.USER_ID)
+        )
+
+        val actiontypeRequestBody = RequestBody.create(
+            MultipartBody.FORM,
+            "" + flag_save_or_delet
+        )
+
+        if (flag_save_or_delet == "2") {
+            attachIdPresenterImplementation!!.doCallAttachIdApi(
+                null,
+                useridRequestBody,
+                actiontypeRequestBody,
+                flag_save_or_delet,
+                Utility.createHeaders(
+                    sharedPreferences
+                )
+            )
+
+        } else if (fileMultipartBody != null) {
+            attachIdPresenterImplementation!!.doCallAttachIdApi(
+                fileMultipartBody,
+                useridRequestBody,
+                actiontypeRequestBody,
+                flag_save_or_delet,
+                Utility.createHeaders(
+                    sharedPreferences
+                )
+            )
+        } else {
+            Toast.makeText(applicationContext, "Image can not be blank", Toast.LENGTH_LONG).show()
+        }
+
+
     }
+
 
 }

@@ -3,21 +3,32 @@ package com.tekzee.amiggos.room.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 @Entity(tableName = "item")
 class Menu(
+    @SerializedName("age_restriction")
     val ageRestriction: String = "",
+    @SerializedName("cost")
     val cost: Int = 0,
+    @SerializedName("description")
     val description: String = "",
     @PrimaryKey @ColumnInfo(name = "id") val id: Int = 0,
+    @SerializedName("is_guest_invities")
     val isGuestInvities: Int = 0,
+    @SerializedName("menu_image")
     val menuImage: String = "",
+    @SerializedName("method")
     val method: String = "",
+    @SerializedName("name")
     val name: String = "",
+    @SerializedName("offer_type")
     val offerType: Int = 0,
     var quantity: Int = 0,
+    @SerializedName("price")
     val price: Double = 0.0
+
 ):Serializable {
 
     override fun toString(): String {

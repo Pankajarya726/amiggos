@@ -1,6 +1,7 @@
 package com.tekzee.amiggos.base.repository
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.tekzee.amiggos.room.dao.ItemDao
 import com.tekzee.amiggos.room.entity.Menu
 
@@ -28,6 +29,7 @@ class ItemRepository(private val itemDao: ItemDao) {
     }
 
     suspend fun getTotalCartAmount(): LiveData<List<Menu>> {
-        return itemDao.getCartTotal()
+        return itemDao.getItemCount()
+//        return MutableLiveData()
     }
 }

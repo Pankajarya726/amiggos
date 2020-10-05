@@ -25,6 +25,7 @@ import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.ui.attachid.AttachIdActivity
 
 class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView {
 
@@ -84,6 +85,10 @@ class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView 
     private fun setupClickListener() {
         binding!!.imgClose.setOnClickListener {
             onBackPressed()
+        }
+
+        binding!!.myId.setOnClickListener {
+            startActivity(Intent(applicationContext, AttachIdActivity::class.java))
         }
 
         binding!!.paymentMethod.setOnClickListener{

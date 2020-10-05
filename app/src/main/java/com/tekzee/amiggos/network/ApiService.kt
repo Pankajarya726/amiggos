@@ -10,6 +10,7 @@ import com.tekzee.amiggos.stripe.model.APaymentSuccessResponse
 import com.tekzee.amiggos.stripe.model.ClientSecretResponse
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
+import com.tekzee.amiggos.ui.attachid.model.MyIdResponse
 import com.tekzee.amiggos.ui.blockedusers.model.BlockedUserResponse
 import com.tekzee.amiggos.ui.blockedusers.model.UnBlockFriendResponse
 import com.tekzee.amiggos.ui.bookingqrcode.model.BookinQrCodeResponse
@@ -93,9 +94,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
-const val FIRST_PAGE =0
-interface ApiService {
+const val FIRST_PAGE = 0
 
+interface ApiService {
 
 
     @POST("guest/getMenu")
@@ -103,8 +104,6 @@ interface ApiService {
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Response<MenuResponse>
-
-
 
 
     @POST("partner/user_status")
@@ -119,7 +118,6 @@ interface ApiService {
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Response<CommonMenuResponse>
-
 
 
     @POST("guest/get_featured_product")
@@ -149,13 +147,11 @@ interface ApiService {
     ): Response<CommonResponse>
 
 
-
     @POST("partner/approved_tagged_memory")
     suspend fun docallDeleteApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Response<CommonResponse>
-
 
 
     @POST("guest/tagging_search_customer")
@@ -210,7 +206,6 @@ interface ApiService {
 //        @Part("our_story_id") our_story_id: RequestBody,
 //        @HeaderMap createHeaders: HashMap<String, String?>
 //    ): Observable<Response<AttachIdResponse>>
-
 
 
     //==========================================================================================
@@ -279,7 +274,6 @@ interface ApiService {
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>>
-
 
 
     @POST("guest/set_defaultprofile")
@@ -626,7 +620,6 @@ interface ApiService {
     ): Observable<Response<ChooseWeekResponse>>
 
 
-
     @POST("payment/creatStripCustomer")
     fun saveCard(
         @Body input: JsonObject,
@@ -684,7 +677,6 @@ interface ApiService {
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<InviteFriendResponse>>
-
 
 
     @POST("guest/userFreindsList_memory")
@@ -904,6 +896,12 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<com.tekzee.amiggos.ui.home.model.VenueResponse>>
 
+    @POST("guest/get_photoid")
+    fun doGetMyId(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<MyIdResponse>>
+
     @POST("user/getNearByUserCount")
     fun getNearByUserCount(
         @Body input: JsonObject,
@@ -917,11 +915,11 @@ interface ApiService {
     ): Observable<Response<CommonResponse>>
 
     @Multipart
-    @POST("user/save_photoid")
+    @POST("guest/my_photoid")
     fun doCallAttachIdApi(
         @Part file: MultipartBody.Part?,
         @Part("userid") valueInt: RequestBody,
-        @Part("dob") date: RequestBody,
+        @Part("action_type") date: RequestBody,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<AttachIdResponse>>
 
@@ -942,7 +940,6 @@ interface ApiService {
     ): Response<CommonResponse>
 
 
-
     @POST("user/create_stripepayment")
     fun getPaymentIntentClientSecret(
         @Body apiParamMap: JsonObject,
@@ -961,13 +958,13 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<APaymentSuccessResponse>>
 
- @POST("user/update_payment_status")
+    @POST("user/update_payment_status")
     fun updatePaymentStatus(
         @Body apiParamMap: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>>
-    
-    
+
+
     companion object {
         operator fun invoke(
             networkConnectionInterceptor: NetworkConnectionInterceptor

@@ -16,6 +16,8 @@ data class UserData(
         val apiToken: String = "",
         @SerializedName("device_id")
         val deviceId: String = "",
+        @SerializedName("profile")
+        val profile: String = "",
         @SerializedName("device_type")
         val deviceType: String = "",
         @SerializedName("dob")
@@ -34,6 +36,10 @@ data class UserData(
         val type: String = "",
         @SerializedName("userid")
         val userid: Int = 0,
+        @SerializedName("age")
+        val age: String = "",
+        @SerializedName("myid")
+        var myid: Boolean = false,
         @SerializedName("username")
         val username: String = ""
     )

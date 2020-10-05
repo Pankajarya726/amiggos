@@ -135,7 +135,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
             }
             "1" -> {
                 sharedPreferences!!.save(ConstantLib.INVITE_FRIEND, invitefrnd)
-                sharedPreferences!!.save(ConstantLib.USER_AGE, userAgeis1!!)
+               // sharedPreferences!!.save(ConstantLib.USER_AGE, userAgeis1!!)
                 gotoDocVerification(userid!!, friendid!!, title, body)
             }
             "2" -> {

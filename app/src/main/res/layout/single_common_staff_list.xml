@@ -22,13 +22,15 @@
             android:layout_height="wrap_content">
 
 
-            <ImageView
+            <com.github.siyamed.shapeimageview.RoundedImageView
                 android:id="@+id/menuimage"
-                android:layout_width="@dimen/_50sdp"
+                android:layout_width="@dimen/_60sdp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_marginBottom="@dimen/_5sdp"
+                app:siRadius="@dimen/_5sdp"
+                app:siSquare="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -78,48 +80,47 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <LinearLayout
-                        android:layout_width="@dimen/_80sdp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="3"
+
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
                             android:id="@+id/txt_minus"
-                            android:layout_width="match_parent"
+                            android:layout_width="@dimen/_25sdp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+
                             android:background="@drawable/minus_bg"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
                             android:text="-"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_15sdp" />
+                            android:textSize="@dimen/_12sdp" />
 
                         <TextView
                             android:id="@+id/txt_qty"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
+                            android:minWidth="@dimen/_25sdp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:background="@drawable/amout_bg"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_15sdp" />
+                            android:textSize="@dimen/_12sdp" />
 
                         <TextView
                             android:id="@+id/txt_plus"
-                            android:layout_width="match_parent"
+                            android:layout_width="@dimen/_25sdp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:background="@drawable/plus_bg"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
                             android:text="+"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_15sdp" />
+                            android:textSize="@dimen/_12sdp" />
 
 
                     </LinearLayout>

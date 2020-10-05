@@ -38,6 +38,10 @@ data class ALoginResponse(
         var username: String = "",
         @SerializedName("is_profile_complete")
         var is_profile_complete: Int = 0,
+        @SerializedName("age")
+        var age: String = "",
+        @SerializedName("myid")
+        var myid: Boolean = false,
         @SerializedName("type")
         var type: String = ""
     )

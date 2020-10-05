@@ -22,6 +22,6 @@ interface ItemDao {
     @Query("UPDATE item SET quantity = :quantity WHERE id = :id")
     suspend fun updateCount(quantity: String,id: String)
 
-    @Query("SELECT * from item")
-    suspend fun getCartTotal(): LiveData<List<Menu>>
+//    @Query("SELECT * from item")
+//    suspend fun getCartTotal(): LiveData<List<Menu>>
 }

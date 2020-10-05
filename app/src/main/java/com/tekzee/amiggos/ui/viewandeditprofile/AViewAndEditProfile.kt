@@ -14,6 +14,9 @@ import com.ajithvgiri.searchdialog.SearchListItem
 import com.ajithvgiri.searchdialog.SearchableDialog
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.JsonObject
 import com.impulsiveweb.galleryview.GalleryView
 
@@ -59,11 +62,13 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
     private var stateId: String? = ""
     private var imagePath: String? = null
     private var pickImageFor = 0 //1-profile 2-uploadphoto
-
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.view_and_edit_layout)
+        database = FirebaseDatabase.getInstance().reference
         sharedPreferences = SharedPreference(this)
         languageData = sharedPreferences!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         aViewAndEditImplementation = AViewAndEditImplementation(this, this)
@@ -408,6 +413,40 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
     }
 
     override fun onProfileUpdateSuccess(data: UpdateProfileResponse?) {
+
+
+//        {
+//            "status": true,
+//            "message": "",
+//            "data": {
+//            "userid": 43,
+//            "username": "trilokwarke",
+//            "email": "trilokwarke@gmail.com",
+//            "name": "Trilok",
+//            "last_name": "Warke",
+//            "dob": "05\/10\/1996",
+//            "city_id": "42672",
+//            "state_id": "3920",
+//            "phone": "8602119024",
+//            "api_token": "QIbGlKBOmCCs6ZybJ3KmWrzH5AkfRQZRXH0Nn9oV",
+//            "device_type": "2",
+//            "firebase_id": null,
+//            "pronouns": "",
+//            "profile": "http:\/\/tekdev.tekzee.in\/Amiggos\/public\/uploads\/user\/customer\/default.png",
+//            "age": 24,
+//            "state": "Alaska",
+//            "city": "Bethel",
+//            "is_profile_complete": 1,
+//            "other_images": [],
+//            "visible_map": 1,
+//            "message_receive": 1,
+//            "push_notification": 1,
+//            "profile_name": "",
+//            "address": "Alaska,Bethel",
+//            "type": "4"
+//        }
+//        }
+
         sharedPreferences!!.save(ConstantLib.PROFILE_IMAGE, data!!.data.user_image)
         Toast.makeText(applicationContext, data.message, Toast.LENGTH_LONG).show()
         callGetProfile()
@@ -471,6 +510,24 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
         cityId = data.city_id
         stateId = data.state_id
         profile_name = data.profile_name
+
+        saveDataToSharedPreference(data)
+
+    }
+
+    private fun saveDataToSharedPreference(data: GetUserProfileResponse.Data) {
+        sharedPreferences!!.save(ConstantLib.USER_NAME,data.name+" "+data.lastName)
+        sharedPreferences!!.save(ConstantLib.USER_DOB,data.name+" "+data.dob)
+        sharedPreferences!!.save(ConstantLib.PROFILE_IMAGE,data.profile)
+        sharedPreferences!!.save(ConstantLib.USER_AGE, data.age)
+        UpdateInfoInFirebase(data)
+    }
+
+
+    private fun UpdateInfoInFirebase(data: GetUserProfileResponse.Data) {
+        val firebaseUser = auth.currentUser
+        database.child(ConstantLib.USER).child(firebaseUser!!.uid).child("name").setValue(data.name+" "+data.lastName)
+        database.child(ConstantLib.USER).child(firebaseUser.uid).child("image").setValue(data.profile)
 
     }
 

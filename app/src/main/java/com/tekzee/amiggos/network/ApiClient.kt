@@ -11,6 +11,7 @@ import com.tekzee.amiggos.stripe.model.APaymentSuccessResponse
 import com.tekzee.amiggos.stripe.model.ClientSecretResponse
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
+import com.tekzee.amiggos.ui.attachid.model.MyIdResponse
 import com.tekzee.amiggos.ui.blockedusers.model.BlockedUserResponse
 import com.tekzee.amiggos.ui.blockedusers.model.UnBlockFriendResponse
 import com.tekzee.amiggos.ui.bookingqrcode.model.BookinQrCodeResponse
@@ -882,6 +883,13 @@ class ApiClient {
         return apiService.doGetVenueApi(input, createHeaders)
     }
 
+    fun doGetMyId(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<MyIdResponse>> {
+        return apiService.doGetMyId(input, createHeaders)
+    }
+
     fun getNearByUserCount(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
@@ -891,11 +899,11 @@ class ApiClient {
 
     fun doCallAttachIdApi(
         file: MultipartBody.Part?,
-        valueInt: RequestBody,
-        date: RequestBody,
+        userid: RequestBody,
+        action: RequestBody,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<AttachIdResponse>> {
-        return apiService.doCallAttachIdApi(file, valueInt, date, createHeaders)
+        return apiService.doCallAttachIdApi(file, userid, action, createHeaders)
     }
 
     fun UploadFileToServer(

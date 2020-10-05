@@ -471,6 +471,9 @@
             android:name=".ui.menu.MenuActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.finalbasket.FinalBasketActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!--metadata tag for instagram-->
         <meta-data

@@ -23,6 +23,7 @@ import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.firebasemodel.User
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.settings.model.SettingsResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.UserData
 import com.tsongkha.spinnerdatepicker.DatePicker
@@ -185,12 +186,37 @@ class StepOne: BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
         saveUserInfo(data)
 
 
-        val stepOneModel = StepOneModel(binding!!.semail.text.toString().trim(),binding!!.spassword.text.toString().trim(),binding!!.susername.text.toString().trim(),dateOfBirth)
-        val intent = Intent(applicationContext,StepTwo::class.java)
-        intent.putExtra("steponedata",stepOneModel)
-        startActivity(intent)
+//        val stepOneModel = StepOneModel(binding!!.semail.text.toString().trim(),binding!!.spassword.text.toString().trim(),binding!!.susername.text.toString().trim(),dateOfBirth)
+//        val intent = Intent(applicationContext,StepTwo::class.java)
+//        intent.putExtra("steponedata",stepOneModel)
+//        startActivity(intent)
+//        Animatoo.animateSlideRight(this)
+
+        startActivity(Intent(applicationContext, AHomeScreen::class.java))
+        finishAffinity()
         Animatoo.animateSlideRight(this)
+
+
     }
+
+//    {
+//        "status": true,
+//        "message": "User registered successfully.",
+//        "data": {
+//        "email": "trilokwarke@gmail.com",
+//        "username": "trilokwarke",
+//        "dob": "10\/5\/1994",
+//        "device_type": "2",
+//        "device_id": "dHnwnokSQKqizvcLO5dTub:APA91bGMn4efHqzyI5kv3E6sz0bKOdyqkiI0Bih_jZOrreS_cP24VkcTM5sOc8KppZSl4RNA_BgXnxzhglb7dH4T2GaMys5PtWhqGcccuRn5rio0LHi5Rm25wGy37Ij6WPBs8l6c2TWN",
+//        "api_token": "QIbGlKBOmCCs6ZybJ3KmWrzH5AkfRQZRXH0Nn9oV",
+//        "status": 1,
+//        "is_active": 0,
+//        "is_profile_complete": 0,
+//        "userid": 43,
+//        "type": "4",
+//        "profile": "http:\/\/tekdev.tekzee.in\/Amiggos\/public\/uploads\/default.png"
+//    }
+//    }
 
     private fun saveUserInfo(data: UserData.Data) {
         sharedPreferences!!.save(ConstantLib.USER_ID, data.userid.toInt())
@@ -198,8 +224,10 @@ class StepOne: BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
         sharedPreferences!!.save(ConstantLib.USER_EMAIL, data.email)
         sharedPreferences!!.save(ConstantLib.USER_DOB, data.dob)
         sharedPreferences!!.save(ConstantLib.API_TOKEN, data.apiToken)
-        sharedPreferences!!.save(ConstantLib.PROFILE_IMAGE, "")
+        sharedPreferences!!.save(ConstantLib.PROFILE_IMAGE, data.profile)
         sharedPreferences!!.save(ConstantLib.ISAGREE, false)
+        sharedPreferences!!.save(ConstantLib.USER_AGE, data.age)
+        sharedPreferences!!.save(ConstantLib.MYID, data.myid)
     }
 
 

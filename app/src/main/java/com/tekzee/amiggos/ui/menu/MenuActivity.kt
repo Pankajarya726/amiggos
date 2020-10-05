@@ -1,5 +1,6 @@
 package com.tekzee.amiggos.ui.menu
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,7 @@ import com.tekzee.amiggos.base.repository.ItemRepository
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.MenuFragmentBinding
 import com.tekzee.amiggos.room.database.AmiggoRoomDatabase
+import com.tekzee.amiggos.ui.finalbasket.FinalBasketActivity
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.adapter.ViewPagerAdapter
 import com.tekzee.amiggos.ui.menu.commonfragment.CommonFragment
 import com.tekzee.amiggos.ui.menu.model.MenuResponse
@@ -72,6 +74,11 @@ class MenuActivity : AppCompatActivity(), MenuEvent, KodeinAware {
     private fun setupclickListener() {
         binding!!.drawerIcon.setOnClickListener {
             onBackPressed()
+        }
+
+        binding!!.btnNextCart.setOnClickListener {
+            val intent = Intent(applicationContext, FinalBasketActivity::class.java)
+            startActivity(intent)
         }
     }
 

@@ -1,9 +1,11 @@
 package com.tekzee.amiggos.ui.attachid
 
 import android.content.Context
+import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.network.ApiClient
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
+import com.tekzee.amiggos.ui.attachid.model.MyIdResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -17,14 +19,15 @@ class AttachIdPresenterImplementation(private var mainView: AttachIdActivityPres
 
 
     override fun doCallAttachIdApi(
-        file: MultipartBody.Part,
-        valueInt: RequestBody,
-        date: RequestBody,
+        file: MultipartBody.Part?,
+        userid: RequestBody,
+        action: RequestBody,
+        flag_save_or_delet: String,
         createHeaders: HashMap<String, String?>
     ) {
         mainView.showProgressbar()
         if (mainView.checkInternet()) {
-            disposable = ApiClient.instance.doCallAttachIdApi(file,valueInt,date,createHeaders)
+            disposable = ApiClient.instance.doCallAttachIdApi(file,userid,action,createHeaders)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
@@ -34,9 +37,43 @@ class AttachIdPresenterImplementation(private var mainView: AttachIdActivityPres
                         200 -> {
                             val responseData: AttachIdResponse? = response.body()
                             if (responseData!!.status) {
-                                mainView.onAttachIdSuccess(responseData)
+                                mainView.onAttachIdSuccess(responseData,flag_save_or_delet)
                             } else {
-                                mainView.validateError(responseData.message.toString())
+                                mainView.onAttachIdFailure(responseData.message.toString(),flag_save_or_delet)
+                            }
+                        }
+                    }
+                }, { error ->
+                    mainView.hideProgressbar()
+                    mainView.validateError(error.message.toString())
+                })
+        } else {
+            mainView.hideProgressbar()
+            mainView.validateError(context!!.getString(R.string.check_internet))
+        }
+    }
+
+
+
+    override fun getMyId(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ) {
+        mainView.showProgressbar()
+        if (mainView.checkInternet()) {
+            disposable = ApiClient.instance.doGetMyId(input,createHeaders)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    mainView.hideProgressbar()
+                    val responseCode = response.code()
+                    when (responseCode) {
+                        200 -> {
+                            val responseData: MyIdResponse? = response.body()
+                            if (responseData!!.status) {
+                                mainView.onMyIdSucess(responseData)
+                            } else {
+                                mainView.validateError(responseData.message)
                             }
                         }
                     }
