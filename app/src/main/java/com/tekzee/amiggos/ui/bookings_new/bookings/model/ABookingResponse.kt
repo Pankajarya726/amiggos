@@ -13,38 +13,24 @@ data class ABookingResponse(
     var status: Boolean = false
 ):Serializable {
     data class Data(
-        @SerializedName("booking_data")
+        @SerializedName("bookings")
         var bookingData: List<BookingData> = listOf()
     ):Serializable {
         data class BookingData(
-            @SerializedName("booking_code")
-            var bookingCode: String = "",
-            @SerializedName("club_id")
-            var clubId: Int = 0,
-            @SerializedName("club_name")
-            var clubName: String = "",
-            @SerializedName("date_time")
-            var dateTime: String = "",
-            @SerializedName("end_time")
-            var endTime: String = "",
             @SerializedName("id")
             var id: Int = 0,
-            @SerializedName("package_id")
-            var packageId: Int = 0,
-            @SerializedName("party_date")
-            var partyDate: String = "",
-            @SerializedName("price")
-            var price: Int = 0,
-            @SerializedName("qr_code")
-            var qrCode: String = "",
-            @SerializedName("start_time")
-            var startTime: String = "",
-            @SerializedName("symbol_left")
-            var symbolLeft: String = "",
-            @SerializedName("symbol_right")
-            var symbolRight: String = "",
-            @SerializedName("user_id")
-            var userId: Int = 0
+            @SerializedName("venue_id")
+            var venue_id: Int = 0,
+            @SerializedName("name")
+            var name: String = "",
+            @SerializedName("booking_date")
+            var booking_date: String = "",
+            @SerializedName("booking_time")
+            var booking_time: String = "",
+            @SerializedName("venue_home_image")
+            var venue_home_image: String ="",
+            @SerializedName("booking_status")
+            var booking_status: String = ""
         ):Serializable
     }
 }

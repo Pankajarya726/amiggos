@@ -2,6 +2,7 @@ package com.tekzee.amiggos.ui.venuedetailsnew.model
 
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class VenueDetails(
     @SerializedName("data")
@@ -10,11 +11,11 @@ data class VenueDetails(
     val message: String = "",
     @SerializedName("status")
     val status: Boolean = false
-) {
+):Serializable {
     data class Data(
         @SerializedName("club_data")
         val clubData: ClubData = ClubData()
-    ) {
+    ):Serializable {
         data class ClubData(
             @SerializedName("address")
             val address: String = "",
@@ -69,8 +70,12 @@ data class VenueDetails(
             @SerializedName("zipcode")
             val zipcode: String = "",
             @SerializedName("mask_image")
-            val maskimage: String = ""
-        ) {
+            val maskimage: String = "",
+            @SerializedName("timeslot")
+            val timeslot: Int =0,
+            @SerializedName("isclock")
+            val isclock: Int = 0
+        ):Serializable {
             data class WorkingDay(
                 @SerializedName("is_open")
                 val isOpen: Int = 0,
@@ -78,7 +83,7 @@ data class VenueDetails(
                 val name: String = "",
                 @SerializedName("timing")
                 val timing: String = ""
-            )
+            ):Serializable
         }
     }
 }

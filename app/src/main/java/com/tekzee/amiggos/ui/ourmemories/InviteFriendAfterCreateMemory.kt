@@ -60,7 +60,7 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
         inviteFriendImplementation = InviteFriendImplementation(this, this)
         setupLanguage()
         setupclickListener()
-        callOurMemoriesApi(false, "")
+        doCallGetFriends(false, "")
         ourMemoryId = intent.getStringExtra(ConstantLib.OURSTORYID)!!
 
     }
@@ -83,13 +83,13 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
         adapter.setLoadingStatus(true)
     }
 
-    private fun callOurMemoriesApi(requestDatFromServer: Boolean, searchvalue: String) {
+    private fun doCallGetFriends(requestDatFromServer: Boolean, searchvalue: String) {
 
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("page_no", onlineFriendPageNo)
         input.addProperty("search", searchvalue)
-        inviteFriendImplementation!!.doCallInviteFriendsApi(
+        inviteFriendImplementation!!.doCallGetFriends(
             input,
             Utility.createHeaders(sharedPreference),
             requestDatFromServer
@@ -117,7 +117,7 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
                 onlineFriendPageNo = 0
                 mydataList.clear()
                 adapter!!.notifyDataSetChanged()
-                callOurMemoriesApi(false, t.toString())
+                doCallGetFriends(false, t.toString())
             })
 
         val closeButton: View? =
@@ -130,7 +130,7 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
             onlineFriendPageNo = 0
             mydataList.clear()
             adapter!!.notifyDataSetChanged()
-            callOurMemoriesApi(false, "")
+            doCallGetFriends(false, "")
         }
 
         binding!!.btnInviteFriend.setOnClickListener {
@@ -255,7 +255,7 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
     override fun onLoadMoreData() {
         mydataList.add(mLoadingData)
         adapter.notifyDataSetChanged()
-        callOurMemoriesApi(true, "")
+        doCallGetFriends(true, "")
     }
 
 

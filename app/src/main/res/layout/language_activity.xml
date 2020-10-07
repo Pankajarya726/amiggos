@@ -5,6 +5,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:background="@android:color/white"
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.Toolbar
@@ -17,18 +18,12 @@
             app:layout_constraintTop_toTopOf="parent"
             app:titleTextColor="@android:color/black">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center|left"
-                android:textColor="@android:color/black"
-                android:textSize="18dp"
-                app:fontFamily="@font/eras" />
+
 
         </androidx.appcompat.widget.Toolbar>
 
         <LinearLayout
+            android:background="@android:color/white"
             android:id="@+id/layoutouter"
             android:layout_width="match_parent"
             android:orientation="vertical"
@@ -43,15 +38,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/toolbar"
                 android:layout_margin="@dimen/_10sdp"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginLeft="@dimen/_20sdp"
-                android:layout_marginEnd="@dimen/_20sdp"
-                android:layout_marginRight="@dimen/_20sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginRight="@dimen/_8sdp"
                 android:text="Language"
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/_20sdp"
-                android:textStyle="bold"
-                app:fontFamily="@font/opensans_bold"
+                android:textSize="@dimen/_18sdp"
+                app:fontFamily="@font/opensans_semibold"
                 />
 
             <View
@@ -65,7 +57,7 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-
+            android:background="@android:color/white"
             android:id="@+id/language_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="0dp"

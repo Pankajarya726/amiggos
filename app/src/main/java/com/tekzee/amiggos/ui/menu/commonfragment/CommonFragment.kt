@@ -90,25 +90,6 @@ class CommonFragment() : Fragment(), CommonEvent, KodeinAware, CommonClickListen
 
     }
 
-//    private fun callStaffByIdApi() {
-//        Coroutines.main {
-//            viewModel.callStaffByIdApi(category_id)
-//        }
-//    }
-
-//    override fun onStarted() {
-//        binding!!.progressCircular.visibility = View.VISIBLE
-//        binding!!.recyclerCommon.visibility = View.GONE
-//    }
-//
-//    override fun onLoaded() {
-//        setupAdapter()
-//        observeList()
-//    }
-
-//    override fun onChangeStatusStarted() {
-//        requireActivity().showProgressBar()
-//    }
 
     private fun setupAdapter() {
         binding!!.progressCircular.visibility = View.VISIBLE
@@ -131,24 +112,6 @@ class CommonFragment() : Fragment(), CommonEvent, KodeinAware, CommonClickListen
 
     }
 
-//    override fun onFailure(message: String) {
-//        binding!!.progressCircular.visibility = View.GONE
-//        binding!!.recyclerCommon.visibility = View.GONE
-//        requireActivity().Errortoast(message)
-//        requireActivity().hideProgressBar()
-//    }
-//
-//    override fun onStatusUpdated(message: String) {
-//        requireActivity().hideProgressBar()
-//        requireActivity().Successtoast(message)
-//    }
-//
-//    override fun sessionExpired(message: String) {
-//        requireActivity().hideProgressBar()
-//        requireActivity().Errortoast(message)
-//
-//    }
-
 
     override fun onItemClicked(position: Int, listItem: Menu, quantity: String) {
         Coroutines.main {
@@ -158,13 +121,10 @@ class CommonFragment() : Fragment(), CommonEvent, KodeinAware, CommonClickListen
             } else {
                 repository!!.updateCount(quantity, listItem.id.toString());
             }
-            repository!!.getItemCount().observe(
-                this,
-                Observer {
-                    Log.e("item data size--->", "" + it.size)
-                    Log.e("item data--->", "" + it.toString())
-                }
-            )
+
+            if(quantity.equals("0")){
+                repository!!.deleteitem(listItem.id)
+            }
         }
 
     }

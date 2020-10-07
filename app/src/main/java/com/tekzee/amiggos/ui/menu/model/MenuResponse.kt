@@ -16,7 +16,9 @@ data class MenuResponse(
 ):Serializable {
     data class Data(
         @SerializedName("section")
-        val section: List<Section> = listOf()
+        val section: List<Section> = listOf(),
+        @SerializedName("tax")
+        val tax: Tax = Tax()
     ):Serializable {
         data class Section(
             @SerializedName("id")
@@ -26,5 +28,12 @@ data class MenuResponse(
             @SerializedName("name")
             val name: String = ""
         ):Serializable
-    }
+    } data class Tax(
+        @SerializedName("currency")
+        val currency: String = "",
+        @SerializedName("key")
+        val key: String = "",
+        @SerializedName("value")
+        val value: String = ""
+    ):Serializable
 }

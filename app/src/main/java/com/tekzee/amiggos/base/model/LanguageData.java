@@ -8,6 +8,24 @@ public class LanguageData {
     @SerializedName("klDone")
     @Expose
     private String klDone;
+    @SerializedName("selectanyonemenuitem")
+    @Expose
+    private String selectanyonemenuitem="Please select any one menu item to proceed";
+    @SerializedName("menu")
+    @Expose
+    private String menu ="Menu";
+    @SerializedName("quantity")
+    @Expose
+    private String quantity="Quantity: ";
+    @SerializedName("referencenumber")
+    @Expose
+    private String referencenumber ="Referenced By : ";
+    @SerializedName("purchasedby")
+    @Expose
+    private String purchasedby="Purchased By : ";
+   @SerializedName("purchasedescription")
+    @Expose
+    private String purchasedescription ="Purchase Description";
     @SerializedName("klCancel")
     @Expose
     private String klCancel="Cancel";
@@ -1288,6 +1306,10 @@ public class LanguageData {
     @Expose
     private String savedcards = "Saved Cards";
 
+    @SerializedName("pay")
+    @Expose
+    private String pay = "Pay";
+
     @SerializedName("venues")
     @Expose
     private String venues = "Venues";
@@ -1434,7 +1456,7 @@ public class LanguageData {
 
 
     @SerializedName("dining")
-    private String dining = "Dining";
+    private String dining = "Dine In";
 
 
     @SerializedName("address")
@@ -1451,6 +1473,82 @@ public class LanguageData {
     @SerializedName("agerestrictionmessage")
     private String agerestrictionmessage ="To buy this product must \n upload your id";
 
+    @SerializedName("checkout")
+    private String checkout ="Checkout";
+
+    @SerializedName("itemordered")
+    private String itemordered ="Item Ordered" ;
+
+    @SerializedName("subtotal")
+    private String subtotal = "Subtotal";
+
+    @SerializedName("feeandestimatedtax")
+    private String feeandestimatedtax ="Fee and estimated tax";
+
+    @SerializedName("tip")
+    private String tip ="Tip";
+
+    @SerializedName("total")
+    private String total ="Total";
+
+    @SerializedName("specialinstruction")
+    private String specialinstruction ="Special Instructions";
+
+    public String getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(String subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public String getFeeandestimatedtax() {
+        return feeandestimatedtax;
+    }
+
+    public void setFeeandestimatedtax(String feeandestimatedtax) {
+        this.feeandestimatedtax = feeandestimatedtax;
+    }
+
+    public String getTip() {
+        return tip;
+    }
+
+    public void setTip(String tip) {
+        this.tip = tip;
+    }
+
+    public String getTotal() {
+        return total;
+    }
+
+    public void setTotal(String total) {
+        this.total = total;
+    }
+
+    public String getSpecialinstruction() {
+        return specialinstruction;
+    }
+
+    public void setSpecialinstruction(String specialinstruction) {
+        this.specialinstruction = specialinstruction;
+    }
+
+    public String getItemordered() {
+        return itemordered;
+    }
+
+    public void setItemordered(String itemordered) {
+        this.itemordered = itemordered;
+    }
+
+    public String getCheckout() {
+        return checkout;
+    }
+
+    public void setCheckout(String checkout) {
+        this.checkout = checkout;
+    }
 
     public String getUpload() {
         return upload;
@@ -1834,6 +1932,16 @@ public class LanguageData {
     public String getpRealFriends() {
         return pRealFriends;
     }
+
+    public String getReferencenumber() {
+        return referencenumber;
+    }
+
+    public void setReferencenumber(String referencenumber) {
+        this.referencenumber = referencenumber;
+    }
+
+
 
     public void setpRealFriends(String pRealFriends) {
         this.pRealFriends = pRealFriends;
@@ -3519,7 +3627,15 @@ public class LanguageData {
         this.klDontHaveStories = klDontHaveStories;
     }
 
-    public String getInviteAlert1() {
+ public String getSelectanyonemenuitem() {
+  return selectanyonemenuitem;
+ }
+
+ public void setSelectanyonemenuitem(String selectanyonemenuitem) {
+  this.selectanyonemenuitem = selectanyonemenuitem;
+ }
+
+ public String getInviteAlert1() {
         return inviteAlert1;
     }
 
@@ -3593,6 +3709,15 @@ public class LanguageData {
 
     public String getUnableToSendRequestSomethingWentWrong() {
         return unableToSendRequestSomethingWentWrong;
+    }
+
+
+    public String getPay() {
+        return pay;
+    }
+
+    public void setPay(String pay) {
+        this.pay = pay;
     }
 
     public void setUnableToSendRequestSomethingWentWrong(String unableToSendRequestSomethingWentWrong) {
@@ -3717,6 +3842,14 @@ public class LanguageData {
 
     public void setYouBlokedUserSuccessfully(String youBlokedUserSuccessfully) {
         this.youBlokedUserSuccessfully = youBlokedUserSuccessfully;
+    }
+
+    public String getPurchasedescription() {
+        return purchasedescription;
+    }
+
+    public void setPurchasedescription(String purchasedescription) {
+        this.purchasedescription = purchasedescription;
     }
 
     public String getUserUnblockedSuccessfully() {
@@ -3969,6 +4102,14 @@ public class LanguageData {
 
     public String getYouCanOnlyAddImageOrVideosToYoureStories() {
         return youCanOnlyAddImageOrVideosToYoureStories;
+    }
+
+    public String getPurchasedby() {
+        return purchasedby;
+    }
+
+    public void setPurchasedby(String purchasedby) {
+        this.purchasedby = purchasedby;
     }
 
     public void setYouCanOnlyAddImageOrVideosToYoureStories(String youCanOnlyAddImageOrVideosToYoureStories) {
@@ -4371,7 +4512,15 @@ public class LanguageData {
         return settingDetailsDataFetchedSuccessfully;
     }
 
-    public void setSettingDetailsDataFetchedSuccessfully(String settingDetailsDataFetchedSuccessfully) {
+ public String getQuantity() {
+  return quantity;
+ }
+
+ public void setQuantity(String quantity) {
+  this.quantity = quantity;
+ }
+
+ public void setSettingDetailsDataFetchedSuccessfully(String settingDetailsDataFetchedSuccessfully) {
         this.settingDetailsDataFetchedSuccessfully = settingDetailsDataFetchedSuccessfully;
     }
 
@@ -5495,7 +5644,15 @@ public class LanguageData {
         this.dashboardSubheading1 = dashboardSubheading1;
     }
 
-    public String getStaffListFetchedSuccessfully() {
+ public String getMenu() {
+  return menu;
+ }
+
+ public void setMenu(String menu) {
+  this.menu = menu;
+ }
+
+ public String getStaffListFetchedSuccessfully() {
         return staffListFetchedSuccessfully;
     }
 

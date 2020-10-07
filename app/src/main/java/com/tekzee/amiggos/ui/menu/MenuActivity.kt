@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -23,7 +22,6 @@ import com.tekzee.amiggos.ui.menu.model.MenuResponse
 import com.tekzee.amiggos.util.Coroutines
 import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.amiggos.util.toast
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
@@ -31,6 +29,7 @@ import org.kodein.di.generic.instance
 
 class MenuActivity : AppCompatActivity(), MenuEvent, KodeinAware {
 
+    private lateinit var responseData: MenuResponse
     override val kodein: Kodein by closestKodein()
     val languageConstant: LanguageData by instance<LanguageData>()
     val prefs: SharedPreference by instance<SharedPreference>()
@@ -39,7 +38,7 @@ class MenuActivity : AppCompatActivity(), MenuEvent, KodeinAware {
     companion object {
         fun newInstance() = MenuActivity()
     }
-
+    var totalAmout = 0.0
     private var binding: MenuFragmentBinding? = null
     private lateinit var viewModel: MenuViewModel
     private var repository: ItemRepository? = null
@@ -50,18 +49,22 @@ class MenuActivity : AppCompatActivity(), MenuEvent, KodeinAware {
         viewModel = ViewModelProvider(this,factory).get(MenuViewModel::class.java)
         binding!!.staffviewmodel = viewModel
         viewModel.menuEvent = this
-        viewModel.callMenuApi(intent.getStringExtra(ConstantLib.VENUE_ID),intent.getStringExtra(ConstantLib.DATE),intent.getStringExtra(ConstantLib.TIME))
         binding!!.headertitle.text = languageConstant.selectyourpacakge
         setupclickListener()
         setupAmount()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.callMenuApi(intent.getStringExtra(ConstantLib.VENUE_ID),intent.getStringExtra(ConstantLib.DATE),intent.getStringExtra(ConstantLib.TIME))
     }
 
     private fun setupAmount() {
         val itemDao = AmiggoRoomDatabase.getDatabase(this).itemDao()
         repository = ItemRepository(itemDao)
         Coroutines.main {
-            repository!!.getTotalCartAmount().observe(this, Observer {
-               var totalAmout = 0.0
+            repository!!.getTotalCartAmount(intent.getStringExtra(ConstantLib.VENUE_ID)).observe(this, Observer {
+               totalAmout = 0.0
                 for(item in it){
                     totalAmout += (item.quantity * item.price)
                }
@@ -77,8 +80,18 @@ class MenuActivity : AppCompatActivity(), MenuEvent, KodeinAware {
         }
 
         binding!!.btnNextCart.setOnClickListener {
-            val intent = Intent(applicationContext, FinalBasketActivity::class.java)
-            startActivity(intent)
+            if(totalAmout>0){
+                val intentFinalBasket = Intent(applicationContext, FinalBasketActivity::class.java)
+                intentFinalBasket.putExtra(ConstantLib.TAX,responseData.data.tax)
+                intentFinalBasket.putExtra(ConstantLib.TIME, intent.getStringExtra(ConstantLib.TIME))
+                intentFinalBasket.putExtra(ConstantLib.DATE, intent.getStringExtra(ConstantLib.DATE))
+                intentFinalBasket.putExtra(ConstantLib.VENUE_ID, intent.getStringExtra(ConstantLib.VENUE_ID))
+                intentFinalBasket.putExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO, intent.getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO))
+                startActivity(intentFinalBasket)
+            }else{
+                Errortoast(languageConstant.selectanyonemenuitem)
+            }
+
         }
     }
 
@@ -103,9 +116,10 @@ class MenuActivity : AppCompatActivity(), MenuEvent, KodeinAware {
         binding!!.progressCircular.visibility = View.VISIBLE
     }
 
-    override fun onLoaded(menuList: List<MenuResponse.Data.Section>) {
+    override fun onLoaded(menuList: List<MenuResponse.Data.Section>, response: MenuResponse) {
         binding!!.progressCircular.visibility = View.GONE
         setupAdapter(menuList,binding!!.viewpager,binding!!.staffTabs)
+        responseData = response
     }
 
     override fun onFailure(message: String) {

@@ -9,8 +9,6 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.viewfriends.ViewFriendInterface
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewData
 import com.tekzee.amiggos.util.SharedPreference
-import kotlinx.android.synthetic.main.single_list_language.view.*
-import kotlinx.android.synthetic.main.single_list_language.view.txt_name
 import kotlinx.android.synthetic.main.single_storieview.view.*
 
 class ViewFriendAdapter(

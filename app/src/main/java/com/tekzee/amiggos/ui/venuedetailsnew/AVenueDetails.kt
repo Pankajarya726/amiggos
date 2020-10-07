@@ -90,7 +90,7 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
 
         binding!!.bookNow.setOnClickListener{
             if(response!!.clubData.goOrder ==1 && response!!.clubData.reservation ==1){
-                showCustomDialog(binding!!.bookNow)
+                showCustomDialog(binding!!.bookNow, response!!)
             }else if(response!!.clubData.goOrder ==1){
                 sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO,ConstantLib.TOGO)
             }else if(response!!.clubData.reservation ==1){
@@ -173,8 +173,8 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
 
 
 
-    fun showCustomDialog(view: View){
-        val bottomSheetDialog: BottomSheetFragment = BottomSheetFragment.newInstance(response!!.clubData.clubId)
+    fun showCustomDialog(view: View, response: VenueDetails.Data){
+        val bottomSheetDialog: BottomSheetFragment = BottomSheetFragment.newInstance(this.response!!.clubData.clubId,response)
         bottomSheetDialog.show(supportFragmentManager, "Bottom Sheet Dialog Fragment")
     }
 

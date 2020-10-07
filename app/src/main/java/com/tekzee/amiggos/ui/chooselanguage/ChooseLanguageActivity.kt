@@ -66,7 +66,7 @@ class ChooseLanguageActivity: BaseActivity(),ChooseLanguagePresenter.ChooseLangu
     private fun setupToolBar() {
         val toolbar: Toolbar = binding.toolbar
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 

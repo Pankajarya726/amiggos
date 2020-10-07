@@ -56,18 +56,19 @@ class CommonAdapter(
                     val quantity =
                         Integer.parseInt(holder.listitembinding.txtQty.text.toString()) + 1
                     holder.listitembinding.txtQty.setText(quantity.toString())
+                    listItem.quantity = quantity
                     listener.onItemClicked(position, listItem, quantity.toString())
                     return@setOnClickListener
                 }
-                Log.e("my age value---->",""+prefs.getValueString(ConstantLib.USER_AGE))
-                Log.e("my age---->",""+Integer.parseInt(prefs.getValueString(ConstantLib.USER_AGE)!!))
-                Log.e("age restriction---->",""+Integer.parseInt(listItem.ageRestriction))
+
+
                 if (listItem.ageRestriction.isNotEmpty() && Integer.parseInt(prefs.getValueString(ConstantLib.USER_AGE)!!)<= Integer.parseInt(listItem.ageRestriction) ) {
                     listener.showAgeRestrictionPopup(holder.listitembinding.txtPlus)
                 } else {
                     val quantity =
                         Integer.parseInt(holder.listitembinding.txtQty.text.toString()) + 1
                     holder.listitembinding.txtQty.setText(quantity.toString())
+                    listItem.quantity = quantity
                     listener.onItemClicked(position, listItem, quantity.toString())
                 }
 

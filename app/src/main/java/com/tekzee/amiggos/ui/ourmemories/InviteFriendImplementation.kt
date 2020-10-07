@@ -28,7 +28,7 @@ class InviteFriendImplementation(
 
 
 
-    override fun doCallInviteFriendsApi(
+    override fun doCallGetFriends(
         input: JsonObject,
         createHeaders: HashMap<String, String?>,
         requestDatFromServer: Boolean
@@ -37,7 +37,7 @@ class InviteFriendImplementation(
             mainView.showProgressbar()
         }
             if (mainView.checkInternet()) {
-            disposable = ApiClient.instance.doCallInviteFriendApi(input,createHeaders)
+            disposable = ApiClient.instance.doCallGetFriends(input,createHeaders)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->

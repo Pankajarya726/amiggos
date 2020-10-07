@@ -93,6 +93,7 @@ class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView 
 
         binding!!.paymentMethod.setOnClickListener{
             val intent = Intent(this, APaymentMethod::class.java);
+            intent.putExtra(ConstantLib.FROM,ConstantLib.PAYMENTMETHOD)
             startActivity(intent)
             Animatoo.animateSlideLeft(this)
         }

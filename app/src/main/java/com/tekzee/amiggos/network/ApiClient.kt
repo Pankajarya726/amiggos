@@ -14,9 +14,11 @@ import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
 import com.tekzee.amiggos.ui.attachid.model.MyIdResponse
 import com.tekzee.amiggos.ui.blockedusers.model.BlockedUserResponse
 import com.tekzee.amiggos.ui.blockedusers.model.UnBlockFriendResponse
+import com.tekzee.amiggos.ui.bookingdetailnew.model.BookingDetailsNewResponse
 import com.tekzee.amiggos.ui.bookingqrcode.model.BookinQrCodeResponse
 import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
 import com.tekzee.amiggos.ui.bookings_new.bookings.model.ABookingResponse
+import com.tekzee.amiggos.ui.calendarview.model.TimeSlotResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
 import com.tekzee.amiggos.ui.choosepackage.model.PackageBookResponse
 import com.tekzee.amiggos.ui.choosepackage.model.PackageResponse
@@ -72,6 +74,8 @@ import com.tekzee.amiggos.ui.signup.steptwo.model.StateResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.UserData
 import com.tekzee.amiggos.ui.stripepayment.model.CardListResponse
 import com.tekzee.amiggos.ui.stripepayment.model.DeleteCardResponse
+import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.BookingPaymentResponse
+import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.SetDefaultCardResponse
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
 import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
 import com.tekzee.amiggos.ui.venuedetailsnew.model.VenueDetails
@@ -624,6 +628,18 @@ class ApiClient {
     ): Observable<Response<DeleteCardResponse>> {
         return apiService.deleteCardApi(input, createHeaders)
     }
+    fun createBookingPayment(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<BookingPaymentResponse>> {
+        return apiService.createBookingPayment(input, createHeaders)
+    }
+    fun setDefaultCard(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<SetDefaultCardResponse>> {
+        return apiService.setDefaultCard(input, createHeaders)
+    }
 
     fun doCallPackageApi(
         input: JsonObject,
@@ -639,12 +655,6 @@ class ApiClient {
         return apiService.doBookPackage(input, createHeaders)
     }
 
-    fun doGetFriendList(
-        input: JsonObject,
-        createHeaders: HashMap<String, String?>
-    ): Observable<Response<FriendListResponse>> {
-        return apiService.doGetFriendList(input, createHeaders)
-    }
 
 
     fun getallAmiggos_invited(
@@ -654,6 +664,13 @@ class ApiClient {
         return apiService.getallAmiggos_invited(input, createHeaders)
     }
 
+    fun dogetBookingDetails(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<BookingDetailsNewResponse>> {
+        return apiService.dogetBookingDetails(input, createHeaders)
+    }
+
     fun doInviteFriend(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
@@ -661,17 +678,11 @@ class ApiClient {
         return apiService.doInviteFriend(input, createHeaders)
     }
 
-    fun doCallInviteFriendApi(
+    fun doCallGetFriends(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<InviteFriendResponse>> {
-        return apiService.doCallInviteFriendApi(input, createHeaders)
-    }
-    fun doCallSendInvitaionApi(
-        input: JsonObject,
-        createHeaders: HashMap<String, String?>
-    ): Observable<Response<InviteFriendResponse>> {
-        return apiService.doCallSendInvitaionApi(input, createHeaders)
+        return apiService.doCallGetFriends(input, createHeaders)
     }
 
     fun doCallGetSettings(
@@ -810,6 +821,14 @@ class ApiClient {
         createHeaders: HashMap<String, String?>
     ): Observable<Response<GuestListResponse>> {
         return apiService.doCallGuestListApi(input, createHeaders)
+    }
+
+
+    fun getTimeSlot(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<TimeSlotResponse>> {
+        return apiService.getTimeSlot(input, createHeaders)
     }
 
     fun doCallGetFriendProfileApi(

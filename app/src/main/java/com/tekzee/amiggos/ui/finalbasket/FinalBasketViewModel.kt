@@ -1,49 +1,58 @@
 package com.tekzee.amiggos.ui.finalbasket
 
 import android.content.Context
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.base.model.LanguageData
-import com.tekzee.amiggos.base.repository.MenuRepository
-import com.tekzee.amiggos.constant.ConstantLib
-import com.tekzee.amiggos.ui.menu.commonfragment.model.CommonMenuResponse
+import com.tekzee.amiggos.base.repository.FinalBasketRepository
 import com.tekzee.amiggos.util.*
 import java.lang.Exception
 
 class FinalBasketViewModel(private val context: Context,
-                           private val repository: MenuRepository,
+                           private val repository: FinalBasketRepository,
                            private val languageConstant: LanguageData,
                            private val prefs: SharedPreference
 ) : ViewModel() {
 
-    var commonEvent: FinalBasketEvent? = null
-    var commonlist = MutableLiveData<ArrayList<CommonMenuResponse.Data.Staff>>()
-    
-//    fun callStaffByIdApi(categoryId: String?) {
-//        val input = JsonObject()
-//        input.addProperty("userid", prefs.getValueString(ConstantLib.USER_ID))
-//        input.addProperty("role_id", categoryId)
-//        docallStaffByIdApi(input)
-//    }
+    var finalBasketEvent: FinalBasketEvent? = null
+
+    fun callCreateBookingApi(input: JsonObject?) {
+         Coroutines.main {
+            finalBasketEvent?.onStarted()
+            try {
+                val response =  repository.callCreateBooking(input!!, Utility.createHeaders(prefs))
+                if(response.status){
+                    finalBasketEvent?.onCreateBookingSuccess(response)
+                }else{
+                    finalBasketEvent?.onCreateBookingFailure(response.message)
+                }
+            }catch (e: ApiException) {
+                finalBasketEvent?.onFailure(e.message!!)
+            } catch (e: NoInternetException) {
+                finalBasketEvent?.onFailure(e.message!!)
+            }catch (e: Exception) {
+                finalBasketEvent?.sessionExpired(e.message!!)
+            }
+        }
+    }
 
 //    private fun docallStaffByIdApi(input: JsonObject) {
 //        Coroutines.main {
-//            commonEvent?.onStarted()
+//            finalBasketEvent?.onStarted()
 //            try {
 //                val response =  repository.doStaffByIdApi(input, Utility.createHeaders(prefs))
 //                if(response.status){
 //                    commonlist.value = response.data.staffList
-//                    commonEvent?.onLoaded()
+//                    finalBasketEvent?.onLoaded()
 //                }else{
-//                    commonEvent?.onFailure(response.message)
+//                    finalBasketEvent?.onFailure(response.message)
 //                }
 //            }catch (e: ApiException) {
-//                commonEvent?.onFailure(e.message!!)
+//                finalBasketEvent?.onFailure(e.message!!)
 //            } catch (e: NoInternetException) {
-//                commonEvent?.onFailure(e.message!!)
+//                finalBasketEvent?.onFailure(e.message!!)
 //            }catch (e: Exception) {
-//                commonEvent?.sessionExpired(e.message!!)
+//                finalBasketEvent?.sessionExpired(e.message!!)
 //            }
 //        }
 //    }
@@ -67,20 +76,20 @@ class FinalBasketViewModel(private val context: Context,
 //
 //    private fun dochangeuserstatus(input: JsonObject) {
 //        Coroutines.main {
-//            commonEvent?.onChangeStatusStarted()
+//            finalBasketEvent?.onChangeStatusStarted()
 //            try {
 //                val response =  repository.doChangeUserStaus(input, Utility.createHeaders(prefs))
 //                if(response.status){
-//                    commonEvent?.onStatusUpdated(response.message)
+//                    finalBasketEvent?.onStatusUpdated(response.message)
 //                }else{
-//                    commonEvent?.onFailure(response.message)
+//                    finalBasketEvent?.onFailure(response.message)
 //                }
 //            }catch (e: ApiException) {
-//                commonEvent?.onFailure(e.message!!)
+//                finalBasketEvent?.onFailure(e.message!!)
 //            } catch (e: NoInternetException) {
-//                commonEvent?.onFailure(e.message!!)
+//                finalBasketEvent?.onFailure(e.message!!)
 //            }catch (e: Exception) {
-//                commonEvent?.sessionExpired(e.message!!)
+//                finalBasketEvent?.sessionExpired(e.message!!)
 //            }
 //        }
 //    }

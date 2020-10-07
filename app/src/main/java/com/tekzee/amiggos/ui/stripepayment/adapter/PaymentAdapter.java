@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.tekzee.amiggos.constant.ConstantLib;
 import com.tekzee.amiggos.databinding.PaymentRowDataBinding;
 import com.tekzee.amiggos.ui.stripepayment.PaymentClick;
 import com.tekzee.amiggos.ui.stripepayment.model.CardListResponse;
@@ -21,10 +22,11 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.MyViewHo
     private LayoutInflater layoutInflater;
     private ArrayList<CardListResponse.Data.Card> data;
     private PaymentClick listener;
-
-    public PaymentAdapter(ArrayList<CardListResponse.Data.Card> data, PaymentClick listener) {
+    private String from;
+    public PaymentAdapter(ArrayList<CardListResponse.Data.Card> data,String from, PaymentClick listener) {
         this.data = data;
         this.listener = listener;
+        this.from = from;
     }
 
     @NonNull
@@ -55,6 +57,11 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.MyViewHo
 //            holder.getBinding().ivDefault.setVisibility(View.GONE);
 //        }
 
+        if(from.equals(ConstantLib.FINALBASKET)){
+            holder.getBinding().delete.setVisibility(View.GONE);
+        }else{
+            holder.getBinding().delete.setVisibility(View.VISIBLE);
+        }
         holder.getBinding().delete.setOnClickListener((View.OnClickListener) view -> {
             listener.onDeleteCard(model);
         });

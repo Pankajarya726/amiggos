@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ImageView
+                android:id="@+id/img_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="@dimen/_5sdp"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView9"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/imageView9"
+                app:srcCompat="@drawable/ic_back_black" />
+
+
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/header_logo" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/venue_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:fontFamily="@font/opensans_bold"
+            android:text="LIV MIAMI"
+            android:textSize="@dimen/_18sdp"
+            android:textColor="@android:color/black" />
+
+
+        <TextView
+            android:id="@+id/venue_address"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:drawableLeft="@drawable/map_booking"
+            android:drawablePadding="@dimen/_5sdp"
+            android:fontFamily="@font/opensans_regular"
+            android:gravity="center|left"
+            android:text="441 collins ave, Miami beach ,FL 3440"
+            android:textColor="@color/Grey_900"
+            android:textSize="@dimen/_10sdp" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:background="@android:color/black" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/invite_friend"
+                android:layout_margin="@dimen/_10sdp"
+                android:visibility="visible"
+                app:cardUseCompatPadding="true">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:scaleType="fitXY"
+                            android:id="@+id/img_venue"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_100sdp"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/logo" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <TextView
+                                android:id="@+id/txt_date"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableLeft="@drawable/clock_booking"
+                                android:drawablePadding="@dimen/_5sdp"
+                                android:fontFamily="@font/opensans_regular"
+                                android:gravity="center|left"
+                                android:text="Wed - 9:00pm"
+                                android:textColor="@color/Grey_900"
+                                android:textSize="@dimen/_10sdp" />
+
+                            <TextView
+                                android:id="@+id/txt_link"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/opensans_regular"
+                                android:gravity="center"
+                                android:text="Lorem Ipsum"
+                                android:textColor="@color/Grey_900"
+                                android:textSize="@dimen/_10sdp" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_marginTop="@dimen/_3sdp"
+                            android:id="@+id/txt_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:drawableLeft="@drawable/calendar_booking"
+                            android:drawablePadding="@dimen/_5sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:gravity="center|left"
+                            android:text="5-10-2020"
+                            android:textColor="@color/Grey_900"
+                            android:textSize="@dimen/_10sdp" />
+
+                        <TextView
+
+                            android:id="@+id/txt_guest_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:gravity="center|left"
+                            android:text="Guest List : 5"
+                            android:textColor="@color/Grey_500"
+                            android:textSize="@dimen/_12sdp" />
+
+                        <TextView
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:id="@+id/txt_purchase_description_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:gravity="center|left"
+                            android:text="Purchase Description"
+                            android:textColor="@color/Grey_900"
+                            android:textSize="@dimen/_8sdp" />
+
+                        <TextView
+                            android:id="@+id/txt_purchase_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:gravity="center|left"
+                            android:text="2 champion bottle \nshirm scarpion"
+                            android:textColor="@color/Grey_900"
+                            android:textSize="@dimen/_8sdp" />
+
+
+                        <TextView
+                            android:id="@+id/txt_purchase_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:gravity="center|left"
+                            android:text="$ 50000"
+                            android:textColor="@color/Grey_900"
+                            android:textSize="@dimen/_12sdp" />
+
+                        <TextView
+                            android:id="@+id/txt_ticketinfo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:gravity="center|left"
+                            android:text="Vip ticket: Row 7,Seat 5b"
+                            android:textColor="@color/Grey_900"
+                            android:textSize="@dimen/_10sdp" />
+
+                        <TextView
+                            android:id="@+id/txt_reference_no"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:gravity="center|left"
+                            android:text="Reference number: 225425fd1212"
+                            android:textColor="@color/Grey_900"
+                            android:textSize="@dimen/_10sdp" />
+
+                        <TextView
+                            android:id="@+id/txt_puchased_by"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:gravity="center|left"
+                            android:text="Purchased by: John Smith"
+                            android:textColor="@color/Grey_900"
+                            android:textSize="@dimen/_10sdp" />
+
+                        <ImageView
+                            android:id="@+id/img_barcode"
+                            android:layout_width="@dimen/_60sdp"
+                            android:layout_height="@dimen/_60sdp"
+                            android:layout_gravity="right"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginRight="@dimen/_15sdp"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/logo" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/viewmenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:background="@drawable/btn_line_bg"
+                        android:gravity="center"
+                        android:padding="@dimen/_5sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="View Menu"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_15sdp" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/invite_friend"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/black"
+                android:fontFamily="@font/opensans_semibold"
+                android:gravity="center"
+                android:text="Invite Friend"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+</layout>

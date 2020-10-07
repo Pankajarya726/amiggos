@@ -47,7 +47,6 @@ class HelpCenterActivity: BaseActivity(), HelpCenterPresenter.HelpCenterMainView
         supportActionBar?.setDisplayShowTitleEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        binding.title.text = languageData!!.klHelpCenter
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

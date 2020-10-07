@@ -7,8 +7,8 @@ import com.tekzee.amiggos.room.entity.Menu
 @Dao
 interface ItemDao {
 
-    @Query("SELECT * from item")
-    fun getItemCount(): LiveData<List<Menu>>
+    @Query("SELECT * from item where venue_id = :venueid")
+    fun getItemCount(venueid:String): LiveData<List<Menu>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: Menu)
@@ -21,6 +21,12 @@ interface ItemDao {
 
     @Query("UPDATE item SET quantity = :quantity WHERE id = :id")
     suspend fun updateCount(quantity: String,id: String)
+
+    @Query("DELETE FROM item where id= :itemid")
+    suspend fun deleteItem(itemid: Int): Int
+
+    @Query("DELETE FROM item")
+    suspend fun clearCart()
 
 //    @Query("SELECT * from item")
 //    suspend fun getCartTotal(): LiveData<List<Menu>>

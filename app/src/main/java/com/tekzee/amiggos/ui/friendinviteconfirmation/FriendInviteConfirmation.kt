@@ -31,20 +31,20 @@ class FriendInviteConfirmation : BaseActivity() {
 
     private fun setupUi() {
         Glide.with(applicationContext).load(sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE)).into(binding!!.imgUser)
-        if (intent.getStringExtra(ConstantLib.FROM).equals("CHECKOUTACTIVITY", true)) {
-            binding!!.btnDone.text = "INVITE FRIENDS"
-            binding!!.txtSentMessage.text ="You have successfully booked. Invite friends to your party by clicking the button below."
+        if (intent.getStringExtra(ConstantLib.FROM).equals(ConstantLib.FINALBASKET, true)) {
+            binding!!.btnDone.text = languageData!!.klINViteFRiends
+            binding!!.txtSentMessage.text =intent.getStringExtra(ConstantLib.MESSAGE)
             bookingId =intent.getStringExtra(ConstantLib.BOOKING_ID)!!
         } else {
-            binding!!.btnDone.text = "DONE"
-            binding!!.txtSentMessage.text ="Congratulations you have successfully invited your friends."
+            binding!!.btnDone.text = languageData!!.klDone
+            binding!!.txtSentMessage.text =intent.getStringExtra(ConstantLib.MESSAGE)
             bookingId =""
         }
     }
 
     private fun setupClickListener() {
         binding!!.btnDone.setOnClickListener {
-            if (intent.getStringExtra(ConstantLib.FROM).equals("CHECKOUTACTIVITY", true)) {
+            if (!intent.getStringExtra(ConstantLib.FROM).equals(ConstantLib.FINALBASKET, true)) {
                 val intent = Intent(applicationContext, FriendListActivity::class.java)
                 intent.putExtra(ConstantLib.BOOKING_ID, bookingId)
                 startActivity(intent)

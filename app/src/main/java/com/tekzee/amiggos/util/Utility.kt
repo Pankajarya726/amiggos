@@ -4,14 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.util.Base64
+import android.widget.Toast
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.orhanobut.logger.Logger
-import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
 import org.json.JSONArray
+import java.math.RoundingMode
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -46,14 +49,17 @@ class Utility {
 //            dialog.show()
 //        }
 
+
+
+
         fun isEmailValid(email: String): Boolean {
             return Pattern.compile(
-                    "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]|[\\w-]{2,}))@"
-                            + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                            + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
-                            + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                            + "[0-9]{1,2}|25[0-5]|2[0-4][0-9]))|"
-                            + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$"
+                "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]|[\\w-]{2,}))@"
+                        + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                        + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                        + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                        + "[0-9]{1,2}|25[0-5]|2[0-4][0-9]))|"
+                        + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$"
             ).matcher(email).matches()
         }
 
@@ -76,7 +82,7 @@ class Utility {
                 for (signature in info.signatures) {
                     val md = MessageDigest.getInstance("SHA")
                     md.update(signature.toByteArray())
-                    Logger.d("KeyHash:"+ Base64.encodeToString(md.digest(), Base64.DEFAULT))
+                    Logger.d("KeyHash:" + Base64.encodeToString(md.digest(), Base64.DEFAULT))
                 }
             } catch (e: PackageManager.NameNotFoundException) {
 
@@ -128,7 +134,25 @@ class Utility {
 //            return json
 //        }
 
-        fun showLogoutPopup(context: Context,message: String) {
+
+        fun roundOffDecimal(number: Double): Double? {
+            val df = DecimalFormat("#.##")
+            df.roundingMode = RoundingMode.CEILING
+            return df.format(number).toDouble()
+        }
+
+        fun logOut(context: Context, message: String){
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+            val sharedPreference = SharedPreference(context)
+            FirebaseAuth.getInstance().signOut()
+            sharedPreference.clearSharedPreference()
+            val intent = Intent(context, MainSplashActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent)
+        }
+
+        fun showLogoutPopup(context: Context, message: String) {
 
             val sharedPreference = SharedPreference(context)
             val languageData = sharedPreference.getLanguageData(ConstantLib.LANGUAGE_DATA)
@@ -194,8 +218,10 @@ class Utility {
 
         fun getDateTimeFromEpocLongOfSeconds(epoc: Long): String? {
             try {
-                val sdf = SimpleDateFormat("dd-MMM",
-                    Locale.ENGLISH)
+                val sdf = SimpleDateFormat(
+                    "dd-MMM",
+                    Locale.ENGLISH
+                )
                 val netDate = Date(epoc)
                 return sdf.format(netDate)
             } catch (e: Exception) {

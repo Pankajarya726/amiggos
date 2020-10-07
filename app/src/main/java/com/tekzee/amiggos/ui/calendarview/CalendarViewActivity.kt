@@ -3,25 +3,33 @@ package com.tekzee.amiggos.ui.calendarview
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.ActivityCalendarBinding
 import com.tekzee.amiggos.ui.calendarview.adapter.TimeAdapter
+import com.tekzee.amiggos.ui.calendarview.model.TimeSlotResponse
 import com.tekzee.amiggos.ui.menu.MenuActivity
+import com.tekzee.amiggos.ui.venuedetailsnew.model.VenueDetails
 import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class CalendarViewActivity : BaseActivity() {
+class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainView {
 
+    private lateinit var dataVenue: VenueDetails.Data
     private lateinit var adapter: TimeAdapter
 
     //    private lateinit var data: ChooseWeekResponse
@@ -30,7 +38,12 @@ class CalendarViewActivity : BaseActivity() {
     private var languageData: LanguageData? = null
     val disabledDates = ArrayList<Calendar>()
     var timedata = ArrayList<String>()
-    var selectedDate =""
+    var selectedDate = ""
+    var seletctedTime = ""
+    private var calendarviewpresenterimplementation: CalendarViewPresenterImplementation? = null
+
+    var displayFormat = SimpleDateFormat("HH:mm")
+    var parseFormat = SimpleDateFormat("hh:mm a")
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,37 +51,49 @@ class CalendarViewActivity : BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_calendar)
         sharedPreferences = SharedPreference(this)
         languageData = sharedPreferences!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-
+        calendarviewpresenterimplementation = CalendarViewPresenterImplementation(this, this)
         val cal = Calendar.getInstance()
         cal.add(Calendar.DAY_OF_MONTH, -1)
         binding.calendarView.setMinimumDate(cal)
+
+        val calTodayDate = Calendar.getInstance()
+        val day = calTodayDate.get(Calendar.DAY_OF_MONTH).toString()
+        val month = (calTodayDate.get(Calendar.MONTH) + 1).toString()
+        val year = calTodayDate.get(Calendar.YEAR).toString()
+
+        selectedDate = "$year-$month-$day"
         setupClickListener()
+        binding.timepicker.setIs24HourView(false)
 
-        binding.timepicker.setIs24HourView(true)
-
-        timedata.add("2pm")
-        timedata.add("2pm")
-        timedata.add("2pm")
-        timedata.add("2pm")
-        timedata.add("2pm")
-        timedata.add("2pm")
         setupAdapter()
-//      data =intent.getSerializableExtra(ConstantLib.CALENDAR_DATA) as ChooseWeekResponse
 
+        dataVenue = intent.getSerializableExtra(ConstantLib.CALENDAR_DATA) as VenueDetails.Data
+        checkTimeSlot()
+    }
 
-//        for (items in data.data.calender)
-//        {
-//            if(items.isOpen == 0){
-//                val cal: Calendar = Calendar.getInstance()
-//                cal.set(Calendar.YEAR,items.date.split("-")[0].toInt())
-//                cal.set(Calendar.MONTH,items.date.split("-")[1].toInt()-1)
-//                cal.set(Calendar.DAY_OF_MONTH,items.date.split("-")[2].toInt())
-//                disabledDates.add(cal)
-//            }
-//        }
-//        binding.calendarView.setDisabledDays(disabledDates)
+    private fun checkTimeSlot() {
+        if (dataVenue.clubData.isclock == 0 && dataVenue.clubData.timeslot == 0) {
+            binding.timeRecycler.visibility = View.GONE
+            binding.timelayout.visibility = View.GONE
+        } else if (dataVenue.clubData.isclock == 1) {
+            binding.timeRecycler.visibility = View.GONE
+            binding.timelayout.visibility = View.VISIBLE
+        } else {
+            callGettimeslot(selectedDate)
+            binding.timeRecycler.visibility = View.VISIBLE
+            binding.timelayout.visibility = View.GONE
+        }
+    }
 
-
+    private fun callGettimeslot(selectedDate: String) {
+        val input: JsonObject = JsonObject()
+        input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
+        input.addProperty("club_id", dataVenue.clubData.clubId)
+        input.addProperty("date", selectedDate)
+        calendarviewpresenterimplementation!!.callGetTimeSlot(
+            input,
+            Utility.createHeaders(sharedPreferences)
+        )
     }
 
     private fun setupAdapter() {
@@ -87,12 +112,24 @@ class CalendarViewActivity : BaseActivity() {
         binding.btnNext.setOnClickListener {
             val intent = Intent(applicationContext, MenuActivity::class.java)
             intent.putExtra(ConstantLib.VENUE_ID, getIntent().getStringExtra(ConstantLib.VENUE_ID))
+            intent.putExtra(
+                ConstantLib.SELECTED_VENUE_DIN_TOGO,
+                getIntent().getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
+            )
             intent.putExtra(ConstantLib.DATE, selectedDate)
-//            h:m:s
-            intent.putExtra(ConstantLib.TIME, ""+binding.timepicker.hour+":"+binding.timepicker.minute+":"+"0")
+
+            seletctedTime = "" + binding.timepicker.hour + ":" + binding.timepicker.minute + ":00"
+
+            intent.putExtra(
+                ConstantLib.TIME,
+                seletctedTime
+            )
             startActivity(intent)
 
         }
+
+
+
 
         binding.calendarView.setOnDayClickListener { eventDay ->
 
@@ -100,63 +137,32 @@ class CalendarViewActivity : BaseActivity() {
             val month = (eventDay.calendar.get(Calendar.MONTH) + 1).toString()
             val year = eventDay.calendar.get(Calendar.YEAR).toString()
 
-            selectedDate  =  ""+eventDay.calendar.get(Calendar.YEAR)+"-"+eventDay.calendar.get(
+            selectedDate = "" + eventDay.calendar.get(Calendar.YEAR) + "-" + eventDay.calendar.get(
                 Calendar.MONTH
-            )+"-"+eventDay.calendar.get(Calendar.DAY_OF_MONTH)
+            ) + "-" + eventDay.calendar.get(Calendar.DAY_OF_MONTH)
 
             val cal: Calendar = Calendar.getInstance()
             cal.set(Calendar.YEAR, eventDay.calendar.get(Calendar.YEAR))
             cal.set(Calendar.MONTH, eventDay.calendar.get(Calendar.MONTH))
             cal.set(Calendar.DAY_OF_MONTH, eventDay.calendar.get(Calendar.DAY_OF_MONTH))
-
-
-
-//            val listofDate = ArrayList<Calendar>()
-//            listofDate.add(cal)
-//            binding.calendarView.selectedDates = listofDate
-
             binding.calendarView.setDate(cal)
+            checkTimeSlot()
 
-
-
-
-
-//            val cal = Calendar.getInstance()
-//            cal.add(Calendar.DAY_OF_MONTH, -1)
-
-            /*if(eventDay.calendar.compareTo(cal)> 0){
-                if(!checkDisabledDate(eventDay.calendar)){
-                    val intentActivity = Intent(
-                        applicationContext,
-                        ChoosePackageActivity::class.java
-                    )
-                    intentActivity.putExtra(
-                        ConstantLib.CLUB_ID,
-                        intent.getStringExtra(ConstantLib.CLUB_ID)
-                    )
-                    intentActivity.putExtra(
-                        ConstantLib.PACKAGE_DATE,
-                        year + "-" + month + "-" + day
-                    )
-                    startActivity(intentActivity)
-                }
-                else{
-                    val pDialog = SweetAlertDialog(
-                        this@CalendarViewActivity,
-                        SweetAlertDialog.ERROR_TYPE
-                    )
-                    pDialog.titleText = "This slot is unavailable,Please choose another date"
-                    pDialog.setCancelable(false)
-                    pDialog.setConfirmButton(languageData!!.klDismiss) {
-                        pDialog.dismiss()
-                    }
-                    pDialog.show()
-                }
-            } else{
-                Logger.d("date is smaller than current date")
-            }*/
         }
     }
+
+    private fun ShowAMPM(mhour: Int): String {
+        var hour = mhour
+        var am_pm = ""
+        if (hour > 12) {
+            am_pm = "PM";
+            hour -= 12;
+        } else {
+            am_pm = "AM";
+        }
+        return am_pm
+    }
+
 
     private fun checkDisabledDate(eventDay: Calendar): Boolean {
         var flag: Boolean = false
@@ -176,6 +182,17 @@ class CalendarViewActivity : BaseActivity() {
             onBackPressed()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onTimeSlotSuccess(responseData: TimeSlotResponse?) {
+        timedata.clear()
+        adapter.notifyDataSetChanged()
+        timedata.addAll(responseData!!.data)
+        adapter.notifyDataSetChanged()
+    }
+
+    override fun onTimeSlotFailure(responseData: String) {
+        TODO("Not yet implemented")
     }
 
 

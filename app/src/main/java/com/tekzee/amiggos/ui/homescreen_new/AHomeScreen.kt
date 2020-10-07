@@ -47,14 +47,14 @@ import com.tekzee.amiggos.util.SharedPreference
 
 
 class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
-    BottomNavigationView.OnNavigationItemSelectedListener,NotifyNotification {
+    BottomNavigationView.OnNavigationItemSelectedListener, NotifyNotification {
 
-    private val firebaseDatabase =  FirebaseDatabase.getInstance()
-    private var badgeViewChat: BadgeView?=null
-    var binding: AHomeScreenBinding?= null
+    private val firebaseDatabase = FirebaseDatabase.getInstance()
+    private var badgeViewChat: BadgeView? = null
+    var binding: AHomeScreenBinding? = null
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
-    private var firebaseAuth =  FirebaseAuth.getInstance()
+    private var firebaseAuth = FirebaseAuth.getInstance()
     private var currentUser = firebaseAuth.currentUser!!.uid
 
     companion object {
@@ -84,11 +84,11 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
                 bottomNavigation!!.menu.getItem(1).isChecked = true
                 setHeaders(R.id.navigation_near_me)
                 openFragment(NearMeFragment.newInstance(intent), "2")
-            } else  if (intent.action == "BOOKING") {
+            } else if (intent.action == "BOOKING") {
                 bottomNavigation!!.menu.getItem(4).isChecked = true
                 setHeaders(R.id.navigation_bookings)
                 openFragment(BookingFragment.newInstance(intent), "2")
-            }else {
+            } else {
                 setHeaders(R.id.navigation_home)
                 openFragment(HomeFragment.newInstance(), "1")
 
@@ -129,7 +129,6 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
 //        }catch (e:Exception){
 //            e.printStackTrace()
 //        }
-
 
 
     }
@@ -251,9 +250,8 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
     private fun setHeaders(navigationMemories: Int) {
 
 
-
         if (navigationMemories == R.id.navigation_memories) {
-            binding!!.headerLogo.visibility = View.GONE
+            binding!!.headerLogo.visibility = View.VISIBLE
             binding!!.notification.visibility = View.GONE
             binding!!.badge.visibility = View.GONE
             binding!!.addMemorie.visibility = View.VISIBLE
@@ -272,7 +270,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
         } else if (navigationMemories == R.id.navigation_bookings) {
             binding!!.badge.visibility = View.VISIBLE
             binding!!.badge.setNumber(Integer.parseInt(ConstantLib.NOTIFICATIONCOUNT))
-            binding!!.headerLogo.visibility = View.GONE
+            binding!!.headerLogo.visibility = View.VISIBLE
             binding!!.badge.visibility = View.GONE
             binding!!.notification.visibility = View.VISIBLE
             binding!!.checkincode.visibility = View.GONE
@@ -280,7 +278,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             binding!!.chaticon.visibility = View.GONE
             badgeViewChat!!.unbind()
         } else if (navigationMemories == R.id.navigation_near_me) {
-            binding!!.headerLogo.visibility = View.GONE
+            binding!!.headerLogo.visibility = View.VISIBLE
             binding!!.badge.visibility = View.GONE
             binding!!.notification.visibility = View.GONE
             binding!!.checkincode.visibility = View.GONE

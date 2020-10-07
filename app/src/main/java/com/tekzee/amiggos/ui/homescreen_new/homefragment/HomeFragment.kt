@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.collection.valueIterator
 import androidx.core.app.ActivityCompat
+import cn.xm.weidongjian.popuphelper.PopupWindowHelper
 import com.allenliu.badgeview.BadgeFactory
 import com.allenliu.badgeview.BadgeView
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
@@ -31,6 +32,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.example.easywaylocation.EasyWayLocation
 import com.example.easywaylocation.Listener
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mapbox.android.core.permissions.PermissionsListener
@@ -96,7 +98,8 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
     private var searchkeyword: String = ""
     private var languageData: LanguageData? = null
     private var easyWayLocation: EasyWayLocation? = null
-
+    private var popupWindowHelper: PopupWindowHelper? = null
+    private var popView:View? = null
     private lateinit var arrayAdapter: AutoCompleteAdapter
 
     companion object {
@@ -429,7 +432,6 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
                     startActivity(intent)
                     Animatoo.animateSlideRight(activity)
                 }else{
-
                     val dialog: BottomDialogExtended =
                         BottomDialogExtended.newInstance(
                             languageData!!.profilecompletedata,
@@ -443,13 +445,22 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
                 }
 
             } else {
+
+//                popView = LayoutInflater.from(requireContext()).inflate(R.layout.popupview, null)
+//                popupWindowHelper = PopupWindowHelper(popView)
+//                popupWindowHelper!!.showFromTop(dataObject.get("view").asString as View)
+
+
+
+
                 val intent = Intent(activity, AVenueDetails::class.java)
                 val clubdata = ClubData()
                 clubdata.clubName = dataObject.get("name").asString
                 clubdata.clubBasicDetails = ""
                 clubdata.clubStateCity = ""
                 clubdata.clubType = dataObject.get("type").asString
-                clubdata.clubId = dataObject.get("id").asString
+//                clubdata.clubId = dataObject.get("id").asString
+                clubdata.clubId = "28"
                 clubdata.clubImage = dataObject.get("image").asString
                 clubdata.address = ""
                 clubdata.agelimit = dataObject.get("agelimit").asString
@@ -538,6 +549,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
                     jsonData.addProperty("image", items.image)
                     jsonData.addProperty("agelimit", items.agelimit)
                     jsonData.addProperty("nearbycount", items.nearByCount)
+//                    jsonData.add("view", imageview)
                     symbolManager.create(
                         SymbolOptions()
                             .withLatLng(LatLng(latitude, longitude))
@@ -549,10 +561,8 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
 
                 }
             })
-            setIMapBoxInfoWindow()
-    }
 
-    private fun setIMapBoxInfoWindow() {
+
     }
 
 

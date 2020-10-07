@@ -45,7 +45,7 @@ class MenuViewModel(private val context: Context,
             try {
                 val response =  repository.doCallMenuApi(input, Utility.createHeaders(prefs))
                 if(response.status){
-                    menuEvent?.onLoaded(response.data.section)
+                    menuEvent?.onLoaded(response.data.section,response)
                 }else{
                     menuEvent?.onFailure(response.message)
                 }

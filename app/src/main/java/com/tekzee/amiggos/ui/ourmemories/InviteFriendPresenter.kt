@@ -8,7 +8,7 @@ class InviteFriendPresenter {
 
     interface InviteFriendPresenterMain{
         fun onStop()
-        fun doCallInviteFriendsApi(
+        fun doCallGetFriends(
             input: JsonObject,
             createHeaders: HashMap<String, String?>,
             requestDatFromServer: Boolean

@@ -17,7 +17,7 @@
         android:layout_marginBottom="5dp"
         android:text="Testing"
         android:textColor="@android:color/black"
-        android:textSize="18dp"
+        android:textSize="@dimen/_12sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/s_switch"
         app:layout_constraintStart_toStartOf="parent"

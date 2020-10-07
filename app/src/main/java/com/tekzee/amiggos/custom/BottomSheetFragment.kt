@@ -11,6 +11,7 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.ui.calendarview.CalendarViewActivity
+import com.tekzee.amiggos.ui.venuedetailsnew.model.VenueDetails
 import com.tekzee.amiggos.util.SharedPreference
 
 class BottomSheetFragment : BottomSheetDialogFragment() {
@@ -40,19 +41,25 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO,ConstantLib.TOGO)
             val intent = Intent(requireContext(), CalendarViewActivity::class.java)
             intent.putExtra(ConstantLib.VENUE_ID, venueid)
+            intent.putExtra(ConstantLib.CALENDAR_DATA, responseData)
+            intent.putExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO, "To-Go")
             startActivity(intent)
         }
         contentView.findViewById<View>(R.id.dinin).setOnClickListener { dialog.dismiss()
             sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO,ConstantLib.RESERVATION)
             val intent = Intent(requireContext(), CalendarViewActivity::class.java)
+            intent.putExtra(ConstantLib.CALENDAR_DATA, responseData)
             intent.putExtra(ConstantLib.VENUE_ID, venueid)
+            intent.putExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO, "Dine-In")
             startActivity(intent)}
     }
 
     companion object {
         var venueid = ""
-        fun newInstance(clubId: Int): BottomSheetFragment {
+        var responseData:VenueDetails.Data? = null
+        fun newInstance(clubId: Int, response: VenueDetails.Data): BottomSheetFragment {
             venueid = clubId.toString()
+            responseData = response
             return BottomSheetFragment()
         }
     }

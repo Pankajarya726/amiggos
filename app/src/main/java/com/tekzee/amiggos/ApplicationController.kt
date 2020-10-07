@@ -27,6 +27,7 @@ import com.tekzee.amiggos.ui.taggingvideo.TaggingVideoViewModelFactory
 import com.tekzee.amiggos.util.NetworkConnectionInterceptor
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.ui.addusers.AddUserViewModelFactory
+import com.tekzee.amiggos.ui.finalbasket.FinalBasketViewModelFactory
 import com.tekzee.amiggos.ui.memories.mymemories.MyMemorieViewModelFactory
 import com.tekzee.amiggos.ui.menu.MenuModelFactory
 import com.tekzee.amiggos.ui.menu.commonfragment.CommonFragmentViewModelFactory
@@ -72,6 +73,7 @@ class ApplicationController : Application(), KodeinAware {
         bind() from singleton { AddUserRepository(instance()) }
         bind() from singleton { MemorieFeaturedBrandRepository(instance()) }
         bind() from singleton { MenuRepository(instance()) }
+        bind() from singleton { FinalBasketRepository(instance()) }
 
 
 //        bind() from singleton { ValidateAppVersionRespository(instance()) }
@@ -177,6 +179,15 @@ class ApplicationController : Application(), KodeinAware {
 
         bind() from singleton {
             CommonFragmentViewModelFactory(
+                instance(),
+                instance(),
+                instance(),
+                instance()
+            )
+        }
+
+        bind() from singleton {
+            FinalBasketViewModelFactory(
                 instance(),
                 instance(),
                 instance(),

@@ -20,6 +20,7 @@ import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.ui.bookingdetailnew.BookingDetailNewActivity
 import com.tekzee.amiggos.ui.homescreen_new.NotifyNotification
 import java.util.*
 
@@ -55,8 +56,8 @@ class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        aBookingPresenterImplementation = ABookingPresenterImplementation(this,context!!)
-        sharedPreference = SharedPreference(context!!)
+        aBookingPresenterImplementation = ABookingPresenterImplementation(this,requireContext())
+        sharedPreference = SharedPreference(requireContext())
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         setupVenueTaggedRecycler()
         callGetBookings()
@@ -84,8 +85,8 @@ class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
         binding.aBookingRecyclerview.layoutManager = layoutManager
         adapter = BookingAdapter(data, object : BookingClickedListener {
             override fun onBookingClicked(bookingData: ABookingResponse.Data.BookingData) {
-                val intent = Intent(activity,ABookingDetails::class.java)
-                intent.putExtra(ConstantLib.BOOKING_DATA,bookingData)
+                val intent = Intent(activity, BookingDetailNewActivity::class.java)
+                intent.putExtra(ConstantLib.BOOKING_ID,bookingData.id.toString())
                 context!!.startActivity(intent)
                 Animatoo.animateSlideRight(activity)
             }

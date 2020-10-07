@@ -27,11 +27,13 @@ class Menu(
     val offerType: Int = 0,
     var quantity: Int = 0,
     @SerializedName("price")
-    val price: Double = 0.0
+    val price: Double = 0.0,
+    @SerializedName("venue_id")
+    val venue_id: Int = 0
 
 ):Serializable {
 
     override fun toString(): String {
-        return "Menu(ageRestriction='$ageRestriction', cost=$cost, description='$description', id=$id, isGuestInvities=$isGuestInvities, menuImage='$menuImage', method='$method', name='$name', offerType=$offerType, quantity=$quantity, price=$price)"
+        return "Menu(ageRestriction='$ageRestriction', cost=$cost, description='$description', id=$id, isGuestInvities=$isGuestInvities, menuImage='$menuImage', method='$method', name='$name', offerType=$offerType, quantity=$quantity, price=$price, venue_id=$venue_id)"
     }
 }

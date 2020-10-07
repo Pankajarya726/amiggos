@@ -59,9 +59,8 @@
                 android:layout_marginTop="@dimen/_8sdp"
                 android:fontFamily="@font/opensans_semibold"
                 android:gravity="center"
-
-                android:textColor="@android:color/darker_gray"
-                android:textSize="@dimen/_15sdp" />
+                android:textColor="@color/Grey_900"
+                android:textSize="@dimen/_12sdp" />
 
 
             <com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView

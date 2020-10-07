@@ -20,62 +20,24 @@
             app:titleTextColor="@android:color/black">
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.an.customfontview.CustomTextView
-                    android:id="@+id/title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="18dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/img_notification"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:textFontPath="font/eras.ttf" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
         </androidx.appcompat.widget.Toolbar>
 
 
-        <LinearLayout
+        <TextView
+            android:fontFamily="@font/opensans_semibold"
+            android:id="@+id/blocked_users_heading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:fontFamily="@font/opensans_bold"
-                    android:id="@+id/blocked_users_heading"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="15dp"
-                    android:padding="2dp"
-                    android:text="Blocked Users"
-                    android:textColor="@android:color/black"
-                    android:textSize="25dp"
-                    android:textStyle="bold" />
-
-
-            </LinearLayout>
-
-        </LinearLayout>
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:layout_marginRight="@dimen/_8sdp"
+            android:padding="2dp"
+            android:text="Blocked Users"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/_18sdp"
+            android:textStyle="bold" />
 
         <View
+            android:layout_marginTop="@dimen/_8sdp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/black" />

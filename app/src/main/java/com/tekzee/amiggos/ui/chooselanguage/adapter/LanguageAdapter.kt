@@ -16,29 +16,29 @@ class LanguageAdapter(
     private val items: ArrayList<Language>,
     private val sharedPreferences: SharedPreference?,
     private val listener: LanguageClicked
-): RecyclerView.Adapter<LanguageAdapter.PendingJobViewHolder>() {
+): RecyclerView.Adapter<LanguageAdapter.LanguageViewHolder>() {
 
     private var context:Context? = null
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PendingJobViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LanguageViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         context = parent.context
         val view = inflater.inflate(R.layout.single_list_language,parent,false)
-        return PendingJobViewHolder(view)
+        return LanguageViewHolder(view)
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
 
-    override fun onBindViewHolder(holder: PendingJobViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: LanguageViewHolder, position: Int) {
         holder.bindingdata.txt_name.text = items[position].name
         Glide.with(context!!).load(items[position].image).into(holder.bindingdata.profile_image)
-        holder.bindingdata.language_mainlayout.setOnClickListener {
+        holder.bindingdata.mainlayout.setOnClickListener {
             listener.onLanguageClicked(position,items[position])
         }
     }
 
-    inner class PendingJobViewHolder(val bindingdata: View): RecyclerView.ViewHolder(bindingdata)
+    inner class LanguageViewHolder(val bindingdata: View): RecyclerView.ViewHolder(bindingdata)
 
 
 }

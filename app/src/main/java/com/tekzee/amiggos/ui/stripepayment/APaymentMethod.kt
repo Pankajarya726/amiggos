@@ -66,20 +66,9 @@ class APaymentMethod: BaseActivity(), APaymentMethodPresenter.APaymentMethodPres
                this
             )
         )
-        adapter = PaymentAdapter(data, object : PaymentClick {
+        adapter = PaymentAdapter(data,intent.getStringExtra(ConstantLib.FROM), object : PaymentClick {
             override fun onRowClick(model: CardListResponse.Data.Card) {
-                //                val intent = Intent(
-//                    this,
-//                    CardDetailsActivity::class.java
-//                )
-//                intent.putExtra("id", model.getId())
-//                intent.putExtra("Card_Type", model.getBrand())
-//                intent.putExtra("isDefault", model.getIsDefault())
-//                intent.putExtra("Card_Number", model.getLast4())
-//                intent.putExtra("Expiry_Month", model.getExpiryMonth())
-//                intent.putExtra("Finger_Print", model.getFingerPrint())
-//                intent.putExtra("Expiry_Year", model.getExpiryYear())
-//                startActivity(intent)
+                
             }
 
             override fun onDeleteCard(model: CardListResponse.Data.Card?) {

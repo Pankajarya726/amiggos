@@ -13,11 +13,6 @@ interface FinalBasketClickListener {
     )
 
 
-    fun onChatButtonClicked(
-        position: Int,
-        listItem: CommonMenuResponse.Data.Staff
-    )
-
     fun showAgeRestrictionPopup(view: View)
     fun viewImage(listItem: Menu?)
 

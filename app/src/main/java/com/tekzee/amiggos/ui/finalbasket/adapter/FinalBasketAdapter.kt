@@ -1,7 +1,6 @@
 package com.tekzee.amiggos.ui.finalbasket.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -10,11 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.repository.ItemRepository
-import com.tekzee.amiggos.constant.ConstantLib
-import com.tekzee.amiggos.databinding.SingleCommonStaffListBinding
+import com.tekzee.amiggos.databinding.SingleFinalbasketListBinding
 import com.tekzee.amiggos.room.entity.Menu
 import com.tekzee.amiggos.ui.finalbasket.FinalBasketClickListener
-import com.tekzee.amiggos.util.Coroutines
 import com.tekzee.amiggos.util.SharedPreference
 import kotlinx.android.synthetic.main.single_common_staff_list.view.*
 
@@ -24,85 +21,36 @@ class FinalBasketAdapter(
     private val repository: ItemRepository?,
     private val prefs: SharedPreference
 ) :
-    ListAdapter<Menu, FinalBasketAdapter.CommonStaffViewHolder>(
+    ListAdapter<Menu, FinalBasketAdapter.FinalBasketStaffViewHolder>(
         FinalBasketDiffutil()
     ) {
 
     private var context: Context? = null
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommonStaffViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FinalBasketStaffViewHolder {
         context = parent.context
         val inflater = LayoutInflater.from(parent.context)
-        val binding: SingleCommonStaffListBinding = DataBindingUtil.inflate(
+        val binding: SingleFinalbasketListBinding = DataBindingUtil.inflate(
             inflater,
-            R.layout.single_common_staff_list, parent, false
+            R.layout.single_finalbasket_list, parent, false
         )
-        return CommonStaffViewHolder(binding)
+        return FinalBasketStaffViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: CommonStaffViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: FinalBasketStaffViewHolder, position: Int) {
         getItem(position).let { listItem ->
             holder.bind(listItem, context)
-            Coroutines.main {
-                val dataResponse = repository!!.getItemDetail(listItem!!.id.toString())
-                if (dataResponse != null) {
-                    Log.e("quantity new-------->", dataResponse.quantity.toString())
-                    holder.listitembinding.txtQty.text = dataResponse.quantity.toString()
-                } else {
-                    holder.listitembinding.txtQty.text = "0"
-                }
-            }
-            holder.listitembinding.txtPlus.setOnClickListener {
-                if(prefs.getValueBoolean(ConstantLib.MYID,false)){
-                    val quantity =
-                        Integer.parseInt(holder.listitembinding.txtQty.text.toString()) + 1
-                    holder.listitembinding.txtQty.setText(quantity.toString())
-                    listener.onItemClicked(position, listItem, quantity.toString())
-                    return@setOnClickListener
-                }
-                Log.e("my age value---->",""+prefs.getValueString(ConstantLib.USER_AGE))
-                Log.e("my age---->",""+Integer.parseInt(prefs.getValueString(ConstantLib.USER_AGE)!!))
-                Log.e("age restriction---->",""+Integer.parseInt(listItem.ageRestriction))
-                if (listItem.ageRestriction.isNotEmpty() && Integer.parseInt(prefs.getValueString(ConstantLib.USER_AGE)!!)<= Integer.parseInt(listItem.ageRestriction) ) {
-                    listener.showAgeRestrictionPopup(holder.listitembinding.txtPlus)
-                } else {
-                    val quantity =
-                        Integer.parseInt(holder.listitembinding.txtQty.text.toString()) + 1
-                    holder.listitembinding.txtQty.setText(quantity.toString())
-                    listener.onItemClicked(position, listItem, quantity.toString())
-                }
-
-            }
-
             holder.listitembinding.menuimage.setOnClickListener {
                 listener.viewImage(listItem)
             }
 
-            holder.listitembinding.txtMinus.setOnClickListener {
-                if(prefs.getValueBoolean(ConstantLib.MYID,false)){
-                    val quantity =
-                        Integer.parseInt(holder.listitembinding.txtQty.text.toString()) - 1
-                    if (quantity >= 0) {
-                        holder.listitembinding.txtQty.text = quantity.toString()
-                        listener.onItemClicked(position, listItem, quantity.toString())
-                    }
-                    return@setOnClickListener
-                }
-                if (listItem.ageRestriction.isNotEmpty() && Integer.parseInt(prefs.getValueString(ConstantLib.USER_AGE)!!)<= Integer.parseInt(listItem.ageRestriction) ) {
-                    listener.showAgeRestrictionPopup(holder.listitembinding.txtMinus)
-                } else {
-                    val quantity =
-                        Integer.parseInt(holder.listitembinding.txtQty.text.toString()) - 1
-                    if (quantity >= 0) {
-                        holder.listitembinding.txtQty.text = quantity.toString()
-                        listener.onItemClicked(position, listItem, quantity.toString())
-                    }
-                }
-
+            holder.listitembinding.imgDelete.setOnClickListener {
+                listener.onItemClicked(position,listItem,"0")
             }
+
         }
     }
 
-    class CommonStaffViewHolder(val listitembinding: SingleCommonStaffListBinding) :
+    class FinalBasketStaffViewHolder(val listitembinding: SingleFinalbasketListBinding) :
         RecyclerView.ViewHolder(listitembinding.root) {
         fun bind(
             listItem: Menu?,

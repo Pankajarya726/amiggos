@@ -108,7 +108,7 @@ class ABookingDetails : BaseActivity(), ABookingDetailsPresenter.ABookingDetails
 
 
         binding!!.htabHeader.setOnClickListener {
-            val image = arrayOf(dataFromIntent!!.qrCode)
+            val image = arrayOf(dataFromIntent!!.venue_home_image)
             imageBuilder = StfalconImageViewer.Builder<String>(this,image){
                 imageView, image ->  Glide.with(this).load(image).into(imageView)
             }.withTransitionFrom(imageView)
@@ -168,15 +168,15 @@ class ABookingDetails : BaseActivity(), ABookingDetailsPresenter.ABookingDetails
         binding!!.txtInviteFriend.visibility = View.VISIBLE
         binding!!.recyclerviewlayout.visibility = View.GONE
 
-        Glide.with(applicationContext).load(dataFromIntent!!.qrCode)
+        Glide.with(applicationContext).load(dataFromIntent!!.venue_home_image)
             .placeholder(R.drawable.blackbg).into(binding!!.htabHeader)
-         binding!!.txtName.text = dataFromIntent!!.clubName
-        binding!!.txtLocation.text = dataFromIntent!!.partyDate
+         binding!!.txtName.text = dataFromIntent!!.name
+        binding!!.txtLocation.text = dataFromIntent!!.booking_date
         binding!!.bookingid.text = "Booking Id : " + dataFromIntent!!.id.toString()
-        binding!!.date.text = "Date : " + dataFromIntent!!.partyDate
-        binding!!.starttime.text = "Start Time : " + dataFromIntent!!.startTime
-        binding!!.endtime.text = "End Time : " + dataFromIntent!!.endTime
-        binding!!.address.text = "Booking Code : " + dataFromIntent!!.bookingCode
+        binding!!.date.text = "Date : " + dataFromIntent!!.booking_date
+        binding!!.starttime.text = "Start Time : " + dataFromIntent!!.booking_time
+        binding!!.endtime.text = "End Time : " + dataFromIntent!!.booking_time
+        binding!!.address.text = "Booking Code : " + dataFromIntent!!.booking_date
     }
 
     override fun onFriendListSuccess(responseData: FriendListResponse?) {

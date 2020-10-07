@@ -52,7 +52,7 @@ class BookingFragment : BaseFragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedPreference = SharedPreference(context!!)
+        sharedPreference = SharedPreference(requireContext())
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         setupViews(view)
         setupLanguage(view)
@@ -71,7 +71,7 @@ class BookingFragment : BaseFragment(){
     ) {
         val fragmentManager = childFragmentManager
         val adapter = ViewPagerAdapter(fragmentManager)
-        adapter.addFragment(ABooking(), "My Bookings")
+        adapter.addFragment(ABooking(), languageData!!.klMyBooking)
         adapter.addFragment(BookingInvitations(), languageData!!.pInvites)
         viewPager.adapter = adapter
         tabs.setupWithViewPager(viewPager)

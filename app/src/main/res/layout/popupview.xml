@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_margin="@dimen/_25sdp"
+    android:padding="@dimen/_8sdp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:fontFamily="@font/opensans_semibold"
+        android:textSize="@dimen/_12sdp"
+        android:text="LIV Maimi"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:fontFamily="@font/opensans_regular"
+        android:textSize="@dimen/_10sdp"
+        android:text="Maimi, Fl"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:fontFamily="@font/opensans_bold"
+        android:textSize="@dimen/_12sdp"
+        android:text="Club"/>
+
+    <Button
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="View Details"
+        android:textAllCaps="true"
+        android:background="@drawable/btn_bg"
+        android:textColor="@android:color/white"/>
+
+
+</LinearLayout>
