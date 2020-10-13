@@ -46,7 +46,7 @@ data class BookingDetailsNewResponse(
             @SerializedName("qr_code")
             val qrCode: String = "",
             @SerializedName("total_amount")
-            val totalAmount: Int = 0,
+            val totalAmount: Float = 0.0f,
             @SerializedName("totalInvited_guest")
             val totalInvitedGuest: Int = 0,
             @SerializedName("userid")
@@ -66,7 +66,7 @@ data class BookingDetailsNewResponse(
                 @SerializedName("name")
                 val name: String = "",
                 @SerializedName("price")
-                val price: Int = 0,
+                val price: Float = 0.0f,
                 @SerializedName("qty")
                 val qty: Int = 0
             ):Serializable

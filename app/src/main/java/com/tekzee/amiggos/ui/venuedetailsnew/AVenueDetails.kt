@@ -22,6 +22,7 @@ import com.tekzee.amiggos.ui.profiledetails.SliderClickListener
 import com.tekzee.amiggos.ui.profiledetails.model.SliderAdapterExample
 import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubData
 import com.tekzee.amiggos.ui.venuedetailsnew.model.VenueDetails
+import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import java.util.*
@@ -30,7 +31,7 @@ import java.util.*
 class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresenterMainView,
     SliderClickListener {
     private var response: VenueDetails.Data? = null
-    private var dataClub: ClubData? = null
+    private var venueId: String? = null
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
     private var aVenueDetailsPresenterImplementation: AVenueDetailsPresenterImplementation? = null
@@ -45,7 +46,7 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         sharedPreference = SharedPreference(this)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         aVenueDetailsPresenterImplementation = AVenueDetailsPresenterImplementation(this, this)
-        dataClub = intent.getSerializableExtra(ConstantLib.VENUE_DATA) as ClubData
+        venueId = intent.getStringExtra(ConstantLib.VENUE_ID)
         setupClickListener()
         callVenueDetailsApi()
         setupLangauge()
@@ -57,11 +58,9 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         binding!!.htabHeader.sliderAdapter = adapter
         //binding!!.htabHeader.setIndicatorAnimation(IndicatorAnimationType.WORM) //set indicator animation by using IndicatorAnimationType. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
         binding!!.htabHeader.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
-        binding!!.htabHeader.autoCycleDirection = SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH
         binding!!.htabHeader.indicatorSelectedColor = Color.WHITE
         binding!!.htabHeader.indicatorUnselectedColor = Color.GRAY
-        binding!!.htabHeader.scrollTimeInSec = 4 //set scroll delay in seconds :
-        binding!!.htabHeader.startAutoCycle()
+
 
 
     }
@@ -76,7 +75,7 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
     private fun callVenueDetailsApi() {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
-        input.addProperty("club_id", dataClub!!.clubId)
+        input.addProperty("club_id", venueId)
         aVenueDetailsPresenterImplementation!!.callVenueDetailsApi(
             input,
             Utility.createHeaders(sharedPreference)
@@ -120,7 +119,7 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
     private fun callLikeUnlikeApi() {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
-        input.addProperty("club_id", dataClub!!.clubId)
+        input.addProperty("club_id", venueId)
         aVenueDetailsPresenterImplementation!!.callLikeUnlikeApi(
             input,
             Utility.createHeaders(sharedPreference)
@@ -132,7 +131,7 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
 
         binding!!.txtName.text = response.clubData.name
         binding!!.txtClubType.text = response.clubData.menuTypeName
-        binding!!.txtLocation.text = response.clubData.clubState
+        binding!!.txtLocation.text = response.clubData.clubCity+", "+response.clubData.clubState
         binding!!.txtAgegroup.text = response.clubData.agelimit
         binding!!.imgHeart.isLiked = response.clubData.isFavorite==1
         binding!!.txtDescription.text = response.clubData.clubDescription
@@ -141,7 +140,7 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
 
         if(response.clubData.maskReq==1){
             binding!!.maskimage.visibility = View.VISIBLE
-            Glide.with(this).load(response.clubData.maskimage).placeholder(R.drawable.blackbg).into(
+            Glide.with(this).load(response.clubData.maskimage).into(
                 binding!!.maskimage
             )
         }else{
@@ -156,6 +155,11 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         list = ArrayList()
         list.addAll(responseData.clubData.homeImage)
         adapter.renewItems(list)
+    }
+
+    override fun onVenueDetailsFailure(message: String) {
+        Errortoast(message)
+        finish()
     }
 
     override fun onLikeUnlikeSuccess(message: String) {

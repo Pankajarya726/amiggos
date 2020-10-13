@@ -1,6 +1,7 @@
 package com.tekzee.amiggos.ui.favoritevenues
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,14 +23,15 @@ import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.RealFavoriteFragmentBinding
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
-import com.tekzee.amiggos.ui.realamiggos.RealAmiggos
+import com.tekzee.amiggos.ui.venuedetailsnew.AVenueDetails
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-class AFavoriteVenues(var friendId: String?, var aProfileDetails: AProfileDetails) : BaseFragment(), AFavoriteVenuePresenter.AFavoriteVenuePresenterMainView, InfiniteScrollRecyclerView.RecyclerViewAdapterCallback ,AFavoriteVenueAdapter.HomeItemClick{
-
+class AFavoriteVenues(var friendId: String?, var aProfileDetails: AProfileDetails) : BaseFragment(),
+    AFavoriteVenuePresenter.AFavoriteVenuePresenterMainView,
+    InfiniteScrollRecyclerView.RecyclerViewAdapterCallback, AFavoriteVenueAdapter.HomeItemClick {
 
 
     private val mLoadingData = FavoriteVenueResponse.Data.FavoriteVenue(loadingStatus = true)
@@ -44,37 +46,39 @@ class AFavoriteVenues(var friendId: String?, var aProfileDetails: AProfileDetail
     private lateinit var onlineFriendRecyclerview: RecyclerView
 
 
-
     @SuppressLint("CheckResult")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.real_favorite_fragment,container,false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.real_favorite_fragment, container, false)
         myView = binding.root
         sharedPreference = SharedPreference(requireContext())
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        realFriendPresenterImplementation = AFavoritePresenterImplementation(this,requireContext())
+        realFriendPresenterImplementation = AFavoritePresenterImplementation(this, requireContext())
         onlineFriendRecyclerview = myView!!.findViewById(R.id.real_friend_fragment)
         setupRecyclerRealFriend()
 
         binding.edtSearch.setOnFocusChangeListener { view, b ->
-                aProfileDetails.setupScrolling()
+            aProfileDetails.setupScrolling()
         }
 
         binding.edtSearch.setOnClickListener {
             aProfileDetails.setupScrolling()
         }
 
-        RxTextView.textChanges(binding.edtSearch) .filter { it.length > 2 }.debounce(500, TimeUnit.MILLISECONDS).subscribeOn(
-            Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
+        RxTextView.textChanges(binding.edtSearch).filter { it.length > 2 }
+            .debounce(500, TimeUnit.MILLISECONDS).subscribeOn(
+                Schedulers.io()
+            ).observeOn(AndroidSchedulers.mainThread()).subscribe {
             realFriendPageNo = 0
-            if(it.isEmpty()){
+            if (it.isEmpty()) {
                 mydataList.clear()
                 adapter!!.notifyDataSetChanged()
                 callFavoriteVenue(false, "")
-            }else{
+            } else {
                 mydataList.clear()
                 adapter!!.notifyDataSetChanged()
                 callFavoriteVenue(false, it.toString())
@@ -108,13 +112,13 @@ class AFavoriteVenues(var friendId: String?, var aProfileDetails: AProfileDetail
 
     override fun validateError(message: String) {
 
-        Toast.makeText(activity,message,Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
 
     private fun setupRecyclerRealFriend() {
 
-        val layoutManager = GridLayoutManager(activity,2, LinearLayoutManager.VERTICAL, false)
+        val layoutManager = GridLayoutManager(activity, 2, LinearLayoutManager.VERTICAL, false)
         onlineFriendRecyclerview.layoutManager = layoutManager
         adapter = AFavoriteVenueAdapter(
             mContext = requireContext(),
@@ -147,18 +151,14 @@ class AFavoriteVenues(var friendId: String?, var aProfileDetails: AProfileDetail
 
 
         adapter?.setLoadingStatus(false)
-        if(mydataList.size>0 && realFriendPageNo > 0){
+        if (mydataList.size > 0 && realFriendPageNo > 0) {
             mydataList.removeAt(mydataList.size - 1)
             adapter?.notifyDataSetChanged()
-        }else{
+        } else {
             mydataList.clear()
             adapter!!.notifyDataSetChanged()
         }
     }
-
-
-
-
 
 
     override fun onLoadMoreData() {
@@ -168,12 +168,14 @@ class AFavoriteVenues(var friendId: String?, var aProfileDetails: AProfileDetail
     }
 
 
-    override fun itemClickCallback(position: Int) {
-//        val intent = Intent(activity, FriendProfile::class.java)
-//        intent.putExtra(ConstantLib.FRIEND_ID,mydataList[position].userid.toString())
-//        intent.putExtra("from","RealFriend")
-//        //intent.putExtra(ConstantLib.OURSTORYID,mydataList[position].isRelateOurMemory.ourStoryId.toString())
-//        startActivity(intent)
+    override fun itemClickCallback(
+        position: Int,
+        favoriteVenue: FavoriteVenueResponse.Data.FavoriteVenue
+    ) {
+        val intent = Intent(activity, AVenueDetails::class.java)
+        intent.putExtra(ConstantLib.VENUE_ID, favoriteVenue.clubId.toString())
+        startActivity(intent)
+
     }
 
 

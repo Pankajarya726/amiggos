@@ -38,7 +38,7 @@ class BookingAdapter(
             itemView.txt_booking_id.text = mDataList[adapterPosition].name
             itemView.txt_zone.text = mDataList[adapterPosition].booking_time
             itemView.txt_date.text = mDataList[adapterPosition].booking_date
-            Glide.with(context).load(mDataList[adapterPosition].venue_home_image).into(itemView.profile_image)
+            Glide.with(context).load(mDataList[adapterPosition].venue_home_image).placeholder(R.drawable.noimage).into(itemView.profile_image)
             itemView.mainlayout.setOnClickListener {
                 listner.onBookingClicked(mDataList[adapterPosition])
             }

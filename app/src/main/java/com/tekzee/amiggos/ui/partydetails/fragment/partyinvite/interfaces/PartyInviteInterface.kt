@@ -1,10 +1,10 @@
 package com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.interfaces
 
-import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesData
+import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
 
 interface PartyInviteInterface {
     fun onItemClicked(
-        partyinvitesData: PartyInvitesData,
+        partyinvitesData: BookingInvitationResponse.Data.BookingDetail,
         i: Int
     )
 }

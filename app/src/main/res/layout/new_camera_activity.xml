@@ -15,7 +15,7 @@
             android:keepScreenOn="true"
             app:cameraAudio="on"
             app:cameraAutoFocusMarker="@string/cameraview_default_autofocus_marker"
-            app:cameraEngine="camera2"
+            app:cameraEngine="camera1"
             app:cameraExperimental="true"
             app:cameraFacing="back"
             app:cameraFlash="auto"
@@ -25,12 +25,12 @@
             app:cameraGestureScrollVertical="exposureCorrection"
             app:cameraGestureTap="autoFocus"
             app:cameraGrid="off"
-            app:cameraWhiteBalance="auto"
             app:cameraHdr="on"
             app:cameraMode="picture"
-            app:cameraPreviewFrameRate="30"
             app:cameraPlaySounds="true"
+            app:cameraPreviewFrameRate="30"
             app:cameraRequestPermissions="true"
+            app:cameraWhiteBalance="auto"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -40,34 +40,33 @@
 
 
             <LinearLayout
-                android:visibility="visible"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center|end"
+                android:background="#60000000"
+                android:orientation="vertical"
                 app:layout_drawOnPictureSnapshot="true"
                 app:layout_drawOnPreview="true"
-                android:background="#60000000"
-                android:layout_gravity="center|end"
-                app:layout_drawOnVideoSnapshot="true"
-                android:orientation="vertical">
+                app:layout_drawOnVideoSnapshot="true">
+
                 <TextView
                     android:id="@+id/username"
-                    android:gravity="center"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/_20sdp"
-                    android:textColor="@color/colorAccent"
-                    android:fontFamily="@font/opensans_semibolditalic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Testing"/>
+                    android:fontFamily="@font/opensans_semibolditalic"
+                    android:gravity="center"
+
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/_15sdp"
+                    android:textStyle="bold" />
+
                 <ImageView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"
                     android:src="@drawable/watermark"
-                    />
+                    android:visibility="visible" />
 
             </LinearLayout>
-
 
 
         </com.otaliastudios.cameraview.CameraView>

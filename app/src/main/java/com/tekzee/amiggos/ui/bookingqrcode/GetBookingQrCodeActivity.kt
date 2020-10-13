@@ -84,7 +84,7 @@ class GetBookingQrCodeActivity: BaseActivity(), BookingQrCodePresenter.BookingQr
         binding.txtTitle.text = responseData.data.title
         binding.txtCode.text = responseData.data.bottomText
         binding.btnQrcode.text = responseData.data.bookingCode
-        Glide.with(applicationContext).load(responseData.data.qrCode).into(binding.imgQrcode)
+        Glide.with(applicationContext).load(responseData.data.qrCode).placeholder(R.drawable.noimage).into(binding.imgQrcode)
 
     }
 

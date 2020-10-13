@@ -150,7 +150,7 @@ class UploadWorkService(context: Context, workerParams: WorkerParameters) : Work
 
        val mBuilder: NotificationCompat.Builder = mNotificationHelper!!.getNotification(
             "error_upload_failed",
-            "message_upload_failed", resultPendingIntent
+           throwable.localizedMessage, resultPendingIntent
         )
         mNotificationHelper!!.notify(FileUploadService.NOTIFICATION_RETRY_ID, mBuilder)
     }

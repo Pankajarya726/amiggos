@@ -3,29 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <include android:id="@+id/error"
-            layout="@layout/error_layout"/>
+        <include
+            android:id="@+id/error"
+            layout="@layout/error_layout" />
 
-        <com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView
-            android:id="@+id/hidden_search_with_recycler"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refreshlayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:filterWhileTyping="false"
-            app:scrollToBottomBeforeHide="true"
-            app:scrollToTopBeforeShow="false"
-            app:hideAtScroll="true"
-            app:visibleAtInit="true">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/invitation_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-        </com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView>
+            android:layout_height="match_parent">
 
 
+            <com.tekzee.amiggos.hiddensearchrecyclerview.utils.HiddenSearchWithRecyclerView
+                android:id="@+id/hidden_search_with_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:filterWhileTyping="false"
+                app:hideAtScroll="true"
+                app:scrollToBottomBeforeHide="true"
+                app:scrollToTopBeforeShow="false"
+                app:visibleAtInit="true">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/invitation_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </com.tekzee.amiggos.hiddensearchrecyclerview.utils.HiddenSearchWithRecyclerView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 
 </layout>

@@ -1,91 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    xmlns:tools="http://schemas.android.com/tools">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/invitation_main_layout"
+        android:id="@+id/mainlayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_8sdp"
+        android:layout_marginRight="@dimen/_8sdp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profile_image"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:src="@drawable/profile_bg"
+            android:id="@+id/img_flag"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:layout_marginBottom="@dimen/_3sdp"
+            android:src="@drawable/attachid"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/active" />
+
 
         <TextView
-            android:fontFamily="@font/opensans_regular"
-            android:id="@+id/txt_name_invitation"
+            android:id="@+id/txt_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginStart="@dimen/_8sdp"
             android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
-            android:gravity="left"
-            android:maxLines="1"
-            android:text="VENUES"
+            android:fontFamily="@font/opensans_semibold"
+            android:maxLines="2"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
             android:textSize="@dimen/_12sdp"
-            android:textColor="@android:color/black"
-            app:fontFamily="@font/opensans_semibold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/txt_accept"
+            app:layout_constraintEnd_toStartOf="@+id/img_eye"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/profile_image"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.477" />
-
-        <TextView
-
-            android:id="@+id/txt_accept"
-            android:layout_width="75dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:background="@drawable/btn_line_bg"
-            android:fontFamily="@font/opensans_regular"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="Accept"
-            android:textColor="@android:color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/txt_reject"
+            app:layout_constraintStart_toEndOf="@+id/img_flag"
             app:layout_constraintTop_toTopOf="parent" />
+
 
         <TextView
             android:id="@+id/txt_reject"
-            android:layout_width="75dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/btn_line_bg"
-            android:fontFamily="@font/opensans_regular"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="Decline"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:background="@drawable/edit_profile_bg"
+            android:paddingLeft="@dimen/_8sdp"
+            android:paddingTop="@dimen/_5sdp"
+            android:paddingRight="@dimen/_8sdp"
+            android:paddingBottom="@dimen/_5sdp"
+            android:text="Accept"
             android:textColor="@android:color/black"
+            android:textSize="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
+        <TextView
+            android:id="@+id/txt_accept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:background="@drawable/edit_profile_bg"
+            android:paddingLeft="@dimen/_8sdp"
+            android:paddingTop="@dimen/_5sdp"
+            android:paddingRight="@dimen/_8sdp"
+            android:paddingBottom="@dimen/_5sdp"
+            android:text="Decline"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/_10sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txt_reject"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/img_eye"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:src="@drawable/eye_black"
+            android:padding="@dimen/_5sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txt_accept"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_flag"
+            android:layout_marginEnd="@dimen/_8sdp"
+            app:layout_constraintVertical_bias="1.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_margin="5dp"
-        android:background="@android:color/black"/>
-
-
-
-</LinearLayout>
+</layout>

@@ -12,6 +12,7 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.databinding.MylifestyleSingleListBinding
 import com.tekzee.amiggos.ui.mylifestyle.MyLifestyleClickListener
 import com.tekzee.amiggos.ui.mylifestyle.model.MyLifestyleResponse
+import kotlinx.android.synthetic.main.mylifestyle_single_list.view.*
 
 
 class MyLifestyleAdapter(
@@ -36,7 +37,7 @@ class MyLifestyleAdapter(
     override fun onBindViewHolder(holder: MyLifestyleViewHolder, position: Int) {
         getItem(position).let { listItem ->
             holder.bind(listItem,context,response)
-            holder.itemView.setOnClickListener {
+            holder.itemView.img_layout.setOnClickListener {
                 listener.onItemClick(listItem)
             }
         }
@@ -45,9 +46,10 @@ class MyLifestyleAdapter(
     class MyLifestyleViewHolder(val listitembinding: MylifestyleSingleListBinding) :
         RecyclerView.ViewHolder(listitembinding.root) {
         fun bind(listItem: MyLifestyleResponse.Data.Lifestyle, context: Context?, response: List<MyLifestyleResponse.Data.Lifestyle>) {
-            Glide.with(context!!).load(listItem.catImage).placeholder(R.drawable.header_logo).into(listitembinding.imgUserFirstfragment)
-            listitembinding.childCount.setText(listItem.children_count.toString())
-            if(listItem.children_count > 0){
+            Glide.with(context!!).load(listItem.catImage).placeholder(R.drawable.noimage).into(listitembinding.imgUserFirstfragment)
+            listitembinding.childCount.text = listItem.selectedSubCategory.toString()
+            listitembinding.txtName.text = listItem.name
+            if(listItem.selectedSubCategory > 0){
                 listitembinding.childCount.visibility= View.VISIBLE
             }else
             {

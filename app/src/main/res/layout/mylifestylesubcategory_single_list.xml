@@ -39,11 +39,25 @@
                     android:fontFamily="@font/opensans_semibold"
                     android:gravity="center" />
 
+
+
             </RelativeLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
+        <ImageView
+            android:id="@+id/child_count"
+            android:layout_width="@dimen/_13sdp"
+            android:layout_height="@dimen/_13sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textColor="@android:color/white"
+            android:src="@drawable/ic_green_tick"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

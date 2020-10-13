@@ -29,7 +29,7 @@ class VenueFragmentAdapter(
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind() {
-            Glide.with(itemView.context).load(mDataList[adapterPosition].image).placeholder(R.drawable.blackbg).into(itemView.img_user_firstfragment)
+            Glide.with(itemView.context).load(mDataList[adapterPosition].image).placeholder(R.drawable.noimage).into(itemView.img_user_firstfragment)
         }
     }
 

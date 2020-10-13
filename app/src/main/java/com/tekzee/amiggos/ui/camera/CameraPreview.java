@@ -343,7 +343,7 @@ public class CameraPreview extends MyCanvas {
 
 
 
-        Glide.with(getApplicationContext()).load(getIntent().getStringExtra(ConstantLib.PROFILE_IMAGE)).placeholder(R.drawable.user).into(img_profile);
+        Glide.with(getApplicationContext()).load(getIntent().getStringExtra(ConstantLib.PROFILE_IMAGE)).placeholder(R.drawable.noimage).into(img_profile);
 
         if(getIntent().getStringExtra(ConstantLib.FROM_ACTIVITY).equalsIgnoreCase("STORIEVIEWACTIVITY")){
             txt_search.setVisibility(View.GONE);

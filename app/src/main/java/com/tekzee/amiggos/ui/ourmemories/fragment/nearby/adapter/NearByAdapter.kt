@@ -56,7 +56,7 @@ class NearByAdapter(
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind() {
-            Glide.with(itemView.context).load(mDataList[adapterPosition].profile).placeholder(R.drawable.user).into(itemView.profile_image)
+            Glide.with(itemView.context).load(mDataList[adapterPosition].profile).placeholder(R.drawable.noimage).into(itemView.profile_image)
             itemView.txt_name.text = mDataList[adapterPosition].name
             if(mDataList[adapterPosition].is_checked){
                 itemView.img_check.visibility = View.VISIBLE

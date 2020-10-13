@@ -44,6 +44,7 @@ class ImagePanaromaActivity: BaseActivity(), ImagePanaromaPresenter.ImagePanarom
         Glide.with(applicationContext)
             .asBitmap()
             .load(intent.getStringExtra(ConstantLib.PROFILE_IMAGE))
+            .placeholder(R.drawable.noimage)
             .into(object : SimpleTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     panoramaGLSurfaceView!!.setPanoramaBitmap(resource)

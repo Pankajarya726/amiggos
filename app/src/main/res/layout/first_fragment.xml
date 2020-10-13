@@ -9,7 +9,7 @@
         layout="@layout/error_layout"/>
 
 
-    <com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView
+    <com.tekzee.amiggos.hiddensearchrecyclerview.utils.HiddenSearchWithRecyclerView
         android:id="@+id/hidden_search_with_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,5 +26,5 @@
             android:layout_marginBottom="55dp"
             android:layout_marginTop="8dp" />
 
-    </com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView>
+    </com.tekzee.amiggos.hiddensearchrecyclerview.utils.HiddenSearchWithRecyclerView>
 </LinearLayout>

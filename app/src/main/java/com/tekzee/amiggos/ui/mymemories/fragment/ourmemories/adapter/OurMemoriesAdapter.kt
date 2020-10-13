@@ -53,9 +53,9 @@ class OurMemoriesAdapter(
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind() {
-            Glide.with(itemView.context).load(mDataList[adapterPosition].imageUrl).placeholder(R.drawable.user).into(itemView.profile_image)
+            Glide.with(itemView.context).load(mDataList[adapterPosition].imageUrl).placeholder(R.drawable.noimage).into(itemView.profile_image)
             if(mDataList[adapterPosition].content.size>0)
-            Glide.with(itemView.context).load(mDataList[adapterPosition].content[0].url).placeholder(R.drawable.user).into(itemView.maincontraintlayout)
+            Glide.with(itemView.context).load(mDataList[adapterPosition].content[0].url).placeholder(R.drawable.noimage).into(itemView.maincontraintlayout)
             itemView.txt_name.text = mDataList[adapterPosition].name
 
             itemView.setOnClickListener {

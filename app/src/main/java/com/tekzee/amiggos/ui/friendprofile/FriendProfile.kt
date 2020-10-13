@@ -295,7 +295,7 @@ class FriendProfile : BaseActivity(), FriendProfilePresenter.FriendProfileMainVi
         binding.fpTxtDescriptionAge.text = responseData.data[0].location
         binding.fpTxtDescriptionLocation.text = responseData.data[0].age.toString()
         Glide.with(applicationContext).load(responseData.data[0].profile)
-            .placeholder(R.drawable.user).into(binding.fpImgProfile)
+            .placeholder(R.drawable.noimage).into(binding.fpImgProfile)
 
         data = responseData
 

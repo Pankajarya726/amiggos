@@ -46,7 +46,7 @@ class TaggingAdapter(private val listener: TaggingClickListener) :
             listItem: TaggingResponse.Data.Search?,
             context: Context?
         ) {
-            Glide.with(context!!).load(listItem!!.image).placeholder(R.drawable.header_logo).into(listitembinding.profileImage)
+            Glide.with(context!!).load(listItem!!.image).placeholder(R.drawable.noimage).into(listitembinding.profileImage)
             listitembinding.taggingitems = listItem
             listitembinding.executePendingBindings()
         }

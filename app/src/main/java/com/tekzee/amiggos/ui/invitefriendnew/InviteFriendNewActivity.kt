@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.gson.JsonObject
+import com.jakewharton.rxbinding2.widget.RxTextView
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
@@ -97,41 +98,54 @@ class InviteFriendNewActivity : BaseActivity(),
     @SuppressLint("CheckResult")
     private fun setupclickListener() {
         binding.imgClose.setOnClickListener {
-            val intent = Intent(applicationContext, AHomeScreen::class.java)
-            startActivity(intent)
-            selectUserIds.clear()
-            finishAffinity()
+            onBackPressed()
         }
 
 
-        RxSearchObservable.fromView(binding.hiddenSearchWithRecycler.searchBarSearchView)
-            .debounce(500, TimeUnit.MILLISECONDS)
-            .filter(Predicate { t ->
-                t.isNotEmpty()
-            })
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(Consumer<String>() { t ->
+//        RxSearchObservable.fromView(binding.hiddenSearchWithRecycler.searchBarSearchView)
+//            .debounce(500, TimeUnit.MILLISECONDS)
+//            .filter(Predicate { t ->
+//                t.isNotEmpty()
+//            })
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe(Consumer<String>() { t ->
+//                onlineFriendPageNo = 0
+//                mydataList.clear()
+//                adapter!!.notifyDataSetChanged()
+//                doCallGetFriends(false, t.toString())
+//            })
+
+        RxTextView.textChanges(binding.searchfriend) .filter { it.length > 2 }.debounce(1000, TimeUnit.MILLISECONDS).subscribeOn(
+            Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
+            if(it.isEmpty()){
                 onlineFriendPageNo = 0
                 mydataList.clear()
                 adapter!!.notifyDataSetChanged()
-                doCallGetFriends(false, t.toString())
-            })
-
-        val closeButton: View? =
-            binding.hiddenSearchWithRecycler.findViewById(androidx.appcompat.R.id.search_close_btn)
-        closeButton?.setOnClickListener {
-
-            binding.hiddenSearchWithRecycler.searchBarSearchView.clearFocus()
-            binding.hiddenSearchWithRecycler.searchBarSearchView.isIconified = false
-            binding.hiddenSearchWithRecycler.clearSearchview()
-            onlineFriendPageNo = 0
-            mydataList.clear()
-            adapter!!.notifyDataSetChanged()
-            doCallGetFriends(false, "")
+                doCallGetFriends(false, it.toString())
+            }else{
+                onlineFriendPageNo = 0
+                mydataList.clear()
+                adapter!!.notifyDataSetChanged()
+                doCallGetFriends(false, it.toString())
+            }
         }
 
-        binding!!.btnInviteFriend.setOnClickListener {
+
+//        val closeButton: View? =
+//            binding.hiddenSearchWithRecycler.findViewById(androidx.appcompat.R.id.search_close_btn)
+//        closeButton?.setOnClickListener {
+//
+//            binding.hiddenSearchWithRecycler.searchBarSearchView.clearFocus()
+//            binding.hiddenSearchWithRecycler.searchBarSearchView.isIconified = false
+//            binding.hiddenSearchWithRecycler.clearSearchview()
+//            onlineFriendPageNo = 0
+//            mydataList.clear()
+//            adapter!!.notifyDataSetChanged()
+//            doCallGetFriends(false, "")
+//        }
+
+        binding.btnInviteFriend.setOnClickListener {
             callSendRequest(toCommaSeparated()!!)
         }
 
@@ -162,16 +176,13 @@ class InviteFriendNewActivity : BaseActivity(),
         binding.btnInviteFriend.text = languageData!!.klDone
         Glide.with(applicationContext)
             .load(sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE))
+            .placeholder(R.drawable.noimage)
             .into(binding.profileImage)
 
     }
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        if (item.itemId == android.R.id.home) {
-            onBackPressed()
-        }
 
         return super.onOptionsItemSelected(item)
     }
@@ -184,25 +195,41 @@ class InviteFriendNewActivity : BaseActivity(),
     }
 
 
+    override fun onBackPressed() {
+        if(intent.getStringExtra(ConstantLib.FROM) == ConstantLib.FINALBASKET){
+            val intent = Intent(applicationContext, AHomeScreen::class.java)
+            startActivity(intent)
+            selectUserIds.clear()
+            finishAffinity()
+        }else{
+            super.onBackPressed()
+        }
+
+
+    }
+
 
     override fun onOurMemoriesSuccessInfinite(responseData: InviteFriendResponse?) {
+        binding.searchfriend.requestFocus()
         onlineFriendPageNo++
-        adapter?.setLoadingStatus(true)
+        adapter.setLoadingStatus(true)
         mydataList.removeAt(mydataList.size - 1)
         mydataList.addAll(responseData!!.data.realFreind)
-        adapter?.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
     }
 
 
     override fun onOurMemoriesFailure(message: String) {
+        binding.searchfriend.requestFocus()
         if (mydataList.size > 0) {
-            adapter?.setLoadingStatus(false)
+            adapter.setLoadingStatus(false)
             mydataList.removeAt(mydataList.size - 1)
-            adapter?.notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
         }
     }
 
     override fun onFriendInviteSuccess(message: String) {
+        binding.searchfriend.requestFocus()
         Successtoast(message)
         val intent = Intent(applicationContext, AHomeScreen::class.java)
         startActivity(intent)

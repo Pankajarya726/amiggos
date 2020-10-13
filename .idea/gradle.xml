@@ -15,7 +15,6 @@
             <option value="$PROJECT_DIR$/autocompleteplace" />
             <option value="$PROJECT_DIR$/cropper" />
             <option value="$PROJECT_DIR$/customimage" />
-            <option value="$PROJECT_DIR$/hiddensearchwithrecyclerview" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

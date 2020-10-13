@@ -9,7 +9,8 @@ data class Story(
     val storieId: String,
     val url: String,
     val storyDate: Long,
-    val banners: ArrayList<MemorieResponse.Data.Memories.Memory.Tagged>
+    val banners: ArrayList<MemorieResponse.Data.Memories.Memory.Tagged>,
+    val creater_id : Int,
 ) : Parcelable {
 
     fun isVideo() =  url.contains(".mp4")

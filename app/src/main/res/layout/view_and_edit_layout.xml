@@ -78,8 +78,6 @@
                         android:layout_height="@dimen/_60sdp"
                         android:layout_gravity="center"
                         android:src="@drawable/attachid"
-                        app:civ_border_color="@android:color/black"
-                        app:civ_border_width="@dimen/_2sdp"
                         app:layout_constraintBottom_toBottomOf="@+id/constraintLayout3"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.492"

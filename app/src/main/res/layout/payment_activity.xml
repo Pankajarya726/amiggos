@@ -42,7 +42,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                 android:orientation="horizontal">
+                android:orientation="horizontal">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -53,11 +54,11 @@
                         android:id="@+id/headertitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginStart="@dimen/_8sdp"
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_semibold"
                         android:gravity="center"
-                        android:padding="@dimen/_10sdp"
+                        android:padding="@dimen/_2sdp"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_15sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -82,7 +83,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
             </LinearLayout>
 
             <View
@@ -91,14 +91,17 @@
                 android:background="@android:color/black" />
 
             <TextView
+                android:layout_marginTop="@dimen/_8sdp"
                 android:id="@+id/saved_cards"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginRight="@dimen/_8sdp"
                 android:fontFamily="@font/opensans_regular"
-                android:padding="@dimen/_8sdp"
+                android:padding="@dimen/_2sdp"
                 android:text="Saved Cards"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_15sdp" />
+                android:textSize="@dimen/_12sdp" />
 
             <androidx.recyclerview.widget.RecyclerView
 
@@ -126,7 +129,6 @@
 
             <TextView
                 android:id="@+id/paynow"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#077910"
@@ -134,7 +136,8 @@
                 android:gravity="center"
                 android:text="Pay"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/_16sdp" />
+                android:textSize="@dimen/_16sdp"
+                android:visibility="gone" />
 
 
         </LinearLayout>

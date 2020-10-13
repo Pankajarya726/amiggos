@@ -28,7 +28,7 @@ class AMyLifestyleSubcategory : BaseActivity(), MyLifestyleSubcategoryPresenter.
     private var binding: MyLifestyleSubcategoryFragmentBinding? = null
     private var presenterImplementation: MyLifestyleSubcategoryPresenterImplementation? = null
     private val SEPARATOR = ","
-
+    private val removedIds = HashSet<String>()
     companion object {
 
         fun newInstance(): AMyLifestyleSubcategory {
@@ -63,27 +63,50 @@ class AMyLifestyleSubcategory : BaseActivity(), MyLifestyleSubcategoryPresenter.
         }
         binding!!.save.setOnClickListener{
             val builder = StringBuilder()
+            val removedIdbuilder = StringBuilder()
             for(item in newlist){
-                if(item.selected==1){
+                if(item.selected==1 && item.isalreadyselected!=1){
                     builder.append(item.id);
                     builder.append(SEPARATOR);
                 }
             }
-            if(builder.toString().isEmpty()){
-                Toast.makeText(applicationContext, "Please select any category", Toast.LENGTH_LONG).show()
-            }else{
-                var listofids: String = builder.toString()
-                listofids = listofids.substring(0, listofids.length - SEPARATOR.length);
-                callSaveMyLifestyleApi(listofids)
+
+            for(item in removedIds){
+                removedIdbuilder.append(item);
+                removedIdbuilder.append(SEPARATOR);
             }
+
+            var listofids: String = builder.toString()
+            if(listofids.isNotEmpty()){
+                listofids = listofids.substring(0, listofids.length - SEPARATOR.length);
+            }else{
+                listofids = ""
+            }
+
+
+
+            var removedlistofids: String = removedIdbuilder.toString()
+            if(removedlistofids.isNotEmpty()){
+                removedlistofids = removedlistofids.substring(0, removedlistofids.length - SEPARATOR.length)
+            }else{
+                removedlistofids = ""
+            }
+
+            if(listofids.isEmpty() && removedlistofids.isEmpty()){
+                finish()
+            }else{
+                callSaveMyLifestyleApi(listofids,removedlistofids)
+            }
+
 
         }
     }
 
-    private fun callSaveMyLifestyleApi(catid: String) {
+    private fun callSaveMyLifestyleApi(catid: String, removedlistofids: String) {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("catid", catid)
+        input.addProperty("remove_catid", removedlistofids)
         presenterImplementation!!.docallSaveMyLifestyleSubcategoryApi(
             input, Utility.createHeaders(
                 sharedPreference
@@ -122,6 +145,13 @@ class AMyLifestyleSubcategory : BaseActivity(), MyLifestyleSubcategoryPresenter.
 
     override fun onMyLifeStyleSubcategorySuccess(responseData: MyLifestyleSubcategoryResponse) {
         newlist = ArrayList<MyLifestyleSubcategoryResponse.Data.Lifestyle>()
+        for(item in responseData.data.lifestyle){
+            if(item.selected ==1){
+                item.isalreadyselected =1
+            }else{
+                item.isalreadyselected =0
+            }
+        }
         newlist.addAll(responseData.data.lifestyle)
         adapter.submitList(newlist)
     }
@@ -160,7 +190,11 @@ class AMyLifestyleSubcategory : BaseActivity(), MyLifestyleSubcategoryPresenter.
     ) {
             if(listitem.selected==0){
                 listitem.selected =1
+                removedIds.remove(listitem.id.toString())
             }else{
+                if(listitem.isalreadyselected==1){
+                    removedIds.add(listitem.id.toString())
+                }
                 listitem.selected =0
             }
         adapter.submitList(newlist)

@@ -44,7 +44,7 @@ class MyFriendChatAdapter(
         }
         holder.bindingdata.txt_timestamp.text = getDateTimeFromEpocLongOfSeconds(items[position].time!!.toLong()).toString()
         holder.bindingdata.txt_message.text = items[position].lastmessage
-        Glide.with(context!!).load(items[position].image).placeholder(R.drawable.user)
+        Glide.with(context!!).load(items[position].image).placeholder(R.drawable.noimage)
             .into(holder.bindingdata.g_user_image)
 
 

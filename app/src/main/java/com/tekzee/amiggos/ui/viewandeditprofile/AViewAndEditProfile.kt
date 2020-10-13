@@ -496,8 +496,8 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
     }
 
     private fun setupProfileData(data: GetUserProfileResponse.Data) {
-//        dateOfBirth =
-//            data.dob.split("-")[2] + "-" + data.dob.split("-")[1] + "-" + data.dob.split("-")[0]
+        sharedPreferences!!.save(ConstantLib.ISPROFILECOMPLETE,data.isProfileComplete)
+        dateOfBirth =data.dob
         binding!!.txtEditProfileHeading.text = data.name+" "+data.lastName
         binding!!.eFirstname.setText(data.name)
         binding!!.eLastname.setText(data.lastName)
@@ -505,11 +505,11 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
         binding!!.eState.setText(data.state)
         binding!!.ePhone.setText(data.phone)
         binding!!.eDateofbirth.setText(data.dob)
-        Glide.with(applicationContext).load(data.profile).placeholder(R.drawable.user)
+        Glide.with(applicationContext).load(data.profile).placeholder(R.drawable.noimage)
             .into(binding!!.imgUser)
-        cityId = data.city_id
-        stateId = data.state_id
-        profile_name = data.profile_name
+        cityId = data.cityId
+        stateId = data.stateId
+        profile_name = data.profile
 
         saveDataToSharedPreference(data)
 

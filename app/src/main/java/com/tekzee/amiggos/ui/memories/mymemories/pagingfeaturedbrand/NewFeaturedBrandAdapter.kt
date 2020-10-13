@@ -27,7 +27,7 @@ class NewFeaturedBrandAdapter(private val listener: FeaturedBrandClickListener):
         getItem(position)?.let { itemData->
             holder.bindPost(itemData)
 
-            holder.itemView.setOnClickListener {
+            holder.itemView.img_layout.setOnClickListener {
                 listener.onItemClickedBrand(itemData)
             }
         }
@@ -40,6 +40,7 @@ class NewFeaturedBrandAdapter(private val listener: FeaturedBrandClickListener):
         fun bindPost(featuredbranditems : MemorieResponse.Data.Memories){
             Glide.with(itemView.context)
                 .load(featuredbranditems.profile)
+                .placeholder(R.drawable.noimage)
                 .into(img_user)
         }
     }

@@ -47,7 +47,7 @@ class BannerAdapter(private val listener: BannerClickListener) :
             listItem: MemorieResponse.Data.Memories.Memory.Tagged?,
             context: Context?
         ) {
-            Glide.with(context!!).load(listItem!!.banner).placeholder(R.drawable.header_logo).into(listitembinding.ivCard)
+            Glide.with(context!!).load(listItem!!.banner).placeholder(R.drawable.noimage).into(listitembinding.ivCard)
             listitembinding.bannerRowResponse = listItem
             listitembinding.executePendingBindings()
         }

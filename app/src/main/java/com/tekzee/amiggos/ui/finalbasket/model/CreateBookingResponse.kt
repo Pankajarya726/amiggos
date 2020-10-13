@@ -17,9 +17,9 @@ data class CreateBookingResponse(
     ) {
         data class Booking(
             @SerializedName("amount")
-            val amount: Int = 0,
+            val amount: Float = 0.0f,
             @SerializedName("booking_id")
-            val bookingId: Int = 0
+            val bookingId: Float = 0.0f
         )
     }
 }

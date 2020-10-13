@@ -52,7 +52,7 @@ class AddUserAdapter(
             context: Context?,
             response: AddUserResponse
         ) {
-            Glide.with(context!!).load(listItem!!.profileImage).placeholder(R.drawable.header_logo).into(listitembinding.profileImage)
+            Glide.with(context!!).load(listItem!!.profileImage).placeholder(R.drawable.noimage).into(listitembinding.profileImage)
             listitembinding.staff = listItem
             listitembinding.executePendingBindings()
         }

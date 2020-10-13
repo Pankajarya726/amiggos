@@ -33,7 +33,7 @@ class MyBookingAdapter(
         holder.bindingdata.txt_venue_name.text = items[position].clubName
         holder.bindingdata.txt_date.setText(items[position].dateTime)
         holder.bindingdata.txt_amount.setText("Paid : "+items[position].symbolLeft+" "+items[position].price)
-        Glide.with(context!!).load(items[position].qrCode).into(holder.bindingdata.img_barcode)
+        Glide.with(context!!).load(items[position].qrCode).placeholder(R.drawable.noimage).into(holder.bindingdata.img_barcode)
         holder.bindingdata.mainlayout.setOnClickListener{
             listener.onBookingClicked(position,items[position])
 

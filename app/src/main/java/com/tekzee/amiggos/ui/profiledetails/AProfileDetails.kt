@@ -107,12 +107,8 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
         binding!!.htabHeader.sliderAdapter = adapter
         //binding!!.htabHeader.setIndicatorAnimation(IndicatorAnimationType.WORM) //set indicator animation by using IndicatorAnimationType. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
         binding!!.htabHeader.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
-        binding!!.htabHeader.autoCycleDirection = SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH
         binding!!.htabHeader.indicatorSelectedColor = Color.WHITE
         binding!!.htabHeader.indicatorUnselectedColor = Color.GRAY
-        binding!!.htabHeader.scrollTimeInSec = 4 //set scroll delay in seconds :
-        binding!!.htabHeader.startAutoCycle()
-
 
     }
 
@@ -280,8 +276,8 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
             binding!!.imgLike.visibility = View.VISIBLE
         }
         binding!!.txtName.text = data.name +" "+ data.lastName
-        binding!!.txtLocation.text = data.address
-        binding!!.txtCount.text = data.real_freind_count
+        binding!!.txtLocation.text = data.city+", "+data.state
+        binding!!.txtCount.text = data.realFreindCount.toString()
         val tabs =binding!!.htabTabs
         val viewPager = binding!!.htabViewpager
         setupAdapter(viewPager, tabs)

@@ -40,15 +40,18 @@ import com.tekzee.amiggos.ui.tagging.TaggingViewModelFactory
 import com.tekzee.amiggos.util.*
 import com.tekzee.amiggosvenueapp.ui.tagging.adapter.TaggingAdapter
 import com.tekzee.amiggosvenueapp.ui.tagging.model.TaggingResponse
+import id.zelory.compressor.Compressor
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
 import org.kodein.di.generic.instance
+import java.io.File
 import java.util.concurrent.TimeUnit
 
 class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener, KodeinAware {
+
 
     override val kodein: Kodein by closestKodein()
     val languageConstant: LanguageData by instance<LanguageData>()
@@ -117,11 +120,37 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) {
-            imageUri = BitmapUtils.saveImageAndReturnUri(applicationContext, bitmap)
-
+            val imagefile = BitmapUtils.saveImageAndReturnFile(applicationContext, bitmap)
+            getimageUrifrombitmap( Compressor.getDefault(this).compressToBitmap(imagefile))
         }.onDeclined { e ->
             if (e.hasDenied()) {
 
+                val dialog: BottomDialogExtended =
+                    BottomDialogExtended.newInstance(
+                        languageConstant.storagepermission,
+                        arrayOf(languageConstant.yes)
+                    )
+                dialog.show(supportFragmentManager, "dialog")
+                dialog.setListener { position ->
+                    dialog.dismiss()
+                    e.askAgain()
+                }
+            }
+
+            if (e.hasForeverDenied()) {
+                e.goToSettings()
+            }
+        }
+    }
+
+    private fun getimageUrifrombitmap(bitmap: Bitmap?) {
+        askPermission(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) {
+            imageUri = BitmapUtils.saveImageAndReturnUri(applicationContext, bitmap)
+        }.onDeclined { e ->
+            if (e.hasDenied()) {
                 val dialog: BottomDialogExtended =
                     BottomDialogExtended.newInstance(
                         languageConstant.storagepermission,

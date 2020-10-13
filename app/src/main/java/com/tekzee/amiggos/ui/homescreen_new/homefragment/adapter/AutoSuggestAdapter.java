@@ -31,7 +31,13 @@ public class AutoSuggestAdapter extends ArrayAdapter<String> implements Filterab
     @Nullable
     @Override
     public String getItem(int position) {
-        return mlistData.get(position).split("-")[1];
+        if(mlistData.get(position).split("-")[1].length()>0){
+            return mlistData.get(position).split("-")[1];
+        }else {
+            return "";
+        }
+
+//        return mlistData.get(position);
     }
 
     /**

@@ -15,7 +15,6 @@ import com.tekzee.amiggos.ui.blockedusers.model.BlockedUserResponse
 import com.tekzee.amiggos.ui.blockedusers.model.UnBlockFriendResponse
 import com.tekzee.amiggos.ui.bookingdetailnew.model.BookingDetailsNewResponse
 import com.tekzee.amiggos.ui.bookingqrcode.model.BookinQrCodeResponse
-import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
 import com.tekzee.amiggos.ui.bookings_new.bookings.model.ABookingResponse
 import com.tekzee.amiggos.ui.calendarview.model.TimeSlotResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
@@ -54,7 +53,6 @@ import com.tekzee.amiggos.ui.notification_new.model.ANotificationResponse
 import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendResponse
 import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
 import com.tekzee.amiggos.ui.ourmemories.model.InviteFriendResponse
-import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
 import com.tekzee.amiggos.ui.profiledetails.model.GetFriendProfileDetailsResponse
 import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponse
@@ -81,6 +79,7 @@ import com.tekzee.amiggos.ui.viewfriends.model.StorieViewResponse
 import com.tekzee.amiggos.util.NetworkConnectionInterceptor
 import com.tekzee.amiggosvenueapp.ui.addusers.model.AddUserResponse
 import com.tekzee.amiggos.ui.menu.commonfragment.model.CommonMenuResponse
+import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
 import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.BookingPaymentResponse
 import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.SetDefaultCardResponse
 import com.tekzee.amiggosvenueapp.ui.tagging.model.TaggingResponse
@@ -159,7 +158,7 @@ interface ApiService {
     ): Response<CommonResponse>
 
 
-    @POST("partner/approved_tagged_memory")
+    @POST("delete_memory")
     suspend fun docallDeleteApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
@@ -561,7 +560,7 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<MyLifestyleSubcategoryResponse>>
 
-    @POST("guest/setMylifestyle_v1")
+    @POST("guest/setMylifestyle")
     fun docallSaveMyLifestyleSubcategoryApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
@@ -717,7 +716,7 @@ interface ApiService {
     fun doCallPartyInviteApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<PartyInvitesResponse>>
+    ): Observable<Response<BookingInvitationResponse>>
 
 
     @POST("user/getRequestList")
@@ -734,7 +733,7 @@ interface ApiService {
     ): Observable<Response<InvitationResponseV2>>
 
 
-    @POST("guest/getFriendsForPartyInvite")
+    @POST("guest/userPartyInvites")
     fun doCallBookingInvitationApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
@@ -755,14 +754,14 @@ interface ApiService {
     ): Observable<Response<CommonResponse>>
 
 
-    @POST("user/acceptPartyInvitaion_V2")
+    @POST("guest/acceptInvitation")
     fun doAcceptBookingInvitationApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>>
 
 
-    @POST("user/rejectPartyInvitaion_V2")
+    @POST("guest/rejectInvitation")
     fun doRejectBookingInvitationApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
@@ -882,14 +881,14 @@ interface ApiService {
     ): Observable<Response<StorieResponse>>
 
 
-    @POST("user/acceptPartyInvitaion_V2")
+    @POST("guest/acceptInvitation")
     fun doCallJoinPartyInvites(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>>
 
 
-    @POST("user/rejectPartyInvitaion")
+    @POST("guest/rejectInvitation")
     fun doCallDeclinePartyInvites(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>

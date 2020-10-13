@@ -21,7 +21,7 @@ import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 
-class BookingDetailNewActivity: BaseActivity(),
+class BookingDetailNewActivity : BaseActivity(),
     BookingDetailsNewPresenter.ABookingDetailsPresenterMainView {
 
     private var bookingData: BookingDetailsNewResponse? = null
@@ -35,9 +35,17 @@ class BookingDetailNewActivity: BaseActivity(),
         binding = DataBindingUtil.setContentView(this, R.layout.bookingdetailnew_activity)
         sharedPreferences = SharedPreference(this)
         languageData = sharedPreferences!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        bookingdetailnewpresenterimplementation = BookingDetailNewPresenterImplementation(this, this)
+        bookingdetailnewpresenterimplementation =
+            BookingDetailNewPresenterImplementation(this, this)
         getBookingDetailsApi()
         setupClickListener()
+        if (intent.getStringExtra(ConstantLib.FROM).equals(ConstantLib.BOOKING_INVITATION)) {
+            binding.viewmenu.visibility = View.GONE
+            binding.inviteFriend.visibility = View.GONE
+        } else {
+            binding.viewmenu.visibility = View.VISIBLE
+            binding.inviteFriend.visibility = View.VISIBLE
+        }
     }
 
     private fun setupClickListener() {
@@ -47,15 +55,15 @@ class BookingDetailNewActivity: BaseActivity(),
 
         binding.viewmenu.setOnClickListener {
             val intent = Intent(this, ViewMenuActivity::class.java)
-            intent.putExtra(ConstantLib.VIEWMENUDATA,bookingData!!.data.booking)
+            intent.putExtra(ConstantLib.VIEWMENUDATA, bookingData!!.data.booking)
             startActivity(intent)
         }
 
         binding.inviteFriend.setOnClickListener {
             val intent = Intent(this, InviteFriendNewActivity::class.java)
-            intent.putExtra(ConstantLib.MESSAGE,"")
-            intent.putExtra(ConstantLib.FROM,ConstantLib.BOOKINGDETAILPAGE)
-            intent.putExtra(ConstantLib.BOOKING_ID,bookingData!!.data.booking.bookingId.toString())
+            intent.putExtra(ConstantLib.MESSAGE, "")
+            intent.putExtra(ConstantLib.FROM, ConstantLib.BOOKINGDETAILPAGE)
+            intent.putExtra(ConstantLib.BOOKING_ID, bookingData!!.data.booking.bookingId.toString())
             startActivity(intent)
 
         }
@@ -90,26 +98,33 @@ class BookingDetailNewActivity: BaseActivity(),
         bookingData = responseData
         binding.venueName.text = responseData!!.data.booking.name
         binding.venueAddress.text = responseData.data.booking.address
-        Glide.with(this).load(responseData.data.booking.venueHomeImage).into(binding.imgVenue)
+        Glide.with(this).load(responseData.data.booking.venueHomeImage)
+            .placeholder(R.drawable.noimage).into(binding.imgVenue)
         binding.txtTime.text = responseData.data.booking.bookingTime
         binding.txtDate.text = responseData.data.booking.bookingDate
-        if(responseData.data.booking.totalInvitedGuest>0){
+        if (responseData.data.booking.totalInvitedGuest > 0) {
             binding.txtGuestList.visibility = View.VISIBLE
-        }else{
+        } else {
             binding.txtGuestList.visibility = View.GONE
         }
-        binding.txtGuestList.text = languageData!!.klGuestList+responseData.data.booking.totalInvitedGuest.toString()
+        binding.txtGuestList.text =
+            languageData!!.klGuestList + responseData.data.booking.totalInvitedGuest.toString()
         binding.txtPurchaseDescriptionTitle.text = languageData!!.purchasedescription
         binding.txtPurchaseDescription.text = Html.fromHtml(responseData.data.booking.description)
-        binding.txtPurchaseAmount.text = "$ "+responseData.data.booking.totalAmount.toString()
+        binding.txtPurchaseAmount.text = "$ " + responseData.data.booking.totalAmount.toString()
         binding.txtTicketinfo.text = responseData.data.booking.totalAmount.toString()
-        binding.txtReferenceNo.text = languageData!!.referencenumber+responseData.data.booking.bookingId.toString()
-        binding.txtPuchasedBy.text = languageData!!.purchasedby+responseData.data.booking.purchasedBy
-        Glide.with(this).load(responseData.data.booking.qrCode).into(binding.imgBarcode)
-        if(responseData.data.booking.menus.isNotEmpty()){
-           binding.viewmenu.visibility= View.VISIBLE
-        }else{
-            binding.viewmenu.visibility= View.GONE
+        binding.txtReferenceNo.text =
+            languageData!!.referencenumber + responseData.data.booking.bookingId.toString()
+        binding.txtPuchasedBy.text =
+            languageData!!.purchasedby + responseData.data.booking.purchasedBy
+        Glide.with(this).load(responseData.data.booking.qrCode).placeholder(R.drawable.noimage)
+            .into(binding.imgBarcode)
+        if(intent.getStringExtra(ConstantLib.FROM).equals(ConstantLib.BOOKING_INVITATION)){
+            binding.viewmenu.visibility = View.GONE
+        }else if (responseData.data.booking.menus.isNotEmpty()) {
+            binding.viewmenu.visibility = View.VISIBLE
+        } else {
+            binding.viewmenu.visibility = View.GONE
         }
     }
 

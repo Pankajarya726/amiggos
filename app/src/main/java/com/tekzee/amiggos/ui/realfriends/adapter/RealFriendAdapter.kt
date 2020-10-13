@@ -58,7 +58,7 @@ class RealFriendAdapter(
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind() {
-            Glide.with(itemView.context).load(mDataList[adapterPosition].profile).placeholder(R.drawable.user).into(itemView.profile_image)
+            Glide.with(itemView.context).load(mDataList[adapterPosition].profile).placeholder(R.drawable.noimage).into(itemView.profile_image)
             itemView.txt_name_real_friend.text = mDataList[adapterPosition].name
 
             itemView.setOnClickListener {

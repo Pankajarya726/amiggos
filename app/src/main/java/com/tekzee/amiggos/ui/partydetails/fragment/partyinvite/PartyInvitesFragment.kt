@@ -15,14 +15,13 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.CommonFragmentLayoutBinding
 import com.tekzee.amiggos.ui.guestlist.GuestListActivity
 import com.tekzee.amiggos.ui.partydetails.PartyDetailsActivity
-import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.adapter.PartyInvitesAdapter
+import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.adapter.PartyInvitesNewAdapter
 import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.interfaces.PartyInviteInterface
-import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesData
-import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesResponse
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
 
 class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMainView {
 
@@ -32,8 +31,8 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMai
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
     private var partyInvitesPresenterImplementation: PartyInvitesPresenterImplementation? = null
-    private lateinit var adapter: PartyInvitesAdapter
-    private val items: ArrayList<PartyInvitesData> = ArrayList()
+    private lateinit var adapter: PartyInvitesNewAdapter
+    private val items: ArrayList<BookingInvitationResponse.Data.BookingDetail> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,9 +41,9 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMai
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.common_fragment_layout,container,false)
         myView = binding.root
-        sharedPreference = SharedPreference(activity!!.baseContext)
+        sharedPreference = SharedPreference(requireActivity().baseContext)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        partyInvitesPresenterImplementation = PartyInvitesPresenterImplementation(this,activity!!)
+        partyInvitesPresenterImplementation = PartyInvitesPresenterImplementation(this,requireActivity())
         setupRecyclerView()
         callPartyInviteApi()
         return myView
@@ -60,9 +59,9 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMai
 
         binding.commonRecyclerview.setHasFixedSize(true)
         binding.commonRecyclerview.layoutManager = LinearLayoutManager(activity)
-        adapter = PartyInvitesAdapter(items,languageData, object : PartyInviteInterface {
+        adapter = PartyInvitesNewAdapter(items,languageData, object : PartyInviteInterface {
             override fun onItemClicked(
-                partyinvitesData: PartyInvitesData,
+                partyinvitesData: BookingInvitationResponse.Data.BookingDetail,
                 type: Int
             ) {
                 when(type){
@@ -86,7 +85,7 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMai
 
     }
 
-    private fun callJoinPartyInviteApi(partyinvitesData: PartyInvitesData) {
+    private fun callJoinPartyInviteApi(partyinvitesData: BookingInvitationResponse.Data.BookingDetail) {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("booking_id", partyinvitesData.bookingId)
@@ -94,7 +93,7 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMai
     }
 
 
-    private fun callDeclinePartyInvites(partyinvitesData: PartyInvitesData) {
+    private fun callDeclinePartyInvites(partyinvitesData: BookingInvitationResponse.Data.BookingDetail) {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("booking_id", partyinvitesData.bookingId)
@@ -108,10 +107,10 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMai
         Toast.makeText(activity,message,Toast.LENGTH_LONG).show()
     }
 
-    override fun onPartyInviteSuccess(responseData: PartyInvitesResponse?) {
+    override fun onPartyInviteSuccess(responseData: BookingInvitationResponse?) {
         items.clear()
         adapter.notifyDataSetChanged()
-        items.addAll(responseData!!.data)
+        items.addAll(responseData!!.data.bookingDetails)
         adapter.notifyDataSetChanged()
     }
 
@@ -119,7 +118,7 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMai
 //        callPartyInviteApi()
         val intent = Intent(activity,PartyDetailsActivity::class.java)
         startActivity(intent)
-        activity!!.finish()
+        requireActivity().finish()
         Toast.makeText(activity,responseData!!.message,Toast.LENGTH_LONG).show()
     }
 
@@ -127,7 +126,7 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMai
         //callPartyInviteApi()
         val intent = Intent(activity,PartyDetailsActivity::class.java)
         startActivity(intent)
-        activity!!.finish()
+        requireActivity().finish()
         Toast.makeText(activity,responseData!!.message,Toast.LENGTH_LONG).show()
     }
 

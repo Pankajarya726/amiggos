@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.bumptech.glide.Glide
 import com.google.gson.JsonObject
-import com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView
 import com.stfalcon.imageviewer.StfalconImageViewer
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
@@ -28,6 +27,7 @@ import com.tekzee.amiggos.util.RxSearchObservable
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.hiddensearchrecyclerview.utils.HiddenSearchWithRecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import io.reactivex.functions.Predicate
@@ -110,7 +110,7 @@ class ABookingDetails : BaseActivity(), ABookingDetailsPresenter.ABookingDetails
         binding!!.htabHeader.setOnClickListener {
             val image = arrayOf(dataFromIntent!!.venue_home_image)
             imageBuilder = StfalconImageViewer.Builder<String>(this,image){
-                imageView, image ->  Glide.with(this).load(image).into(imageView)
+                imageView, image ->  Glide.with(this).load(image).placeholder(R.drawable.noimage).into(imageView)
             }.withTransitionFrom(imageView)
                 .withBackgroundColor(resources.getColor(R.color.black))
                 .allowSwipeToDismiss(true)
@@ -169,7 +169,7 @@ class ABookingDetails : BaseActivity(), ABookingDetailsPresenter.ABookingDetails
         binding!!.recyclerviewlayout.visibility = View.GONE
 
         Glide.with(applicationContext).load(dataFromIntent!!.venue_home_image)
-            .placeholder(R.drawable.blackbg).into(binding!!.htabHeader)
+            .placeholder(R.drawable.noimage).into(binding!!.htabHeader)
          binding!!.txtName.text = dataFromIntent!!.name
         binding!!.txtLocation.text = dataFromIntent!!.booking_date
         binding!!.bookingid.text = "Booking Id : " + dataFromIntent!!.id.toString()

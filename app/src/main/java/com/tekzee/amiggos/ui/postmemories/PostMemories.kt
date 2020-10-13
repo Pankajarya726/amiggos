@@ -19,6 +19,7 @@ import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.enums.FriendsAction
 import com.tekzee.amiggos.services.UploadWorkService
 
 
@@ -67,8 +68,7 @@ class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView 
     private fun setupClickListerner() {
         binding.layoutmymemories.setOnClickListener {
             val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-            pDialog.titleText =
-                "Your memory will be uploaded in backgroud and will take few moments to get updated"
+            pDialog.titleText = languageData!!.yourmemorywillbeuploadedinbackgroud
             pDialog.setCancelable(false)
             pDialog.setCancelButton(languageData!!.klCancel) {
                 pDialog.dismiss()
@@ -136,7 +136,10 @@ class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView 
                     data
                 ).setConstraints(constraints).addTag("Upload").build()
             WorkManager.getInstance(this).enqueue(oneTimeWorkRequest)
-            val intent = Intent(applicationContext, AHomeScreen::class.java)
+            val intent = Intent(applicationContext, AHomeScreen::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                action = FriendsAction.SHOW_MY_MEMORY.action
+            }
             startActivity(intent)
             finishAffinity()
 
@@ -169,7 +172,10 @@ class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView 
                     data
                 ).setConstraints(constraints).addTag("Upload").build()
             WorkManager.getInstance(this).enqueue(oneTimeWorkRequest)
-            val intent = Intent(applicationContext, AHomeScreen::class.java)
+            val intent = Intent(applicationContext, AHomeScreen::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                action = FriendsAction.SHOW_MY_MEMORY.action
+            }
             startActivity(intent)
             finishAffinity()
         }

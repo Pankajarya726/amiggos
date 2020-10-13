@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.work.*
 import com.bumptech.glide.Glide
 import com.google.gson.JsonObject
+import com.jakewharton.rxbinding2.widget.RxTextView
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.ActivityOurMemoriesBinding
+import com.tekzee.amiggos.enums.FriendsAction
 import com.tekzee.amiggos.services.UploadWorkOurMemoryService
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.ourmemories.adapter.InviteFriendAdapter
@@ -62,6 +64,7 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
         setupclickListener()
         doCallGetFriends(false, "")
         ourMemoryId = intent.getStringExtra(ConstantLib.OURSTORYID)!!
+        hideKeyboard()
 
     }
 
@@ -106,34 +109,49 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
         }
 
 
-        RxSearchObservable.fromView(binding.hiddenSearchWithRecycler.searchBarSearchView)
-            .debounce(500, TimeUnit.MILLISECONDS)
-            .filter(Predicate { t ->
-                t.isNotEmpty()
-            })
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(Consumer<String>() { t ->
+        RxTextView.textChanges(binding.searchfriend) .filter { it.length > 2 }.debounce(1000, TimeUnit.MILLISECONDS).subscribeOn(
+            Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
+            if(it.isEmpty()){
                 onlineFriendPageNo = 0
                 mydataList.clear()
                 adapter!!.notifyDataSetChanged()
-                doCallGetFriends(false, t.toString())
-            })
-
-        val closeButton: View? =
-            binding.hiddenSearchWithRecycler.findViewById(androidx.appcompat.R.id.search_close_btn)
-        closeButton?.setOnClickListener {
-
-            binding.hiddenSearchWithRecycler.searchBarSearchView.clearFocus()
-            binding.hiddenSearchWithRecycler.searchBarSearchView.isIconified = false
-            binding.hiddenSearchWithRecycler.clearSearchview()
-            onlineFriendPageNo = 0
-            mydataList.clear()
-            adapter!!.notifyDataSetChanged()
-            doCallGetFriends(false, "")
+                doCallGetFriends(false, it.toString())
+            }else{
+                onlineFriendPageNo = 0
+                mydataList.clear()
+                adapter!!.notifyDataSetChanged()
+                doCallGetFriends(false, it.toString())
+            }
         }
 
-        binding!!.btnInviteFriend.setOnClickListener {
+//        RxSearchObservable.fromView(binding.searchfriend)
+//            .debounce(1000, TimeUnit.MILLISECONDS)
+//            .filter(Predicate { t ->
+//                t.isNotEmpty()
+//            })
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe(Consumer<String>() { t ->
+//                onlineFriendPageNo = 0
+//                mydataList.clear()
+//                adapter!!.notifyDataSetChanged()
+//                doCallGetFriends(false, t.toString())
+//            })
+
+//        val closeButton: View? =
+//            binding.hiddenSearchWithRecycler.findViewById(androidx.appcompat.R.id.search_close_btn)
+//        closeButton?.setOnClickListener {
+//
+//            binding.hiddenSearchWithRecycler.searchBarSearchView.clearFocus()
+//            binding.hiddenSearchWithRecycler.searchBarSearchView.isIconified = false
+//            binding.hiddenSearchWithRecycler.clearSearchview()
+//            onlineFriendPageNo = 0
+//            mydataList.clear()
+//            adapter!!.notifyDataSetChanged()
+//            doCallGetFriends(false, "")
+//        }
+
+        binding.btnInviteFriend.setOnClickListener {
             callUploadImageToMyMemories(toCommaSeparated()!!)
         }
 
@@ -146,6 +164,7 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
         binding.btnInviteFriend.text = languageData!!.klDone
         Glide.with(applicationContext)
             .load(sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE))
+            .placeholder(R.drawable.noimage)
             .into(binding.profileImage)
 
     }
@@ -161,6 +180,7 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
     }
 
     override fun onOurMemoriesSuccess(responseData: InviteFriendResponse?) {
+        binding.profileImage.requestFocus()
         onlineFriendPageNo++
         mydataList =
             responseData!!.data.realFreind as ArrayList<InviteFriendResponse.Data.RealFreind>
@@ -170,19 +190,22 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
 
 
     override fun onOurMemoriesSuccessInfinite(responseData: InviteFriendResponse?) {
+        binding.profileImage.requestFocus()
         onlineFriendPageNo++
-        adapter?.setLoadingStatus(true)
+        adapter.setLoadingStatus(true)
         mydataList.removeAt(mydataList.size - 1)
         mydataList.addAll(responseData!!.data.realFreind)
-        adapter?.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
+
     }
 
 
     override fun onOurMemoriesFailure(message: String) {
+        binding.profileImage.requestFocus()
         if (mydataList.size > 0) {
-            adapter?.setLoadingStatus(false)
+            adapter.setLoadingStatus(false)
             mydataList.removeAt(mydataList.size - 1)
-            adapter?.notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
         }
     }
 
@@ -211,7 +234,10 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
                     data
                 ).setConstraints(constraints).addTag("Upload").build()
             WorkManager.getInstance(this).enqueue(oneTimeWorkRequest)
-            val intent = Intent(applicationContext, AHomeScreen::class.java)
+            val intent = Intent(applicationContext, AHomeScreen::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                action = FriendsAction.SHOW_MY_MEMORY.action
+            }
             startActivity(intent)
             selectUserIds.clear()
             finishAffinity()
@@ -236,7 +262,10 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
                     data
                 ).setConstraints(constraints).addTag("Upload").build()
             WorkManager.getInstance(this).enqueue(oneTimeWorkRequest)
-            val intent = Intent(applicationContext, AHomeScreen::class.java)
+            val intent = Intent(applicationContext, AHomeScreen::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                action = FriendsAction.SHOW_MY_MEMORY.action
+            }
             startActivity(intent)
             selectUserIds.clear()
             finishAffinity()

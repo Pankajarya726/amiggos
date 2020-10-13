@@ -8,27 +8,37 @@ public class LanguageData {
     @SerializedName("klDone")
     @Expose
     private String klDone;
+
+    @SerializedName("yourmemorywillbeuploadedinbackgroud")
+    @Expose
+    private String yourmemorywillbeuploadedinbackgroud ="Your memory will be uploaded in backgroud and will take few moments to get updated";
+    @SerializedName("time")
+    @Expose
+    private String time = "Time";
+    @SerializedName("date")
+    @Expose
+    private String date = "Date";
     @SerializedName("selectanyonemenuitem")
     @Expose
-    private String selectanyonemenuitem="Please select any one menu item to proceed";
+    private String selectanyonemenuitem = "Please select any one menu item to proceed";
     @SerializedName("menu")
     @Expose
-    private String menu ="Menu";
+    private String menu = "Menu";
     @SerializedName("quantity")
     @Expose
-    private String quantity="Quantity: ";
+    private String quantity = "Quantity: ";
     @SerializedName("referencenumber")
     @Expose
-    private String referencenumber ="Referenced By : ";
+    private String referencenumber = "Referenced Number : ";
     @SerializedName("purchasedby")
     @Expose
-    private String purchasedby="Purchased By : ";
-   @SerializedName("purchasedescription")
+    private String purchasedby = "Purchased By : ";
+    @SerializedName("purchasedescription")
     @Expose
-    private String purchasedescription ="Purchase Description";
+    private String purchasedescription = "Purchase Description";
     @SerializedName("klCancel")
     @Expose
-    private String klCancel="Cancel";
+    private String klCancel = "Cancel";
     @SerializedName("klOk")
     @Expose
     private String klOk;
@@ -856,7 +866,7 @@ public class LanguageData {
     private String visibleOnMap;
     @SerializedName("messages")
     @Expose
-    private String messages="Messages";
+    private String messages = "Messages";
     @SerializedName("push_notification")
     @Expose
     private String pushNotification;
@@ -1288,7 +1298,7 @@ public class LanguageData {
 
     @SerializedName("edit")
     @Expose
-    private String edit ="Edit";
+    private String edit = "Edit";
 
     @SerializedName("deletecard")
     @Expose
@@ -1348,7 +1358,7 @@ public class LanguageData {
 
     @SerializedName("setprofilepicture")
     @Expose
-    private String setprofilepicture = "Select Profile Picture";
+    private String setprofilepicture = "Set Profile Picture";
 
     @SerializedName("profilecompletionerror")
     @Expose
@@ -1356,36 +1366,47 @@ public class LanguageData {
 
     @SerializedName("favoritevenue")
     @Expose
-    private String favoritevenue ="Favorite Venue";
+    private String favoritevenue = "Favorite Venue";
 
     @SerializedName("chooseyourpreference")
     @Expose
-    private String chooseyourpreference ="Choose Your Preference";
+    private String chooseyourpreference = "Choose Your Preference";
 
     @SerializedName("storagepermission")
     @Expose
-    private String storagepermission="Please provide storage persmission";
+    private String storagepermission = "Please provide storage persmission";
+    @SerializedName("locationpermission")
+    @Expose
+    private String locationpermission = "Please provide location persmission";
+
+    public String getLocationpermission() {
+        return locationpermission;
+    }
+
+    public void setLocationpermission(String locationpermission) {
+        this.locationpermission = locationpermission;
+    }
 
     @SerializedName("videosaved")
     @Expose
-    private String videosaved ="Video saved successfully";
+    private String videosaved = "Video saved successfully";
 
     @SerializedName("imagesaved")
     @Expose
-    private String imagesaved="Image saved successfully";
+    private String imagesaved = "Image saved successfully";
 
     @SerializedName("invite")
     @Expose
-    private String invite ="Invite";
+    private String invite = "Invite";
 
     @SerializedName("undo")
     @Expose
-    private String undo ="Undo";
+    private String undo = "Undo";
 
 
     @SerializedName("selectyourpacakge")
     @Expose
-    private String selectyourpacakge ="Select Your Package";
+    private String selectyourpacakge = "Select Your Package";
 
     public String getSelectyourpacakge() {
         return selectyourpacakge;
@@ -1423,32 +1444,32 @@ public class LanguageData {
     private String max_venue_brand_limit = "Can not tag more venue or brands";
 
     @SerializedName("approve")
-    private String approve="Approve";
+    private String approve = "Approve";
 
     @SerializedName("decline")
-    private String decline ="Decline";
+    private String decline = "Decline";
 
     @SerializedName("invitefriendhint")
-    private String invitefriendhint="Invite friend to your party by clicking the invite below and hit done";
+    private String invitefriendhint = "Invite friend to your party by clicking the invite below and hit done";
 
 
     @SerializedName("delete")
-    private String delete ="Delete";
+    private String delete = "Delete";
 
     @SerializedName("deletemessage")
-    private String deletemessage ="Are you sure you want to delete message";
+    private String deletemessage = "Are you sure you want to delete message";
 
     @SerializedName("entermessage")
-    private String entermessage ="Plese enter message first" ;
+    private String entermessage = "Plese enter message first";
 
     @SerializedName("invitefriend")
-    private String invitefriend ="Invite Friend";
+    private String invitefriend = "Invite Friend";
 
     @SerializedName("newmember")
-    private String newmember ="New Member";
+    private String newmember = "New Member";
 
     @SerializedName("profilecompleteddata")
-    private String profilecompletedata ="You need to fill your profile details before viewing other profile. Would you like to complete the profile?";
+    private String profilecompletedata = "You need to fill your profile details before viewing other profile. Would you like to complete the profile?";
 
 
     @SerializedName("togo")
@@ -1460,39 +1481,39 @@ public class LanguageData {
 
 
     @SerializedName("address")
-    private String address ="Address";
+    private String address = "Address";
 
 
     @SerializedName("phonenumber")
-    private String phonenumber ="Phone Number" ;
+    private String phonenumber = "Phone Number";
 
 
     @SerializedName("upload")
-    private String upload ="Upload";
+    private String upload = "Upload";
 
     @SerializedName("agerestrictionmessage")
-    private String agerestrictionmessage ="To buy this product must \n upload your id";
+    private String agerestrictionmessage = "To buy this product must \n upload your id";
 
     @SerializedName("checkout")
-    private String checkout ="Checkout";
+    private String checkout = "Checkout";
 
     @SerializedName("itemordered")
-    private String itemordered ="Item Ordered" ;
+    private String itemordered = "Item Ordered";
 
     @SerializedName("subtotal")
     private String subtotal = "Subtotal";
 
     @SerializedName("feeandestimatedtax")
-    private String feeandestimatedtax ="Fee and estimated tax";
+    private String feeandestimatedtax = "Fee and estimated tax";
 
     @SerializedName("tip")
-    private String tip ="Tip";
+    private String tip = "Tip";
 
     @SerializedName("total")
-    private String total ="Total";
+    private String total = "Total";
 
     @SerializedName("specialinstruction")
-    private String specialinstruction ="Special Instructions";
+    private String specialinstruction = "Special Instructions";
 
     public String getSubtotal() {
         return subtotal;
@@ -1940,7 +1961,6 @@ public class LanguageData {
     public void setReferencenumber(String referencenumber) {
         this.referencenumber = referencenumber;
     }
-
 
 
     public void setpRealFriends(String pRealFriends) {
@@ -3627,15 +3647,15 @@ public class LanguageData {
         this.klDontHaveStories = klDontHaveStories;
     }
 
- public String getSelectanyonemenuitem() {
-  return selectanyonemenuitem;
- }
+    public String getSelectanyonemenuitem() {
+        return selectanyonemenuitem;
+    }
 
- public void setSelectanyonemenuitem(String selectanyonemenuitem) {
-  this.selectanyonemenuitem = selectanyonemenuitem;
- }
+    public void setSelectanyonemenuitem(String selectanyonemenuitem) {
+        this.selectanyonemenuitem = selectanyonemenuitem;
+    }
 
- public String getInviteAlert1() {
+    public String getInviteAlert1() {
         return inviteAlert1;
     }
 
@@ -4228,6 +4248,14 @@ public class LanguageData {
         this.userRemovedFromYoureFreindList = userRemovedFromYoureFreindList;
     }
 
+    public String getYourmemorywillbeuploadedinbackgroud() {
+        return yourmemorywillbeuploadedinbackgroud;
+    }
+
+    public void setYourmemorywillbeuploadedinbackgroud(String yourmemorywillbeuploadedinbackgroud) {
+        this.yourmemorywillbeuploadedinbackgroud = yourmemorywillbeuploadedinbackgroud;
+    }
+
     public String getPackageListFetchedSuccessfully() {
         return packageListFetchedSuccessfully;
     }
@@ -4334,6 +4362,22 @@ public class LanguageData {
 
     public String getQrCodeScreenBottomText() {
         return qrCodeScreenBottomText;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public void setQrCodeScreenBottomText(String qrCodeScreenBottomText) {
@@ -4512,15 +4556,15 @@ public class LanguageData {
         return settingDetailsDataFetchedSuccessfully;
     }
 
- public String getQuantity() {
-  return quantity;
- }
+    public String getQuantity() {
+        return quantity;
+    }
 
- public void setQuantity(String quantity) {
-  this.quantity = quantity;
- }
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
 
- public void setSettingDetailsDataFetchedSuccessfully(String settingDetailsDataFetchedSuccessfully) {
+    public void setSettingDetailsDataFetchedSuccessfully(String settingDetailsDataFetchedSuccessfully) {
         this.settingDetailsDataFetchedSuccessfully = settingDetailsDataFetchedSuccessfully;
     }
 
@@ -5644,15 +5688,15 @@ public class LanguageData {
         this.dashboardSubheading1 = dashboardSubheading1;
     }
 
- public String getMenu() {
-  return menu;
- }
+    public String getMenu() {
+        return menu;
+    }
 
- public void setMenu(String menu) {
-  this.menu = menu;
- }
+    public void setMenu(String menu) {
+        this.menu = menu;
+    }
 
- public String getStaffListFetchedSuccessfully() {
+    public String getStaffListFetchedSuccessfully() {
         return staffListFetchedSuccessfully;
     }
 

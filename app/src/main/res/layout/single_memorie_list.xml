@@ -13,7 +13,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_6sdp">
-
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/img_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/_5sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:rippleColor="@color/black">
         <tangxiaolv.com.library.EffectiveShapeView
             android:id="@+id/user_image"
             android:layout_width="@dimen/_80sdp"
@@ -28,7 +37,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:shape="round_rectangle"
             app:srcCompat="@drawable/ic_send" />
-
+        </com.google.android.material.card.MaterialCardView>
         <TextView
             android:id="@+id/s_text_name"
             android:layout_width="0dp"

@@ -153,10 +153,11 @@ class MemorieNotificationFragment: BaseFragment(), MemorieNotificationFragmentPr
     }
 
     override fun itemClickCallback(position: Int) {
-        TODO("Not yet implemented")
+        Log.e("message-->",""+position)
     }
 
     override fun onItemLongClickListener(position: Int) {
-        TODO("Not yet implemented")
+        Log.e("message-->",""+position)
+
     }
 }

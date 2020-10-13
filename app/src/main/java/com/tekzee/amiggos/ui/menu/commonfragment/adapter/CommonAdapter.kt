@@ -110,7 +110,7 @@ class CommonAdapter(
             context: Context?
         ) {
             Glide.with(context!!).load(listItem!!.menuImage)
-                .placeholder(R.drawable.header_logo).into(itemView.menuimage)
+                .placeholder(R.drawable.noimage).into(itemView.menuimage)
             listitembinding.commonitem = listItem
             listitembinding.executePendingBindings()
         }

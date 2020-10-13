@@ -60,6 +60,7 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:id="@+id/scrollview"
             android:layout_above="@+id/btn_next"
             android:layout_below="@+id/viewbetweendateandtime">
 
@@ -119,7 +120,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_8sdp"
                         android:fontFamily="@font/opensans_bold"
-                        android:gravity="center"
+                        android:gravity="center|left"
                         android:text="Time"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/_15sdp" />
@@ -130,14 +131,35 @@
                         android:layout_height="wrap_content"
                         android:timePickerMode="spinner" />
                 </LinearLayout>
-
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/time_recycler"
+                <LinearLayout
+                    android:id="@+id/timeslotlayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_8sdp"
-                    android:visibility="gone" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/time_slot"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:fontFamily="@font/opensans_bold"
+                        android:gravity="center|left"
+                        android:text="Time"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/_15sdp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/time_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_8sdp"
+                        />
+                </LinearLayout>
+
+
+
+
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 

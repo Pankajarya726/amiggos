@@ -23,7 +23,9 @@ data class MyLifestyleSubcategoryResponse(
             @SerializedName("parent_id")
             val parentId: Int = 0,
             @SerializedName("selected")
-            var selected: Int = 0
+            var selected: Int = 0,
+            @SerializedName("isalreadyselected")
+            var isalreadyselected: Int = 0
         )
     }
 }

@@ -100,6 +100,7 @@ class StoryDisplayFragment : Fragment(),
         img_cancel.setOnClickListener {
             requireActivity().onBackPressed()
         }
+
     }
 
 
@@ -222,13 +223,19 @@ class StoryDisplayFragment : Fragment(),
             storyDisplayVideo.hide()
             storyDisplayVideoProgress.hide()
             storyDisplayImage.show()
-            Glide.with(this).load(stories[counter].url).into(storyDisplayImage)
+            Glide.with(this).load(stories[counter].url).placeholder(R.drawable.noimage).into(storyDisplayImage)
         }
 
         val cal: Calendar = Calendar.getInstance(Locale.ENGLISH).apply {
             timeInMillis = stories[counter].storyDate
         }
         storyDisplayTime.text = DateFormat.format("MM-dd-yyyy HH:mm:ss", cal).toString()
+
+        if(prefs.getValueInt(ConstantLib.USER_ID) == stories[counter].creater_id){
+            img_delete.visibility = View.VISIBLE
+        }else{
+            img_delete.visibility = View.GONE
+        }
     }
 
     private fun initializePlayer() {
@@ -433,6 +440,7 @@ class StoryDisplayFragment : Fragment(),
 
     override fun onDeleteResponse(message: String) {
         Toast.makeText(requireContext(),message,Toast.LENGTH_LONG).show()
+        requireActivity().finish()
     }
 
     override fun onFailure(message: String) {

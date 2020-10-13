@@ -32,7 +32,7 @@ class LanguageAdapter(
 
     override fun onBindViewHolder(holder: LanguageViewHolder, position: Int) {
         holder.bindingdata.txt_name.text = items[position].name
-        Glide.with(context!!).load(items[position].image).into(holder.bindingdata.profile_image)
+        Glide.with(context!!).load(items[position].image).placeholder(R.drawable.noimage).into(holder.bindingdata.profile_image)
         holder.bindingdata.mainlayout.setOnClickListener {
             listener.onLanguageClicked(position,items[position])
         }

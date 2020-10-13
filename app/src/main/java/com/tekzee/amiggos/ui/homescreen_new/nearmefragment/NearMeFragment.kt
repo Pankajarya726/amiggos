@@ -30,10 +30,12 @@ class NearMeFragment : BaseFragment() {
     companion object {
 
         private lateinit var mIntent: Intent
+        private var mtab: Int = 0
         private val nearmefragment: NearMeFragment? = null
 
-        fun newInstance(intent: Intent): NearMeFragment{
+        fun newInstance(intent: Intent, tab: Int): NearMeFragment{
             mIntent = intent
+            mtab = tab
             if(nearmefragment == null){
                 return NearMeFragment()
             }
@@ -72,6 +74,7 @@ class NearMeFragment : BaseFragment() {
     ) {
         val fragmentManager = childFragmentManager
         val adapter = ViewPagerTwoAdapter(this)
+        viewPager.isUserInputEnabled = false
         adapter.addFragment(FirstFragment.newInstance(), languageData!!.pNearme)
         adapter.addFragment(RealFriend.newInstance(), languageData!!.pRealFriends)
         adapter.addFragment(Invitations.newInstance(), languageData!!.pInvitaion)
@@ -95,9 +98,7 @@ class NearMeFragment : BaseFragment() {
             }
         }.attach()
 
-        if(mIntent.action == FriendsAction.CLICK.action){
-            viewPager.currentItem = 2
-         }
+        viewPager.currentItem = mtab
     }
 
     override fun validateError(message: String) {

@@ -82,12 +82,24 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
 
             if (intent.action == FriendsAction.CLICK.action) {
                 bottomNavigation!!.menu.getItem(1).isChecked = true
+                setHeaders(R.id.navigation_bookings)
+                openFragment(BookingFragment.newInstance(intent,2), "5")
+            } else if (intent.action == FriendsAction.SHOW_FRIENDS.action) {
+                bottomNavigation!!.menu.getItem(4).isChecked = true
                 setHeaders(R.id.navigation_near_me)
-                openFragment(NearMeFragment.newInstance(intent), "2")
-            } else if (intent.action == "BOOKING") {
+                openFragment(NearMeFragment.newInstance(intent,1), "2")
+            } else if (intent.action == FriendsAction.SHOW_FRIEND_REQUEST.action) {
+                bottomNavigation!!.menu.getItem(4).isChecked = true
+                setHeaders(R.id.navigation_near_me)
+                openFragment(NearMeFragment.newInstance(intent, 2), "2")
+            }  else if (intent.action == FriendsAction.PARTY_INVITATIONS.action) {
                 bottomNavigation!!.menu.getItem(4).isChecked = true
                 setHeaders(R.id.navigation_bookings)
-                openFragment(BookingFragment.newInstance(intent), "2")
+                openFragment(BookingFragment.newInstance(intent, 1), "5")
+            }else if (intent.action == FriendsAction.SHOW_MY_MEMORY.action) {
+                bottomNavigation!!.menu.getItem(4).isChecked = true
+                setHeaders(R.id.navigation_memories)
+                openFragment(AMemoriesFragment.newInstance(), "4")
             } else {
                 setHeaders(R.id.navigation_home)
                 openFragment(HomeFragment.newInstance(), "1")
@@ -99,11 +111,11 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             if (e.hasDenied()) {
 
                 AlertDialog.Builder(this)
-                    .setMessage("Please accept our permissions")
-                    .setPositiveButton("yes") { dialog, which ->
+                    .setMessage(languageData!!.locationpermission)
+                    .setPositiveButton(languageData!!.yes) { dialog, which ->
                         e.askAgain()
                     } //ask again
-                    .setNegativeButton("no") { dialog, which ->
+                    .setNegativeButton(languageData!!.no) { dialog, which ->
                         dialog.dismiss()
                     }
                     .show()
@@ -225,7 +237,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             }
             R.id.navigation_near_me -> {
                 setHeaders(R.id.navigation_near_me)
-                openFragment(NearMeFragment.newInstance(intent), "2")
+                openFragment(NearMeFragment.newInstance(intent, 0), "2")
                 return true
             }
             R.id.navigation_my_lifestyle -> {
@@ -240,7 +252,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             }
             R.id.navigation_bookings -> {
                 setHeaders(R.id.navigation_bookings)
-                openFragment(BookingFragment.newInstance(intent), "5")
+                openFragment(BookingFragment.newInstance(intent, 0), "5")
                 return true
             }
         }

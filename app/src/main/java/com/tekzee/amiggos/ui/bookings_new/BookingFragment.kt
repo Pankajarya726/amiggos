@@ -27,8 +27,10 @@ class BookingFragment : BaseFragment(){
 
     companion object {
         private lateinit var mIntent: Intent
+        private var mtab: Int=0
         private val fragment: BookingFragment? = null
-        fun newInstance(intent: Intent): BookingFragment{
+        fun newInstance(intent: Intent, tab: Int): BookingFragment{
+            mtab = tab
             mIntent = intent
             if(fragment == null){
                 return BookingFragment()
@@ -75,9 +77,7 @@ class BookingFragment : BaseFragment(){
         adapter.addFragment(BookingInvitations(), languageData!!.pInvites)
         viewPager.adapter = adapter
         tabs.setupWithViewPager(viewPager)
-        if(mIntent.action == "BOOKING"){
-            viewPager.currentItem = 2
-        }
+        viewPager.currentItem = mtab
     }
 
     override fun validateError(message: String) {

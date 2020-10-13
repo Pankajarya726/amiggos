@@ -4,10 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        android:background="@android:color/white">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -44,30 +43,22 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
                 android:orientation="horizontal">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/heading"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="@dimen/_8sdp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:padding="2dp"
+                    android:text="Add a card"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/_15sdp"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/heading"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginTop="15dp"
-                        android:fontFamily="@font/opensans_bold"
-                        android:padding="2dp"
-                        android:text="Add a card"
-                        android:textColor="@android:color/black"
-                        android:textSize="18dp"
-                        android:textStyle="bold" />
-
-
-                </LinearLayout>
 
             </LinearLayout>
 
@@ -76,141 +67,58 @@
                 android:layout_height="1dp"
                 android:background="@android:color/black" />
 
-            <ImageView
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_width="match_parent"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:src="@drawable/ic_pay"
-                android:layout_height="wrap_content"/>
-
-
-            <LinearLayout
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/white">
-
-
-                    <ImageView
-                        android:id="@+id/btn_close"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true" />
-
-                </RelativeLayout>
-
-
-                <EditText
-                    android:id="@+id/edtCardNumber"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="-0.25dp"
-                    android:background="@drawable/bg_card_number_edit_text"
-                    android:drawableRight="@drawable/ic_card_number"
-                    android:hint="Card Number"
-                    android:inputType="phone"
-                    android:padding="16dp"
-                    android:textColor="@android:color/black"
-                    android:textColorHint="@color/black"
-                    android:textSize="14sp"
-                    tools:ignore="LabelFor,NegativeMargin" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-0.25dp"
-                    android:orientation="horizontal"
-                    tools:ignore="NegativeMargin">
-
-                    <EditText
-                        android:id="@+id/edtValidity"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_marginRight="-0.25dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_card_date_edit_text"
-                        android:drawableRight="@drawable/ic_card_date"
-                        android:hint="Validity(MM/YY)"
-                        android:inputType="date"
-                        android:maxLength="5"
-                        android:padding="16dp"
-                        android:textColor="@android:color/black"
-                        android:textColorHint="@color/black"
-                        android:textSize="14sp"
-                        tools:ignore="LabelFor,RtlHardcoded" />
-
-                    <EditText
-                        android:id="@+id/edtCvv"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_marginLeft="-0.25dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_card_cvc_edit_text"
-                        android:drawableRight="@drawable/ic_card_cvc"
-                        android:hint="CVV"
-                        android:inputType="number"
-                        android:maxLength="3"
-                        android:padding="16dp"
-                        android:textColor="@android:color/black"
-                        android:textColorHint="@color/black"
-                        android:textSize="14sp"
-                        tools:ignore="LabelFor,RtlHardcoded" />
-                </LinearLayout>
-
-            </LinearLayout>
 
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginRight="25dp"
+                        android:src="@drawable/ic_pay" />
+
                     <com.braintreepayments.cardform.view.CardForm
-                        android:layout_margin="15dp"
                         android:id="@+id/card_form"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"
+                        android:layout_margin="15dp" />
                 </LinearLayout>
             </ScrollView>
 
         </LinearLayout>
 
 
-
-
         <LinearLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:orientation="vertical"
             android:background="@android:color/white"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent">
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/black"/>
+                android:background="@android:color/black" />
 
             <TextView
                 android:id="@+id/savecard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Save"
-                android:gravity="center"
-                android:textSize="16dp"
                 android:background="@color/black"
+                android:fontFamily="@font/opensans_bold"
+                android:gravity="center"
+                android:text="Save"
                 android:textColor="@android:color/white"
-                android:fontFamily="@font/opensans_bold"/>
+                android:textSize="16dp" />
 
         </LinearLayout>
 

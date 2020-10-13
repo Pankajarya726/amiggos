@@ -2,6 +2,7 @@ package com.tekzee.amiggos.ui.mylifestylesubcategory.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -54,8 +55,9 @@ class MyLifestyleSubcategoryAdapter(
             listitembinding.subCatName.text = listItem.name
             if (listItem.selected == 1) {
                 listitembinding.imgLayout.setBackgroundDrawable(context!!.resources.getDrawable(R.drawable.white_ring))
-
+                listitembinding.childCount.visibility = View.VISIBLE
             } else {
+                listitembinding.childCount.visibility = View.GONE
                 listitembinding.imgLayout.setBackgroundDrawable(context!!.resources.getDrawable(R.drawable.yellow_ring))
             }
             listitembinding.executePendingBindings()

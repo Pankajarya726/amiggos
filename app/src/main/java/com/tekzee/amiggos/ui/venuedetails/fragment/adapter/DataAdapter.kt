@@ -27,7 +27,7 @@ class DataAdapter(var venueData: List<ClubDetailResponse.Data.ClubData.VenueData
 
     override fun onBindViewHolder(holder: PendingJobViewHolder, position: Int) {
         holder.bindingdata.txt_name.text = venueData[position].value
-        Glide.with(context!!).load(venueData[position].imageIcon).into(holder.bindingdata.img_flag)
+        Glide.with(context!!).load(venueData[position].imageIcon).placeholder(R.drawable.noimage).into(holder.bindingdata.img_flag)
     }
 
     inner class PendingJobViewHolder(val bindingdata: View): RecyclerView.ViewHolder(bindingdata)

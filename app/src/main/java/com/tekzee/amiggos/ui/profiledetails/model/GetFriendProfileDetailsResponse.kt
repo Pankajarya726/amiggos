@@ -5,34 +5,34 @@ import com.google.gson.annotations.SerializedName
 
 data class GetFriendProfileDetailsResponse(
     @SerializedName("data")
-    var `data`: Data = Data(),
+    val `data`: Data = Data(),
     @SerializedName("message")
-    var message: String = "",
+    val message: String = "",
     @SerializedName("status")
-    var status: Boolean = false
+    val status: Boolean = false
 ) {
     data class Data(
         @SerializedName("address")
-        var address: String = "",
+        val address: String = "",
+        @SerializedName("city")
+        val city: String = "",
         @SerializedName("isMyFriend")
-        var isMyFriend: String = "",
+        val isMyFriend: String = "",
         @SerializedName("isMyFriendBlocked")
-        var isMyFriendBlocked: String = "",
+        val isMyFriendBlocked: String = "",
         @SerializedName("last_name")
-        var lastName: String = "",
+        val lastName: String = "",
         @SerializedName("name")
-        var name: String = "",
+        val name: String = "",
+        @SerializedName("other_images")
+        val otherImages: String = "",
         @SerializedName("profile")
         val profile: List<String> = listOf(),
-        @SerializedName("social_login")
-        var socialLogin: String = "",
-        @SerializedName("typeoflogin")
-        var typeoflogin: String = "",
         @SerializedName("real_freind_count")
-        var real_freind_count: String = "",
+        val realFreindCount: Int = 0,
+        @SerializedName("state")
+        val state: String = "",
         @SerializedName("userid")
-        var userid: Int = 0,
-        @SerializedName("1")
-        var x1: Int = 0
+        val userid: Int = 0
     )
 }

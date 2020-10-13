@@ -59,7 +59,7 @@ class InviteFriendAdapter(
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind() {
-            Glide.with(itemView.context).load(mDataList[adapterPosition].profile).placeholder(R.drawable.user).into(itemView.img_flag)
+            Glide.with(itemView.context).load(mDataList[adapterPosition].profile).placeholder(R.drawable.noimage).into(itemView.img_flag)
             itemView.txt_name.text = mDataList[adapterPosition].name
             if(InviteFriendAfterCreateMemory.selectUserIds.contains(mDataList[adapterPosition].userid)){
                 itemView.txt_invite.text = languageData!!.undo

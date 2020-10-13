@@ -29,10 +29,12 @@ class ImageSliderAdapter(
         if(data[position].isImage ==1){
             Glide.with(context!!)
                 .load(data[position].url)
+                .placeholder(R.drawable.noimage)
                 .into(viewHolder!!.image)
         }else{
             Glide.with(context!!)
                 .load(R.drawable.user)
+                .placeholder(R.drawable.noimage)
                 .into(viewHolder!!.image)
         }
 

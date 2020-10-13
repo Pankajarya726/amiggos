@@ -2,8 +2,8 @@ package com.tekzee.amiggos.ui.partydetails.fragment.partyinvite
 
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.base.model.CommonResponse
-import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesResponse
 import com.tekzee.amiggos.base.BaseMainView
+import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
 
 class PartyInvitesPresenter {
 
@@ -26,7 +26,7 @@ class PartyInvitesPresenter {
     }
 
     interface PartyInviteMainView : BaseMainView {
-        fun onPartyInviteSuccess(responseData: PartyInvitesResponse?)
+        fun onPartyInviteSuccess(responseData: BookingInvitationResponse?)
         fun onJoinPartyInvitesSuccess(responseData: CommonResponse?)
         fun onDeclinePartyInvitesSuccess(responseData: CommonResponse?)
     }

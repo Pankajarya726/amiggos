@@ -96,7 +96,6 @@ class StepTwo: BaseActivity(), StepTwoPresenter.StepTwoPresenterMainView {
         input.addProperty("state",stateId)
         input.addProperty("city",cityId)
         input.addProperty("phone_number",binding!!.tphone.text.toString().trim())
-
         input.addProperty("pronouns", "")
         input.addProperty("image","")
         stepTwoImplementation!!.doUpdateUserInformation(input, Utility.createHeaders(sharedPreferences))

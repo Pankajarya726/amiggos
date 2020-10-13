@@ -37,6 +37,7 @@ class PlaceAPI private constructor(
       val sb = buildApiUrl(PLACES_API_BASE + TYPE_AUTOCOMPLETE + OUT_JSON)
       sb.append("&input=" + URLEncoder.encode(input, "utf8"))
       val url = URL(sb.toString())
+//      Log.e("url ---->",url.toString())
       conn = url.openConnection() as HttpURLConnection
       val inputStreamReader = InputStreamReader(conn.inputStream)
       constructData(inputStreamReader, jsonResults)
@@ -158,6 +159,7 @@ class PlaceAPI private constructor(
 
   private fun parseDetailsData(jsonResults: StringBuilder, listener: OnPlacesDetailsListener) {
     val jsonObj = JSONObject(jsonResults.toString())
+//    Log.e("response---->",jsonObj.toString());
     val resultJsonObject = jsonObj.getJSONObject(RESULT)
     val addressArray = resultJsonObject.getJSONArray(ADDRESS_COMPONENTS)
     val geometry = resultJsonObject.getJSONObject(GEOMETRY)
@@ -175,7 +177,7 @@ class PlaceAPI private constructor(
     getAddress(addressArray, address)
     listener.onPlaceDetailsFetched(
       PlaceDetails(
-        resultJsonObject.getString(ID), resultJsonObject.getString(NAME), address, lat,
+        "", resultJsonObject.getString(NAME), address, lat,
         lng, placeId, url, utcOffset, "", "", ""
       )
     )

@@ -32,7 +32,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.example.easywaylocation.EasyWayLocation
 import com.example.easywaylocation.Listener
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mapbox.android.core.permissions.PermissionsListener
@@ -64,7 +63,6 @@ import com.tekzee.amiggos.ui.homescreen_new.homefragment.adapter.AutoSuggestAdap
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.ui.venuedetailsnew.AVenueDetails
-import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubData
 import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
 import com.tekzee.amiggos.util.OnSwipeTouchListener
 import com.tekzee.amiggos.util.SharedPreference
@@ -198,10 +196,11 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
 
 
     private fun setupClickListener(view: View) {
+
         view.findViewById<RadioButton>(R.id.img_icon_two).setOnClickListener {
             categoryId = "12"
             callHomeApi(0)
-
+            setupRadioButton(R.id.img_icon_two)
         }
 
         view.findViewById<RadioButton>(R.id.img_icon_one).setOnClickListener {
@@ -223,6 +222,13 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
             categoryId = "16"
             callHomeApi(0)
         }
+    }
+
+    fun setupRadioButton(id: Int){
+        requireView().findViewById<RadioButton>(id).isChecked = true
+        requireView().findViewById<RadioButton>(id).isChecked = true
+        requireView().findViewById<RadioButton>(id).isChecked = true
+        requireView().findViewById<RadioButton>(id).isChecked = true
     }
 
     private fun setupPlaceAutoComplete(view: View) {
@@ -332,37 +338,6 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         }
 //        ConstantLib.NOTIFICATIONCOUNT = responseData!!.data.notificationcount
         dataResponse.addAll(responseData.data.venue)
-
-
-       /* for (userData in responseData.data.venue) {
-
-            dataResponse.addAll(responseData.data.venue)
-
-            *//*dataResponse.add(
-                HomeApiResponse.Data.NearestClub(
-                    userData.userid,
-                    2,
-                    userData.name,
-                    "",
-                    userData.distanceFromMylocation,
-                    userData.profile,
-                    "",
-                    userData.latitude,
-                    userData.longitude,
-                    "",
-                    "",
-                    "",
-                    "",
-                    false
-                    ,
-                    ""
-                )
-            )*//*
-        }*/
-
-
-//        Collections.sort(dataResponse, MarkerCompartor())
-
         if (dataResponse.isNotEmpty()) {
             setMarkersOnMap(dataResponse)
             val latLngBounds = LatLngBounds.Builder()
@@ -422,7 +397,9 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
             )
         }
 
+
         symbolManager!!.addClickListener { t: Symbol? ->
+
             val dataObject = t!!.data!!.asJsonObject
             if (dataObject.get("type").asString.equals("user", true)) {
                 if(Utility.checkProfileComplete(sharedPreference)){
@@ -445,30 +422,8 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
                 }
 
             } else {
-
-//                popView = LayoutInflater.from(requireContext()).inflate(R.layout.popupview, null)
-//                popupWindowHelper = PopupWindowHelper(popView)
-//                popupWindowHelper!!.showFromTop(dataObject.get("view").asString as View)
-
-
-
-
                 val intent = Intent(activity, AVenueDetails::class.java)
-                val clubdata = ClubData()
-                clubdata.clubName = dataObject.get("name").asString
-                clubdata.clubBasicDetails = ""
-                clubdata.clubStateCity = ""
-                clubdata.clubType = dataObject.get("type").asString
-//                clubdata.clubId = dataObject.get("id").asString
-                clubdata.clubId = "28"
-                clubdata.clubImage = dataObject.get("image").asString
-                clubdata.address = ""
-                clubdata.agelimit = dataObject.get("agelimit").asString
-                clubdata.isFavoriteVenue = false
-                clubdata.dress = ""
-                clubdata.club_description = ""
-
-                intent.putExtra(ConstantLib.VENUE_DATA, clubdata)
+                intent.putExtra(ConstantLib.VENUE_ID, dataObject.get("id").asString)
                 startActivity(intent)
             }
 
@@ -514,7 +469,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         Glide.with(this)
             .asBitmap()
             .load(image)
-            .placeholder(R.drawable.user)
+            .placeholder(R.drawable.noimage)
             .into(object : CustomTarget<Bitmap>(120, 120) {
                 override fun onLoadCleared(placeholder: Drawable?) {
 
@@ -616,14 +571,16 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
             requireContext(),
             android.R.layout.simple_dropdown_item_1line
         )
-        searchText!!.setThreshold(2)
+        searchText!!.threshold = 2
         searchText!!.setAdapter(autoSuggestAdapter)
         searchText!!.setOnItemClickListener { parent, view, position, id ->
             hideKeyboard()
             searchText!!.setText("")
             Log.d("result--->", "" + finalDataList.get(position))
             removeAllMarkers()
-            setMarkersOnMap(listOf(finalDataList[position]) as ArrayList<HomeResponse.Data.Venue>)
+            val datalist = ArrayList<HomeResponse.Data.Venue>()
+            datalist.add(finalDataList[position])
+            setMarkersOnMap(datalist)
             val position = CameraPosition.Builder()
                 .target(
                     LatLng(
@@ -637,7 +594,6 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
                 3000
             )
         }
-
     }
 
     override fun onRequestPermissionsResult(
@@ -735,15 +691,19 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         finalDataList.addAll(responseData.data.venue)
         listOfData.clear()
         autoSuggestAdapter!!.notifyDataSetChanged()
-        for (x in finalDataList.indices) {
-            listOfData.add(x.toString() + "-" + responseData.data.venue[x].name)
+        for (x in 0 until finalDataList.size) {
+            if(responseData.data.venue[x].name.isNotEmpty()){
+                listOfData.add(x.toString() + "-" + responseData.data.venue[x].name)
+            }else{
+                listOfData.add("$x- ")
+            }
+
         }
 
         autoSuggestAdapter!!.setData(listOfData);
         autoSuggestAdapter!!.notifyDataSetChanged()
 
     }
-
 
 
 }

@@ -87,180 +87,187 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_layout"
+                app:cardElevation="@dimen/_8sdp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@+id/invite_friend"
-                android:layout_margin="@dimen/_10sdp"
+                android:layout_margin="@dimen/_3sdp"
                 android:visibility="visible"
                 app:cardUseCompatPadding="true">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
-                    <LinearLayout
+                    <ScrollView
+                        android:layout_above="@+id/viewmenu"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:scaleType="fitXY"
-                            android:id="@+id/img_venue"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_100sdp"
-                            android:adjustViewBounds="true"
-                            android:src="@drawable/logo" />
-
+                        android:layout_height="wrap_content">
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_5sdp"
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:orientation="horizontal"
-                            android:weightSum="2">
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/txt_date"
+                            <ImageView
+                                android:scaleType="fitXY"
+                                android:id="@+id/img_venue"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_150sdp"
+                                android:adjustViewBounds="true"
+                                android:src="@drawable/logo" />
+
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableLeft="@drawable/clock_booking"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+
+                                <TextView
+                                    android:id="@+id/txt_date"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableLeft="@drawable/clock_booking"
+                                    android:drawablePadding="@dimen/_5sdp"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:gravity="center|left"
+                                    android:text="Wed - 9:00pm"
+                                    android:textColor="@color/Grey_900"
+                                    android:textSize="@dimen/_10sdp" />
+
+                                <TextView
+                                    android:id="@+id/txt_link"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:gravity="center"
+                                    android:text="Lorem Ipsum"
+                                    android:textColor="@color/Grey_900"
+                                    android:textSize="@dimen/_10sdp" />
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_marginTop="@dimen/_3sdp"
+                                android:id="@+id/txt_time"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:drawableLeft="@drawable/calendar_booking"
                                 android:drawablePadding="@dimen/_5sdp"
                                 android:fontFamily="@font/opensans_regular"
                                 android:gravity="center|left"
-                                android:text="Wed - 9:00pm"
+                                android:text="5-10-2020"
                                 android:textColor="@color/Grey_900"
                                 android:textSize="@dimen/_10sdp" />
 
                             <TextView
-                                android:id="@+id/txt_link"
+
+                                android:id="@+id/txt_guest_list"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_5sdp"
                                 android:fontFamily="@font/opensans_regular"
-                                android:gravity="center"
-                                android:text="Lorem Ipsum"
+                                android:gravity="center|left"
+                                android:text="Guest List : 5"
+                                android:textColor="@color/Grey_500"
+                                android:textSize="@dimen/_12sdp" />
+
+                            <TextView
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:id="@+id/txt_purchase_description_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:fontFamily="@font/opensans_regular"
+                                android:gravity="center|left"
+                                android:text="Purchase Description"
+                                android:textColor="@color/Grey_900"
+                                android:textSize="@dimen/_8sdp" />
+
+                            <TextView
+                                android:id="@+id/txt_purchase_description"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:fontFamily="@font/opensans_regular"
+                                android:gravity="center|left"
+                                android:text="2 champion bottle \nshirm scarpion"
+                                android:textColor="@color/Grey_900"
+                                android:textSize="@dimen/_8sdp" />
+
+
+                            <TextView
+                                android:id="@+id/txt_purchase_amount"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:gravity="center|left"
+                                android:text="$ 50000"
+                                android:textColor="@color/Grey_900"
+                                android:textSize="@dimen/_12sdp" />
+
+                            <TextView
+                                android:id="@+id/txt_ticketinfo"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:fontFamily="@font/opensans_regular"
+                                android:gravity="center|left"
+                                android:text="Vip ticket: Row 7,Seat 5b"
                                 android:textColor="@color/Grey_900"
                                 android:textSize="@dimen/_10sdp" />
 
+                            <TextView
+                                android:id="@+id/txt_reference_no"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:fontFamily="@font/opensans_regular"
+                                android:gravity="center|left"
+                                android:text="Reference number: 225425fd1212"
+                                android:textColor="@color/Grey_900"
+                                android:textSize="@dimen/_10sdp" />
+
+                            <TextView
+                                android:id="@+id/txt_puchased_by"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:fontFamily="@font/opensans_regular"
+                                android:gravity="center|left"
+                                android:text="Purchased by: John Smith"
+                                android:textColor="@color/Grey_900"
+                                android:textSize="@dimen/_10sdp" />
+
+                            <ImageView
+                                android:id="@+id/img_barcode"
+                                android:layout_width="@dimen/_60sdp"
+                                android:layout_height="@dimen/_60sdp"
+                                android:layout_gravity="right"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:layout_marginRight="@dimen/_15sdp"
+                                android:adjustViewBounds="true"
+                                android:layout_marginBottom="@dimen/_15sdp"
+                                android:src="@drawable/logo" />
+
                         </LinearLayout>
+                    </ScrollView>
 
-                        <TextView
-                            android:layout_marginTop="@dimen/_3sdp"
-                            android:id="@+id/txt_time"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_5sdp"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:drawableLeft="@drawable/calendar_booking"
-                            android:drawablePadding="@dimen/_5sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:gravity="center|left"
-                            android:text="5-10-2020"
-                            android:textColor="@color/Grey_900"
-                            android:textSize="@dimen/_10sdp" />
-
-                        <TextView
-
-                            android:id="@+id/txt_guest_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_5sdp"
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:gravity="center|left"
-                            android:text="Guest List : 5"
-                            android:textColor="@color/Grey_500"
-                            android:textSize="@dimen/_12sdp" />
-
-                        <TextView
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:id="@+id/txt_purchase_description_title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_5sdp"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:gravity="center|left"
-                            android:text="Purchase Description"
-                            android:textColor="@color/Grey_900"
-                            android:textSize="@dimen/_8sdp" />
-
-                        <TextView
-                            android:id="@+id/txt_purchase_description"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_5sdp"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:gravity="center|left"
-                            android:text="2 champion bottle \nshirm scarpion"
-                            android:textColor="@color/Grey_900"
-                            android:textSize="@dimen/_8sdp" />
-
-
-                        <TextView
-                            android:id="@+id/txt_purchase_amount"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_5sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:gravity="center|left"
-                            android:text="$ 50000"
-                            android:textColor="@color/Grey_900"
-                            android:textSize="@dimen/_12sdp" />
-
-                        <TextView
-                            android:id="@+id/txt_ticketinfo"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_5sdp"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:gravity="center|left"
-                            android:text="Vip ticket: Row 7,Seat 5b"
-                            android:textColor="@color/Grey_900"
-                            android:textSize="@dimen/_10sdp" />
-
-                        <TextView
-                            android:id="@+id/txt_reference_no"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_5sdp"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:gravity="center|left"
-                            android:text="Reference number: 225425fd1212"
-                            android:textColor="@color/Grey_900"
-                            android:textSize="@dimen/_10sdp" />
-
-                        <TextView
-                            android:id="@+id/txt_puchased_by"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_5sdp"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:gravity="center|left"
-                            android:text="Purchased by: John Smith"
-                            android:textColor="@color/Grey_900"
-                            android:textSize="@dimen/_10sdp" />
-
-                        <ImageView
-                            android:id="@+id/img_barcode"
-                            android:layout_width="@dimen/_60sdp"
-                            android:layout_height="@dimen/_60sdp"
-                            android:layout_gravity="right"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:layout_marginRight="@dimen/_15sdp"
-                            android:adjustViewBounds="true"
-                            android:src="@drawable/logo" />
-
-                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/viewmenu"
@@ -270,6 +277,7 @@
                         android:background="@drawable/btn_line_bg"
                         android:gravity="center"
                         android:padding="@dimen/_5sdp"
+
                         android:fontFamily="@font/opensans_regular"
                         android:text="View Menu"
                         android:textColor="@color/black"

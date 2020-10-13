@@ -34,7 +34,7 @@ class BlockedUserAdapter(
     override fun onBindViewHolder(holder: FriendListViewHolder, position: Int) {
 
         holder.bindingdata.txt_name.text = items[position].name
-        Glide.with(context!!).load(items[position].profile).into(holder.bindingdata.img_flag)
+        Glide.with(context!!).load(items[position].profile).placeholder(R.drawable.noimage).into(holder.bindingdata.img_flag)
         holder.bindingdata.txt_unblock.text = languageData!!.punblock
         holder.bindingdata.txt_unblock.setOnClickListener{
              listener.onUnblockClicked(items[position])

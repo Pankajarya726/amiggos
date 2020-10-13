@@ -87,6 +87,7 @@ class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
             override fun onBookingClicked(bookingData: ABookingResponse.Data.BookingData) {
                 val intent = Intent(activity, BookingDetailNewActivity::class.java)
                 intent.putExtra(ConstantLib.BOOKING_ID,bookingData.id.toString())
+                intent.putExtra(ConstantLib.FROM,ConstantLib.BOOOKING_LIST)
                 context!!.startActivity(intent)
                 Animatoo.animateSlideRight(activity)
             }

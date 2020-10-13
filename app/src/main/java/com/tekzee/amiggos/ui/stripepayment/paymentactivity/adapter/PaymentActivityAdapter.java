@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.tekzee.amiggos.R;
 import com.tekzee.amiggos.constant.ConstantLib;
 import com.tekzee.amiggos.databinding.PaymentActivityRowDataBinding;
 import com.tekzee.amiggos.ui.stripepayment.model.CardListResponse;
@@ -52,7 +53,7 @@ public class PaymentActivityAdapter extends RecyclerView.Adapter<PaymentActivity
         }else{
             holder.getBinding().delete.setVisibility(View.GONE);
         }
-        Glide.with(context).load(model.getIcon()).into(holder.getBinding().ivCard);
+        Glide.with(context).load(model.getIcon()).placeholder(R.drawable.noimage).into(holder.getBinding().ivCard);
        
         holder.getBinding().mainlayout.setOnClickListener((View.OnClickListener) view -> {
             listener.onRowClick(model,position);

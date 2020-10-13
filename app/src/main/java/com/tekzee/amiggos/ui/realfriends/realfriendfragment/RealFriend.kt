@@ -126,9 +126,18 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
             adapter!!.notifyDataSetChanged()
             callRealFriendApi(false, "", isFragmentVisible)
         }
+        setupRefreshLayout()
     }
 
-
+    private fun setupRefreshLayout() {
+        binding!!.refreshlayout.setOnRefreshListener {
+            binding!!.refreshlayout.isRefreshing = false
+            realFriendPageNo = 0
+            mydataList.clear()
+            adapter!!.notifyDataSetChanged()
+            callRealFriendApi(false, "", isFragmentVisible)
+        }
+    }
     private fun setupClickListener() {
         binding.error.errorLayout.setOnClickListener {
             callRealFriendApi(false, "", isFragmentVisible)

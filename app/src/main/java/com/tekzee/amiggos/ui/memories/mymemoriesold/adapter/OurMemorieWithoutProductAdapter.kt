@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.memories.mymemoriesold.MyMemorieClickListener
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
+import kotlinx.android.synthetic.main.ourmemoriewithoutproduct_layout.view.*
 import kotlinx.android.synthetic.main.single_first_fragment.view.img_user_firstfragment
 
 
@@ -31,8 +32,8 @@ class OurMemorieWithoutProductAdapter(
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind() {
-            Glide.with(itemView.context).load(mDataList[adapterPosition].memory[0].storyFile).placeholder(R.drawable.blackbg).into(itemView.img_user_firstfragment)
-            itemView.img_user_firstfragment.setOnClickListener {
+            Glide.with(itemView.context).load(mDataList[adapterPosition].memory[0].storyFile).placeholder(R.drawable.noimage).into(itemView.img_user_firstfragment)
+            itemView.img_layout.setOnClickListener {
                 listener.onMemorieClicked(mDataList[adapterPosition])
             }
         }

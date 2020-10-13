@@ -20,6 +20,8 @@ import com.tekzee.amiggos.ui.calendarview.adapter.TimeAdapter
 import com.tekzee.amiggos.ui.calendarview.model.TimeSlotResponse
 import com.tekzee.amiggos.ui.menu.MenuActivity
 import com.tekzee.amiggos.ui.venuedetailsnew.model.VenueDetails
+import com.tekzee.amiggos.util.Coroutines
+import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import java.text.SimpleDateFormat
@@ -52,6 +54,18 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
         sharedPreferences = SharedPreference(this)
         languageData = sharedPreferences!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         calendarviewpresenterimplementation = CalendarViewPresenterImplementation(this, this)
+        setupCalendar()
+        setupClickListener()
+        setupAdapter()
+        setupLangauge()
+
+        dataVenue = intent.getSerializableExtra(ConstantLib.CALENDAR_DATA) as VenueDetails.Data
+        binding.timepicker.setIs24HourView(false)
+        checkTimeSlot()
+
+    }
+
+    private fun setupCalendar() {
         val cal = Calendar.getInstance()
         cal.add(Calendar.DAY_OF_MONTH, -1)
         binding.calendarView.setMinimumDate(cal)
@@ -62,25 +76,24 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
         val year = calTodayDate.get(Calendar.YEAR).toString()
 
         selectedDate = "$year-$month-$day"
-        setupClickListener()
-        binding.timepicker.setIs24HourView(false)
+    }
 
-        setupAdapter()
-
-        dataVenue = intent.getSerializableExtra(ConstantLib.CALENDAR_DATA) as VenueDetails.Data
-        checkTimeSlot()
+    private fun setupLangauge() {
+        binding.timeTitle.setText(languageData!!.time)
+        binding.timeSlot.setText(languageData!!.time)
+        binding.dateTitle.setText(languageData!!.date)
     }
 
     private fun checkTimeSlot() {
         if (dataVenue.clubData.isclock == 0 && dataVenue.clubData.timeslot == 0) {
-            binding.timeRecycler.visibility = View.GONE
+            binding.timeslotlayout.visibility = View.GONE
             binding.timelayout.visibility = View.GONE
         } else if (dataVenue.clubData.isclock == 1) {
-            binding.timeRecycler.visibility = View.GONE
+            binding.timeslotlayout.visibility = View.GONE
             binding.timelayout.visibility = View.VISIBLE
         } else {
             callGettimeslot(selectedDate)
-            binding.timeRecycler.visibility = View.VISIBLE
+            binding.timeslotlayout.visibility = View.VISIBLE
             binding.timelayout.visibility = View.GONE
         }
     }
@@ -108,38 +121,74 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
         binding.imgClose.setOnClickListener {
             onBackPressed()
         }
-
         binding.btnNext.setOnClickListener {
-            val intent = Intent(applicationContext, MenuActivity::class.java)
-            intent.putExtra(ConstantLib.VENUE_ID, getIntent().getStringExtra(ConstantLib.VENUE_ID))
-            intent.putExtra(
-                ConstantLib.SELECTED_VENUE_DIN_TOGO,
-                getIntent().getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
-            )
-            intent.putExtra(ConstantLib.DATE, selectedDate)
 
-            seletctedTime = "" + binding.timepicker.hour + ":" + binding.timepicker.minute + ":00"
+            if (dataVenue.clubData.isclock == 0 && dataVenue.clubData.timeslot == 0) {
+                val intent = Intent(applicationContext, MenuActivity::class.java)
+                intent.putExtra(
+                    ConstantLib.VENUE_ID,
+                    getIntent().getStringExtra(ConstantLib.VENUE_ID)
+                )
+                intent.putExtra(
+                    ConstantLib.SELECTED_VENUE_DIN_TOGO,
+                    getIntent().getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
+                )
+                intent.putExtra(ConstantLib.DATE, selectedDate)
+                intent.putExtra(
+                    ConstantLib.TIME,
+                    ""
+                )
+                startActivity(intent)
+            } else if (dataVenue.clubData.isclock == 1) {
+                val intent = Intent(applicationContext, MenuActivity::class.java)
+                intent.putExtra(
+                    ConstantLib.VENUE_ID,
+                    getIntent().getStringExtra(ConstantLib.VENUE_ID)
+                )
+                intent.putExtra(
+                    ConstantLib.SELECTED_VENUE_DIN_TOGO,
+                    getIntent().getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
+                )
+                intent.putExtra(ConstantLib.DATE, selectedDate)
+                seletctedTime =
+                    "" + binding.timepicker.hour + ":" + binding.timepicker.minute + ":00"
+                intent.putExtra(
+                    ConstantLib.TIME,
+                    seletctedTime
+                )
+                startActivity(intent)
+            } else if (dataVenue.clubData.timeslot == 1) {
+                if (adapter.selected != null) {
+                    val intent = Intent(applicationContext, MenuActivity::class.java)
+                    intent.putExtra(
+                        ConstantLib.VENUE_ID,
+                        getIntent().getStringExtra(ConstantLib.VENUE_ID)
+                    )
+                    intent.putExtra(
+                        ConstantLib.SELECTED_VENUE_DIN_TOGO,
+                        getIntent().getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
+                    )
+                    intent.putExtra(ConstantLib.DATE, selectedDate)
 
-            intent.putExtra(
-                ConstantLib.TIME,
-                seletctedTime
-            )
-            startActivity(intent)
+                    intent.putExtra(
+                        ConstantLib.TIME,
+                        adapter.selected
+                    )
+                    startActivity(intent)
+                } else {
+                    binding.timeRecycler.requestFocus()
+                    Errortoast("Please select any slot or select different date")
+                }
 
+            }
         }
-
-
-
 
         binding.calendarView.setOnDayClickListener { eventDay ->
 
             val day = eventDay.calendar.get(Calendar.DAY_OF_MONTH).toString()
             val month = (eventDay.calendar.get(Calendar.MONTH) + 1).toString()
             val year = eventDay.calendar.get(Calendar.YEAR).toString()
-
-            selectedDate = "" + eventDay.calendar.get(Calendar.YEAR) + "-" + eventDay.calendar.get(
-                Calendar.MONTH
-            ) + "-" + eventDay.calendar.get(Calendar.DAY_OF_MONTH)
+            selectedDate = "$year-$month-$day"
 
             val cal: Calendar = Calendar.getInstance()
             cal.set(Calendar.YEAR, eventDay.calendar.get(Calendar.YEAR))
@@ -149,30 +198,6 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
             checkTimeSlot()
 
         }
-    }
-
-    private fun ShowAMPM(mhour: Int): String {
-        var hour = mhour
-        var am_pm = ""
-        if (hour > 12) {
-            am_pm = "PM";
-            hour -= 12;
-        } else {
-            am_pm = "AM";
-        }
-        return am_pm
-    }
-
-
-    private fun checkDisabledDate(eventDay: Calendar): Boolean {
-        var flag: Boolean = false
-        for (items in disabledDates) {
-            if (eventDay.compareTo(items) == 0) {
-                flag = true
-            }
-        }
-        return flag
-
     }
 
 
@@ -185,14 +210,28 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
     }
 
     override fun onTimeSlotSuccess(responseData: TimeSlotResponse?) {
+
+        Coroutines.main {
+            binding.scrollview.fullScroll(View.FOCUS_DOWN)
+        }
+
+
+        binding.timeslotlayout.visibility = View.VISIBLE
         timedata.clear()
         adapter.notifyDataSetChanged()
-        timedata.addAll(responseData!!.data)
+        timedata.addAll(responseData!!.data.timeSlot)
         adapter.notifyDataSetChanged()
     }
 
-    override fun onTimeSlotFailure(responseData: String) {
-        TODO("Not yet implemented")
+    override fun onTimeSlotFailure(message: String) {
+
+        Coroutines.main {
+            binding.scrollview.fullScroll(View.FOCUS_DOWN)
+        }
+        timedata.clear()
+        adapter.notifyDataSetChanged()
+        Errortoast(message)
+        binding.timeslotlayout.visibility = View.GONE
     }
 
 

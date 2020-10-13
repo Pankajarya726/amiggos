@@ -4,8 +4,8 @@ import android.content.Context
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
-import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesResponse
 import com.tekzee.amiggos.network.ApiClient
+import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -40,7 +40,7 @@ class PartyInvitesPresenterImplementation(private var mainView: PartyInvitesPres
                     mainView.hideProgressbar()
                     when (response.code()) {
                         200 -> {
-                            val responseData: PartyInvitesResponse? = response.body()
+                            val responseData: BookingInvitationResponse? = response.body()
                             if (responseData!!.status) {
                                 mainView.onPartyInviteSuccess(responseData)
                             } else {

@@ -34,7 +34,7 @@ class ABookingDetailAdapter(
     override fun onBindViewHolder(holder: FriendListViewHolder, position: Int) {
         Logger.d("name====>"+items[position].name)
         holder.bindingdata.txt_name.text = items[position].name
-        Glide.with(context!!).load(items[position].profile).into(holder.bindingdata.img_flag)
+        Glide.with(context!!).load(items[position].profile).placeholder(R.drawable.noimage).into(holder.bindingdata.img_flag)
         if(items[position].isInvited == 0){
             holder.bindingdata.txt_invite.setText(languageData!!.klMsgInvite)
         }else{

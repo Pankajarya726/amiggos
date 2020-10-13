@@ -121,10 +121,10 @@
                     android:id="@+id/heading"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/opensans_bold"
+                    android:fontFamily="@font/opensans_semibold"
                     android:padding="@dimen/_15sdp"
                     android:textColor="@android:color/black"
-                    android:textSize="@dimen/_20sdp"
+                    android:textSize="@dimen/_18sdp"
                     android:textStyle="bold" />
 
 

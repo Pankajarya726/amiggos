@@ -5,9 +5,14 @@ import com.google.gson.annotations.SerializedName
 
 data class TimeSlotResponse(
     @SerializedName("data")
-    val `data`: List<String> = listOf(),
+    val `data`: Data = Data(),
     @SerializedName("message")
     val message: String = "",
     @SerializedName("status")
     val status: Boolean = false
-)
+) {
+    data class Data(
+        @SerializedName("timeSlot")
+        val timeSlot: List<String> = listOf()
+    )
+}

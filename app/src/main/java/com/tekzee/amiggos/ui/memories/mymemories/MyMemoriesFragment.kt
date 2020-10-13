@@ -1,4 +1,4 @@
-package com.tekzee.amiggosvenueapp.ui.memories.fragment.mymemories
+package com.tekzee.amiggos.ui.memories.mymemories
 
 import android.content.Intent
 import android.os.Bundle
@@ -15,10 +15,6 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.MyMemoriesFragmentNewBinding
 import com.tekzee.amiggos.ui.cameranew.CameraActivity
-import com.tekzee.amiggos.ui.memories.mymemories.FeaturedBrandClickListener
-import com.tekzee.amiggos.ui.memories.mymemories.MemorieClickListener
-import com.tekzee.amiggos.ui.memories.mymemories.MyMemorieViewModelFactory
-import com.tekzee.amiggos.ui.memories.mymemories.MyMemoriesViewModel
 
 import com.tekzee.amiggos.ui.memories.mymemories.pagingfeaturedbrand.NewFeaturedBrandAdapter
 import com.tekzee.amiggos.ui.memories.mymemories.pagingfeaturedbrand.NewMemorieAdapter

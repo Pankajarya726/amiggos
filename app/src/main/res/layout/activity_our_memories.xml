@@ -2,10 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        >
 
         <ImageView
             android:id="@+id/img_close"
@@ -18,71 +18,81 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profile_image"
-            android:layout_width="@dimen/_100sdp"
-            android:layout_height="@dimen/_100sdp"
-            android:src="@drawable/user"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.1" />
-
-        <LinearLayout
+        <ScrollView
+            android:layout_below="@+id/img_close"
+            android:layout_above="@+id/btn_invite_friend"
+            android:layout_marginTop="@dimen/_30sdp"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:orientation="vertical"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toTopOf="@+id/btn_invite_friend"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_image">
+            app:layout_constraintTop_toBottomOf="@+id/img_close">
 
-            <TextView
-                android:id="@+id/txt_title"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/opensans_semibold"
-                android:gravity="center"
-                android:text="Invite Friends"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/_18sdp" />
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/txt_subtitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:fontFamily="@font/opensans_semibold"
-                android:gravity="center"
-                android:textColor="@color/Grey_900"
-                android:textSize="@dimen/_12sdp" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_100sdp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/user"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.498"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.1" />
 
 
-            <com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView
-                android:id="@+id/hidden_search_with_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:filterWhileTyping="false"
-                app:hideAtScroll="true"
-                app:scrollToBottomBeforeHide="true"
-                app:scrollToTopBeforeShow="false"
-                app:visibleAtInit="true">
+                <TextView
+                    android:id="@+id/txt_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:gravity="center"
+                    android:text="Invite Friends"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/_18sdp" />
+
+                <TextView
+                    android:id="@+id/txt_subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:gravity="center"
+                    android:textColor="@color/Grey_900"
+                    android:textSize="@dimen/_12sdp" />
+
+
+                <EditText
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:id="@+id/searchfriend"
+                    android:layout_width="match_parent"
+                    android:hint="Search"
+                    android:padding="@dimen/_8sdp"
+                    android:drawableLeft="@drawable/search"
+                    android:gravity="center|left"
+                    android:drawablePadding="@dimen/_8sdp"
+                    android:background="@drawable/search_bg_invite"
+                    android:layout_height="wrap_content"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/real_friend_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="@dimen/_5sdp" />
-            </com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView>
 
 
-        </LinearLayout>
-
+            </LinearLayout>
+        </ScrollView>
 
         <Button
             android:id="@+id/btn_invite_friend"
@@ -93,10 +103,11 @@
             android:text="Done"
             android:textColor="@color/white"
             android:textSize="@dimen/_15sdp"
+            android:layout_alignParentBottom="true"
             app:layout_constraintBottom_toBottomOf="parent" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 
 
 </layout>

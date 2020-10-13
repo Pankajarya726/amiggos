@@ -142,7 +142,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
                 gotoFriendRequest(title, body, userid)
             }
             "3" -> {
-                gotoFriendRequest(title, body, userid)
+                gotoRealFriend(title, body, userid)
             }
             "4" -> {
                 createDefaultNotification(title, body)
@@ -160,7 +160,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
                 createDefaultNotification(title, body)
             }
             "9" -> {
-                goToAttachidActivity(title, body)
+                gotoSendPartyInvitation(title, body)
             }
             "10" -> {
                 createDefaultNotification(title, body)
@@ -312,9 +312,13 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
         createNotificationChannel()
         playSound()
 
-        val intent = Intent(this, PartyDetailsActivity::class.java).apply {
+
+        val notificationId = System.currentTimeMillis().toInt()
+        val intent = Intent(this, AHomeScreen::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            action = FriendsAction.PARTY_INVITATIONS.action
         }
+
 
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
@@ -369,11 +373,48 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
         val notificationId = System.currentTimeMillis().toInt()
         val intent = Intent(this, AHomeScreen::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            action = FriendsAction.CLICK.action
+            action = FriendsAction.SHOW_FRIEND_REQUEST.action
             putExtra(packageName, notificationId)
             putExtra(ConstantLib.FRIEND_ID, muserid)
+            putExtra(ConstantLib.FROM,ConstantLib.FRIENDREQUEST)
             putExtra(ConstantLib.EXTRA_NOTIFICATION_ID, notificationId)
             putExtra(ConstantLib.SUB_TAB, 2)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_notification_icon)
+            .setShowWhen(true)
+            .setContentTitle(body)
+            .setContentText(title)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(title)
+            )
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+
+        with(NotificationManagerCompat.from(this)) {
+            notify(notificationId, builder.build())
+        }
+
+    }
+
+    private fun gotoRealFriend(title: String, body: String, muserid: String) {
+        createNotificationChannel()
+        playSound()
+
+        val notificationId = System.currentTimeMillis().toInt()
+        val intent = Intent(this, AHomeScreen::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            action = FriendsAction.SHOW_FRIENDS.action
+            putExtra(packageName, notificationId)
+            putExtra(ConstantLib.FRIEND_ID, muserid)
+            putExtra(ConstantLib.FROM,ConstantLib.FRIENDREQUEST)
+            putExtra(ConstantLib.EXTRA_NOTIFICATION_ID, notificationId)
+            putExtra(ConstantLib.SUB_TAB, 1)
         }
 
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)

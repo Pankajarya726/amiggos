@@ -114,7 +114,7 @@ class AttachIdActivity : BaseActivity(), AttachIdActivityPresenter.AttachIdMainV
             binding.txtUpload.visibility = View.VISIBLE
             sharedPreferences!!.save(ConstantLib.MYID, false)
         }
-        Glide.with(this).load(responseData.data.photoId).into(binding.myidPicture)
+        Glide.with(this).load(responseData.data.photoId).placeholder(R.drawable.noimage).into(binding.myidPicture)
     }
 
 

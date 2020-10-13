@@ -9,10 +9,13 @@ import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.JsonObject
+import com.tekzee.amiggos.BuildConfig
 import com.tekzee.amiggos.R
-import com.tekzee.amiggos.databinding.ASettingsBinding
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
+import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.databinding.ASettingsBinding
+import com.tekzee.amiggos.ui.attachid.AttachIdActivity
 import com.tekzee.amiggos.ui.blockedusers.ABlockedUser
 import com.tekzee.amiggos.ui.chooselanguage.ChooseLanguageActivity
 import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
@@ -24,8 +27,6 @@ import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.amiggos.constant.ConstantLib
-import com.tekzee.amiggos.ui.attachid.AttachIdActivity
 
 class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView {
 
@@ -41,7 +42,7 @@ class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView 
         binding = DataBindingUtil.setContentView(this, R.layout.a_settings)
         sharedPreference = SharedPreference(this)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        asettingspresenterimplementation =  ASettingsPresenterImplementation(this,this)
+        asettingspresenterimplementation =  ASettingsPresenterImplementation(this, this)
         setupClickListener()
         setupLanguage()
 
@@ -55,7 +56,11 @@ class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView 
     private fun callGetProfileApi() {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
-        asettingspresenterimplementation.doCallUserPrfolie(input, Utility.createHeaders(sharedPreference))
+        asettingspresenterimplementation.doCallUserPrfolie(
+            input, Utility.createHeaders(
+                sharedPreference
+            )
+        )
 
     }
 
@@ -74,17 +79,33 @@ class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView 
     }
 
     private fun setupView(data: GetUserProfileResponse.Data) {
+        sharedPreference!!.save(ConstantLib.ISPROFILECOMPLETE, data.isProfileComplete)
         binding!!.txtName.text = data.name+" "+data.lastName
-        binding!!.age.text = data.age
-        binding!!.address.text = data.address
+        binding!!.age.text = data.age.toString()
+        binding!!.address.text = data.city+", "+data.state
         Glide.with(this).load(data.profile)
-            .placeholder(R.drawable.user)
+            .placeholder(R.drawable.noimage)
             .into(binding!!.imgUser)
     }
 
     private fun setupClickListener() {
         binding!!.imgClose.setOnClickListener {
             onBackPressed()
+        }
+        binding!!.imgMail.setOnClickListener {
+
+            try {
+                val sendIntent = Intent()
+                sendIntent.action = Intent.ACTION_SEND
+                sendIntent.putExtra(
+                    Intent.EXTRA_TEXT,
+                    "Hey check out my app at: https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID
+                )
+                sendIntent.type = "text/plain"
+                startActivity(sendIntent)
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
         }
 
         binding!!.myId.setOnClickListener {
@@ -93,7 +114,7 @@ class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView 
 
         binding!!.paymentMethod.setOnClickListener{
             val intent = Intent(this, APaymentMethod::class.java);
-            intent.putExtra(ConstantLib.FROM,ConstantLib.PAYMENTMETHOD)
+            intent.putExtra(ConstantLib.FROM, ConstantLib.PAYMENTMETHOD)
             startActivity(intent)
             Animatoo.animateSlideLeft(this)
         }
@@ -105,8 +126,14 @@ class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView 
 
         binding!!.viewprofile.setOnClickListener {
             val intent = Intent(this, AProfileDetails::class.java)
-            intent.putExtra(ConstantLib.FRIEND_ID, sharedPreference!!.getValueInt(ConstantLib.USER_ID).toString())
-            intent.putExtra(ConstantLib.PROFILE_IMAGE, sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE))
+            intent.putExtra(
+                ConstantLib.FRIEND_ID,
+                sharedPreference!!.getValueInt(ConstantLib.USER_ID).toString()
+            )
+            intent.putExtra(
+                ConstantLib.PROFILE_IMAGE,
+                sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE)
+            )
             startActivity(intent)
             Animatoo.animateSlideRight(this)
         }
@@ -173,11 +200,11 @@ class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView 
     }
 
     override fun onUserProfileFailure(message: String) {
-        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
     override fun validateError(message: String) {
-        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
     override fun onStop() {

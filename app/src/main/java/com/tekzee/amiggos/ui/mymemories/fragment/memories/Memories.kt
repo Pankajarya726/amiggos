@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -56,8 +57,6 @@ class Memories: BaseFragment(), MemoriesPresenter.MemoriesMainView, InfiniteScro
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         memoriesPresenterImplementation = MemoriesPresenterImplementation(this,requireContext())
         setupViewData()
-        callMemoriesApi(false, "")
-
         RxTextView.textChanges(binding.edtSearch) .filter { it.length > 2 }.debounce(500, TimeUnit.MILLISECONDS).subscribeOn(
             Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
             memoriesPageNo = 0
@@ -72,6 +71,12 @@ class Memories: BaseFragment(), MemoriesPresenter.MemoriesMainView, InfiniteScro
 
     private fun setupViewData() {
         binding.edtSearch.hint = languageData!!.klSearchTitle
+    }
+
+    override fun onResume() {
+        super.onResume()
+        memoriesPageNo = 0
+        callMemoriesApi(false, "")
     }
 
     private fun callMemoriesApi(requestDatFromServer: Boolean, searchvalue: String) {
@@ -91,7 +96,7 @@ class Memories: BaseFragment(), MemoriesPresenter.MemoriesMainView, InfiniteScro
     }
 
     override fun validateError(message: String) {
-
+        Toast.makeText(context,message, Toast.LENGTH_LONG).show()
 
     }
 

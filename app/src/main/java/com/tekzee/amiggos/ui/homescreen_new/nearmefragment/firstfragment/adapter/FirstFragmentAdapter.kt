@@ -3,6 +3,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -51,7 +52,7 @@ class FirstFragmentAdapter(
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind() {
             Logger.d(mDataList[adapterPosition].profile)
-            Glide.with(itemView.context).load(mDataList[adapterPosition].profile).placeholder(R.drawable.blackbg).into(itemView.img_user_firstfragment)
+            Glide.with(itemView.context).load(mDataList[adapterPosition].profile).placeholder(R.drawable.noimage).into(itemView.img_user_firstfragment)
 //            itemView.txt_name.text = mDataList[adapterPosition].name
 //            if(mDataList[adapterPosition].isRelate ==4 && mDataList[adapterPosition].isRelate== 5){
 //                itemView.add.visibility = View.VISIBLE
@@ -66,7 +67,7 @@ class FirstFragmentAdapter(
 
             itemView.img_layout.setOnClickListener {
                 mItemClickCallback?.let {
-                    mItemClickCallback.itemClickCallback(adapterPosition)
+                    mItemClickCallback.itemClickCallback(adapterPosition,itemView.img_user_firstfragment,mDataList[adapterPosition])
                 }
             }
 //            itemView.storie.setOnClickListener{
@@ -77,7 +78,9 @@ class FirstFragmentAdapter(
 
     interface HomeItemClick {
         fun itemClickCallback(
-            position: Int
+            position: Int,
+            imgUserFirstfragment: ImageView,
+            nearestFreind: NearByV2Response.Data.NearestFreind
         )
 
         fun storieClicked(

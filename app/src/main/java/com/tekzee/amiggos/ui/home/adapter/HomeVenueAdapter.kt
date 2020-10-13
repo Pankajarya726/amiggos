@@ -86,7 +86,7 @@ class HomeVenueAdapter(var venueListData: ArrayList<NearestClub>) : RecyclerView
                 context!!.startActivity(intent)
             }
 
-            Glide.with(itemView.context).load(venueListData[adapterPosition].image).placeholder(R.drawable.blackbg).into(itemView.findViewById(R.id.imageView6))
+            Glide.with(itemView.context).load(venueListData[adapterPosition].image).placeholder(R.drawable.noimage).into(itemView.findViewById(R.id.imageView6))
 
             val txtAge = itemView.findViewById(R.id.txt_age) as TextView
             if (venueListData[adapterPosition].agelimit.isEmpty()) {

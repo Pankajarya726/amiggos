@@ -2,8 +2,8 @@ package com.tekzee.amiggos.ui.bookings_new.bookinginvitation
 
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.base.model.CommonResponse
-import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
 import com.tekzee.amiggos.base.BaseMainView
+import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
 
 class BookingInvitationPresenter {
 

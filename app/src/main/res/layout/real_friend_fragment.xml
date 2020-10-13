@@ -41,8 +41,12 @@
             android:textColor="@color/colorPrimary"
             android:textColorHint="@color/colorPrimary"
              />
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refreshlayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView
+        <com.tekzee.amiggos.hiddensearchrecyclerview.utils.HiddenSearchWithRecyclerView
             android:id="@+id/hidden_search_with_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -56,9 +60,9 @@
             android:id="@+id/real_friend_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-        </com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView>
+        </com.tekzee.amiggos.hiddensearchrecyclerview.utils.HiddenSearchWithRecyclerView>
 
-
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
     </LinearLayout>
 </layout>

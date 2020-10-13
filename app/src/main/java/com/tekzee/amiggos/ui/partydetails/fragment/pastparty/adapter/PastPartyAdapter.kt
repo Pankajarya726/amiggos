@@ -37,7 +37,7 @@ class PastPartyAdapter(
         holder.bindingdata.p_txt_date.text = items[position].partyDate
         holder.bindingdata.p_txt_time.text = items[position].startTime
         holder.bindingdata.p_txt_list.text = languageData!!.klGuestList
-        Glide.with(context!!).load(items[position].venueHomeImage).placeholder(R.drawable.user).into(holder.bindingdata.p_user_image)
+        Glide.with(context!!).load(items[position].venueHomeImage).placeholder(R.drawable.noimage).into(holder.bindingdata.p_user_image)
         holder.bindingdata.p_txt_list.setOnClickListener{
             pastPartyInterface.onItemClicked(items[position],1)
         }

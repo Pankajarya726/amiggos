@@ -50,6 +50,7 @@
 
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/myidlayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,6 +64,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
+                    android:minHeight="@dimen/_80sdp"
                     android:src="@drawable/logo" />
 
                 <LinearLayout

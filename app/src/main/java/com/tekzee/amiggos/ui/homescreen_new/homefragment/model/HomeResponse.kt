@@ -13,7 +13,7 @@ data class HomeResponse(
 ) {
     data class Data(
         @SerializedName("venue")
-        val venue: List<Venue> = listOf()
+        val venue: ArrayList<Venue> = ArrayList()
     ) {
         data class Venue(
             @SerializedName("agelimit")

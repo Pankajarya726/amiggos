@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.tekzee.amiggos.R;
 import com.tekzee.amiggos.constant.ConstantLib;
 import com.tekzee.amiggos.databinding.PaymentRowDataBinding;
 import com.tekzee.amiggos.ui.stripepayment.PaymentClick;
@@ -48,7 +49,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.MyViewHo
 
         holder.getBinding().tvCardNumber.setText(model.getBrand() + " ********* " + model.getLast4());
 
-        Glide.with(context).load(model.getIcon()).into(holder.getBinding().ivCard);
+        Glide.with(context).load(model.getIcon()).placeholder(R.drawable.noimage).into(holder.getBinding().ivCard);
 
 //        if (model.isDefault()==1) {
 //            holder.getBinding().ivDefault.setVisibility(View.GONE);

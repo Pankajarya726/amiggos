@@ -36,7 +36,7 @@ class TurningAdapter(
         holder.bindingdata.txt_name.text = items[position].name
         holder.bindingdata.txt_venue_name.text = items[position].clubName
         holder.bindingdata.txt_date_time.text = items[position].partyTime.split(" ")[0]+"\n"+items[position].partyTime.split(" ")[1]+" "+items[position].partyTime.split(" ")[2]
-        Glide.with(context!!).load(items[position].profile).placeholder(R.drawable.user).into(holder.bindingdata.profile_image)
+        Glide.with(context!!).load(items[position].profile).placeholder(R.drawable.noimage).into(holder.bindingdata.profile_image)
         holder.bindingdata.mainlayout.setOnClickListener{
             listener.onTuringUpClicked(position,items[position])
         }

@@ -54,9 +54,6 @@ class StorieViewModel(private val context: Context,
                 val jsoninput = JsonObject()
                 jsoninput.addProperty("userid",prefs.getValueInt(ConstantLib.USER_ID))
                 jsoninput.addProperty("memory_id",memorieId)
-                jsoninput.addProperty("type",prefs.getValueString(ConstantLib.TYPE))
-//                jsoninput.addProperty("approval_status",status)
-                jsoninput.addProperty("venue_id",prefs.getValueString(ConstantLib.VENUE_ID))
                 val response =  repository.docallDeleteApi(jsoninput, Utility.createHeaders(prefs))
                 if(response.status){
                     storieEvent?.onDeleteResponse(response.message)

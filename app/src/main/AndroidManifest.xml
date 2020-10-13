@@ -236,7 +236,7 @@
         <activity
             android:name="com.tekzee.amiggos.ui.viewfriends.ViewFriendsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/MyTheme" />
 
 
         <activity
@@ -409,7 +409,7 @@
         <activity
             android:name="com.tekzee.amiggos.ui.notification_new.ANotification"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/MyTheme" />
 
         <activity
             android:name="com.tekzee.amiggos.ui.stripepayment.APaymentMethod"
@@ -418,7 +418,7 @@
         <activity
             android:name="com.tekzee.amiggos.ui.stripepayment.addnewcard.AAddCard"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/MyTheme" />
         <activity
             android:name=".ui.mylifestylesubcategory.AMyLifestyleSubcategory"
             android:screenOrientation="portrait"

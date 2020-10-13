@@ -30,7 +30,7 @@ class FriendInviteConfirmation : BaseActivity() {
     }
 
     private fun setupUi() {
-        Glide.with(applicationContext).load(sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE)).into(binding!!.imgUser)
+        Glide.with(applicationContext).load(sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE)).placeholder(R.drawable.noimage).into(binding!!.imgUser)
         if (intent.getStringExtra(ConstantLib.FROM).equals(ConstantLib.FINALBASKET, true)) {
             binding!!.btnDone.text = languageData!!.klINViteFRiends
             binding!!.txtSentMessage.text =intent.getStringExtra(ConstantLib.MESSAGE)

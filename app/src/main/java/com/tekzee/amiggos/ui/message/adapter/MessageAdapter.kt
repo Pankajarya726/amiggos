@@ -68,7 +68,7 @@ class MessageAdapter(
                         try{
                             val user = snapshot.getValue(User::class.java)
                             Glide.with(applicationContext).load(user!!.image)
-                                .placeholder(R.drawable.header_logo)
+                                .placeholder(R.drawable.noimage)
                                 .into(holder.itemView.g_user_image)
                             holder.itemView.g_txt_name.text = user.name
                             listItem.name = user.name

@@ -187,13 +187,6 @@ class CameraActivity : AppCompatActivity(),
 
     private fun capturePictureSnapshot() {
         if (binding!!.camera.isTakingPicture) return
-        if (binding!!.camera.preview != Preview.GL_SURFACE) {
-            Log.d(
-                TAG,
-                "Picture snapshots are only allowed with the GL_SURFACE preview."
-            )
-            return
-        }
         mCaptureTime = System.currentTimeMillis()
         Log.d(TAG, "Capturing picture snapshot...")
         binding!!.camera.takePictureSnapshot()
@@ -202,13 +195,6 @@ class CameraActivity : AppCompatActivity(),
     private fun captureVideoSnapshot() {
         if (binding!!.camera.isTakingVideo) {
             Log.e(TAG, "Already taking video.")
-            return
-        }
-        if (binding!!.camera.preview != Preview.GL_SURFACE) {
-            Log.e(
-                TAG,
-                "Video snapshots are only allowed with the GL_SURFACE preview."
-            )
             return
         }
         Log.e(TAG, "Recording snapshot for 5 seconds...")

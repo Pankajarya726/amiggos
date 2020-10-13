@@ -31,10 +31,10 @@ class InvitationAdapter(
 
 
     override fun onBindViewHolder(holder: PartyInvitesViewHolder, position: Int) {
-        holder.bindingdata.txt_name_invitation.text = items[position].name
+        holder.bindingdata.txt_name.text = items[position].name
         holder.bindingdata.txt_accept.text = languageData!!.paccept
         holder.bindingdata.txt_reject.text = languageData.preject
-        Glide.with(context!!).load(items[position].profile).placeholder(R.drawable.user).into(holder.bindingdata.profile_image)
+        Glide.with(context!!).load(items[position].profile).placeholder(R.drawable.noimage).into(holder.bindingdata.img_flag)
 
         holder.bindingdata.txt_accept.setOnClickListener{
             invitationInterface.onItemClicked(items[position],1)

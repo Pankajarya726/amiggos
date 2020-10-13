@@ -57,7 +57,7 @@ class StorieViewNew: AppCompatActivity(),
         for (i in memorieData.memory.indices) {
             if(memorieData.memory[i].storyFile!=null){
                 banners = memorieData.memory[i].tagged as ArrayList<MemorieResponse.Data.Memories.Memory.Tagged>
-                stories.add(Story(memorieData.memory[i].id.toString(),memorieData.memory[i].storyFile,1600148193438,banners))
+                stories.add(Story(memorieData.memory[i].id.toString(),memorieData.memory[i].storyFile,1600148193438,banners,memorieData.venueId))
             }
 
         }
@@ -169,7 +169,7 @@ class StorieViewNew: AppCompatActivity(),
 
     private fun preLoadImages(imageList: MutableList<String>) {
         imageList.forEach { imageStory ->
-            Glide.with(this).load(imageStory).preload()
+            Glide.with(this).load(imageStory).placeholder(R.drawable.noimage).preload()
         }
     }
 

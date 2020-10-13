@@ -21,6 +21,7 @@ class AVenueDetailsPresenter {
 
     interface AVenueDetailsPresenterMainView: BaseMainView {
         fun onVenueDetailsSuccess(responseData: VenueDetails.Data)
+        fun onVenueDetailsFailure(message: String)
         fun onLikeUnlikeSuccess(message: String)
     }
 }

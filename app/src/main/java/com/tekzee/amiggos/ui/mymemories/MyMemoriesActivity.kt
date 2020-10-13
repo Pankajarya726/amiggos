@@ -131,4 +131,9 @@ class MyMemoriesActivity : BaseActivity() {
 
         Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
     }
+
+    override fun onResume() {
+        super.onResume()
+
+    }
 }

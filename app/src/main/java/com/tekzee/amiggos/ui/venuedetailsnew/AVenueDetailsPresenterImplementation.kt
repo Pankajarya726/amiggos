@@ -43,7 +43,7 @@ class AVenueDetailsPresenterImplementation(private var mainView: AVenueDetailsPr
                             if (responseData!!.status) {
                                 mainView.onVenueDetailsSuccess(responseData.data)
                             } else {
-                                mainView.validateError(responseData.message)
+                                mainView.onVenueDetailsFailure(responseData.message)
                             }
                         }
                     }

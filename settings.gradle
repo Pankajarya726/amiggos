@@ -1,2 +1,2 @@
-include ':app', ':cropper', ':autocompleteplace', ':hiddensearchwithrecyclerview', ':customimage'
+include ':app', ':cropper', ':autocompleteplace', ':customimage'
 rootProject.name='Amiggos'

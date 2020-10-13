@@ -16,7 +16,6 @@ import com.tekzee.amiggos.ui.blockedusers.model.BlockedUserResponse
 import com.tekzee.amiggos.ui.blockedusers.model.UnBlockFriendResponse
 import com.tekzee.amiggos.ui.bookingdetailnew.model.BookingDetailsNewResponse
 import com.tekzee.amiggos.ui.bookingqrcode.model.BookinQrCodeResponse
-import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
 import com.tekzee.amiggos.ui.bookings_new.bookings.model.ABookingResponse
 import com.tekzee.amiggos.ui.calendarview.model.TimeSlotResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
@@ -31,13 +30,11 @@ import com.tekzee.amiggos.ui.helpcenter.model.HelpCenterResponse
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.NearbyMeCountResponse
 import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
-import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeApiResponse
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
 import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailResponse
 import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
-import com.tekzee.amiggos.ui.memories.mymemoriesold.model.OurMemoriesWithoutProductsResponse
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 import com.tekzee.amiggos.ui.memories.venuefragment.model.VenueTaggedResponse
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingResponse
@@ -56,7 +53,7 @@ import com.tekzee.amiggos.ui.notification_new.model.ANotificationResponse
 import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendResponse
 import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
 import com.tekzee.amiggos.ui.ourmemories.model.InviteFriendResponse
-import com.tekzee.amiggos.ui.partydetails.fragment.partyinvite.model.PartyInvitesResponse
+import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
 import com.tekzee.amiggos.ui.profiledetails.model.GetFriendProfileDetailsResponse
 import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponse
@@ -77,7 +74,6 @@ import com.tekzee.amiggos.ui.stripepayment.model.DeleteCardResponse
 import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.BookingPaymentResponse
 import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.SetDefaultCardResponse
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
-import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
 import com.tekzee.amiggos.ui.venuedetailsnew.model.VenueDetails
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
@@ -114,6 +110,7 @@ class ApiClient {
         val okHttpClient: OkHttpClient = clientBuilder
             .readTimeout(2, TimeUnit.MINUTES)
             .connectTimeout(2, TimeUnit.MINUTES)
+            .writeTimeout(2, TimeUnit.MINUTES)
             .build();
 
 
@@ -695,7 +692,7 @@ class ApiClient {
     fun doCallPartyInviteApi(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
-    ): Observable<Response<PartyInvitesResponse>> {
+    ): Observable<Response<BookingInvitationResponse>> {
         return apiService.doCallPartyInviteApi(input, createHeaders)
     }
 

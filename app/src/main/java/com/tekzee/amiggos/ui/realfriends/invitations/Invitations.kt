@@ -118,6 +118,17 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
         setupClickListener()
         setupView()
         callInvitationApi()
+        setupRefreshLayout()
+    }
+
+    private fun setupRefreshLayout() {
+        binding!!.refreshlayout.setOnRefreshListener {
+            binding!!.refreshlayout.isRefreshing = false
+            pageNo = 0
+            items.clear()
+            adapter.notifyDataSetChanged()
+            callInvitationApi()
+        }
     }
 
     private fun setupClickListener() {

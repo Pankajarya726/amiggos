@@ -48,7 +48,7 @@ class PhotoAdapter(
     class PromotersViewHolder(val listitembinding: PhotoSingleListBinding) :
         RecyclerView.ViewHolder(listitembinding.root) {
         fun bind(listItem: GetUserProfileResponse.Data.OtherImage, context: Context?, response: List<GetUserProfileResponse.Data.OtherImage>) {
-            Glide.with(context!!).load(listItem.image).placeholder(R.drawable.header_logo).into(listitembinding.imgUserFirstfragment)
+            Glide.with(context!!).load(listItem.image).placeholder(R.drawable.noimage).into(listitembinding.imgUserFirstfragment)
             listitembinding.executePendingBindings()
         }
     }

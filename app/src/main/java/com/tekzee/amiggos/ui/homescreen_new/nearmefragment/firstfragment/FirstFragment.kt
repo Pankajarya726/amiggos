@@ -1,30 +1,32 @@
 package com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.example.easywaylocation.EasyWayLocation
 import com.example.easywaylocation.Listener
+import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.JsonObject
-import com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
+import com.tekzee.amiggos.custom.ProfileRestrictionFragment
+import com.tekzee.amiggos.hiddensearchrecyclerview.utils.HiddenSearchWithRecyclerView
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.adapter.FirstFragmentAdapter
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
@@ -38,7 +40,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import io.reactivex.functions.Predicate
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.referal_activity.*
 import java.util.concurrent.TimeUnit
 
 
@@ -85,7 +86,10 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         isFragmentVisible = true
     }
 
-
+    override fun onResume() {
+        super.onResume()
+        Logger.d("Onresume---> nearme")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -105,7 +109,29 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         setupViews(view)
         setupRecyclerFirstFragment(view)
         easyWayLocation = EasyWayLocation(activity, false, this)
-        easyWayLocation!!.startLocation()
+
+
+        //check permissions
+        askPermission(Manifest.permission.ACCESS_FINE_LOCATION) {
+            showProgressbar()
+            easyWayLocation!!.startLocation()
+        }.onDeclined { e ->
+            if (e.hasDenied()) {
+                AlertDialog.Builder(requireContext())
+                    .setMessage(languageData!!.locationpermission)
+                    .setPositiveButton(languageData!!.yes) { dialog, which ->
+                        e.askAgain()
+                    } //ask again
+                    .setNegativeButton(languageData!!.no) { dialog, which ->
+                        dialog.dismiss()
+                    }
+                    .show()
+            }
+
+            if (e.hasForeverDenied()) {
+                e.goToSettings()
+            }
+        }
         setupClickListener()
     }
 
@@ -246,17 +272,18 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
 
     }
 
-    override fun itemClickCallback(position: Int) {
-        if(sharedPreference!!.getValueInt(ConstantLib.ISPROFILECOMPLETE)==0){
-            val dialog: BottomDialogExtended =
-                BottomDialogExtended.newInstance(
-                    languageData!!.profilecompletionerror,
-                    arrayOf(languageData!!.yes)
-                )
-            dialog.show(this.childFragmentManager, "dialog")
-            dialog.setListener { position ->
+    fun showCustomDialog(view: View){
+        val bottomSheetDialog: ProfileRestrictionFragment = ProfileRestrictionFragment.newInstance()
+        bottomSheetDialog.show(childFragmentManager, "profile restriction fragment")
+    }
 
-            }
+    override fun itemClickCallback(
+        position: Int,
+        imgUserFirstfragment: ImageView,
+        nearestFreind: NearByV2Response.Data.NearestFreind
+    ) {
+        if(!Utility.checkProfileComplete(sharedPreference)){
+            showCustomDialog(imgUserFirstfragment)
         }else{
             searchView!!.clearSearchview()
 

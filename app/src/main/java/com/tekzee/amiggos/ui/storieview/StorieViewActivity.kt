@@ -131,7 +131,7 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
 
     private fun setupViews() {
         Glide.with(applicationContext)
-            .load(intent.getStringExtra(ConstantLib.PROFILE_IMAGE)).placeholder(R.drawable.user).into(img_profile)
+            .load(intent.getStringExtra(ConstantLib.PROFILE_IMAGE)).placeholder(R.drawable.noimage).into(img_profile)
         binding.txtName.text = intent.getStringExtra(ConstantLib.USER_NAME)
         binding.join.text = languageData!!.klJoin
         if(sharedPreferences!!.getValueInt(ConstantLib.USER_ID).toString().equals(intent.getStringExtra(
@@ -185,6 +185,7 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
                     Log.d("url ",urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/"+intent.getStringExtra(ConstantLib.OURSTORYID));
                     Glide.with(view)
                         .load(urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/"+intent.getStringExtra(ConstantLib.OURSTORYID)+"/"+urlList[index].id)
+                        .placeholder(R.drawable.noimage)
                         .listener(object : RequestListener<Drawable> {
                             override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                                 //TODO: something on exception
@@ -200,6 +201,7 @@ class StorieViewActivity: BaseActivity(), MomentzCallback, StorieViewPresenter.S
                 }else{
                     Glide.with(view)
                         .load(urlList[index].apiUrl+"/"+sharedPreferences!!.getValueInt(ConstantLib.USER_ID)+"/"+urlList[index].id+"/0")
+                        .placeholder(R.drawable.noimage)
                         .listener(object : RequestListener<Drawable> {
                             override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                                 //TODO: something on exception

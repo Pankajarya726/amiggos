@@ -27,7 +27,7 @@ class ImageViewerActivity: BaseActivity() {
         setupToolBar()
 
         Glide.with(applicationContext).load(intent.getStringExtra(ConstantLib.PROFILE_IMAGE))
-            .placeholder(R.drawable.user).into(binding.imgProfile)
+            .placeholder(R.drawable.noimage).into(binding.imgProfile)
     }
 
     private fun setupToolBar() {

@@ -1,5 +1,6 @@
 package com.tekzee.amiggos.ui.notification_new.fragments.friendrequestnotification
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,8 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.APartyInvitesFragmentBinding
+import com.tekzee.amiggos.enums.FriendsAction
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.notification_new.adapter.ANotificationAdapterFriend
 import com.tekzee.amiggos.ui.notification_new.model.ANotificationResponse
 import com.tekzee.amiggos.util.SharedPreference
@@ -137,11 +140,15 @@ class FriendRequestNotificationFragment: BaseFragment(), FriendRequestFragmentPr
     }
 
     override fun itemClickCallback(position: Int) {
-        TODO("Not yet implemented")
+        val intent = Intent(requireContext(), AHomeScreen::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            action = FriendsAction.SHOW_FRIEND_REQUEST.action
+        }
+        startActivity(intent)
     }
 
     override fun onItemLongClickListener(position: Int) {
-        TODO("Not yet implemented")
+        Log.e("message-->",""+position)
     }
 
     override fun onLoadMoreData() {

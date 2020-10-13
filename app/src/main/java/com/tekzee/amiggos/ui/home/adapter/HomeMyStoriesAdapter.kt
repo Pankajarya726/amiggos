@@ -61,7 +61,7 @@ class HomeMyStoriesAdapter(
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind() {
 
-            Glide.with(itemView.context).load(mDataList!![adapterPosition].imageUrl).placeholder(R.drawable.blackbg).into(itemView.user_image)
+            Glide.with(itemView.context).load(mDataList!![adapterPosition].imageUrl).placeholder(R.drawable.noimage).into(itemView.user_image)
 
             itemView.s_text_name.text = mDataList!![adapterPosition].name
 

@@ -52,7 +52,7 @@ class RealAmiggosAdapter(
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind() {
-            Glide.with(itemView.context).load(mDataList[adapterPosition].profile).placeholder(R.drawable.user).into(itemView.img_user_firstfragment)
+            Glide.with(itemView.context).load(mDataList[adapterPosition].profile).placeholder(R.drawable.noimage).into(itemView.img_user_firstfragment)
             itemView.img_layout.setOnClickListener {
                 mItemClickCallback.let {
                     mItemClickCallback.itemClickCallback(adapterPosition)

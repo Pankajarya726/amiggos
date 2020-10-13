@@ -27,6 +27,8 @@ data class MemorieResponse(
             val type: Int = 0
         ): Serializable {
             data class Memory(
+                @SerializedName("creater_id ")
+                val creater_id : Int = 0,
                 @SerializedName("file_type")
                 val fileType: Int = 0,
                 @SerializedName("id")

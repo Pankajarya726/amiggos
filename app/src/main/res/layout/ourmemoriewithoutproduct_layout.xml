@@ -6,7 +6,16 @@
     android:layout_height="wrap_content">
 
 
-
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/img_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/_5sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:rippleColor="@color/black">
     <tangxiaolv.com.library.EffectiveShapeView
         android:layout_margin="4dp"
         android:id="@+id/img_user_firstfragment"
@@ -17,7 +26,7 @@
         app:shape="round_rectangle"
         app:sides="4"/>
 
-
+    </com.google.android.material.card.MaterialCardView>
 
 
 

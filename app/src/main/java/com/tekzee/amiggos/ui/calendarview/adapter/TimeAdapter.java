@@ -90,9 +90,14 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.SingleViewHold
     }
 
     public String getSelected() {
-        if (checkedPosition != -1) {
-            return time.get(checkedPosition);
+        try {
+            if (checkedPosition != -1) {
+                return time.get(checkedPosition);
+            }
+        }catch (Exception e){
+            return null;
         }
+
         return null;
     }
 }

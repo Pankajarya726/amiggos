@@ -34,7 +34,7 @@ class GuestListAdapter(
 
 
         holder.bindingdata.g_txt_name.text = items[position].name
-        Glide.with(context!!).load(items[position].profile).placeholder(R.drawable.user)
+        Glide.with(context!!).load(items[position].profile).placeholder(R.drawable.noimage)
             .into(holder.bindingdata.g_user_image)
 
     }

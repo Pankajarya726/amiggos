@@ -186,6 +186,47 @@ public class BitmapUtils {
     }
 
 
+    public static File saveImageAndReturnFile(Context context, Bitmap image) {
+
+        String savedImagePath = null;
+        Uri imageuri = null;
+        // Create the new file in the external storage
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + ".jpg";
+        File storageDir = new File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                        + "/amiggos");
+        boolean success = true;
+        if (!storageDir.exists()) {
+            success = storageDir.mkdirs();
+        }
+
+        // Save the new Bitmap
+        File imageFile =null;
+        if (success) {
+           imageFile = new File(storageDir, imageFileName);
+            imageuri = Uri.fromFile(imageFile);
+            savedImagePath = imageFile.getAbsolutePath();
+            try {
+                OutputStream fOut = new FileOutputStream(imageFile);
+                image.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                fOut.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // Add the image to the system gallery
+            galleryAddPic(context, savedImagePath);
+
+            // Show a Toast with the save location
+            // String savedMessage = context.getString(R.string.saved_message, savedImagePath);
+
+        }
+
+        return imageFile;
+    }
+
     public static Uri saveImageAndReturnUri(Context context, Bitmap image) {
 
         String savedImagePath = null;

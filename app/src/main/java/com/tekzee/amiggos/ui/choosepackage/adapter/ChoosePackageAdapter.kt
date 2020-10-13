@@ -33,7 +33,7 @@ class ChoosePackageAdapter(
     override fun onBindViewHolder(holder: ChoosePackageViewHolder, position: Int) {
 
         Glide.with(context!!).load(items[position].packageImage)
-            .placeholder(R.drawable.user).into(holder.bindingdata.user_image)
+            .placeholder(R.drawable.noimage).into(holder.bindingdata.user_image)
         holder.bindingdata.txt_seat.text = items[position].noSeat +"\n"+ languageData.kllblSeatsTitle
         holder.bindingdata.txt_package_name.text = items[position].packageName
         holder.bindingdata.price.text = items[position].symbolLeft+items[position].price.toString()

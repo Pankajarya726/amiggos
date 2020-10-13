@@ -24,17 +24,17 @@ class BookingInvitationAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PartyInvitesViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         context = parent.context
-        val view = inflater.inflate(R.layout.single_invitation,parent,false)
+        val view = inflater.inflate(R.layout.booking_single_invitation,parent,false)
 
         return PartyInvitesViewHolder(view)
     }
 
 
     override fun onBindViewHolder(holder: PartyInvitesViewHolder, position: Int) {
-        holder.bindingdata.txt_name_invitation.text = items[position].name
+        holder.bindingdata.txt_name.text = items[position].name
         holder.bindingdata.txt_accept.text = languageData!!.paccept
         holder.bindingdata.txt_reject.text = languageData.preject
-        Glide.with(context!!).load(items[position].profile).placeholder(R.drawable.user).into(holder.bindingdata.profile_image)
+        Glide.with(context!!).load(items[position].profile).placeholder(R.drawable.noimage).into(holder.bindingdata.img_flag)
 
         holder.bindingdata.txt_accept.setOnClickListener{
             invitationInterface.onItemClicked(items[position],1)
@@ -42,6 +42,10 @@ class BookingInvitationAdapter(
 
         holder.bindingdata.txt_reject.setOnClickListener{
             invitationInterface.onItemClicked(items[position],2)
+        }
+
+        holder.itemView.img_eye.setOnClickListener{
+            invitationInterface.onItemClicked(items[position],4)
         }
 
         holder.itemView.setOnClickListener{

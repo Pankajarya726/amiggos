@@ -26,7 +26,7 @@ class NewMemorieAdapter(private val listener: MemorieClickListener) :
         getItem(position)?.let { itemData->
             holder.bindPost(itemData)
 
-            holder.itemView.setOnClickListener {
+            holder.itemView.img_layout.setOnClickListener {
                 listener.onItemClicked(itemData)
             }
         }
@@ -42,6 +42,7 @@ class NewMemorieAdapter(private val listener: MemorieClickListener) :
                 s_text_name.text = memorieitem.name
                 Glide.with(itemView.context)
                     .load(memorieitem.profile)
+                    .placeholder(R.drawable.noimage)
                     .into(user_image)
             }
         }

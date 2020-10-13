@@ -18,7 +18,7 @@ import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.AmemoriesFragmentBinding
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.adapter.ViewPagerTwoAdapter
-import com.tekzee.amiggosvenueapp.ui.memories.fragment.mymemories.MyMemoriesFragment
+import com.tekzee.amiggos.ui.memories.mymemories.MyMemoriesFragment
 
 
 class AMemoriesFragment : BaseFragment() {
@@ -68,7 +68,7 @@ class AMemoriesFragment : BaseFragment() {
     ) {
         val fragmentManager = childFragmentManager
         val adapter = ViewPagerTwoAdapter(this)
-
+        viewPager.isUserInputEnabled = false
         adapter.addFragment(MyMemoriesFragment(), languageData!!.klMemories)
         adapter.addFragment(MyMemorieFragment(), languageData!!.pourmemories)
         adapter.addFragment(VenueFragment(),languageData!!.venues)

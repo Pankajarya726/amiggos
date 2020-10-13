@@ -65,14 +65,14 @@ class ChatNewAdapter(
                 holder.bindingdata.show_message.text = listItem.msg
                 holder.bindingdata.txt_receiver_name.text = listItem.friendName
                 Glide.with(context!!).load(listItem.friendImage)
-                    .placeholder(R.drawable.header_logo).into(holder.bindingdata.img_receiver)
+                    .placeholder(R.drawable.noimage).into(holder.bindingdata.img_receiver)
 
             } else {
                 holder.bindingdata.show_message_right.text = listItem.msg
                 holder.bindingdata.txt_sender_name.text = listItem.SenderName
                 Glide.with(context!!)
                     .load(prefs.getValueString(ConstantLib.PROFILE_IMAGE))
-                    .placeholder(R.drawable.header_logo).into(holder.bindingdata.img_sender)
+                    .placeholder(R.drawable.noimage).into(holder.bindingdata.img_sender)
                 holder.bindingdata.show_message_right.setOnLongClickListener {
                     listener.onItemClicked(position, listItem)
                     false
