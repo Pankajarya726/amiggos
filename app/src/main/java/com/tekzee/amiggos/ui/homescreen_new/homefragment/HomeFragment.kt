@@ -5,26 +5,22 @@ import `in`.madapps.placesautocomplete.adapter.PlacesAutoCompleteAdapter
 import `in`.madapps.placesautocomplete.listener.OnPlacesDetailsListener
 import `in`.madapps.placesautocomplete.model.Place
 import `in`.madapps.placesautocomplete.model.PlaceDetails
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.collection.valueIterator
-import androidx.core.app.ActivityCompat
-import cn.xm.weidongjian.popuphelper.PopupWindowHelper
 import com.allenliu.badgeview.BadgeFactory
 import com.allenliu.badgeview.BadgeView
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
@@ -32,35 +28,28 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.example.easywaylocation.EasyWayLocation
 import com.example.easywaylocation.Listener
+import com.google.android.gms.maps.CameraUpdate
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.*
 import com.google.gson.JsonObject
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
-import com.mapbox.mapboxsdk.Mapbox
-import com.mapbox.mapboxsdk.camera.CameraPosition
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
-import com.mapbox.mapboxsdk.geometry.LatLng
-import com.mapbox.mapboxsdk.geometry.LatLngBounds
-import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
-import com.mapbox.mapboxsdk.location.modes.CameraMode
-import com.mapbox.mapboxsdk.location.modes.RenderMode
-import com.mapbox.mapboxsdk.maps.MapView
-import com.mapbox.mapboxsdk.maps.MapboxMap
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
-import com.mapbox.mapboxsdk.maps.Style
-import com.mapbox.mapboxsdk.plugins.annotation.Symbol
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
 import com.tekzee.amiggos.ui.cameranew.CameraActivity
+import com.tekzee.amiggos.ui.homescreen_new.CustomInfoWindowAdapter
 import com.tekzee.amiggos.ui.homescreen_new.NotifyNotification
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.adapter.AutoCompleteAdapter
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.adapter.AutoSuggestAdapter
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse
+import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse.Data.Venue
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.ui.venuedetailsnew.AVenueDetails
 import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
@@ -73,8 +62,9 @@ import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 
-class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallback,
-    PermissionsListener, Listener {
+class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
+    PermissionsListener, Listener, com.google.android.gms.maps.OnMapReadyCallback {
+    private var mMap: GoogleMap? = null
     private lateinit var notifylistner: NotifyNotification
     private var finalDataList = ArrayList<HomeResponse.Data.Venue>()
     val listOfData = ArrayList<String>()
@@ -86,18 +76,13 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
     private var longitude: String? = " 0.0"
     private var latitude: String? = "0.0"
     private lateinit var homepresenterImplementation: HomePresenterImplementation
-    private var mstyle: Style? = null
-    private var mmapboxMap: MapboxMap? = null
-    private var mapView: MapView? = null
+
     private var permissionsManager: PermissionsManager? = null
-    private var img_my_location: ImageView? = null
     private var sharedPreference: SharedPreference? = null
     private var categoryId: String = ""
     private var searchkeyword: String = ""
     private var languageData: LanguageData? = null
     private var easyWayLocation: EasyWayLocation? = null
-    private var popupWindowHelper: PopupWindowHelper? = null
-    private var popView:View? = null
     private lateinit var arrayAdapter: AutoCompleteAdapter
 
     companion object {
@@ -118,7 +103,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        mapView!!.onSaveInstanceState(outState)
+//        mapView!!.onSaveInstanceState(outState)
     }
 
     override fun onCreateView(
@@ -126,8 +111,10 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Mapbox.getInstance(requireContext(), resources.getString(R.string.mapbox_token))
         val view = inflater.inflate(R.layout.home_fragment, container, false)
+        val mapFragment: SupportMapFragment =
+            childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
         return view
     }
 
@@ -137,11 +124,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         homepresenterImplementation = HomePresenterImplementation(this, requireContext())
         sharedPreference = SharedPreference(requireContext())
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        mapView = view.findViewById(R.id.mapView)
-        mapView!!.onCreate(savedInstanceState)
-        mapView!!.getMapAsync(this)
-
-        easyWayLocation   = EasyWayLocation(activity, false, this)
+        easyWayLocation = EasyWayLocation(activity, false, this)
         easyWayLocation!!.startLocation()
     }
 
@@ -224,7 +207,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         }
     }
 
-    fun setupRadioButton(id: Int){
+    fun setupRadioButton(id: Int) {
         requireView().findViewById<RadioButton>(id).isChecked = true
         requireView().findViewById<RadioButton>(id).isChecked = true
         requireView().findViewById<RadioButton>(id).isChecked = true
@@ -233,7 +216,8 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
 
     private fun setupPlaceAutoComplete(view: View) {
         placesApi =
-            PlaceAPI.Builder().apiKey(resources.getString(R.string.placeapi)).build(requireContext())
+            PlaceAPI.Builder().apiKey(resources.getString(R.string.placeapi))
+                .build(requireContext())
         view.findViewById<AutoCompleteTextView>(R.id.autoCompleteEditText).setAdapter(
             PlacesAutoCompleteAdapter(requireContext(), placesApi!!)
         )
@@ -266,13 +250,9 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
                 longitude = placeDetails.lng.toString()
                 requireActivity().runOnUiThread(Runnable {
                     hideKeyboard()
-                    val position = CameraPosition.Builder()
-                        .target(LatLng(latitude!!.toDouble(), longitude!!.toDouble())).zoom(12.0)
-                        .bearing(0.0).tilt(30.0).build()
-                    mmapboxMap!!.animateCamera(
-                        CameraUpdateFactory.newCameraPosition(position),
-                        3000
-                    )
+//                    val position = CameraPosition.Builder()
+//                        .target(LatLng(latitude!!.toDouble(), longitude!!.toDouble())).zoom(12.0)
+//                        .bearing(0.0).tilt(30.0).build()
                     callHomeApi(0)
                 })
 
@@ -297,49 +277,32 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         )
     }
 
-    private fun setupViews(view: View?) {
-        img_my_location = requireView().findViewById(R.id.img_my_location)
-        img_my_location!!.setOnClickListener {
-            enableLocationComponent(mstyle!!)
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        mapView!!.onStart()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mapView!!.onResume()
-    }
 
     override fun onStop() {
         super.onStop()
-        mapView!!.onStop()
         homepresenterImplementation.onStop()
     }
 
     override fun onLowMemory() {
         super.onLowMemory()
-        mapView!!.onLowMemory()
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mapView!!.onDestroy()
     }
 
     override fun onHomeApiSuccess(responseData: HomeResponse) {
 
         if (dataResponse.isNotEmpty()) {
-            removeAllMarkers()
+            mMap!!.clear()
             dataResponse.clear()
         }
 //        ConstantLib.NOTIFICATIONCOUNT = responseData!!.data.notificationcount
         dataResponse.addAll(responseData.data.venue)
         if (dataResponse.isNotEmpty()) {
             setMarkersOnMap(dataResponse)
+
             val latLngBounds = LatLngBounds.Builder()
                 .include(
                     LatLng(
@@ -354,11 +317,75 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
                     )
                 )
                 .build()
-            mmapboxMap!!.easeCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200), 3000)
+            val padding = 20 // offset from edges of the map in pixels
+            val cu: CameraUpdate = CameraUpdateFactory.newLatLngBounds(latLngBounds, padding)
+            mMap!!.moveCamera(cu)
 
 
         }
         notifylistner.onNotify()
+    }
+
+    private fun setMarkersOnMap(nearestClubs: java.util.ArrayList<HomeResponse.Data.Venue>) {
+        for (items in nearestClubs) {
+            var marker: View? = null
+            var imageview: ImageView? = null
+            val layoutInflater: LayoutInflater = LayoutInflater.from(context)
+            if (items.type.equals("venue")) {
+                marker = layoutInflater.inflate(R.layout.custom_marker_circular, null)
+                imageview = marker.findViewById(R.id.marker_image) as ImageView
+            } else {
+                marker = layoutInflater.inflate(R.layout.custom_marker_circular_user, null)
+                imageview = marker.findViewById(R.id.marker_image) as ImageView
+
+                BadgeFactory.create(requireContext())
+                    .setTextColor(resources.getColor(R.color.white))
+                    .setWidthAndHeight(20, 20)
+                    .setBadgeBackground(resources.getColor(R.color.red))
+                    .setTextSize(8)
+                    .setBadgeGravity(Gravity.RIGHT)
+                    .setBadgeCount(items.nearByCount)
+                    .setShape(BadgeView.SHAPE_CIRCLE)
+                    .setSpace(10, 10)
+                    .bind(imageview)
+            }
+
+
+
+            Glide.with(this)
+                .asBitmap()
+                .load(items.image)
+                .placeholder(R.drawable.noimage)
+                .into(object : CustomTarget<Bitmap>(120, 120) {
+                    override fun onLoadCleared(placeholder: Drawable?) {
+
+                    }
+
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
+                    ) {
+                        mMap!!.addMarker(
+                            MarkerOptions().position(
+                                LatLng(
+                                    items.latitude.toDouble(),
+                                    items.longitude.toDouble()
+                                )
+                            )
+                                .icon(
+                                    BitmapDescriptorFactory.fromBitmap(
+                                        getMarkerBitmapFromView(
+                                            marker,
+                                            resource,
+                                            imageview
+                                        )
+                                    )
+                                )
+                        ).tag = items
+                    }
+                })
+
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -366,158 +393,22 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         notifylistner = activity as NotifyNotification
     }
 
+    private fun getMarkerBitmapFromView(view: View, bitmap: Bitmap, imageview: ImageView): Bitmap? {
 
-    private fun removeAllMarkers() {
-        val listOfSymbols = ArrayList<Symbol>()
-        val symbolArray: androidx.collection.LongSparseArray<Symbol>? = symbolManager!!.annotations
-        for (item in symbolArray!!.valueIterator()) {
-            listOfSymbols.add(item)
-        }
-        symbolManager!!.delete(listOfSymbols)
-    }
-
-    private fun setMarkersOnMap(nearestClubs: ArrayList<HomeResponse.Data.Venue>) {
-        if (symbolManager != null) {
-            removeAllMarkers()
-        }
-
-        symbolManager = SymbolManager(mapView!!, mmapboxMap!!, mstyle!!)
-        symbolManager!!.iconAllowOverlap = true
-        symbolManager!!.iconIgnorePlacement = true
-
-        for (items in nearestClubs) {
-            addSymbolOnMap(
-                symbolManager!!,
-                items.latitude.toDouble(),
-                items.longitude.toDouble(),
-                items.image,
-                mstyle!!,
-                items.name,
-                items
-            )
-        }
-
-
-        symbolManager!!.addClickListener { t: Symbol? ->
-
-            val dataObject = t!!.data!!.asJsonObject
-            if (dataObject.get("type").asString.equals("user", true)) {
-                if(Utility.checkProfileComplete(sharedPreference)){
-                    val intent = Intent(activity, AProfileDetails::class.java)
-                    intent.putExtra(ConstantLib.FRIEND_ID, dataObject.get("id").toString())
-                    intent.putExtra(ConstantLib.PROFILE_IMAGE, dataObject.get("image").toString())
-                    startActivity(intent)
-                    Animatoo.animateSlideRight(activity)
-                }else{
-                    val dialog: BottomDialogExtended =
-                        BottomDialogExtended.newInstance(
-                            languageData!!.profilecompletedata,
-                            arrayOf(languageData!!.yes)
-                        )
-                    dialog.show(childFragmentManager, "dialog")
-                    dialog.setListener { position ->
-                        val intent = Intent(requireContext(), AViewAndEditProfile::class.java)
-                        startActivity(intent)
-                    }
-                }
-
-            } else {
-                val intent = Intent(activity, AVenueDetails::class.java)
-                intent.putExtra(ConstantLib.VENUE_ID, dataObject.get("id").asString)
-                startActivity(intent)
-            }
-
-        }
-
-    }
-
-
-    private fun addSymbolOnMap(
-        symbolManager: SymbolManager,
-        latitude: Double,
-        longitude: Double,
-        image: String,
-        mstyle: Style,
-        clubName: String,
-        items: HomeResponse.Data.Venue
-    ) {
-        var marker: View? = null
-        var imageview: ImageView? = null
-        val layoutInflater: LayoutInflater = LayoutInflater.from(context)
-        if (items.type.equals("venue")) {
-            marker = layoutInflater.inflate(R.layout.custom_marker_circular, null)
-            imageview = marker.findViewById(R.id.marker_image) as ImageView
-
-        } else {
-            marker = layoutInflater.inflate(R.layout.custom_marker_circular_user, null)
-            imageview = marker.findViewById(R.id.marker_image) as ImageView
-
-            BadgeFactory.create(requireContext())
-                .setTextColor(resources.getColor(R.color.white))
-                .setWidthAndHeight(20, 20)
-                .setBadgeBackground(resources.getColor(R.color.red))
-                .setTextSize(8)
-                .setBadgeGravity(Gravity.RIGHT)
-                .setBadgeCount(items.nearByCount)
-                .setShape(BadgeView.SHAPE_CIRCLE)
-                .setSpace(10, 10)
-                .bind(imageview)
-        }
-
-
-
-        Glide.with(this)
-            .asBitmap()
-            .load(image)
-            .placeholder(R.drawable.noimage)
-            .into(object : CustomTarget<Bitmap>(120, 120) {
-                override fun onLoadCleared(placeholder: Drawable?) {
-
-                }
-
-                override fun onResourceReady(
-                    resource: Bitmap,
-                    transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
-                ) {
-                    imageview.setImageBitmap(resource)
-                    val displayMetrics = DisplayMetrics()
-                    requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-                    marker!!.layoutParams =
-                        ViewGroup.LayoutParams(52, ViewGroup.LayoutParams.WRAP_CONTENT)
-                    marker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels)
-                    marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
-                    marker.buildDrawingCache()
-                    val bitmap = Bitmap.createBitmap(
-                        marker.measuredWidth,
-                        marker.measuredHeight,
-                        Bitmap.Config.ARGB_8888
-                    )
-                    val canvas = Canvas(bitmap)
-                    marker.draw(canvas)
-                    mstyle.addImage(clubName, bitmap)
-                    val jsonData = JsonObject()
-                    jsonData.addProperty("id", items.id)
-                    jsonData.addProperty("type", items.type)
-                    jsonData.addProperty("name", items.name)
-                    jsonData.addProperty("latitude", items.latitude)
-                    jsonData.addProperty("longitude", items.longitude)
-                    jsonData.addProperty("image", items.image)
-                    jsonData.addProperty("agelimit", items.agelimit)
-                    jsonData.addProperty("nearbycount", items.nearByCount)
-//                    jsonData.add("view", imageview)
-                    symbolManager.create(
-                        SymbolOptions()
-                            .withLatLng(LatLng(latitude, longitude))
-                            .withIconImage(clubName)
-                            .withData(jsonData)
-                            .withIconSize(1.0f)
-
-                    )
-
-                }
-            })
-
-
+        imageview.setImageBitmap(bitmap)
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+        view.layout(0, 0, view.measuredWidth, view.measuredHeight)
+        view.buildDrawingCache()
+        val returnedBitmap = Bitmap.createBitmap(
+            view.measuredWidth, view.measuredHeight,
+            Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(returnedBitmap)
+        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN)
+        val drawable = view.background
+        drawable?.draw(canvas)
+        view.draw(canvas)
+        return returnedBitmap
     }
 
 
@@ -530,23 +421,6 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
-    override fun onMapReady(mapboxMap: MapboxMap) {
-        mmapboxMap = mapboxMap
-        mapboxMap.setStyle(Style.DARK, fun(style: Style) {
-            //enableLocationComponent(style)
-            mstyle = style
-        })
-
-
-        setupViews(view)
-        setupPlaceAutoComplete(requireView())
-        setupClickListener(requireView())
-        setUpLanguage(requireView())
-        setupGestures(view)
-        setupSearchAutocomplete()
-
-
-    }
 
     @SuppressLint("CheckResult")
     private fun setupSearchAutocomplete() {
@@ -561,8 +435,8 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
                     requireView().findViewById<AutoCompleteTextView>(R.id.search_txt).hint =
                         languageData!!.pWhatWouldYouLikeToDo
                 } else {
-                    if(it.toString().length!=0)
-                    callApi("")
+                    if (it.toString().length != 0)
+                        callApi("")
 //                it.toString()
                 }
             }
@@ -577,22 +451,21 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
             hideKeyboard()
             searchText!!.setText("")
             Log.d("result--->", "" + finalDataList.get(position))
-            removeAllMarkers()
+            mMap!!.clear()
             val datalist = ArrayList<HomeResponse.Data.Venue>()
             datalist.add(finalDataList[position])
             setMarkersOnMap(datalist)
-            val position = CameraPosition.Builder()
-                .target(
+            val latLngBounds = LatLngBounds.Builder()
+                .include(
                     LatLng(
                         finalDataList[position].latitude.toDouble(),
                         finalDataList[position].longitude.toDouble()
                     )
-                ).zoom(12.0)
-                .bearing(0.0).tilt(30.0).build()
-            mmapboxMap!!.animateCamera(
-                CameraUpdateFactory.newCameraPosition(position),
-                3000
-            )
+                )
+                .build()
+            val padding = 20 // offset from edges of the map in pixels
+            val cu: CameraUpdate = CameraUpdateFactory.newLatLngBounds(latLngBounds, padding)
+            mMap!!.moveCamera(cu)
         }
     }
 
@@ -605,55 +478,6 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         permissionsManager!!.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    private fun enableLocationComponent(style: Style) {
-        if (PermissionsManager.areLocationPermissionsGranted(activity)) { // Get an instance of the component
-
-            // Get an instance of the component
-            val locationComponent = mmapboxMap!!.locationComponent
-
-            // Activate with a built LocationComponentActivationOptions object
-            locationComponent.activateLocationComponent(
-                LocationComponentActivationOptions.builder(
-                    requireContext(),
-                    style
-                ).build()
-            )
-
-            // Enable to make component visible
-            locationComponent.isLocationComponentEnabled = true
-
-            // Set the component's camera mode
-            locationComponent.cameraMode = CameraMode.TRACKING
-
-            // Set the component's render mode
-            locationComponent.renderMode = RenderMode.COMPASS
-
-            if (ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return
-            }
-            locationComponent.isLocationComponentEnabled = true
-            locationComponent.zoomWhileTracking(10.0)
-
-
-        } else {
-            permissionsManager = PermissionsManager(this)
-            permissionsManager!!.requestLocationPermissions(activity)
-        }
-    }
 
     override fun onExplanationNeeded(permissionsToExplain: MutableList<String>?) {
         Toast.makeText(activity, "user_location_permission_explanation", Toast.LENGTH_LONG).show();
@@ -661,13 +485,13 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
 
     override fun onPermissionResult(granted: Boolean) {
 
-        if (granted) {
-            mmapboxMap!!.getStyle { style -> enableLocationComponent(style) }
-        } else {
-            Toast.makeText(activity, "user_location_permission_not_granted", Toast.LENGTH_LONG)
-                .show()
-            requireActivity().finish()
-        }
+//        if (granted) {
+//            mmapboxMap!!.getStyle { style -> enableLocationComponent(style) }
+//        } else {
+//            Toast.makeText(activity, "user_location_permission_not_granted", Toast.LENGTH_LONG)
+//                .show()
+//            requireActivity().finish()
+//        }
     }
 
     override fun locationCancelled() {
@@ -692,9 +516,9 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
         listOfData.clear()
         autoSuggestAdapter!!.notifyDataSetChanged()
         for (x in 0 until finalDataList.size) {
-            if(responseData.data.venue[x].name.isNotEmpty()){
+            if (responseData.data.venue[x].name.isNotEmpty()) {
                 listOfData.add(x.toString() + "-" + responseData.data.venue[x].name)
-            }else{
+            } else {
                 listOfData.add("$x- ")
             }
 
@@ -705,5 +529,59 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView, OnMapReadyCallb
 
     }
 
+    override fun onMapReady(map: GoogleMap?) {
+        mMap = map
 
+        mMap!!.setMapStyle(
+            MapStyleOptions.loadRawResourceStyle(
+                context, R.raw.style_json
+            )
+        )
+        setupPlaceAutoComplete(requireView())
+        setupClickListener(requireView())
+        setUpLanguage(requireView())
+        setupGestures(view)
+        setupSearchAutocomplete()
+
+        val adapter = CustomInfoWindowAdapter(requireActivity())
+        mMap!!.setInfoWindowAdapter(adapter)
+
+        mMap!!.setOnInfoWindowClickListener {
+            val venueData = it.getTag() as Venue
+            if (venueData.type.equals("user", true)) {
+                if (Utility.checkProfileComplete(sharedPreference)) {
+                    val intent = Intent(activity, AProfileDetails::class.java)
+                    intent.putExtra(ConstantLib.FRIEND_ID, venueData.id.toString())
+                    intent.putExtra(ConstantLib.PROFILE_IMAGE, venueData.image)
+                    startActivity(intent)
+                    Animatoo.animateSlideRight(activity)
+                } else {
+                    val dialog: BottomDialogExtended =
+                        BottomDialogExtended.newInstance(
+                            languageData!!.profilecompletedata,
+                            arrayOf(languageData!!.yes)
+                        )
+                    dialog.show(childFragmentManager, "dialog")
+                    dialog.setListener { position ->
+                        val intent = Intent(
+                            requireContext(),
+                            AViewAndEditProfile::class.java
+                        )
+                        startActivity(intent)
+                    }
+                }
+
+            } else {
+                val intent = Intent(activity, AVenueDetails::class.java)
+                intent.putExtra(ConstantLib.VENUE_ID, venueData.id.toString())
+                startActivity(intent)
+            }
+        }
+
+    }
+
+}
+
+interface onInfoWindowItemClicked{
+    fun onItemClicked(venueData: HomeResponse.Data.Venue)
 }

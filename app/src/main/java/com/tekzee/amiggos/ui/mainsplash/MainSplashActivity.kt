@@ -17,7 +17,7 @@ import com.tekzee.amiggos.databinding.MainSplashActivityBinding
 import com.tekzee.amiggos.ui.agegroup.AgeGroupActivity
 import com.tekzee.amiggos.ui.attachid.AttachIdActivity
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
-import com.tekzee.amiggos.ui.login.LoginActivity
+
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
 import com.tekzee.amiggos.ui.statusview.StatusViewActivity
 import com.tekzee.amiggos.base.BaseActivity
@@ -218,12 +218,12 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
 
     }
 
-    private fun showLoginScreen() {
-        sharedPreferences!!.save(ConstantLib.ISAGREE, false)
-        val intent = Intent(applicationContext, LoginActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
+//    private fun showLoginScreen() {
+//        sharedPreferences!!.save(ConstantLib.ISAGREE, false)
+//        val intent = Intent(applicationContext, LoginActivity::class.java)
+//        startActivity(intent)
+//        finish()
+//    }
 
     private fun showSplashScreen() {
         sharedPreferences!!.save(ConstantLib.ISAGREE, false)

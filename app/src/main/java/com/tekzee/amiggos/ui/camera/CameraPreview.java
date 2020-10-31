@@ -220,8 +220,8 @@ public class CameraPreview extends MyCanvas {
 
                                     customButton.setVisibility(View.INVISIBLE);
                                     customButtonSquare.setVisibility(View.VISIBLE);
-
                                 }
+
                             });
 
                             try {
@@ -347,9 +347,9 @@ public class CameraPreview extends MyCanvas {
 
         if(getIntent().getStringExtra(ConstantLib.FROM_ACTIVITY).equalsIgnoreCase("STORIEVIEWACTIVITY")){
             txt_search.setVisibility(View.GONE);
-            img_profile.setVisibility(View.GONE);
+            img_profile.setVisibility(View.GONE);            txt_search.setVisibility(View.GONE);
+
         }else{
-            txt_search.setVisibility(View.GONE);
             img_profile.setVisibility(View.VISIBLE);
         }
 

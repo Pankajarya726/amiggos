@@ -41,7 +41,7 @@ class NewMemorieAdapter(private val listener: MemorieClickListener) :
             with(memorieitem) {
                 s_text_name.text = memorieitem.name
                 Glide.with(itemView.context)
-                    .load(memorieitem.profile)
+                    .load(memorieitem.thumb_image)
                     .placeholder(R.drawable.noimage)
                     .into(user_image)
             }

@@ -232,13 +232,51 @@ class AViewAndEditImplementation(
     }
 
     override fun doUpdateUserImageApi(
-        file: MultipartBody.Part?,
+        file: Array<MultipartBody.Part?>,
         useridRequestBody: RequestBody,
         createHeaders1: HashMap<String, String?>
     ) {
         mainView.showProgressbar()
         if (mainView.checkInternet()) {
             disposable = ApiClient.instance.doUpdateImage(
+                file,
+                useridRequestBody,
+                createHeaders1
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    mainView.hideProgressbar()
+                    val responseCode = response.code()
+                    when (responseCode) {
+                        200 -> {
+                            val responseData: CommonResponse? = response.body()
+                            if (responseData!!.status) {
+                                mainView.onUploadImageSuccess(responseData.message)
+                            } else {
+                                mainView.validateError(responseData.message.toString())
+                            }
+                        }
+                    }
+                }, { error ->
+                    mainView.hideProgressbar()
+                    mainView.validateError(error.message.toString())
+                })
+        } else {
+            mainView.hideProgressbar()
+            mainView.validateError(context!!.getString(R.string.check_internet))
+        }
+    }
+
+
+    override fun doUpdateUserSingleImageApi(
+        file: MultipartBody.Part?,
+        useridRequestBody: RequestBody,
+        createHeaders1: HashMap<String, String?>
+    ) {
+        mainView.showProgressbar()
+        if (mainView.checkInternet()) {
+            disposable = ApiClient.instance.doUpdateSingleImage(
                 file,
                 useridRequestBody,
                 createHeaders1

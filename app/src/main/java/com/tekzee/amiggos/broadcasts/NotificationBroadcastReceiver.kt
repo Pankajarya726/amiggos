@@ -39,7 +39,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     }
 
     @SuppressLint("CheckResult")
-    private fun callRejectApi(friendId: String?) {
+    private fun callRejectApi(friendId: String?) {                                                  
         val input = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("friend_id", friendId)

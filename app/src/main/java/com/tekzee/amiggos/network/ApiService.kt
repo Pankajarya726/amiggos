@@ -403,6 +403,14 @@ interface ApiService {
     @Multipart
     @POST("guest/addImage")
     fun doUpdateImage(
+        @Part filesMultipart: Array<MultipartBody.Part?>,
+        @Part("userid") userid: RequestBody,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
+    @Multipart
+    @POST("guest/addImage")
+    fun doUpdateSingleImage(
         @Part filesMultipart: MultipartBody.Part?,
         @Part("userid") userid: RequestBody,
         @HeaderMap createHeaders: HashMap<String, String?>
@@ -698,7 +706,7 @@ interface ApiService {
 
 
 
-    @POST("guest/userFreindsList_memory")
+    @POST("guest/getFriendsForPartyInvite")
     fun doCallGetFriends(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>

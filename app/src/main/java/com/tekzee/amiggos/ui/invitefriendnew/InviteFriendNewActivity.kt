@@ -3,8 +3,8 @@ package com.tekzee.amiggos.ui.invitefriendnew
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,11 +20,12 @@ import com.tekzee.amiggos.databinding.ActivityOurMemoriesBinding
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.invitefriendnew.adapter.InviteFriendBookingAdapter
 import com.tekzee.amiggos.ui.ourmemories.model.InviteFriendResponse
-import com.tekzee.amiggos.util.*
+import com.tekzee.amiggos.util.Errortoast
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Successtoast
+import com.tekzee.amiggos.util.Utility
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
-import io.reactivex.functions.Predicate
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -56,8 +57,10 @@ class InviteFriendNewActivity : BaseActivity(),
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         inviteFriendImplementation = InviteFriendNewImplementation(this, this)
         setupLanguage()
+        setupRecyclerView()
         setupclickListener()
         doCallGetFriends(false, "")
+
     }
 
 
@@ -102,48 +105,41 @@ class InviteFriendNewActivity : BaseActivity(),
         }
 
 
-//        RxSearchObservable.fromView(binding.hiddenSearchWithRecycler.searchBarSearchView)
-//            .debounce(500, TimeUnit.MILLISECONDS)
-//            .filter(Predicate { t ->
-//                t.isNotEmpty()
-//            })
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe(Consumer<String>() { t ->
+
+//        RxTextView.textChanges(binding.searchfriend).filter { it.length > 2 }
+//            .debounce(1000, TimeUnit.MILLISECONDS).subscribeOn(
+//                Schedulers.io()
+//            ).observeOn(AndroidSchedulers.mainThread()).subscribe {
+//            if (it.isEmpty()) {
 //                onlineFriendPageNo = 0
 //                mydataList.clear()
-//                adapter!!.notifyDataSetChanged()
-//                doCallGetFriends(false, t.toString())
-//            })
+//                adapter.notifyDataSetChanged()
+//                doCallGetFriends(false, it.toString())
+//            } else {
+//                onlineFriendPageNo = 0
+//                mydataList.clear()
+//                adapter.notifyDataSetChanged()
+//                doCallGetFriends(false, it.toString())
+//            }
+//        }
 
-        RxTextView.textChanges(binding.searchfriend) .filter { it.length > 2 }.debounce(1000, TimeUnit.MILLISECONDS).subscribeOn(
-            Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
-            if(it.isEmpty()){
+
+        RxTextView.textChanges(binding.searchfriend).filter { it.length > 2 }.debounce(1000,TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
+            Log.e("TEsgin---->",it.toString())
+            if (it.isEmpty()) {
                 onlineFriendPageNo = 0
                 mydataList.clear()
-                adapter!!.notifyDataSetChanged()
+                adapter.notifyDataSetChanged()
                 doCallGetFriends(false, it.toString())
-            }else{
+            } else {
                 onlineFriendPageNo = 0
                 mydataList.clear()
-                adapter!!.notifyDataSetChanged()
+                adapter.notifyDataSetChanged()
                 doCallGetFriends(false, it.toString())
             }
         }
 
 
-//        val closeButton: View? =
-//            binding.hiddenSearchWithRecycler.findViewById(androidx.appcompat.R.id.search_close_btn)
-//        closeButton?.setOnClickListener {
-//
-//            binding.hiddenSearchWithRecycler.searchBarSearchView.clearFocus()
-//            binding.hiddenSearchWithRecycler.searchBarSearchView.isIconified = false
-//            binding.hiddenSearchWithRecycler.clearSearchview()
-//            onlineFriendPageNo = 0
-//            mydataList.clear()
-//            adapter!!.notifyDataSetChanged()
-//            doCallGetFriends(false, "")
-//        }
 
         binding.btnInviteFriend.setOnClickListener {
             callSendRequest(toCommaSeparated()!!)
@@ -166,9 +162,9 @@ class InviteFriendNewActivity : BaseActivity(),
 
     private fun setupLanguage() {
         binding.txtTitle.text = languageData!!.invitefriend
-        if(intent.getStringExtra(ConstantLib.FROM) == ConstantLib.FINALBASKET){
+        if (intent.getStringExtra(ConstantLib.FROM) == ConstantLib.FINALBASKET) {
             binding.txtSubtitle.text = intent.getStringExtra(ConstantLib.MESSAGE)
-        }else{
+        } else {
             binding.txtSubtitle.text = languageData!!.invitefriendhint
         }
 
@@ -196,12 +192,12 @@ class InviteFriendNewActivity : BaseActivity(),
 
 
     override fun onBackPressed() {
-        if(intent.getStringExtra(ConstantLib.FROM) == ConstantLib.FINALBASKET){
+        if (intent.getStringExtra(ConstantLib.FROM) == ConstantLib.FINALBASKET) {
             val intent = Intent(applicationContext, AHomeScreen::class.java)
             startActivity(intent)
             selectUserIds.clear()
             finishAffinity()
-        }else{
+        } else {
             super.onBackPressed()
         }
 
@@ -210,7 +206,7 @@ class InviteFriendNewActivity : BaseActivity(),
 
 
     override fun onOurMemoriesSuccessInfinite(responseData: InviteFriendResponse?) {
-        binding.searchfriend.requestFocus()
+
         onlineFriendPageNo++
         adapter.setLoadingStatus(true)
         mydataList.removeAt(mydataList.size - 1)
@@ -220,7 +216,7 @@ class InviteFriendNewActivity : BaseActivity(),
 
 
     override fun onOurMemoriesFailure(message: String) {
-        binding.searchfriend.requestFocus()
+
         if (mydataList.size > 0) {
             adapter.setLoadingStatus(false)
             mydataList.removeAt(mydataList.size - 1)
@@ -229,7 +225,7 @@ class InviteFriendNewActivity : BaseActivity(),
     }
 
     override fun onFriendInviteSuccess(message: String) {
-        binding.searchfriend.requestFocus()
+
         Successtoast(message)
         val intent = Intent(applicationContext, AHomeScreen::class.java)
         startActivity(intent)
@@ -245,8 +241,6 @@ class InviteFriendNewActivity : BaseActivity(),
     override fun validateError(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
-
-
 
 
     override fun onDestroy() {
@@ -267,9 +261,9 @@ class InviteFriendNewActivity : BaseActivity(),
         realFreind: InviteFriendResponse.Data.RealFreind,
         type: Int
     ) {
-        if(type ==1){
+        if (type == 1) {
             selectUserIds.remove(realFreind.userid)
-        }else{
+        } else {
             selectUserIds.add(realFreind.userid)
         }
         adapter.notifyItemChanged(position)

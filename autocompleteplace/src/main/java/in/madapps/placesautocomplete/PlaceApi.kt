@@ -37,7 +37,7 @@ class PlaceAPI private constructor(
       val sb = buildApiUrl(PLACES_API_BASE + TYPE_AUTOCOMPLETE + OUT_JSON)
       sb.append("&input=" + URLEncoder.encode(input, "utf8"))
       val url = URL(sb.toString())
-//      Log.e("url ---->",url.toString())
+      Log.e("url ---->",url.toString())
       conn = url.openConnection() as HttpURLConnection
       val inputStreamReader = InputStreamReader(conn.inputStream)
       constructData(inputStreamReader, jsonResults)
@@ -50,6 +50,7 @@ class PlaceAPI private constructor(
     } finally {
       conn?.disconnect()
     }
+    Log.e("url ---->",jsonResults.toString())
     return parseAutoCompleteData(jsonResults)
   }
 

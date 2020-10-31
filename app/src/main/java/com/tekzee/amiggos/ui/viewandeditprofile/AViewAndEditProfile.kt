@@ -19,7 +19,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.JsonObject
 import com.impulsiveweb.galleryview.GalleryView
-
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
@@ -30,6 +29,7 @@ import com.tekzee.amiggos.ui.signup.steptwo.model.StateResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.adapter.PhotoAdapter
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
+import com.tekzee.amiggos.util.GetFilePath
 import com.tekzee.amiggos.util.ImagePickerUtils
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
@@ -38,6 +38,8 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import com.tsongkha.spinnerdatepicker.DatePicker
 import com.tsongkha.spinnerdatepicker.DatePickerDialog
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder
+import droidninja.filepicker.FilePickerBuilder
+import droidninja.filepicker.FilePickerConst
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -49,6 +51,7 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
     DatePickerDialog.OnDateSetListener, PhotoDeleteClickListener {
 
 
+    private val FILE_REQUEST_CODE: Int = 500
     private lateinit var profile_name: String
     private lateinit var adapter: PhotoAdapter
     private var dateOfBirth: String? = ""
@@ -195,8 +198,18 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
                 )
             dialog.show(supportFragmentManager, "dialog")
             dialog.setListener { position ->
-                pickImageFor = 2
-                pickImage()
+                if (position == 0) {
+                    pickImageFor = 2
+                    FilePickerBuilder.instance
+                        .setMaxCount(5) //optional
+//                        .setSelectedFiles(filePaths) //optional
+                        .setActivityTheme(R.style.LibAppTheme) //optional
+                        .pickPhoto(this)
+                } else {
+                    pickImageFor = 2
+                    pickImage()
+                }
+
             }
         }
     }
@@ -496,9 +509,9 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
     }
 
     private fun setupProfileData(data: GetUserProfileResponse.Data) {
-        sharedPreferences!!.save(ConstantLib.ISPROFILECOMPLETE,data.isProfileComplete)
-        dateOfBirth =data.dob
-        binding!!.txtEditProfileHeading.text = data.name+" "+data.lastName
+        sharedPreferences!!.save(ConstantLib.ISPROFILECOMPLETE, data.isProfileComplete)
+        dateOfBirth = data.dob
+        binding!!.txtEditProfileHeading.text = data.name + " " + data.lastName
         binding!!.eFirstname.setText(data.name)
         binding!!.eLastname.setText(data.lastName)
         binding!!.eCity.setText(data.city)
@@ -516,9 +529,9 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
     }
 
     private fun saveDataToSharedPreference(data: GetUserProfileResponse.Data) {
-        sharedPreferences!!.save(ConstantLib.USER_NAME,data.name+" "+data.lastName)
-        sharedPreferences!!.save(ConstantLib.USER_DOB,data.name+" "+data.dob)
-        sharedPreferences!!.save(ConstantLib.PROFILE_IMAGE,data.profile)
+        sharedPreferences!!.save(ConstantLib.USER_NAME, data.name + " " + data.lastName)
+        sharedPreferences!!.save(ConstantLib.USER_DOB, data.name + " " + data.dob)
+        sharedPreferences!!.save(ConstantLib.PROFILE_IMAGE, data.profile)
         sharedPreferences!!.save(ConstantLib.USER_AGE, data.age)
         UpdateInfoInFirebase(data)
     }
@@ -526,8 +539,10 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
 
     private fun UpdateInfoInFirebase(data: GetUserProfileResponse.Data) {
         val firebaseUser = auth.currentUser
-        database.child(ConstantLib.USER).child(firebaseUser!!.uid).child("name").setValue(data.name+" "+data.lastName)
-        database.child(ConstantLib.USER).child(firebaseUser.uid).child("image").setValue(data.profile)
+        database.child(ConstantLib.USER).child(firebaseUser!!.uid).child("name")
+            .setValue(data.name + " " + data.lastName)
+        database.child(ConstantLib.USER).child(firebaseUser.uid).child("image")
+            .setValue(data.profile)
 
     }
 
@@ -554,26 +569,32 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
         data: Intent?
     ) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            val result =
-                CropImage.getActivityResult(data)
-            if (resultCode == RESULT_OK) {
-                imagePath = ImagePickerUtils.getPath(this, result.uri)
-                if (pickImageFor == 1) {
-                    binding!!.imgUser.setImageURI(Uri.parse(imagePath))
-                } else {
-                    uploadUserImage()
+
+        if (requestCode == FilePickerConst.REQUEST_CODE_PHOTO) {
+            val photoPaths = ArrayList<Uri>()
+            photoPaths.addAll(data!!.getParcelableArrayListExtra<Uri>(FilePickerConst.KEY_SELECTED_MEDIA));
+            uploadMultipleUserImage(photoPaths)
+        } else
+            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                val result =
+                    CropImage.getActivityResult(data)
+                if (resultCode == RESULT_OK) {
+                    imagePath = ImagePickerUtils.getPath(this, result.uri)
+                    if (pickImageFor == 1) {
+                        binding!!.imgUser.setImageURI(Uri.parse(imagePath))
+                    } else {
+                        uploadUserImage()
+                    }
+
+
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Toast.makeText(
+                        this,
+                        "Cropping failed: " + result.error,
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
-
-
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(
-                    this,
-                    "Cropping failed: " + result.error,
-                    Toast.LENGTH_LONG
-                ).show()
             }
-        }
     }
 
     private fun uploadUserImage() {
@@ -603,7 +624,7 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
 
 
         if (fileMultipartBody != null) {
-            aViewAndEditImplementation!!.doUpdateUserImageApi(
+            aViewAndEditImplementation!!.doUpdateUserSingleImageApi(
                 fileMultipartBody,
                 useridRequestBody,
                 Utility.createHeaders(
@@ -615,6 +636,43 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
         }
     }
 
+    private fun uploadMultipleUserImage(photoPaths: ArrayList<Uri>) {
+
+
+        val surveyImagesParts = arrayOfNulls<MultipartBody.Part>(
+            photoPaths.size
+        )
+
+        for (x in 0 until photoPaths.size) {
+            val file: File = File(
+                GetFilePath.getFilePath(application, photoPaths[x])
+            )
+            val imagearray = RequestBody.create(
+                "image/*".toMediaTypeOrNull(),
+                file
+            )
+            surveyImagesParts[x] = MultipartBody.Part.createFormData(
+                "image[]",
+                file.name+System.currentTimeMillis(),
+                imagearray
+            )
+        }
+
+
+
+        val useridRequestBody = RequestBody.create(
+            MultipartBody.FORM,
+            "" + sharedPreferences!!.getValueInt(ConstantLib.USER_ID)
+        )
+
+        aViewAndEditImplementation!!.doUpdateUserImageApi(
+            surveyImagesParts,
+            useridRequestBody,
+            Utility.createHeaders(
+                sharedPreferences
+            )
+        )
+    }
     override fun onDateSet(view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
 
         val month = monthOfYear + 1
@@ -650,14 +708,18 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
             )
         dialog.show(supportFragmentManager, "dialog")
         dialog.setListener { position ->
-            if(position == 0){
+            if (position == 0) {
                 val paths: ArrayList<String> = ArrayList()
                 paths.add(listItem.image)
                 GalleryView.show(this, paths)
-            }else if(position == 1){
-                if(profile_name.equals(listItem.id,true)){
-                    Toast.makeText(applicationContext,languageData!!.pleaseselectdifferentimage,Toast.LENGTH_LONG).show()
-                }else{
+            } else if (position == 1) {
+                if (profile_name.equals(listItem.id, true)) {
+                    Toast.makeText(
+                        applicationContext,
+                        languageData!!.pleaseselectdifferentimage,
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
                     setDefaultProfile(listItem.id)
                 }
 
@@ -669,7 +731,11 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("image_name", id)
-        aViewAndEditImplementation!!.updateProfileImage(input, Utility.createHeaders(sharedPreferences))
+        aViewAndEditImplementation!!.updateProfileImage(
+            input, Utility.createHeaders(
+                sharedPreferences
+            )
+        )
     }
 
     private fun deletePhoto(photoid: String) {

@@ -48,7 +48,7 @@ class CheckoutActivity : BaseActivity(),
     private lateinit var checkOutActivityImplementation: CheckOutActivityImplementation
     private var adapter: CheckoutPaymentAdapter? = null
     private val data = ArrayList<CardListResponse.Data.Card>()
-    private var selectedPosition = -1;
+    private var selectedPosition = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -4,8 +4,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-      <!--  <ImageView
-            android:id="@+id/marker_background"
+<!--        <ImageView
+            android:id="@+id/marker_image"
             android:layout_width="@dimen/_32sdp"
             android:layout_height="@dimen/_32sdp"
             android:src="@drawable/framlayout"
@@ -25,7 +25,7 @@
     <!--        app:shape="rectangle" />-->
 
 
-    <com.github.siyamed.shapeimageview.BubbleImageView
+   <com.github.siyamed.shapeimageview.BubbleImageView
         android:id="@+id/marker_image"
         android:layout_width="@dimen/_40sdp"
         android:layout_height="@dimen/_40sdp"

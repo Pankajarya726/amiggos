@@ -255,11 +255,23 @@ class ApiClient {
 
 
     fun doUpdateImage(
-        fileMultipartBody: MultipartBody.Part?,
+        fileMultipartBody: Array<MultipartBody.Part?>,
         useridRequestBody: RequestBody,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>> {
         return apiService.doUpdateImage(
+            fileMultipartBody,
+            useridRequestBody,
+            createHeaders
+        )
+    }
+
+    fun doUpdateSingleImage(
+        fileMultipartBody: MultipartBody.Part?,
+        useridRequestBody: RequestBody,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.doUpdateSingleImage(
             fileMultipartBody,
             useridRequestBody,
             createHeaders

@@ -16,7 +16,6 @@ import com.tekzee.amiggos.constant.ConstantLib
 
 class AgeGroupActivity : BaseActivity(), AgeGroupActivityPresenter.AgeGroupMainView {
 
-
     lateinit var binding: AgeGroupActivityBinding
     private var sharedPreference: SharedPreference? = null
     private var ageGroupActivityPresenterImplementation: AgeGroupActivityPresenterImplementation? =

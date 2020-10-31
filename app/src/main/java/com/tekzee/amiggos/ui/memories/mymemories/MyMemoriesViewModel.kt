@@ -9,7 +9,6 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.base.repository.MemorieFeaturedBrandRepository
-import com.tekzee.amiggos.ui.memories.mymemories.MemorieEvent
 import com.tekzee.amiggos.ui.memories.mymemories.pagingfeaturedbrand.NewFeaturedBrandDataSource
 import com.tekzee.amiggos.ui.memories.mymemories.pagingfeaturedbrand.NewMemorieDataSource
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse

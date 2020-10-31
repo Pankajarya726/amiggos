@@ -32,6 +32,10 @@ data class HomeResponse(
             val name: String = "",
             @SerializedName("near_by_count")
             val nearByCount: String = "",
+            @SerializedName("city")
+            val city: String = "",
+            @SerializedName("state")
+            val state: String = "",
             @SerializedName("type")
             val type: String = ""
         )

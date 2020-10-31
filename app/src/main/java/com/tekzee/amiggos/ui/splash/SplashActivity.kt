@@ -10,7 +10,7 @@ import android.widget.MediaController
 import androidx.databinding.DataBindingUtil
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.databinding.SplashActivityBinding
-import com.tekzee.amiggos.ui.login.LoginActivity
+//import com.tekzee.amiggos.ui.login.LoginActivity
 import com.tekzee.amiggos.ui.splash.adapter.ViewPagerAdapter
 import com.tekzee.amiggos.ui.splash.model.ViewPageData
 import com.tekzee.amiggos.base.BaseActivity
@@ -74,15 +74,15 @@ class SplashActivity : BaseActivity(), MediaPlayer.OnPreparedListener {
             callNextView()
         }
 
-        binding.getStarted.setOnClickListener{
-            sharedPreference!!.save(ConstantLib.ISAGREE,false)
-            sharedPreference!!.save(ConstantLib.SPREAD_CHECKBOX,false)
-            sharedPreference!!.save(ConstantLib.TURNTUP_CHECKBOX,false)
-            sharedPreference!!.save(ConstantLib.OPENMIDED_CHECKBOX,false)
-            val intent = Intent(applicationContext,LoginActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
+//        binding.getStarted.setOnClickListener{
+//            sharedPreference!!.save(ConstantLib.ISAGREE,false)
+//            sharedPreference!!.save(ConstantLib.SPREAD_CHECKBOX,false)
+//            sharedPreference!!.save(ConstantLib.TURNTUP_CHECKBOX,false)
+//            sharedPreference!!.save(ConstantLib.OPENMIDED_CHECKBOX,false)
+//            val intent = Intent(applicationContext,LoginActivity::class.java)
+//            startActivity(intent)
+//            finish()
+//        }
 
         binding.imgMute.setOnClickListener{
             mediaPlayer.setVolume(0f,0f)

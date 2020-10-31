@@ -48,6 +48,12 @@ class AViewAndEditPresenter  {
         )
 
         fun doUpdateUserImageApi(
+            file: Array<MultipartBody.Part?>,
+            useridRequestBody: RequestBody,
+            createHeaders1: HashMap<String, String?>
+        )
+
+        fun doUpdateUserSingleImageApi(
             file: MultipartBody.Part?,
             useridRequestBody: RequestBody,
             createHeaders1: HashMap<String, String?>

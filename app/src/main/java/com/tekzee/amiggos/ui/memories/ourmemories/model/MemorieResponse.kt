@@ -21,6 +21,8 @@ data class MemorieResponse(
             val name: String = "",
             @SerializedName("profile")
             val profile: String = "",
+            @SerializedName("thumb_image")
+            val thumb_image: String = "",
             @SerializedName("venue_id")
             val venueId: Int = 0,
             @SerializedName("type")
@@ -35,6 +37,10 @@ data class MemorieResponse(
                 val id: Int = 0,
                 @SerializedName("story_file")
                 val storyFile: String = "",
+                @SerializedName("thumb_video")
+                val thumb_video: String = "",
+                @SerializedName("video_thumb")
+                val video_thumb: String = "",
                 @SerializedName("tagged")
                 val tagged: List<Tagged> = listOf(),
                 @SerializedName("venue_id")

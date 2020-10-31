@@ -11,7 +11,7 @@ public class LanguageData {
 
     @SerializedName("yourmemorywillbeuploadedinbackgroud")
     @Expose
-    private String yourmemorywillbeuploadedinbackgroud ="Your memory will be uploaded in backgroud and will take few moments to get updated";
+    private String yourmemorywillbeuploadedinbackgroud = "Your memory will be uploaded in backgroud and will take few moments to get updated";
     @SerializedName("time")
     @Expose
     private String time = "Time";
@@ -1379,13 +1379,6 @@ public class LanguageData {
     @Expose
     private String locationpermission = "Please provide location persmission";
 
-    public String getLocationpermission() {
-        return locationpermission;
-    }
-
-    public void setLocationpermission(String locationpermission) {
-        this.locationpermission = locationpermission;
-    }
 
     @SerializedName("videosaved")
     @Expose
@@ -1408,37 +1401,7 @@ public class LanguageData {
     @Expose
     private String selectyourpacakge = "Select Your Package";
 
-    public String getSelectyourpacakge() {
-        return selectyourpacakge;
-    }
 
-    public void setSelectyourpacakge(String selectyourpacakge) {
-        this.selectyourpacakge = selectyourpacakge;
-    }
-
-    public String getInvite() {
-        return invite;
-    }
-
-    public void setInvite(String invite) {
-        this.invite = invite;
-    }
-
-    public String getUndo() {
-        return undo;
-    }
-
-    public void setUndo(String undo) {
-        this.undo = undo;
-    }
-
-    public String getImagesaved() {
-        return imagesaved;
-    }
-
-    public void setImagesaved(String imagesaved) {
-        this.imagesaved = imagesaved;
-    }
 
     @SerializedName("max_venue_brand_limit")
     private String max_venue_brand_limit = "Can not tag more venue or brands";
@@ -5703,5 +5666,43 @@ public class LanguageData {
     public void setStaffListFetchedSuccessfully(String staffListFetchedSuccessfully) {
         this.staffListFetchedSuccessfully = staffListFetchedSuccessfully;
     }
+    public String getSelectyourpacakge() {
+        return selectyourpacakge;
+    }
 
+    public void setSelectyourpacakge(String selectyourpacakge) {
+        this.selectyourpacakge = selectyourpacakge;
+    }
+
+    public String getLocationpermission() {
+        return locationpermission;
+    }
+
+    public void setLocationpermission(String locationpermission) {
+        this.locationpermission = locationpermission;
+    }
+
+    public String getInvite() {
+        return invite;
+    }
+
+    public void setInvite(String invite) {
+        this.invite = invite;
+    }
+
+    public String getUndo() {
+        return undo;
+    }
+
+    public void setUndo(String undo) {
+        this.undo = undo;
+    }
+
+    public String getImagesaved() {
+        return imagesaved;
+    }
+
+    public void setImagesaved(String imagesaved) {
+        this.imagesaved = imagesaved;
+    }
 }

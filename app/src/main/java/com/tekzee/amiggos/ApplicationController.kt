@@ -4,9 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.multidex.MultiDex
 import com.devs.acr.AutoErrorReporter
-import com.facebook.FacebookSdk
-import com.facebook.LoggingBehavior
-import com.facebook.appevents.AppEventsLogger
+
 import com.google.android.exoplayer2.database.DatabaseProvider
 import com.google.android.exoplayer2.database.ExoDatabaseProvider
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor
@@ -395,9 +393,9 @@ class ApplicationController : Application(), KodeinAware {
     override fun onCreate() {
         super.onCreate()
         RxJavaPlugins.setErrorHandler { throwable: Throwable? -> System.out.println("Exception" + throwable!!.localizedMessage) }
-        AppEventsLogger.activateApp(this);
-        FacebookSdk.setIsDebugEnabled(true)
-        FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS)
+//        AppEventsLogger.activateApp(this);
+//        FacebookSdk.setIsDebugEnabled(true)
+//        FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS)
         PaymentConfiguration.init(
             getApplicationContext(),
             "pk_test_E5sEgimoA8T4SexAo1GnNPkJ00sG6jBcdG"
