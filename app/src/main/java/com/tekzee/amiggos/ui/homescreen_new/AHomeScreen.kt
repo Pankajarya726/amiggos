@@ -97,7 +97,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
                 setHeaders(R.id.navigation_bookings)
                 openFragment(BookingFragment.newInstance(intent, 1), "5")
             }else if (intent.action == FriendsAction.SHOW_MY_MEMORY.action) {
-                bottomNavigation!!.menu.getItem(4).isChecked = true
+                bottomNavigation!!.menu.getItem(3).isChecked = true
                 setHeaders(R.id.navigation_memories)
                 openFragment(AMemoriesFragment.newInstance(), "4")
             } else {

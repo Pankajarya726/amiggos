@@ -66,13 +66,13 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     PermissionsListener, Listener, com.google.android.gms.maps.OnMapReadyCallback {
     private var mMap: GoogleMap? = null
     private lateinit var notifylistner: NotifyNotification
-    private var finalDataList = ArrayList<HomeResponse.Data.Venue>()
+    private var finalDataList = ArrayList<Venue>()
     val listOfData = ArrayList<String>()
     private var autoSuggestAdapter: AutoSuggestAdapter? = null
     private var searchText: AutoCompleteTextView? = null
     private var placesApi: PlaceAPI? = null
     private var symbolManager: SymbolManager? = null
-    private var dataResponse = ArrayList<HomeResponse.Data.Venue>()
+    private var dataResponse = ArrayList<Venue>()
     private var longitude: String? = " 0.0"
     private var latitude: String? = "0.0"
     private lateinit var homepresenterImplementation: HomePresenterImplementation
@@ -326,7 +326,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         notifylistner.onNotify()
     }
 
-    private fun setMarkersOnMap(nearestClubs: java.util.ArrayList<HomeResponse.Data.Venue>) {
+    private fun setMarkersOnMap(nearestClubs: java.util.ArrayList<Venue>) {
         for (items in nearestClubs) {
             var marker: View? = null
             var imageview: ImageView? = null
@@ -452,7 +452,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
             searchText!!.setText("")
             Log.d("result--->", "" + finalDataList.get(position))
             mMap!!.clear()
-            val datalist = ArrayList<HomeResponse.Data.Venue>()
+            val datalist = ArrayList<Venue>()
             datalist.add(finalDataList[position])
             setMarkersOnMap(datalist)
             val latLngBounds = LatLngBounds.Builder()
@@ -583,5 +583,5 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 }
 
 interface onInfoWindowItemClicked{
-    fun onItemClicked(venueData: HomeResponse.Data.Venue)
+    fun onItemClicked(venueData: Venue)
 }

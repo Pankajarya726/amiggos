@@ -431,7 +431,7 @@
             android:theme="@style/AppTheme.NoActionBar" /> <!-- optional (needed if default theme has no action bar) -->
 
         <activity
-            android:name="com.tekzee.amiggosvenueapp.ui.taggingvideo.TaggingVideoActivity"
+            android:name=".ui.taggingvideo.TaggingVideoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

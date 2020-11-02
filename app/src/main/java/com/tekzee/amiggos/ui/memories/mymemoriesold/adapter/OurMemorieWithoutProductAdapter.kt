@@ -32,7 +32,7 @@ class OurMemorieWithoutProductAdapter(
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind() {
-            Glide.with(itemView.context).load(mDataList[adapterPosition].memory[0].storyFile).placeholder(R.drawable.noimage).into(itemView.img_user_firstfragment)
+            Glide.with(itemView.context).load(mDataList[adapterPosition].thumb_image).placeholder(R.drawable.noimage).into(itemView.img_user_firstfragment)
             itemView.img_layout.setOnClickListener {
                 listener.onMemorieClicked(mDataList[adapterPosition])
             }

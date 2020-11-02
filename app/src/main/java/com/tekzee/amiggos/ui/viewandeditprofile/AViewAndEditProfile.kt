@@ -1,5 +1,6 @@
 package com.tekzee.amiggos.ui.viewandeditprofile
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
@@ -7,6 +8,7 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import com.ajithvgiri.searchdialog.OnSearchItemSelected
@@ -14,6 +16,8 @@ import com.ajithvgiri.searchdialog.SearchListItem
 import com.ajithvgiri.searchdialog.SearchableDialog
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.bumptech.glide.Glide
+import com.github.florent37.runtimepermission.RuntimePermission.askPermission
+import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -191,26 +195,52 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
 //                .show()
 
 
-            val dialog: com.tekzee.amiggos.custom.BottomDialog =
-                com.tekzee.amiggos.custom.BottomDialog.newInstance(
-                    "",
-                    arrayOf(languageData!!.uploadexistingphoto, languageData!!.takenewphoto)
-                )
-            dialog.show(supportFragmentManager, "dialog")
-            dialog.setListener { position ->
-                if (position == 0) {
-                    pickImageFor = 2
-                    FilePickerBuilder.instance
-                        .setMaxCount(5) //optional
+            askPermission(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) {
+
+                val dialog: com.tekzee.amiggos.custom.BottomDialog =
+                    com.tekzee.amiggos.custom.BottomDialog.newInstance(
+                        "",
+                        arrayOf(languageData!!.uploadexistingphoto, languageData!!.takenewphoto)
+                    )
+                dialog.show(supportFragmentManager, "dialog")
+                dialog.setListener { position ->
+                    if (position == 0) {
+                        pickImageFor = 2
+                        FilePickerBuilder.instance
+                            .setMaxCount(5) //optional
 //                        .setSelectedFiles(filePaths) //optional
-                        .setActivityTheme(R.style.LibAppTheme) //optional
-                        .pickPhoto(this)
-                } else {
-                    pickImageFor = 2
-                    pickImage()
+                            .setActivityTheme(R.style.LibAppTheme) //optional
+                            .pickPhoto(this)
+                    } else {
+                        pickImageFor = 2
+                        pickImage()
+                    }
+
+                }
+            }.onDeclined { e ->
+                if (e.hasDenied()) {
+                    AlertDialog.Builder(this)
+                        .setMessage("Please allow permission to upload images")
+                        .setPositiveButton("yes") { dialog, which ->
+                            e.askAgain();
+                        } //ask again
+                        .setNegativeButton("no") { dialog, which ->
+                            finish()
+                        }
+                        .show();
                 }
 
+                if (e.hasForeverDenied()) {
+                    // you need to open setting manually if you really need it
+                    e.goToSettings();
+                }
             }
+
+
+
         }
     }
 

@@ -19,7 +19,7 @@ import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.NewCameraActivityBinding
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggosvenueapp.ui.tagging.TaggingFragment
-import com.tekzee.amiggosvenueapp.ui.taggingvideo.TaggingVideoActivity
+import com.tekzee.amiggos.ui.taggingvideo.TaggingVideoActivity
 import java.io.File
 
 

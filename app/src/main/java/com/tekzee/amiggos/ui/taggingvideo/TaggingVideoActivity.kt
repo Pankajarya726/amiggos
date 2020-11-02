@@ -1,4 +1,4 @@
-package com.tekzee.amiggosvenueapp.ui.taggingvideo
+package com.tekzee.amiggos.ui.taggingvideo
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -42,9 +42,6 @@ import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
 import com.tekzee.amiggos.databinding.TaggingVideoFragmentBinding
 import com.tekzee.amiggos.ui.postmemories.PostMemories
-import com.tekzee.amiggos.ui.postmemories.service.FileUploadService
-import com.tekzee.amiggos.ui.taggingvideo.TaggingVideoViewModel
-import com.tekzee.amiggos.ui.taggingvideo.TaggingVideoViewModelFactory
 import com.tekzee.amiggos.util.*
 import com.tekzee.amiggosvenueapp.ui.tagging.TaggingClickListener
 import com.tekzee.amiggosvenueapp.ui.tagging.TaggingEvent
