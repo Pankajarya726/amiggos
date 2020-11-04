@@ -29,6 +29,7 @@
         android:id="@+id/marker_image"
         android:layout_width="@dimen/_40sdp"
         android:layout_height="@dimen/_40sdp"
+       android:paddingBottom="@dimen/_20sdp"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

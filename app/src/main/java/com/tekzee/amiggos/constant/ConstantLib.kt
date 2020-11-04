@@ -28,6 +28,7 @@ object ConstantLib {
     const val MEMORIE_DATA = "MEMORIE_DATA"
     const val SELECTEDFRIENDS = "SELECTEDFRIENDS"
     const val VENUE_ID = "VENUE_ID"
+    const val IS_GOOGLE_VENUE = "IS_GOOGLE_VENUE"
     const val DATE = "DATE"
     const val APPROVAL = "APPROVAL"
     const val TIME = "TIME"

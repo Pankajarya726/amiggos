@@ -1478,6 +1478,39 @@ public class LanguageData {
     @SerializedName("specialinstruction")
     private String specialinstruction = "Special Instructions";
 
+    @SerializedName("closed")
+    private String closed = "Closed";
+
+    @SerializedName("booknow")
+    private String booknow="Book Now";
+
+    @SerializedName("google_venue_warning")
+    private String google_venue_warning="Not yet partnering with Amiggos. Suggest our app to this location";
+
+    public String getGoogle_venue_warning() {
+        return google_venue_warning;
+    }
+
+    public void setGoogle_venue_warning(String google_venue_warning) {
+        this.google_venue_warning = google_venue_warning;
+    }
+
+    public String getBooknow() {
+        return booknow;
+    }
+
+    public void setBooknow(String booknow) {
+        this.booknow = booknow;
+    }
+
+    public String getClosed() {
+        return closed;
+    }
+
+    public void setClosed(String closed) {
+        this.closed = closed;
+    }
+
     public String getSubtotal() {
         return subtotal;
     }

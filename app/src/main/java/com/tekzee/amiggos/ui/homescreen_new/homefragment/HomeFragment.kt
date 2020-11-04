@@ -181,28 +181,33 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     private fun setupClickListener(view: View) {
 
         view.findViewById<RadioButton>(R.id.img_icon_two).setOnClickListener {
-            categoryId = "12"
+            categoryId = "5"
             callHomeApi(0)
             setupRadioButton(R.id.img_icon_two)
         }
 
         view.findViewById<RadioButton>(R.id.img_icon_one).setOnClickListener {
-            categoryId = "15"
+            categoryId = "4"
             callHomeApi(0)
         }
 
         view.findViewById<RadioButton>(R.id.img_icon_three).setOnClickListener {
-            categoryId = "14"
+            categoryId = "3"
             callHomeApi(0)
         }
 
         view.findViewById<RadioButton>(R.id.img_icon_four).setOnClickListener {
-            categoryId = "13"
+            categoryId = "1"
             callHomeApi(0)
         }
 
         view.findViewById<RadioButton>(R.id.img_icon_five).setOnClickListener {
-            categoryId = "16"
+            categoryId = "2"
+            callHomeApi(0)
+        }
+
+        view.findViewById<RadioButton>(R.id.img_icon_six).setOnClickListener {
+            categoryId = "37"
             callHomeApi(0)
         }
     }
@@ -317,7 +322,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                     )
                 )
                 .build()
-            val padding = 20 // offset from edges of the map in pixels
+            val padding = 200 // offset from edges of the map in pixels
             val cu: CameraUpdate = CameraUpdateFactory.newLatLngBounds(latLngBounds, padding)
             mMap!!.moveCamera(cu)
 
@@ -334,10 +339,6 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
             if (items.type.equals("venue")) {
                 marker = layoutInflater.inflate(R.layout.custom_marker_circular, null)
                 imageview = marker.findViewById(R.id.marker_image) as ImageView
-            } else {
-                marker = layoutInflater.inflate(R.layout.custom_marker_circular_user, null)
-                imageview = marker.findViewById(R.id.marker_image) as ImageView
-
                 BadgeFactory.create(requireContext())
                     .setTextColor(resources.getColor(R.color.white))
                     .setWidthAndHeight(20, 20)
@@ -348,6 +349,11 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                     .setShape(BadgeView.SHAPE_CIRCLE)
                     .setSpace(10, 10)
                     .bind(imageview)
+            } else {
+                marker = layoutInflater.inflate(R.layout.custom_marker_circular_user, null)
+                imageview = marker.findViewById(R.id.marker_image) as ImageView
+
+
             }
 
 
@@ -414,10 +420,10 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
     override fun onHomeApiFailure(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-    }
+    }    override fun validateError(message: String) {
 
 
-    override fun validateError(message: String) {
+
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
@@ -463,7 +469,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                     )
                 )
                 .build()
-            val padding = 20 // offset from edges of the map in pixels
+            val padding = 50 // offset from edges of the map in pixels
             val cu: CameraUpdate = CameraUpdateFactory.newLatLngBounds(latLngBounds, padding)
             mMap!!.moveCamera(cu)
         }
@@ -574,6 +580,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
             } else {
                 val intent = Intent(activity, AVenueDetails::class.java)
                 intent.putExtra(ConstantLib.VENUE_ID, venueData.id.toString())
+                intent.putExtra(ConstantLib.IS_GOOGLE_VENUE, venueData.is_google_venue.toString())
                 startActivity(intent)
             }
         }

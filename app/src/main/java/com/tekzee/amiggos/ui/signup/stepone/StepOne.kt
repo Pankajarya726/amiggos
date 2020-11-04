@@ -247,7 +247,7 @@ class StepOne: BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
 
     override fun onDateSet(view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
         val month = monthOfYear + 1
-        binding!!.sdateOfBirth.setText("$month/$dayOfMonth/$year")
-        dateOfBirth = "$month/$dayOfMonth/$year"
+        binding!!.sdateOfBirth.setText("$dayOfMonth/$month/$year")
+        dateOfBirth = "$year-$month-$dayOfMonth"
     }
 }

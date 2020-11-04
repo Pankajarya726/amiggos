@@ -37,7 +37,9 @@ data class HomeResponse(
             @SerializedName("state")
             val state: String = "",
             @SerializedName("type")
-            val type: String = ""
+            val type: String = "",
+            @SerializedName("is_google_venue")
+            val is_google_venue: Int = 0
         )
     }
 }

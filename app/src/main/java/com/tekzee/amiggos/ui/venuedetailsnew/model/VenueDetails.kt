@@ -41,6 +41,8 @@ data class VenueDetails(
             val homeImage: List<String> = listOf(),
             @SerializedName("is_favorite")
             val isFavorite: Int = 0,
+            @SerializedName("is_booking_available")
+            val isBookingAvailable: Int = 0,
             @SerializedName("latitude")
             val latitude: String = "",
             @SerializedName("longitude")

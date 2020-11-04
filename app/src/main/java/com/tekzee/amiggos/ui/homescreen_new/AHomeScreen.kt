@@ -43,6 +43,7 @@ import com.tekzee.amiggos.ui.message.model.Message
 import com.tekzee.amiggos.ui.mylifestyle.AMyLifeStyle
 import com.tekzee.amiggos.ui.notification_new.ANotification
 import com.tekzee.amiggos.ui.settings_new.ASettings
+import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
 import com.tekzee.amiggos.util.SharedPreference
 
 
@@ -83,20 +84,20 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             if (intent.action == FriendsAction.CLICK.action) {
                 bottomNavigation!!.menu.getItem(1).isChecked = true
                 setHeaders(R.id.navigation_bookings)
-                openFragment(BookingFragment.newInstance(intent,2), "5")
+                openFragment(BookingFragment.newInstance(intent, 2), "5")
             } else if (intent.action == FriendsAction.SHOW_FRIENDS.action) {
                 bottomNavigation!!.menu.getItem(4).isChecked = true
                 setHeaders(R.id.navigation_near_me)
-                openFragment(NearMeFragment.newInstance(intent,1), "2")
+                openFragment(NearMeFragment.newInstance(intent, 1), "2")
             } else if (intent.action == FriendsAction.SHOW_FRIEND_REQUEST.action) {
                 bottomNavigation!!.menu.getItem(4).isChecked = true
                 setHeaders(R.id.navigation_near_me)
                 openFragment(NearMeFragment.newInstance(intent, 2), "2")
-            }  else if (intent.action == FriendsAction.PARTY_INVITATIONS.action) {
+            } else if (intent.action == FriendsAction.PARTY_INVITATIONS.action) {
                 bottomNavigation!!.menu.getItem(4).isChecked = true
                 setHeaders(R.id.navigation_bookings)
                 openFragment(BookingFragment.newInstance(intent, 1), "5")
-            }else if (intent.action == FriendsAction.SHOW_MY_MEMORY.action) {
+            } else if (intent.action == FriendsAction.SHOW_MY_MEMORY.action) {
                 bottomNavigation!!.menu.getItem(3).isChecked = true
                 setHeaders(R.id.navigation_memories)
                 openFragment(AMemoriesFragment.newInstance(), "4")
@@ -183,9 +184,19 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
 
     private fun setupClickListener() {
         binding!!.menuDrawer.setOnClickListener {
-            val intent = Intent(this@AHomeScreen, ASettings::class.java)
-            startActivity(intent)
-            Animatoo.animateSlideRight(this)
+            if (sharedPreference!!.getValueInt(ConstantLib.ISPROFILECOMPLETE) == 1) {
+                val intent = Intent(this@AHomeScreen, ASettings::class.java)
+                startActivity(intent)
+                Animatoo.animateSlideRight(this)
+            } else {
+                val intent = Intent(this, AViewAndEditProfile::class.java)
+                intent.putExtra(ConstantLib.FROM, "EDIT")
+                intent.putExtra(ConstantLib.NAME, sharedPreference!!.getValueString(ConstantLib.NAME))
+                startActivity(intent)
+                Animatoo.animateSlideRight(this)
+            }
+
+
         }
 
         binding!!.addMemorie.setOnClickListener {
@@ -311,7 +322,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
 
     override fun onBackPressed() {
         if (bottomNavigation!!.menu.getItem(0).isChecked) {
-            onBackPressed()
+            System.exit(0)
         } else {
             bottomNavigation!!.menu.getItem(0).isChecked = true
             openFragment(HomeFragment.newInstance(), "1")

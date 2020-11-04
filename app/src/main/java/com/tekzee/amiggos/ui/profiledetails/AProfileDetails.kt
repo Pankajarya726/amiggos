@@ -447,8 +447,8 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
         )
     }
 
-    override fun onSliderClicked() {
-        GalleryView.show(this, list)
+    override fun onSliderClicked(position: Int) {
+        GalleryView.show(this, list,position)
     }
 
 

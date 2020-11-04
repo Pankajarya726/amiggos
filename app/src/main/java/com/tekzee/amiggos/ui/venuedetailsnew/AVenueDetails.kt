@@ -30,6 +30,7 @@ import java.util.*
 
 class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresenterMainView,
     SliderClickListener {
+    private var isBookingAvailable: Int=0
     private var response: VenueDetails.Data? = null
     private var venueId: String? = null
     private var sharedPreference: SharedPreference? = null
@@ -70,6 +71,7 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         binding!!.venueDetail.text = languageData!!.klVenuedetails
         binding!!.address.text = languageData!!.address
         binding!!.phonenumber.text = languageData!!.phonenumber
+        binding!!.googleVenue.text = languageData!!.google_venue_warning
     }
 
     private fun callVenueDetailsApi() {
@@ -88,16 +90,17 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         }
 
         binding!!.bookNow.setOnClickListener{
-            if(response!!.clubData.goOrder ==1 && response!!.clubData.reservation ==1){
-                showCustomDialog(binding!!.bookNow, response!!)
-            }else if(response!!.clubData.goOrder ==1){
-                sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO,ConstantLib.TOGO)
-            }else if(response!!.clubData.reservation ==1){
-                sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO,ConstantLib.RESERVATION)
-            }else{
-                sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO,"")
+            if(isBookingAvailable ==1){
+                if(response!!.clubData.goOrder ==1 && response!!.clubData.reservation ==1){
+                    showCustomDialog(binding!!.bookNow, response!!)
+                }else if(response!!.clubData.goOrder ==1){
+                    sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO,ConstantLib.TOGO)
+                }else if(response!!.clubData.reservation ==1){
+                    sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO,ConstantLib.RESERVATION)
+                }else{
+                    sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO,"")
+                }
             }
-
         }
 
 
@@ -129,6 +132,14 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
 
     private fun setupViews(response: VenueDetails.Data) {
 
+        if(intent.getIntExtra(ConstantLib.IS_GOOGLE_VENUE,0)==1){
+            binding!!.googleVenue.visibility = View.VISIBLE
+            binding!!.amiggosVenue.visibility = View.GONE
+        }else{
+            binding!!.googleVenue.visibility = View.GONE
+            binding!!.amiggosVenue.visibility = View.VISIBLE
+        }
+
         binding!!.txtName.text = response.clubData.name
         binding!!.txtClubType.text = response.clubData.menuTypeName
         binding!!.txtLocation.text = response.clubData.clubCity+", "+response.clubData.clubState
@@ -137,6 +148,14 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         binding!!.txtDescription.text = response.clubData.clubDescription
         binding!!.txtAddress.text = response.clubData.address
         binding!!.txtPhone.text = response.clubData.phoneNumber
+        isBookingAvailable = response.clubData.isBookingAvailable
+        if(response.clubData.isBookingAvailable == 1){
+            binding!!.bookNow.setText(languageData!!.booknow)
+        }else{
+            binding!!.bookNow.setText(languageData!!.closed)
+        }
+
+
 
         if(response.clubData.maskReq==1){
             binding!!.maskimage.visibility = View.VISIBLE
@@ -171,15 +190,16 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
-    override fun onSliderClicked() {
-        GalleryView.show(this, list)
-    }
 
 
 
     fun showCustomDialog(view: View, response: VenueDetails.Data){
         val bottomSheetDialog: BottomSheetFragment = BottomSheetFragment.newInstance(this.response!!.clubData.clubId,response)
         bottomSheetDialog.show(supportFragmentManager, "Bottom Sheet Dialog Fragment")
+    }
+
+    override fun onSliderClicked(position: Int) {
+        GalleryView.show(this, list,position)
     }
 
 }

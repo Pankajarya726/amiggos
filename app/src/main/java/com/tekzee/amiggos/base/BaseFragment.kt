@@ -32,13 +32,13 @@ abstract class BaseFragment : Fragment(), BaseMainView {
     }
 
     override fun checkInternet(): Boolean {
-        return NetWorkConection.isNEtworkConnected(activity!!.baseContext)
+        return NetWorkConection.isNEtworkConnected(requireActivity().baseContext)
     }
 
     override fun hideKeyboard(){
         if(activity!=null){
-            val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            var view = activity!!.currentFocus
+            val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            var view = requireActivity().currentFocus
             if (view == null) {
                 view = View(activity)
             }
