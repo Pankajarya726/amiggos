@@ -54,6 +54,7 @@ import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendResponse
 import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
 import com.tekzee.amiggos.ui.ourmemories.model.InviteFriendResponse
 import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
+import com.tekzee.amiggos.ui.homescreen_new.model.BadgeCountResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
 import com.tekzee.amiggos.ui.profiledetails.model.GetFriendProfileDetailsResponse
 import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponse
@@ -479,6 +480,12 @@ class ApiClient {
         createHeaders: HashMap<String, String?>
     ): Observable<Response<HomeResponse>> {
         return apiService.docallHomeApi(input, createHeaders)
+    }
+    fun doCallBadgeApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<BadgeCountResponse>> {
+        return apiService.doCallBadgeApi(input, createHeaders)
     }
 
     fun docallMyLifestyleApi(

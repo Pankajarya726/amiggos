@@ -95,7 +95,6 @@ class ChatActivity : AppCompatActivity(), ChatEvent, KodeinAware, ChatActivityLi
         } else {
             conversationId = prefs.getValueInt(ConstantLib.USER_ID).toString() + "_" + friendId
         }
-        Log.e("Chat between--->", conversationId)
         viewModel.doGetChatBetweenSenderAndReceiver(conversationId).observe(this, Observer {
             val listOfChat = ArrayList<ChatMessage>()
             for (item in it) {

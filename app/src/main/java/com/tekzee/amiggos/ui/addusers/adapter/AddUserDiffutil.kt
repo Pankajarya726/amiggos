@@ -1,7 +1,7 @@
-package com.tekzee.amiggosvenueapp.ui.addusers.adapter
+package com.tekzee.amiggos.ui.addusers.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.tekzee.amiggosvenueapp.ui.addusers.model.AddUserResponse
+import com.tekzee.amiggos.ui.addusers.model.AddUserResponse
 
 
 class AddUserDiffutil : DiffUtil.ItemCallback<AddUserResponse.Data.Staff>() {

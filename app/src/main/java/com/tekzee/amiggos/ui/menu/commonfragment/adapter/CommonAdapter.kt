@@ -62,8 +62,18 @@ class CommonAdapter(
                 }
 
 
-                if (listItem.ageRestriction.isNotEmpty() && Integer.parseInt(prefs.getValueString(ConstantLib.USER_AGE)!!)<= Integer.parseInt(listItem.ageRestriction) ) {
-                    listener.showAgeRestrictionPopup(holder.listitembinding.txtPlus)
+                if (!listItem.ageRestriction.equals("none",true) ) {
+                    if(listItem.is_idproof_uploaded.equals("0")){
+                        listener.showAgeRestrictionPopup(holder.listitembinding.txtPlus)
+                    }else if(listItem.is_idproof_verified.equals("0")){
+                        listener.showNotVerifiedMessage(listItem.is_idproof_notverified_message)
+                    }else{
+                        val quantity =
+                            Integer.parseInt(holder.listitembinding.txtQty.text.toString()) + 1
+                        holder.listitembinding.txtQty.setText(quantity.toString())
+                        listItem.quantity = quantity
+                        listener.onItemClicked(position, listItem, quantity.toString())
+                    }
                 } else {
                     val quantity =
                         Integer.parseInt(holder.listitembinding.txtQty.text.toString()) + 1

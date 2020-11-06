@@ -1,9 +1,11 @@
 package com.tekzee.amiggos.ui.venuedetailsnew
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.google.gson.JsonObject
@@ -18,6 +20,7 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomSheetFragment
 import com.tekzee.amiggos.databinding.AVenueDetailsBinding
+import com.tekzee.amiggos.ui.calendarview.CalendarViewActivity
 import com.tekzee.amiggos.ui.profiledetails.SliderClickListener
 import com.tekzee.amiggos.ui.profiledetails.model.SliderAdapterExample
 import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubData
@@ -30,7 +33,7 @@ import java.util.*
 
 class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresenterMainView,
     SliderClickListener {
-    private var isBookingAvailable: Int=0
+    private var isBookingAvailable: Int = 0
     private var response: VenueDetails.Data? = null
     private var venueId: String? = null
     private var sharedPreference: SharedPreference? = null
@@ -63,7 +66,6 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         binding!!.htabHeader.indicatorUnselectedColor = Color.GRAY
 
 
-
     }
 
 
@@ -89,16 +91,27 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
             onBackPressed()
         }
 
-        binding!!.bookNow.setOnClickListener{
-            if(isBookingAvailable ==1){
-                if(response!!.clubData.goOrder ==1 && response!!.clubData.reservation ==1){
+        binding!!.bookNow.setOnClickListener {
+            if (isBookingAvailable == 1) {
+                if (response!!.clubData.goOrder == 1 && response!!.clubData.reservation == 1) {
                     showCustomDialog(binding!!.bookNow, response!!)
-                }else if(response!!.clubData.goOrder ==1){
-                    sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO,ConstantLib.TOGO)
-                }else if(response!!.clubData.reservation ==1){
-                    sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO,ConstantLib.RESERVATION)
-                }else{
-                    sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO,"")
+                } else if (response!!.clubData.goOrder == 1) {
+                    sharedPreference!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO, ConstantLib.TOGO)
+                    val intent = Intent(applicationContext, CalendarViewActivity::class.java)
+                    intent.putExtra(ConstantLib.CALENDAR_DATA, response!!)
+                    intent.putExtra(ConstantLib.VENUE_ID, response!!.clubData.clubId.toString())
+                    intent.putExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO, "To-Go")
+                    startActivity(intent)
+                } else if (response!!.clubData.reservation == 1) {
+                    sharedPreference!!.save(
+                        ConstantLib.SELECTED_VENUE_DIN_TOGO,
+                        ConstantLib.RESERVATION
+                    )
+                    val intent = Intent(applicationContext, CalendarViewActivity::class.java)
+                    intent.putExtra(ConstantLib.CALENDAR_DATA, response!!)
+                    intent.putExtra(ConstantLib.VENUE_ID, response!!.clubData.clubId.toString())
+                    intent.putExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO, "Dine-In")
+                    startActivity(intent)
                 }
             }
         }
@@ -118,7 +131,6 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
     }
 
 
-
     private fun callLikeUnlikeApi() {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
@@ -132,37 +144,39 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
 
     private fun setupViews(response: VenueDetails.Data) {
 
-        if(intent.getIntExtra(ConstantLib.IS_GOOGLE_VENUE,0)==1){
+        if (intent.getIntExtra(ConstantLib.IS_GOOGLE_VENUE, 0) == 1) {
             binding!!.googleVenue.visibility = View.VISIBLE
             binding!!.amiggosVenue.visibility = View.GONE
-        }else{
+            binding!!.bookNow.visibility = View.GONE
+        } else {
             binding!!.googleVenue.visibility = View.GONE
             binding!!.amiggosVenue.visibility = View.VISIBLE
+            binding!!.bookNow.visibility = View.VISIBLE
         }
 
         binding!!.txtName.text = response.clubData.name
         binding!!.txtClubType.text = response.clubData.menuTypeName
-        binding!!.txtLocation.text = response.clubData.clubCity+", "+response.clubData.clubState
+        binding!!.txtLocation.text = response.clubData.clubCity + ", " + response.clubData.clubState
         binding!!.txtAgegroup.text = response.clubData.agelimit
-        binding!!.imgHeart.isLiked = response.clubData.isFavorite==1
+        binding!!.imgHeart.isLiked = response.clubData.isFavorite == 1
         binding!!.txtDescription.text = response.clubData.clubDescription
         binding!!.txtAddress.text = response.clubData.address
         binding!!.txtPhone.text = response.clubData.phoneNumber
-        isBookingAvailable = response.clubData.isBookingAvailable
-        if(response.clubData.isBookingAvailable == 1){
-            binding!!.bookNow.setText(languageData!!.booknow)
-        }else{
-            binding!!.bookNow.setText(languageData!!.closed)
+        isBookingAvailable = response.clubData.isBookingAvailable.toInt()
+        if (response.clubData.isBookingAvailable.toInt() == 1) {
+            binding!!.bookNow.text = languageData!!.booknow
+        } else {
+            binding!!.bookNow.text = languageData!!.closed
         }
 
 
 
-        if(response.clubData.maskReq==1){
+        if (response.clubData.maskReq == 1) {
             binding!!.maskimage.visibility = View.VISIBLE
             Glide.with(this).load(response.clubData.maskimage).into(
                 binding!!.maskimage
             )
-        }else{
+        } else {
             binding!!.maskimage.visibility = View.GONE
         }
 
@@ -191,15 +205,14 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
     }
 
 
-
-
-    fun showCustomDialog(view: View, response: VenueDetails.Data){
-        val bottomSheetDialog: BottomSheetFragment = BottomSheetFragment.newInstance(this.response!!.clubData.clubId,response)
+    fun showCustomDialog(view: View, response: VenueDetails.Data) {
+        val bottomSheetDialog: BottomSheetFragment =
+            BottomSheetFragment.newInstance(this.response!!.clubData.clubId, response)
         bottomSheetDialog.show(supportFragmentManager, "Bottom Sheet Dialog Fragment")
     }
 
     override fun onSliderClicked(position: Int) {
-        GalleryView.show(this, list,position)
+        GalleryView.show(this, list, position)
     }
 
 }

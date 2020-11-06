@@ -17,7 +17,10 @@ class FirstFragmentPresenter{
     }
 
     interface FirstFragmentPresenterMainView: BaseMainView {
-        fun onOnlineFriendSuccess(responseData: List<NearByV2Response.Data.NearestFreind>)
+        fun onOnlineFriendSuccess(
+            responseData: List<NearByV2Response.Data.NearestFreind>,
+            totalCount: Int
+        )
         fun onOnlineFriendInfiniteSuccess(responseData: List<NearByV2Response.Data.NearestFreind>)
         fun onOnlineFriendFailure(responseData: String)
     }

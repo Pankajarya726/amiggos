@@ -27,6 +27,7 @@ import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
 import com.tekzee.amiggos.custom.ProfileRestrictionFragment
 import com.tekzee.amiggos.hiddensearchrecyclerview.utils.HiddenSearchWithRecyclerView
+import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.adapter.FirstFragmentAdapter
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
@@ -190,7 +191,11 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
 
     }
 
-    override fun onOnlineFriendSuccess(responseData: List<NearByV2Response.Data.NearestFreind>) {
+    override fun onOnlineFriendSuccess(
+        responseData: List<NearByV2Response.Data.NearestFreind>,
+        totalCount: Int
+    ) {
+        NearMeFragment.setNearmeBadge(totalCount)
         onlineFriendPageNo++
         mydataList.addAll(responseData)
         adapter!!.notifyDataSetChanged()

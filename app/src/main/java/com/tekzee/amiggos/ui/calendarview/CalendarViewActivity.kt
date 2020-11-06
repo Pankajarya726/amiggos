@@ -124,57 +124,57 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
         binding.btnNext.setOnClickListener {
 
             if (dataVenue.clubData.isclock == 0 && dataVenue.clubData.timeslot == 0) {
-                val intent = Intent(applicationContext, MenuActivity::class.java)
-                intent.putExtra(
+                val menuIntent = Intent(applicationContext, MenuActivity::class.java)
+                menuIntent.putExtra(
                     ConstantLib.VENUE_ID,
-                    getIntent().getStringExtra(ConstantLib.VENUE_ID)
+                    intent.getStringExtra(ConstantLib.VENUE_ID)
                 )
-                intent.putExtra(
+                menuIntent.putExtra(
                     ConstantLib.SELECTED_VENUE_DIN_TOGO,
-                    getIntent().getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
+                    intent.getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
                 )
-                intent.putExtra(ConstantLib.DATE, selectedDate)
-                intent.putExtra(
+                menuIntent.putExtra(ConstantLib.DATE, selectedDate)
+                menuIntent.putExtra(
                     ConstantLib.TIME,
                     ""
                 )
-                startActivity(intent)
+                startActivity(menuIntent)
             } else if (dataVenue.clubData.isclock == 1) {
-                val intent = Intent(applicationContext, MenuActivity::class.java)
-                intent.putExtra(
+                val menuIntent = Intent(applicationContext, MenuActivity::class.java)
+                menuIntent.putExtra(
                     ConstantLib.VENUE_ID,
-                    getIntent().getStringExtra(ConstantLib.VENUE_ID)
+                    intent.getStringExtra(ConstantLib.VENUE_ID)
                 )
-                intent.putExtra(
+                menuIntent.putExtra(
                     ConstantLib.SELECTED_VENUE_DIN_TOGO,
-                    getIntent().getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
+                    intent.getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
                 )
-                intent.putExtra(ConstantLib.DATE, selectedDate)
+                menuIntent.putExtra(ConstantLib.DATE, selectedDate)
                 seletctedTime =
                     "" + binding.timepicker.hour + ":" + binding.timepicker.minute + ":00"
-                intent.putExtra(
+                menuIntent.putExtra(
                     ConstantLib.TIME,
                     seletctedTime
                 )
-                startActivity(intent)
+                startActivity(menuIntent)
             } else if (dataVenue.clubData.timeslot == 1) {
                 if (adapter.selected != null) {
-                    val intent = Intent(applicationContext, MenuActivity::class.java)
-                    intent.putExtra(
+                    val menuIntent = Intent(applicationContext, MenuActivity::class.java)
+                    menuIntent.putExtra(
                         ConstantLib.VENUE_ID,
-                        getIntent().getStringExtra(ConstantLib.VENUE_ID)
+                        intent.getStringExtra(ConstantLib.VENUE_ID)
                     )
-                    intent.putExtra(
+                    menuIntent.putExtra(
                         ConstantLib.SELECTED_VENUE_DIN_TOGO,
-                        getIntent().getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
+                        intent.getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
                     )
-                    intent.putExtra(ConstantLib.DATE, selectedDate)
+                    menuIntent.putExtra(ConstantLib.DATE, selectedDate)
 
-                    intent.putExtra(
+                    menuIntent.putExtra(
                         ConstantLib.TIME,
                         adapter.selected
                     )
-                    startActivity(intent)
+                    startActivity(menuIntent)
                 } else {
                     binding.timeRecycler.requestFocus()
                     Errortoast("Please select any slot or select different date")

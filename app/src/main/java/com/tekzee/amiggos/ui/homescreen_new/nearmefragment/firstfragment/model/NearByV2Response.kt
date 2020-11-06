@@ -13,7 +13,9 @@ data class NearByV2Response(
 ) {
     data class Data(
         @SerializedName("nearest_freind")
-        var nearestFreind: List<NearestFreind> = listOf()
+        var nearestFreind: List<NearestFreind> = listOf(),
+        @SerializedName("total_count")
+        var total_count: Int = 0
     ) {
         data class NearestFreind(
             @SerializedName("distance_from_mylocation")

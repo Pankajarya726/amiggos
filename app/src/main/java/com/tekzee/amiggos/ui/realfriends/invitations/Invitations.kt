@@ -23,6 +23,7 @@ import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
+import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
 import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
 import com.tekzee.amiggos.util.RxSearchObservable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -115,7 +116,6 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         invitationPresenterImplementation = InvitationPresenterImplementation(this, requireContext())
         setupRecyclerView()
-        setupClickListener()
         setupView()
         callInvitationApi()
         setupRefreshLayout()
@@ -131,14 +131,7 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
         }
     }
 
-    private fun setupClickListener() {
-        binding.error.errorLayout.setOnClickListener {
-            pageNo = 0
-            items.clear()
-            adapter.notifyDataSetChanged()
-            callInvitationApi()
-        }
-    }
+
 
     private fun setupRecyclerView() {
 
@@ -241,9 +234,10 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
     }
 
     override fun onInvitaionSuccess(responseData: InvitationResponseV2?) {
+        NearMeFragment.setInvitationBadge(responseData!!.data.total_count)
         items.clear()
         adapter.notifyDataSetChanged()
-        items.addAll(responseData!!.data.freindRequest)
+        items.addAll(responseData.data.freindRequest)
         adapter.notifyDataSetChanged()
 //        setupErrorVisibility()
     }
@@ -272,13 +266,5 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
     }
 
 
-    fun setupErrorVisibility(){
-        if(items.size == 0){
-            binding.error.errorLayout.visibility = View.VISIBLE
-            binding.invitationRecyclerview.visibility = View.GONE
-        }else{
-            binding.invitationRecyclerview.visibility = View.VISIBLE
-            binding.error.errorLayout.visibility = View.GONE
-        }
-    }
+
 }

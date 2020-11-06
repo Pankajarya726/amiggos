@@ -13,7 +13,9 @@ data class InvitationResponseV2(
 ) {
     data class Data(
         @SerializedName("freind_request")
-        var freindRequest: List<FreindRequest> = listOf()
+        var freindRequest: List<FreindRequest> = listOf(),
+        @SerializedName("total_count")
+        var total_count: Int = 0
     ) {
         data class FreindRequest(
             @SerializedName("name")

@@ -1,4 +1,4 @@
-package com.tekzee.amiggosvenueapp.ui.addusers.model
+package com.tekzee.amiggos.ui.addusers.model
 
 
 import com.google.gson.annotations.SerializedName

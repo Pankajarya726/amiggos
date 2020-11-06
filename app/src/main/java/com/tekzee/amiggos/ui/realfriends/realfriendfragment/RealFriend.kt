@@ -18,6 +18,7 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
 import com.tekzee.amiggos.databinding.RealFriendFragmentBinding
+import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
 import com.tekzee.amiggos.ui.onlinefriends.adapter.OnlineFriendAdapter
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.ui.realfriends.adapter.RealFriendAdapter
@@ -138,11 +139,7 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
             callRealFriendApi(false, "", isFragmentVisible)
         }
     }
-    private fun setupClickListener() {
-        binding.error.errorLayout.setOnClickListener {
-            callRealFriendApi(false, "", isFragmentVisible)
-        }
-    }
+
 
     @SuppressLint("CheckResult")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -153,7 +150,6 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
         realFriendPresenterImplementation = RealFriendPresenterImplementation(this,requireContext())
         onlineFriendRecyclerview = myView!!.findViewById(R.id.real_friend_fragment)
         setupRecyclerRealFriend()
-        setupClickListener()
 
         RxTextView.textChanges(binding.edtSearch) .filter { it.length > 2 }.debounce(500, TimeUnit.MILLISECONDS).subscribeOn(
             Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe{
@@ -194,7 +190,11 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
     }
 
 
-    override fun onRealFriendSuccess(responseData: List<RealFriendV2Response.Data.RealFreind>) {
+    override fun onRealFriendSuccess(
+        responseData: List<RealFriendV2Response.Data.RealFreind>,
+        totalCount: Int
+    ) {
+        NearMeFragment.setRealFriendBadge(totalCount)
         realFriendPageNo++
         mydataList.addAll(responseData)
         adapter!!.notifyDataSetChanged()
@@ -290,14 +290,6 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
 
 
 
-    fun setupErrorVisibility(){
-        if(mydataList.size == 0){
-            binding.error.errorLayout.visibility = View.VISIBLE
-            binding.mainlayout.visibility = View.GONE
-        }else{
-            binding.mainlayout.visibility = View.VISIBLE
-            binding.error.errorLayout.visibility = View.GONE
-        }
-    }
+
 
 }

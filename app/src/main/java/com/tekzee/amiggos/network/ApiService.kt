@@ -77,9 +77,10 @@ import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewResponse
 import com.tekzee.amiggos.util.NetworkConnectionInterceptor
-import com.tekzee.amiggosvenueapp.ui.addusers.model.AddUserResponse
+import com.tekzee.amiggos.ui.addusers.model.AddUserResponse
 import com.tekzee.amiggos.ui.menu.commonfragment.model.CommonMenuResponse
 import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
+import com.tekzee.amiggos.ui.homescreen_new.model.BadgeCountResponse
 import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.BookingPaymentResponse
 import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.SetDefaultCardResponse
 import com.tekzee.amiggosvenueapp.ui.tagging.model.TaggingResponse
@@ -554,6 +555,12 @@ interface ApiService {
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<HomeResponse>>
+
+    @POST("guest/batchcount_customer")
+    fun doCallBadgeApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<BadgeCountResponse>>
 
     @POST("guest/mylifestyle_v1")
     fun docallMyLifestyleApi(

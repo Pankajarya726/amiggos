@@ -23,6 +23,12 @@ class Menu(
     val method: String = "",
     @SerializedName("name")
     val name: String = "",
+    @SerializedName("is_idproof_verified")
+    val is_idproof_verified: String = "",
+    @SerializedName("is_idproof_uploaded")
+    val is_idproof_uploaded: String = "",
+    @SerializedName("is_idproof_notverified_message")
+    val is_idproof_notverified_message: String = "",
     @SerializedName("offer_type")
     val offerType: Int = 0,
     var quantity: Int = 0,

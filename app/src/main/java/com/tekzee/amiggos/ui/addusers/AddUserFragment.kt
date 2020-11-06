@@ -18,9 +18,7 @@ import com.tekzee.amiggos.ui.chatnew.ChatActivity
 import com.tekzee.amiggos.ui.message.model.MyFriendChatModel
 import com.tekzee.amiggos.util.*
 import com.tekzee.amiggos.ui.addusers.adapter.AddUserAdapter
-import com.tekzee.amiggosvenueapp.ui.addusers.AddUserClickListener
-import com.tekzee.amiggosvenueapp.ui.addusers.AddUserEvent
-import com.tekzee.amiggosvenueapp.ui.addusers.model.AddUserResponse
+import com.tekzee.amiggos.ui.addusers.model.AddUserResponse
 import io.reactivex.Observable
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware

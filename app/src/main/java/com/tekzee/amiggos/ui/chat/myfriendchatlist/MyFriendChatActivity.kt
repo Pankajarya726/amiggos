@@ -80,21 +80,6 @@ class MyFriendChatActivity : BaseActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val messageData: Message? = snapshot.getValue(Message::class.java)
                     if (messageData!=null) {
-
-//                        if(messageData.sender.equals(FirebaseAuth.getInstance().currentUser!!.uid)){
-//                            if(!listOfSenders.contains(messageData.receiver))
-//                            listOfSenders.add(messageData.receiver)
-//                            getAllLastConversationBetweenSenderAndReceiver(messageData.receiver)
-//                        }
-//
-//                        if(messageData.receiver.equals(FirebaseAuth.getInstance().currentUser!!.uid)){
-//                            if(!listOfSenders.contains(messageData.sender))
-//                            listOfSenders.add(messageData.sender)
-//                            getAllLastConversationBetweenSenderAndReceiver(messageData.sender)
-//                        }
-
-//                        Logger.d("listof senders ---->"+listOfSenders.size.toString())
-
                         if (!listOfSenders.contains(messageData.sender) && !messageData.sender.equals(FirebaseAuth.getInstance().uid.toString())){
                             listOfSenders.add(messageData.sender)
                             getAllLastConversationBetweenSenderAndReceiver(messageData.sender)
@@ -119,7 +104,6 @@ class MyFriendChatActivity : BaseActivity() {
                     messageBetweenSenderAndReceiver.clear()
 
                     for(messages in snapshot.children){
-//                        Logger.d("messages---->"+messages.toString())
                         val data = messages.value as HashMap<String,Any>
                         val messageData = Message(
                             data["isSeen"]!!.toString().toBoolean(),

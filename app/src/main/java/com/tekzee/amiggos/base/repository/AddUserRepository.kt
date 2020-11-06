@@ -3,7 +3,7 @@ package com.tekzee.amiggos.base.repository
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.network.ApiService
 import com.tekzee.amiggos.network.SafeApiRequest
-import com.tekzee.amiggosvenueapp.ui.addusers.model.AddUserResponse
+import com.tekzee.amiggos.ui.addusers.model.AddUserResponse
 
 
 class AddUserRepository(private val apiService: ApiService): SafeApiRequest() {

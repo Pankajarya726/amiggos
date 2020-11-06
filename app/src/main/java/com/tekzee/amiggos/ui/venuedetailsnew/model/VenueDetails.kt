@@ -42,7 +42,7 @@ data class VenueDetails(
             @SerializedName("is_favorite")
             val isFavorite: Int = 0,
             @SerializedName("is_booking_available")
-            val isBookingAvailable: Int = 0,
+            val isBookingAvailable: String = "0",
             @SerializedName("latitude")
             val latitude: String = "",
             @SerializedName("longitude")

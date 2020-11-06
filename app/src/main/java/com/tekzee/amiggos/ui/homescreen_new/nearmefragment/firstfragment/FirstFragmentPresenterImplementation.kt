@@ -51,7 +51,7 @@ class FirstFragmentPresenterImplementation(
                                 if (requestDatFromServer) {
                                     mainView.onOnlineFriendInfiniteSuccess(responseData.data.nearestFreind)
                                 } else {
-                                    mainView.onOnlineFriendSuccess(responseData.data.nearestFreind)
+                                    mainView.onOnlineFriendSuccess(responseData.data.nearestFreind,responseData.data.total_count)
                                 }
                             } else {
                                 mainView.onOnlineFriendFailure(responseData.message)

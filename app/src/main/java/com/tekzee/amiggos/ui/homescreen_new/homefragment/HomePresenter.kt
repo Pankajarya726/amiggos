@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.base.BaseMainView
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse
+import com.tekzee.amiggos.ui.homescreen_new.model.BadgeCountResponse
 
 class HomePresenter {
 
@@ -21,12 +22,19 @@ class HomePresenter {
             createHeaders: HashMap<String, String?>,
             languageData: LanguageData?
         )
+
+        fun doCallBadgeApi(
+            input: JsonObject,
+            createHeaders: HashMap<String, String?>,
+            languageData: LanguageData?
+        )
     }
 
     interface HomeMainView : BaseMainView {
         fun onHomeApiSuccess(responseData: HomeResponse)
         fun onSearchApiSuccess(responseData: HomeResponse)
         fun onHomeApiFailure(message: String)
+        fun onBadgeApiSuccess(responseData: BadgeCountResponse);
     }
 
 }

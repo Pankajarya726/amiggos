@@ -13,7 +13,9 @@ data class RealFriendV2Response(
 ) {
     data class Data(
         @SerializedName("real_freind")
-        var realFreind: List<RealFreind> = listOf()
+        var realFreind: List<RealFreind> = listOf(),
+        @SerializedName("total_count")
+        var total_count: Int = 0
     ) {
         data class RealFreind(
             @SerializedName("name")

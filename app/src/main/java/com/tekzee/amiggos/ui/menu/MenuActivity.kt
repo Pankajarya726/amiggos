@@ -2,6 +2,7 @@ package com.tekzee.amiggos.ui.menu
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -51,6 +52,7 @@ class MenuActivity : AppCompatActivity(), MenuEvent, KodeinAware {
         viewModel.menuEvent = this
         binding!!.headertitle.text = languageConstant.selectyourpacakge
         setupclickListener()
+        Log.e("venue id------>",intent.getStringExtra(ConstantLib.VENUE_ID)!!)
         setupAmount()
     }
 
@@ -63,7 +65,7 @@ class MenuActivity : AppCompatActivity(), MenuEvent, KodeinAware {
         val itemDao = AmiggoRoomDatabase.getDatabase(this).itemDao()
         repository = ItemRepository(itemDao)
         Coroutines.main {
-            repository!!.getTotalCartAmount(intent.getStringExtra(ConstantLib.VENUE_ID)).observe(this, Observer {
+            repository!!.getTotalCartAmount(intent.getStringExtra(ConstantLib.VENUE_ID)!!).observe(this, Observer {
                totalAmout = 0.0
                 for(item in it){
                     totalAmout += (item.quantity * item.price)

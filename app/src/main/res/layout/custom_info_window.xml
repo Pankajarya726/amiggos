@@ -50,7 +50,8 @@
     <Button
         android:id="@+id/custom_view_details"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_25sdp"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/_25sdp"
         android:layout_marginTop="@dimen/_3sdp"
         android:layout_marginBottom="@dimen/_10sdp"
         android:background="@drawable/bg_real_friend"

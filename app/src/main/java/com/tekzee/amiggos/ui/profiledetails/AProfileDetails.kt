@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
+import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.JsonObject
@@ -312,9 +313,18 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
         isMyFriend = responseData!!.data.isMyFriend.toBoolean()
         isMyFriendBlocked = responseData.data.isMyFriendBlocked.toBoolean()
 
-//        Glide.with(applicationContext).load(responseData.data.profile).placeholder(R.drawable.blackbg).into(
-//            binding!!.htabHeader
-//        )
+
+        if(isMyFriend){
+            Glide.with(applicationContext).load(responseData.data.profile).placeholder(R.drawable.heart_selected).into(
+                binding!!.imgLike
+            )
+        }else {
+            Glide.with(applicationContext).load(responseData.data.profile).placeholder(R.drawable.heart_unliked).into(
+                binding!!.imgLike
+            )
+        }
+
+
         list = ArrayList()
         list.addAll(responseData.data.profile)
         adapter.renewItems(list)

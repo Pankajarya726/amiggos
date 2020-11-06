@@ -48,7 +48,7 @@ class RealFriendPresenterImplementation(
                                 if(requestDatFromServer){
                                     mainView.onRealFriendInfiniteSuccess(responseData.data.realFreind)
                                 }else{
-                                    mainView.onRealFriendSuccess(responseData.data.realFreind)
+                                    mainView.onRealFriendSuccess(responseData.data.realFreind,responseData.data.total_count)
                                 }
                             } else {
                                 mainView.onRealFriendFailure(responseData.message)

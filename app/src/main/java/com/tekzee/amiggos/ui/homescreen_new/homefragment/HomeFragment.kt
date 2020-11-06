@@ -44,12 +44,14 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
 import com.tekzee.amiggos.ui.cameranew.CameraActivity
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.homescreen_new.CustomInfoWindowAdapter
 import com.tekzee.amiggos.ui.homescreen_new.NotifyNotification
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.adapter.AutoCompleteAdapter
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.adapter.AutoSuggestAdapter
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse.Data.Venue
+import com.tekzee.amiggos.ui.homescreen_new.model.BadgeCountResponse
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.ui.venuedetailsnew.AVenueDetails
 import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
@@ -115,7 +117,22 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         val mapFragment: SupportMapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+
+
         return view
+    }
+
+    private fun callBadgeApi() {
+        val input = JsonObject()
+        input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
+        input.addProperty("latitude", latitude)
+        input.addProperty("longitude", longitude)
+        homepresenterImplementation.doCallBadgeApi(
+            input,
+            Utility.createHeaders(sharedPreference),
+            languageData
+        )
     }
 
 
@@ -303,7 +320,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
             mMap!!.clear()
             dataResponse.clear()
         }
-//        ConstantLib.NOTIFICATIONCOUNT = responseData!!.data.notificationcount
+
         dataResponse.addAll(responseData.data.venue)
         if (dataResponse.isNotEmpty()) {
             setMarkersOnMap(dataResponse)
@@ -328,7 +345,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
 
         }
-        notifylistner.onNotify()
+
     }
 
     private fun setMarkersOnMap(nearestClubs: java.util.ArrayList<Venue>) {
@@ -420,8 +437,17 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
     override fun onHomeApiFailure(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-    }    override fun validateError(message: String) {
+    }
 
+    override fun onBadgeApiSuccess(responseData: BadgeCountResponse) {
+        AHomeScreen.setupNearByCountBadge(responseData.data.nearByCountBatch.toInt())
+        AHomeScreen.setupMemoryCountBadge(responseData.data.memoryCountBatch.toInt())
+        AHomeScreen.setupBookingCountBadge(responseData.data.bookingCountBatch.toInt())
+        ConstantLib.NOTIFICATIONCOUNT = responseData.data.notificationCountBatch
+        notifylistner.onNotify()
+    }
+
+    override fun validateError(message: String) {
 
 
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
@@ -514,6 +540,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         easyWayLocation!!.endUpdates()
         Logger.d("Location updates--->$latitude----$longitude")
         callHomeApi(0)
+        callBadgeApi()
     }
 
     override fun onSearchApiSuccess(responseData: HomeResponse) {
@@ -580,7 +607,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
             } else {
                 val intent = Intent(activity, AVenueDetails::class.java)
                 intent.putExtra(ConstantLib.VENUE_ID, venueData.id.toString())
-                intent.putExtra(ConstantLib.IS_GOOGLE_VENUE, venueData.is_google_venue.toString())
+                intent.putExtra(ConstantLib.IS_GOOGLE_VENUE, venueData.is_google_venue.toInt())
                 startActivity(intent)
             }
         }
@@ -589,6 +616,6 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
 }
 
-interface onInfoWindowItemClicked{
+interface onInfoWindowItemClicked {
     fun onItemClicked(venueData: Venue)
 }

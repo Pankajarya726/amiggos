@@ -61,6 +61,37 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
     companion object {
         var bottomNavigation: BottomNavigationView? = null
 
+
+
+
+        fun setupNearByCountBadge(badgeCount: Int) {
+            if(badgeCount>0){
+                val badge = bottomNavigation!!.getOrCreateBadge(R.id.navigation_near_me)
+                badge.isVisible = true
+                badge.number = badgeCount
+            }
+
+        }
+
+
+        fun setupMemoryCountBadge(badgeCount: Int) {
+            if(badgeCount>0){
+                val badge = bottomNavigation!!.getOrCreateBadge(R.id.navigation_memories)
+                badge.isVisible = true
+                badge.number = badgeCount
+            }
+
+        }
+
+        fun setupBookingCountBadge(badgeCount: Int) {
+            if(badgeCount>0){
+                val badge = bottomNavigation!!.getOrCreateBadge(R.id.navigation_bookings)
+                badge.isVisible = true
+                badge.number = badgeCount
+            }
+
+        }
+
     }
 
 
@@ -294,7 +325,6 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             binding!!.badge.visibility = View.VISIBLE
             binding!!.badge.setNumber(Integer.parseInt(ConstantLib.NOTIFICATIONCOUNT))
             binding!!.headerLogo.visibility = View.VISIBLE
-            binding!!.badge.visibility = View.GONE
             binding!!.notification.visibility = View.VISIBLE
             binding!!.checkincode.visibility = View.GONE
             binding!!.addMemorie.visibility = View.GONE
@@ -310,7 +340,8 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             badgeViewChat!!.bind(binding!!.chaticon)
         } else if (navigationMemories == R.id.navigation_my_lifestyle) {
             binding!!.headerLogo.visibility = View.VISIBLE
-            binding!!.badge.visibility = View.GONE
+            binding!!.badge.visibility = View.VISIBLE
+            binding!!.badge.setNumber(Integer.parseInt(ConstantLib.NOTIFICATIONCOUNT))
             binding!!.notification.visibility = View.VISIBLE
             binding!!.checkincode.visibility = View.GONE
             binding!!.addMemorie.visibility = View.GONE

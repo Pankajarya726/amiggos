@@ -6,6 +6,7 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.network.ApiClient
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse
+import com.tekzee.amiggos.ui.homescreen_new.model.BadgeCountResponse
 import com.tekzee.amiggos.util.Utility
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -90,6 +91,39 @@ class HomePresenterImplementation(
                                     mainView.onHomeApiFailure(responseData.message)
                                 }
 
+                        }
+                        404 -> {
+                                Utility.showLogoutPopup(context!!,"your Session has been expired,please logout")
+                        }
+                    }
+
+                }, { error ->
+                    mainView.onHomeApiFailure(error.message.toString())
+                })
+        } else {
+
+            mainView.validateError(context!!.getString(R.string.check_internet))
+        }
+    }
+
+    override fun doCallBadgeApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>,
+        languageData: LanguageData?
+    ) {
+
+        if (mainView.checkInternet()) {
+
+            disposable = ApiClient.instance.doCallBadgeApi(input,createHeaders)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response: Response<BadgeCountResponse> ->
+                    when (response.code()) {
+                        200 -> {
+                            val responseData: BadgeCountResponse = response.body()!!
+                                if (responseData.status) {
+                                    mainView.onBadgeApiSuccess(responseData)
+                                }
                         }
                         404 -> {
                                 Utility.showLogoutPopup(context!!,"your Session has been expired,please logout")

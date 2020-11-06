@@ -22,6 +22,7 @@ import com.tekzee.amiggos.ui.menu.commonfragment.adapter.CommonAdapter
 import com.tekzee.amiggos.ui.menu.commonfragment.model.CommonMenuResponse
 import com.tekzee.amiggos.ui.menu.model.MenuResponse
 import com.tekzee.amiggos.util.Coroutines
+import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.SharedPreference
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -136,6 +137,10 @@ class CommonFragment() : Fragment(), CommonEvent, KodeinAware, CommonClickListen
 
     override fun showAgeRestrictionPopup(view: View) {
         showCustomDialog(view)
+    }
+
+    override fun showNotVerifiedMessage(isIdproofNotverifiedMessage: String) {
+        requireActivity().Errortoast(isIdproofNotverifiedMessage)
     }
 
     override fun viewImage(listItem: Menu?) {
