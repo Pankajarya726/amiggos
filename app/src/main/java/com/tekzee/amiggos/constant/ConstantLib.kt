@@ -7,6 +7,8 @@ object ConstantLib {
     const val CONVERSATION = "conversation"
     const val SELECTED_VENUE_DIN_TOGO = "SELECTED_VENUE_DIN_TOGO"
     const val OURMEMORIES = "OURMEMORIES"
+    const val CURRENTLAT = "CURRENTLAT"
+    const val CURRENTLNG = "CURRENTLNG"
     const val TOGO = "TOGO"
     const val FRIENDREQUEST = "FRIENDREQUEST"
     const val BOOOKING_LIST = "BOOOKING_LIST"

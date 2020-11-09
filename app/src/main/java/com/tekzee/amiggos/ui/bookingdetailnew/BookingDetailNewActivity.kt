@@ -108,7 +108,7 @@ class BookingDetailNewActivity : BaseActivity(),
             binding.txtGuestList.visibility = View.GONE
         }
         binding.txtGuestList.text =
-            languageData!!.klGuestList + responseData.data.booking.totalInvitedGuest.toString()
+            languageData!!.klGuestList + ": "+responseData.data.booking.totalInvitedGuest.toString()
         binding.txtPurchaseDescriptionTitle.text = languageData!!.purchasedescription
         binding.txtPurchaseDescription.text = Html.fromHtml(responseData.data.booking.description)
         binding.txtPurchaseAmount.text = "$ " + responseData.data.booking.totalAmount.toString()

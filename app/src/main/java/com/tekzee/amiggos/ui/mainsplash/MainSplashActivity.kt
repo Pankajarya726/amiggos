@@ -19,7 +19,7 @@ import com.tekzee.amiggos.ui.attachid.AttachIdActivity
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
-import com.tekzee.amiggos.ui.statusview.StatusViewActivity
+//import com.tekzee.amiggos.ui.statusview.StatusViewActivity
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.ui.signup.login_new.ALogin
 import com.tekzee.amiggos.util.SharedPreference
@@ -245,11 +245,11 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
         finish()
     }
 
-    private fun showApprovalController() {
-        val intent = Intent(applicationContext, StatusViewActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
+//    private fun showApprovalController() {
+//        val intent = Intent(applicationContext, StatusViewActivity::class.java)
+//        startActivity(intent)
+//        finish()
+//    }
 
     private fun showAttachedIDController() {
         val intent = Intent(applicationContext, AttachIdActivity::class.java)

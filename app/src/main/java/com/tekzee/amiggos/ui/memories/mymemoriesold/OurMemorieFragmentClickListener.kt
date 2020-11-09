@@ -2,7 +2,7 @@ package com.tekzee.amiggos.ui.memories.mymemoriesold
 
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 
-interface MyMemorieClickListener {
+interface OurMemorieFragmentClickListener {
 
     fun onMemorieClicked(storiesData: MemorieResponse.Data.Memories)
 }

@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.databinding.ViewFriendActivityBinding
-import com.tekzee.amiggos.ui.friendprofile.FriendProfile
-import com.tekzee.amiggos.ui.myprofile.MyProfileActivity
 import com.tekzee.amiggos.ui.viewfriends.adapter.ViewFriendAdapter
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewData
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewResponse
@@ -20,6 +18,8 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
+import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
 
 class ViewFriendsActivity: BaseActivity(), ViewFriendPresenter.ViewFriendMainView {
 
@@ -44,8 +44,8 @@ class ViewFriendsActivity: BaseActivity(), ViewFriendPresenter.ViewFriendMainVie
     private fun callViewFriendApi() {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
-        input.addProperty("story_id", intent.getStringExtra(ConstantLib.STORY))
-        input.addProperty("file_id", "0")
+        input.addProperty("memory_id", intent.getStringExtra(ConstantLib.STORY))
+//        input.addProperty("file_id", "0")
         viewPresenterImplementation!!.docallViewFriendApi(
             input,
             Utility.createHeaders(sharedPreferences)
@@ -63,13 +63,25 @@ class ViewFriendsActivity: BaseActivity(), ViewFriendPresenter.ViewFriendMainVie
                 storieViewData: StorieViewData
             ) {
                 if(sharedPreferences!!.getValueInt(ConstantLib.USER_ID) == storieViewData.userid){
-                    val intent = Intent(applicationContext, MyProfileActivity::class.java)
+                    val intent = Intent(applicationContext, AViewAndEditProfile::class.java)
                     startActivity(intent)
                 }else{
-                    val intent = Intent(applicationContext, FriendProfile::class.java)
-                    intent.putExtra("from","ViewFriend")
-                    intent.putExtra(ConstantLib.FRIEND_ID,storieViewData.userid.toString())
+//                    val intent = Intent(applicationContext, FriendProfile::class.java)
+//                    intent.putExtra("from","ViewFriend")
+//                    intent.putExtra(ConstantLib.FRIEND_ID,storieViewData.userid.toString())
+//                    startActivity(intent)
+
+                    val intent = Intent(applicationContext, AProfileDetails::class.java)
+                    intent.putExtra(ConstantLib.FRIEND_ID, storieViewData.userid.toString())
+//                    intent.putExtra(ConstantLib.IS_MY_FRIEND, mydataList[position].isMyFriend)
+//                    intent.putExtra(ConstantLib.IS_MY_FRIEND_BLOCKED, mydataList[position].isMyFriendBlocked)
+//                    intent.putExtra(ConstantLib.PROFILE_IMAGE, mydataList[position].profile)
+//                    intent.putExtra(ConstantLib.NAME, mydataList[position].name)
+//                    intent.putExtra(ConstantLib.ADDRESS, mydataList[position].address)
+//                    intent.putExtra(ConstantLib.REAL_FREIND_COUNT, mydataList[position].real_freind_count)
+                    intent.putExtra("from", "ViewFriend")
                     startActivity(intent)
+
                 }
 
             }

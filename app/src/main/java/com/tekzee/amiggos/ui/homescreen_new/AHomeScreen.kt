@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.allenliu.badgeview.BadgeFactory
 import com.allenliu.badgeview.BadgeView
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
@@ -37,6 +38,7 @@ import com.tekzee.amiggos.ui.bookings_new.BookingFragment
 import com.tekzee.amiggos.ui.cameranew.CameraActivity
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.HomeFragment
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
+import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
 import com.tekzee.amiggos.ui.memories.AMemoriesFragment
 import com.tekzee.amiggos.ui.message.MessageActivity
 import com.tekzee.amiggos.ui.message.model.Message
@@ -178,6 +180,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
     }
 
     private fun setupBadge() {
+
         badgeViewChat = BadgeFactory.create(this)
             .setTextColor(resources.getColor(R.color.white))
             .setWidthAndHeight(20, 20)
@@ -353,7 +356,18 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
 
     override fun onBackPressed() {
         if (bottomNavigation!!.menu.getItem(0).isChecked) {
-            System.exit(0)
+
+            val pDialog = SweetAlertDialog(this)
+            pDialog.titleText = languageData!!.exitwarning
+            pDialog.setCancelable(false)
+            pDialog.setCancelButton(languageData!!.klCancel) {
+                pDialog.dismiss()
+            }
+            pDialog.setConfirmButton(languageData!!.klOk) {
+                pDialog.dismiss()
+                System.exit(0)
+            }
+            pDialog.show()
         } else {
             bottomNavigation!!.menu.getItem(0).isChecked = true
             openFragment(HomeFragment.newInstance(), "1")

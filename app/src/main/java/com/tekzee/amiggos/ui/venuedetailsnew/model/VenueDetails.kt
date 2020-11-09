@@ -11,11 +11,11 @@ data class VenueDetails(
     val message: String = "",
     @SerializedName("status")
     val status: Boolean = false
-):Serializable {
+) : Serializable {
     data class Data(
         @SerializedName("club_data")
         val clubData: ClubData = ClubData()
-    ):Serializable {
+    ) : Serializable {
         data class ClubData(
             @SerializedName("address")
             val address: String = "",
@@ -50,7 +50,7 @@ data class VenueDetails(
             @SerializedName("mask_req")
             val maskReq: Int = 0,
             @SerializedName("menu_type")
-            val menuType: Int = 0,
+            val menuType: String = "0",
             @SerializedName("menu_type_name")
             val menuTypeName: String = "",
             @SerializedName("name")
@@ -74,10 +74,10 @@ data class VenueDetails(
             @SerializedName("mask_image")
             val maskimage: String = "",
             @SerializedName("timeslot")
-            val timeslot: Int =0,
+            val timeslot: Int = 0,
             @SerializedName("isclock")
             val isclock: Int = 0
-        ):Serializable {
+        ) : Serializable {
             data class WorkingDay(
                 @SerializedName("is_open")
                 val isOpen: Int = 0,
@@ -85,7 +85,7 @@ data class VenueDetails(
                 val name: String = "",
                 @SerializedName("timing")
                 val timing: String = ""
-            ):Serializable
+            ) : Serializable
         }
     }
 }

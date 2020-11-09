@@ -103,6 +103,8 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setupClickListener() {
+
+
         binding!!.eState.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
                 callStateApi()

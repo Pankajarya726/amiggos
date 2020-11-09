@@ -39,9 +39,8 @@
                 android:layout_marginRight="@dimen/_8sdp"
                 android:fontFamily="@font/opensans_semibold"
                 android:padding="@dimen/_2sdp"
-             
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/_15sdp"
+                android:textSize="@dimen/_18sdp"
                 android:textStyle="bold" />
 
 

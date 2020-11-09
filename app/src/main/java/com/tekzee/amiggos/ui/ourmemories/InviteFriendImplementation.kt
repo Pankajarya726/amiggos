@@ -4,7 +4,7 @@ import android.content.Context
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.network.ApiClient
-import com.tekzee.amiggos.ui.ourmemories.model.InviteFriendResponse
+import com.tekzee.amiggos.ui.ourmemories.model.GetFriendForInviteAfterCreateMemoryResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -37,14 +37,14 @@ class InviteFriendImplementation(
             mainView.showProgressbar()
         }
             if (mainView.checkInternet()) {
-            disposable = ApiClient.instance.doCallGetFriends(input,createHeaders)
+            disposable = ApiClient.instance.doCallGetFriendsAfterCreateMemory(input,createHeaders)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
                     mainView.hideProgressbar()
                     when (response.code()) {
                         200 -> {
-                            val responseData: InviteFriendResponse? = response.body()
+                            val responseData: GetFriendForInviteAfterCreateMemoryResponse? = response.body()
                             if (responseData!!.data.realFreind.isNotEmpty()) {
                                 if(requestDatFromServer){
                                     mainView.onOurMemoriesSuccessInfinite(responseData)

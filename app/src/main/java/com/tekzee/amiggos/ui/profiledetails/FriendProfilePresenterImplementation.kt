@@ -1,17 +1,18 @@
-package com.tekzee.amiggos.ui.friendprofile
+package com.tekzee.amiggos.ui.profiledetails
 
 import android.content.Context
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
-import com.tekzee.amiggos.ui.notification.model.StorieResponse
+import com.tekzee.amiggos.ui.profiledetails.model.StorieResponse
 import com.tekzee.amiggos.network.ApiClient
 import com.tekzee.amiggos.ui.profiledetails.model.GetFriendProfileDetailsResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class FriendProfilePresenterImplementation(private var mainView: FriendProfilePresenter.FriendProfileMainView,context: Context): FriendProfilePresenter.FriendProfileMainPresenter {
+class FriendProfilePresenterImplementation(private var mainView: FriendProfilePresenter.FriendProfileMainView, context: Context):
+    FriendProfilePresenter.FriendProfileMainPresenter {
 
     private var context: Context? = null
     private var disposable: Disposable? = null

@@ -28,7 +28,6 @@ import java.lang.Exception
 
 class MessageAdapter(
     private val listener: MessageClickListener,
-    private val currenLoggedinUserId: String?,
     private val applicationContext: Context
 ) :
     ListAdapter<MyConversation, MessageAdapter.ChatListViewHolder>(
@@ -98,9 +97,7 @@ class MessageAdapter(
                 } else {
                     finalUserId = listItem.recevieramiggosid!! + "_" + listItem.senderamiggosid!!
                 }
-//
-//                Log.e("finaluser id---->",finalUserId)
-//
+
                 ref.child(ConstantLib.MESSAGE).orderByChild("roomid").equalTo(finalUserId)
                     .addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {

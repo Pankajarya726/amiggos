@@ -9,10 +9,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class MyMemorieImplementation(
-    private var mainView: MyMemoriePresenter.MyMemoriePresenterMainView,
+class OurMemorieFragmentImplementation(
+    private var mainView: OurMemorieFragmentPresenter.MyMemoriePresenterMainView,
     context: Context
-) : MyMemoriePresenter.MyMemoriePresenterMain {
+) : OurMemorieFragmentPresenter.MyMemoriePresenterMain {
 
 
     var context: Context? = context

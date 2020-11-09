@@ -8,6 +8,7 @@ import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.stripe.model.APaymentSuccessResponse
 import com.tekzee.amiggos.stripe.model.ClientSecretResponse
+import com.tekzee.amiggos.ui.addusers.model.AddUserResponse
 import com.tekzee.amiggos.ui.agegroup.model.AgeGroupResponse
 import com.tekzee.amiggos.ui.attachid.model.AttachIdResponse
 import com.tekzee.amiggos.ui.attachid.model.MyIdResponse
@@ -15,6 +16,7 @@ import com.tekzee.amiggos.ui.blockedusers.model.BlockedUserResponse
 import com.tekzee.amiggos.ui.blockedusers.model.UnBlockFriendResponse
 import com.tekzee.amiggos.ui.bookingdetailnew.model.BookingDetailsNewResponse
 import com.tekzee.amiggos.ui.bookingqrcode.model.BookinQrCodeResponse
+import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
 import com.tekzee.amiggos.ui.bookings_new.bookings.model.ABookingResponse
 import com.tekzee.amiggos.ui.calendarview.model.TimeSlotResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
@@ -24,65 +26,58 @@ import com.tekzee.amiggos.ui.chooseweek.model.ChooseWeekResponse
 import com.tekzee.amiggos.ui.favoritevenues.model.FavoriteVenueResponse
 import com.tekzee.amiggos.ui.finalbasket.model.CreateBookingResponse
 import com.tekzee.amiggos.ui.friendlist.model.FriendListResponse
-import com.tekzee.amiggos.ui.friendprofile.model.FriendProfileResponse
 import com.tekzee.amiggos.ui.guestlist.model.GuestListResponse
 import com.tekzee.amiggos.ui.helpcenter.model.HelpCenterResponse
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.NearbyMeCountResponse
 import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse
+import com.tekzee.amiggos.ui.homescreen_new.model.BadgeCountResponse
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
 import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailResponse
+import com.tekzee.amiggos.ui.invitefriendnew.model.GetUserForInviteResponse
 import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 import com.tekzee.amiggos.ui.memories.venuefragment.model.VenueTaggedResponse
+import com.tekzee.amiggos.ui.menu.commonfragment.model.CommonMenuResponse
+import com.tekzee.amiggos.ui.menu.model.MenuResponse
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingResponse
 import com.tekzee.amiggos.ui.mylifestyle.model.MyLifestyleResponse
 import com.tekzee.amiggos.ui.mylifestylesubcategory.model.MyLifestyleSubcategoryResponse
-import com.tekzee.amiggos.ui.mymemories.fragment.memories.model.MyMemoriesResponse
-import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
+//import com.tekzee.amiggos.ui.mymemories.fragment.memories.model.MyMemoriesResponse
+//import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
 import com.tekzee.amiggos.ui.mypreferences.model.MyPreferenceResponse
 import com.tekzee.amiggos.ui.mypreferences.model.PreferenceSavedResponse
-import com.tekzee.amiggos.ui.myprofile.model.MyProfileResponse
+//import com.tekzee.amiggos.ui.myprofile.model.MyProfileResponse
 import com.tekzee.amiggos.ui.newpreferences.amusictypefragment.model.AMusicTypeResponse
 import com.tekzee.amiggos.ui.newpreferences.avenuetypefragment.model.AVenueTypeResponse
-import com.tekzee.amiggos.ui.notification.model.NotificationResponse
-import com.tekzee.amiggos.ui.notification.model.StorieResponse
 import com.tekzee.amiggos.ui.notification_new.model.ANotificationResponse
-import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendResponse
-import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
-import com.tekzee.amiggos.ui.ourmemories.model.InviteFriendResponse
+//import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
+import com.tekzee.amiggos.ui.ourmemories.model.GetFriendForInviteAfterCreateMemoryResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
 import com.tekzee.amiggos.ui.profiledetails.model.GetFriendProfileDetailsResponse
+import com.tekzee.amiggos.ui.profiledetails.model.StorieResponse
 import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponse
 import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponseV2
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendResponse
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendV2Response
-import com.tekzee.amiggos.ui.referalcode.model.ReferalCodeResponse
-import com.tekzee.amiggos.ui.referalcode.model.VenueResponse
-import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendResponse
 import com.tekzee.amiggos.ui.settings.model.SettingsResponse
 import com.tekzee.amiggos.ui.settings.model.UpdateSettingsResponse
 import com.tekzee.amiggos.ui.signup.login_new.model.ALoginResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.CityResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.StateResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.UserData
-import com.tekzee.amiggos.ui.menu.model.MenuResponse
 import com.tekzee.amiggos.ui.stripepayment.model.CardListResponse
 import com.tekzee.amiggos.ui.stripepayment.model.DeleteCardResponse
+import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.BookingPaymentResponse
+import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.SetDefaultCardResponse
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
 import com.tekzee.amiggos.ui.venuedetailsnew.model.VenueDetails
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewResponse
 import com.tekzee.amiggos.util.NetworkConnectionInterceptor
-import com.tekzee.amiggos.ui.addusers.model.AddUserResponse
-import com.tekzee.amiggos.ui.menu.commonfragment.model.CommonMenuResponse
-import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
-import com.tekzee.amiggos.ui.homescreen_new.model.BadgeCountResponse
-import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.BookingPaymentResponse
-import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.SetDefaultCardResponse
 import com.tekzee.amiggosvenueapp.ui.tagging.model.TaggingResponse
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -152,8 +147,8 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Response<AddUserResponse>
 
-    @POST("partner/approved_tagged_memory")
-    suspend fun docallAcceptDeclineApi(
+    @POST("guest/rejectOurStoryInvite")
+    suspend fun rejectOurStory(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Response<CommonResponse>
@@ -316,11 +311,11 @@ interface ApiService {
     ): Observable<Response<VenueDetailResponse>>
 
 
-    @POST("user/insertReferralCode")
-    fun doCallReferalApi(
-        @Body input: JsonObject,
-        @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<ReferalCodeResponse>>
+//    @POST("user/insertReferralCode")
+//    fun doCallReferalApi(
+//        @Body input: JsonObject,
+//        @HeaderMap createHeaders: HashMap<String, String?>
+//    ): Observable<Response<ReferalCodeResponse>>
 
 
     @POST("guest/getSettingDetails")
@@ -418,7 +413,7 @@ interface ApiService {
     ): Observable<Response<CommonResponse>>
 
 
-    @POST("user/getMemoryViewedUserList")
+    @POST("guest/memory_viewed_list")
     fun docallViewFriendApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
@@ -438,11 +433,11 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<UpdateSettingsResponse>>
 
-    @POST("user/isVenueCheckUncheck")
-    fun doCallCheckVenueApi(
-        @Body input: JsonObject,
-        @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<VenueResponse>>
+//    @POST("user/isVenueCheckUncheck")
+//    fun doCallCheckVenueApi(
+//        @Body input: JsonObject,
+//        @HeaderMap createHeaders: HashMap<String, String?>
+//    ): Observable<Response<VenueResponse>>
 
 
     @POST("user/age_group")
@@ -493,11 +488,11 @@ interface ApiService {
     ): Observable<Response<MemorieResponse>>
 
 
-    @POST("user/getAllActiveUserList_V1")
-    fun doCallOnlineFriendApi(
-        @Body input: JsonObject,
-        @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<OnlineFriendResponse>>
+//    @POST("user/getAllActiveUserList_V1")
+//    fun doCallOnlineFriendApi(
+//        @Body input: JsonObject,
+//        @HeaderMap createHeaders: HashMap<String, String?>
+//    ): Observable<Response<OnlineFriendResponse>>
 
     @POST("guest/getAllNotification")
     fun doCallNotification(
@@ -505,11 +500,11 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<ANotificationResponse>>
 
-    @POST("user/getNearByUser")
-    fun getNearByUser(
-        @Body input: JsonObject,
-        @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<SearchFriendResponse>>
+//    @POST("user/getNearByUser")
+//    fun getNearByUser(
+//        @Body input: JsonObject,
+//        @HeaderMap createHeaders: HashMap<String, String?>
+//    ): Observable<Response<SearchFriendResponse>>
 
     @POST("guest/getNearByUser")
     fun getNearByUserv2(
@@ -581,18 +576,18 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>>
 
+//
+//    @POST("user/getOurStories")
+//    fun doCallOurMemoriesApi(
+//        @Body input: JsonObject,
+//        @HeaderMap createHeaders: HashMap<String, String?>
+//    ): Observable<Response<OurMemoriesResponse>>
 
-    @POST("user/getOurStories")
-    fun doCallOurMemoriesApi(
-        @Body input: JsonObject,
-        @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<OurMemoriesResponse>>
-
-    @POST("user/userFreindsList")
-    fun doCallOurMemoriesUploadApi(
-        @Body input: JsonObject,
-        @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<OurFriendListResponse>>
+//    @POST("user/userFreindsList")
+//    fun doCallOurMemoriesUploadApi(
+//        @Body input: JsonObject,
+//        @HeaderMap createHeaders: HashMap<String, String?>
+//    ): Observable<Response<OurFriendListResponse>>
 
     @POST("user/get_venueType")
     fun doCallVenueTypeApi(
@@ -606,17 +601,17 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<AMusicTypeResponse>>
 
-    @POST("user/getNearByUser")
-    fun doCallNearBy(
-        @Body input: JsonObject,
-        @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<OurFriendListResponse>>
+//    @POST("user/getNearByUser")
+//    fun doCallNearBy(
+//        @Body input: JsonObject,
+//        @HeaderMap createHeaders: HashMap<String, String?>
+//    ): Observable<Response<OurFriendListResponse>>
 
-    @POST("user/getMyStories")
-    fun docallMemoriesApi(
-        @Body input: JsonObject,
-        @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<MyMemoriesResponse>>
+//    @POST("user/getMyStories")
+//    fun docallMemoriesApi(
+//        @Body input: JsonObject,
+//        @HeaderMap createHeaders: HashMap<String, String?>
+//    ): Observable<Response<MyMemoriesResponse>>
 
     @POST("user/dashboard_map")
     fun doGetDashboardMapApi(
@@ -717,7 +712,16 @@ interface ApiService {
     fun doCallGetFriends(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<InviteFriendResponse>>
+    ): Observable<Response<GetUserForInviteResponse>>
+
+
+
+
+    @POST("guest/userFreindsList_memory")
+    fun doCallGetFriendsAfterCreateMemory(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<GetFriendForInviteAfterCreateMemoryResponse>>
 
 
     @POST("user/getSetting")
@@ -818,18 +822,18 @@ interface ApiService {
     ): Observable<Response<MyBookingResponse>>
 
 
-    @POST("user/getUserProfile")
-    fun doMyProfile(
-        @Body input: JsonObject,
-        @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<MyProfileResponse>>
+//    @POST("user/getUserProfile")
+//    fun doMyProfile(
+//        @Body input: JsonObject,
+//        @HeaderMap createHeaders: HashMap<String, String?>
+//    ): Observable<Response<MyProfileResponse>>
 
 
-    @POST("user/getMyStoryByUserId")
-    fun doGetMyStoryByUserId(
-        @Body input: JsonObject,
-        @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<OurMemoriesResponse>>
+//    @POST("user/getMyStoryByUserId")
+//    fun doGetMyStoryByUserId(
+//        @Body input: JsonObject,
+//        @HeaderMap createHeaders: HashMap<String, String?>
+//    ): Observable<Response<OurMemoriesResponse>>
 
 
     @POST("guest/blockFriend")
@@ -868,11 +872,11 @@ interface ApiService {
     ): Observable<Response<TimeSlotResponse>>
 
 
-    @POST("user/getFreindProfile")
-    fun doCallGetFriendProfileApi(
-        @Body input: JsonObject,
-        @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<FriendProfileResponse>>
+//    @POST("user/getFreindProfile")
+//    fun doCallGetFriendProfileApi(
+//        @Body input: JsonObject,
+//        @HeaderMap createHeaders: HashMap<String, String?>
+//    ): Observable<Response<FriendProfileResponse>>
 
 
     @POST("guest/getFriendsProfile_v1")
@@ -882,11 +886,11 @@ interface ApiService {
     ): Observable<Response<GetFriendProfileDetailsResponse>>
 
 
-    @POST("user/getAllNotification")
-    fun doCallGetNotification(
-        @Body input: JsonObject,
-        @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<NotificationResponse>>
+//    @POST("user/getAllNotification")
+//    fun doCallGetNotification(
+//        @Body input: JsonObject,
+//        @HeaderMap createHeaders: HashMap<String, String?>
+//    ): Observable<Response<NotificationResponse>>
 
 
     @POST("user/getOurStoryById")

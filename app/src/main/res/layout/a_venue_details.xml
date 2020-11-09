@@ -105,7 +105,7 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:layout_marginEnd="@dimen/_15sdp"
                     android:orientation="horizontal"
-                    app:layout_constraintEnd_toStartOf="@+id/img_heart"
+                    app:layout_constraintEnd_toStartOf="@+id/linearlayoutheart"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -138,18 +138,34 @@
 
                 </LinearLayout>
 
-                <com.like.LikeButton
-
-                    android:id="@+id/img_heart"
-                    android:layout_width="@dimen/_35sdp"
-                    android:layout_height="@dimen/_35sdp"
+                <LinearLayout
+                    android:id="@+id/linearlayoutheart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginEnd="@dimen/_15sdp"
+                    android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:like_drawable="@drawable/heart_selected"
-                    app:unlike_drawable="@drawable/heart_unliked" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.like.LikeButton
+
+                        android:id="@+id/img_heart"
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_gravity="center"
+                        app:like_drawable="@drawable/heart_selected"
+                        app:unlike_drawable="@drawable/heart_unliked" />
+
+                    <ImageView
+                        android:id="@+id/navigation"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_navigate" />
+                </LinearLayout>
+
 
                 <TextView
                     android:id="@+id/txt_location"

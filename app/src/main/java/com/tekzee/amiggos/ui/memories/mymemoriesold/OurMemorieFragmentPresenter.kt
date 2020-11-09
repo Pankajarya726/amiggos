@@ -4,7 +4,7 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.base.BaseMainView
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 
-class MyMemoriePresenter{
+class OurMemorieFragmentPresenter{
 
     interface MyMemoriePresenterMain{
         fun onStop()

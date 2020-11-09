@@ -1,4 +1,4 @@
-package com.tekzee.amiggosvenueapp.ui.storieviewnew.data
+package com.tekzee.amiggos.ui.storieviewnew.data
 
 import android.os.Parcelable
 import com.tekzee.amiggos.ui.storieviewnew.data.Story

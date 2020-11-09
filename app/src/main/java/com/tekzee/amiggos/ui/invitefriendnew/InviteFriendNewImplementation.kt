@@ -5,7 +5,7 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.network.ApiClient
-import com.tekzee.amiggos.ui.ourmemories.model.InviteFriendResponse
+import com.tekzee.amiggos.ui.invitefriendnew.model.GetUserForInviteResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -43,8 +43,8 @@ class InviteFriendNewImplementation(
                     mainView.hideProgressbar()
                     when (response.code()) {
                         200 -> {
-                            val responseData: InviteFriendResponse? = response.body()
-                            if (responseData!!.data.realFreind.isNotEmpty()) {
+                            val responseData: GetUserForInviteResponse? = response.body()
+                            if (responseData!!.data.user.isNotEmpty()) {
                                 if (requestDatFromServer) {
                                     mainView.onOurMemoriesSuccessInfinite(responseData)
                                 } else {

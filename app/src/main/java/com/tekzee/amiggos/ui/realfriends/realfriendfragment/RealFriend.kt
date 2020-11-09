@@ -19,7 +19,7 @@ import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
 import com.tekzee.amiggos.databinding.RealFriendFragmentBinding
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
-import com.tekzee.amiggos.ui.onlinefriends.adapter.OnlineFriendAdapter
+import com.tekzee.amiggos.ui.realfriends.adapter.OnlineFriendAdapter
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.ui.realfriends.adapter.RealFriendAdapter
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendV2Response

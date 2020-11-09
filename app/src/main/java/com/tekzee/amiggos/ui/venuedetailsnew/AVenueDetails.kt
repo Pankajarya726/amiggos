@@ -1,11 +1,12 @@
 package com.tekzee.amiggos.ui.venuedetailsnew
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.google.gson.JsonObject
@@ -13,7 +14,6 @@ import com.impulsiveweb.galleryview.GalleryView
 import com.like.LikeButton
 import com.like.OnLikeListener
 import com.smarteist.autoimageslider.SliderAnimations
-import com.smarteist.autoimageslider.SliderView
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
@@ -23,7 +23,6 @@ import com.tekzee.amiggos.databinding.AVenueDetailsBinding
 import com.tekzee.amiggos.ui.calendarview.CalendarViewActivity
 import com.tekzee.amiggos.ui.profiledetails.SliderClickListener
 import com.tekzee.amiggos.ui.profiledetails.model.SliderAdapterExample
-import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubData
 import com.tekzee.amiggos.ui.venuedetailsnew.model.VenueDetails
 import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.SharedPreference
@@ -87,6 +86,29 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
     }
 
     private fun setupClickListener() {
+
+        binding!!.navigation.setOnClickListener {
+            val uri = java.lang.String.format(
+                Locale.ENGLISH,
+                "http://maps.google.com/maps?saddr="+sharedPreference!!.getValueString(ConstantLib.CURRENTLAT)+","+sharedPreference!!.getValueString(ConstantLib.CURRENTLNG)+"&daddr="+response!!.clubData.latitude+","+response!!.clubData.longitude,
+                12f,
+                2f,
+            )
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+            intent.setPackage("com.google.android.apps.maps")
+            try {
+                startActivity(intent)
+            } catch (ex: ActivityNotFoundException) {
+                try {
+                    val unrestrictedIntent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                    startActivity(unrestrictedIntent)
+                } catch (innerEx: ActivityNotFoundException) {
+                    Toast.makeText(this, "Please install a maps application", Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+        }
+
         binding!!.imgBack.setOnClickListener {
             onBackPressed()
         }
@@ -146,11 +168,13 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
 
         if (intent.getIntExtra(ConstantLib.IS_GOOGLE_VENUE, 0) == 1) {
             binding!!.googleVenue.visibility = View.VISIBLE
+            binding!!.imgHeart.visibility = View.GONE
             binding!!.amiggosVenue.visibility = View.GONE
             binding!!.bookNow.visibility = View.GONE
         } else {
             binding!!.googleVenue.visibility = View.GONE
             binding!!.amiggosVenue.visibility = View.VISIBLE
+            binding!!.imgHeart.visibility = View.VISIBLE
             binding!!.bookNow.visibility = View.VISIBLE
         }
 

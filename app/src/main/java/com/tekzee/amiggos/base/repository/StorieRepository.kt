@@ -8,11 +8,11 @@ import com.tekzee.amiggos.network.SafeApiRequest
 
 class StorieRepository(private val apiService: ApiService): SafeApiRequest() {
 
-    suspend fun docallAcceptDeclineApi(
+    suspend fun rejectOurStory(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): CommonResponse {
-        return apiRequest { apiService.docallAcceptDeclineApi(input,createHeaders) }
+        return apiRequest { apiService.rejectOurStory(input,createHeaders) }
     }
 
     suspend fun docallDeleteApi(

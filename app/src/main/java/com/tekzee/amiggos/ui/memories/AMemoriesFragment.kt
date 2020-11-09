@@ -11,7 +11,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
-import com.tekzee.amiggos.ui.memories.mymemoriesold.MyMemorieFragment
+import com.tekzee.amiggos.ui.memories.mymemoriesold.OurMemorieFragment
 import com.tekzee.amiggos.ui.memories.venuefragment.VenueFragment
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.mallortaxi.base.BaseFragment
@@ -46,7 +46,7 @@ class AMemoriesFragment : BaseFragment() {
 
 
 //        val view = inflater.inflate(R.layout.amemories_fragment, container, false)
-        binding = DataBindingUtil.inflate(inflater,R.layout.amemories_fragment,container,false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.amemories_fragment, container, false)
         return binding!!.root
     }
 
@@ -59,7 +59,7 @@ class AMemoriesFragment : BaseFragment() {
     }
 
     private fun setupLanguage(view: View?) {
-        binding!!.memoriesHeading.text= languageData!!.pMemories
+        binding!!.memoriesHeading.text = languageData!!.pMemories
     }
 
     private fun setupAdapter(
@@ -70,8 +70,8 @@ class AMemoriesFragment : BaseFragment() {
         val adapter = ViewPagerTwoAdapter(this)
         viewPager.isUserInputEnabled = false
         adapter.addFragment(MyMemoriesFragment(), languageData!!.klMemories)
-        adapter.addFragment(MyMemorieFragment(), languageData!!.pourmemories)
-        adapter.addFragment(VenueFragment(),languageData!!.venues)
+        adapter.addFragment(OurMemorieFragment(), languageData!!.pourmemories)
+        adapter.addFragment(VenueFragment(), languageData!!.venues)
         viewPager.adapter = adapter
         viewPager.offscreenPageLimit = 1
 
@@ -82,10 +82,10 @@ class AMemoriesFragment : BaseFragment() {
                     tab.text = languageData!!.klMemories
                 }
                 1 -> {
-                    MyMemorieFragment()
+                    OurMemorieFragment()
                     tab.text = languageData!!.pourmemories
                 }
-                1 -> {
+                2 -> {
                     VenueFragment()
                     tab.text = languageData!!.venues
                 }
@@ -94,7 +94,7 @@ class AMemoriesFragment : BaseFragment() {
     }
 
     override fun validateError(message: String) {
-        Toast.makeText(activity,message,Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
     private fun setupViews(view: View?) {

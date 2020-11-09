@@ -57,7 +57,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/img_mail"
                     app:layout_constraintStart_toEndOf="@+id/img_close"
                     app:layout_constraintTop_toTopOf="@+id/img_close"
-                    app:srcCompat="@drawable/header_logo" />
+                    app:srcCompat="@drawable/logo_header" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

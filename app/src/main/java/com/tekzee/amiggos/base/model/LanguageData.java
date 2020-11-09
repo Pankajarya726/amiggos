@@ -1487,6 +1487,17 @@ public class LanguageData {
     @SerializedName("google_venue_warning")
     private String google_venue_warning="Not yet partnering with Amiggos. Suggest our app to this location";
 
+    @SerializedName("exit_warning")
+    private String exitwarning="Are you sure you want to exit?";
+
+    public String getExitwarning() {
+        return exitwarning;
+    }
+
+    public void setExitwarning(String exitwarning) {
+        this.exitwarning = exitwarning;
+    }
+
     public String getGoogle_venue_warning() {
         return google_venue_warning;
     }

@@ -2,7 +2,7 @@ package com.tekzee.amiggos.ui.invitefriendnew
 
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.base.BaseMainView
-import com.tekzee.amiggos.ui.ourmemories.model.InviteFriendResponse
+import com.tekzee.amiggos.ui.invitefriendnew.model.GetUserForInviteResponse
 
 class InviteFriendNewPresenter {
 
@@ -23,8 +23,8 @@ class InviteFriendNewPresenter {
     }
 
     interface InviteFriendPresenterMainView : BaseMainView {
-        fun onOurMemoriesSuccess(responseData: InviteFriendResponse?)
-        fun onOurMemoriesSuccessInfinite(responseData: InviteFriendResponse?)
+        fun onOurMemoriesSuccess(responseData: GetUserForInviteResponse?)
+        fun onOurMemoriesSuccessInfinite(responseData: GetUserForInviteResponse?)
         fun onOurMemoriesFailure(message: String)
         fun onFriendInviteSuccess(message: String)
         fun onFriendInviteFailure(message: String)

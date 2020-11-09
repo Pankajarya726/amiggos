@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,14 +21,11 @@ import com.tekzee.amiggos.enums.FriendsAction
 import com.tekzee.amiggos.services.UploadWorkOurMemoryService
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.ourmemories.adapter.InviteFriendAdapter
-import com.tekzee.amiggos.ui.ourmemories.model.InviteFriendResponse
-import com.tekzee.amiggos.util.RxSearchObservable
+import com.tekzee.amiggos.ui.ourmemories.model.GetFriendForInviteAfterCreateMemoryResponse
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
-import io.reactivex.functions.Predicate
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -45,8 +41,8 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
     private var languageData: LanguageData? = null
     private var selectedIds: String = ""
     private var inviteFriendImplementation: InviteFriendImplementation? = null
-    private var mydataList = ArrayList<InviteFriendResponse.Data.RealFreind>()
-    private val mLoadingData = InviteFriendResponse.Data.RealFreind(loadingStatus = true)
+    private var mydataList = ArrayList<GetFriendForInviteAfterCreateMemoryResponse.Data.RealFreind>()
+    private val mLoadingData = GetFriendForInviteAfterCreateMemoryResponse.Data.RealFreind(loadingStatus = true)
     private var onlineFriendPageNo = 0
 
     companion object {
@@ -179,17 +175,17 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onOurMemoriesSuccess(responseData: InviteFriendResponse?) {
+    override fun onOurMemoriesSuccess(responseData: GetFriendForInviteAfterCreateMemoryResponse?) {
         binding.profileImage.requestFocus()
         onlineFriendPageNo++
         mydataList =
-            responseData!!.data.realFreind as ArrayList<InviteFriendResponse.Data.RealFreind>
+            responseData!!.data.realFreind as ArrayList<GetFriendForInviteAfterCreateMemoryResponse.Data.RealFreind>
         setupRecyclerView()
     }
 
 
 
-    override fun onOurMemoriesSuccessInfinite(responseData: InviteFriendResponse?) {
+    override fun onOurMemoriesSuccessInfinite(responseData: GetFriendForInviteAfterCreateMemoryResponse?) {
         binding.profileImage.requestFocus()
         onlineFriendPageNo++
         adapter.setLoadingStatus(true)
@@ -290,7 +286,7 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
 
     override fun itemClickCallback(
         position: Int,
-        realFreind: InviteFriendResponse.Data.RealFreind,
+        realFreind: GetFriendForInviteAfterCreateMemoryResponse.Data.RealFreind,
         type: Int
     ) {
         if(type ==1){

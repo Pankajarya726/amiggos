@@ -1,9 +1,9 @@
-package com.tekzee.amiggos.ui.friendprofile
+package com.tekzee.amiggos.ui.profiledetails
 
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.base.model.CommonResponse
-import com.tekzee.amiggos.ui.friendprofile.model.FriendProfileResponse
-import com.tekzee.amiggos.ui.notification.model.StorieResponse
+import com.tekzee.amiggos.ui.profiledetails.model.FriendProfileResponse
+import com.tekzee.amiggos.ui.profiledetails.model.StorieResponse
 import com.tekzee.amiggos.ui.profiledetails.model.GetFriendProfileDetailsResponse
 import com.tekzee.amiggos.base.BaseMainView
 

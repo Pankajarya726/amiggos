@@ -13,7 +13,7 @@
 //
 //class FeaturedBrandAdapter(
 //    var mDataList: ArrayList<MemorieResponse.Data.Memories>,
-//    var listener: FeaturedBrandsClickListener
+//    var listenerFragment: FeaturedBrandsClickListener
 //) : RecyclerView.Adapter<FeaturedBrandAdapter.ViewHolder>() {
 //
 //
@@ -41,7 +41,7 @@
 //                .placeholder(R.drawable.blackbg).into(itemView.img_user_firstfragment)
 //
 //            itemView.img_user_firstfragment.setOnClickListener {
-////                listener.OnFeaturedBrandsClicked(mDataList[adapterPosition])
+////                listenerFragment.OnFeaturedBrandsClicked(mDataList[adapterPosition])
 //            }
 //        }
 //

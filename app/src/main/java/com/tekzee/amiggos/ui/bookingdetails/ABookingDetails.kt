@@ -81,6 +81,7 @@ class ABookingDetails : BaseActivity(), ABookingDetailsPresenter.ABookingDetails
         input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("booking_id", dataFromIntent!!.id.toString())
         input.addProperty("friend_id", userid.toString())
+        input.addProperty("unfriend_id", "")
         aBookingDetailPresenterImplementation!!.doInviteFriend(
             input,
             Utility.createHeaders(sharedPreferences)

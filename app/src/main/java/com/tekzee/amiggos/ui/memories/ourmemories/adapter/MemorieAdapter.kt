@@ -13,7 +13,7 @@
 //
 //class MemorieAdapter(
 //    var mDataList: ArrayList<MemorieResponse.Data.Memories>,
-//    var listener: OurMemorieClickListener
+//    var listenerFragment: OurMemorieClickListener
 //) : RecyclerView.Adapter<MemorieAdapter.ViewHolder>() {
 //
 //
@@ -43,7 +43,7 @@
 //            itemView.s_text_name.text = mDataList[adapterPosition].name
 //
 //            itemView.user_image.setOnClickListener {
-//                listener.OnMemorieClicked(mDataList[adapterPosition])
+//                listenerFragment.OnMemorieClicked(mDataList[adapterPosition])
 //            }
 //        }
 //

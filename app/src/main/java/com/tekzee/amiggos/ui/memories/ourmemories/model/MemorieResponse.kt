@@ -14,7 +14,7 @@ data class MemorieResponse(
         @SerializedName("memories_list")
         val memoriesList: List<Memories> = listOf()
     ) {
-        data class Memories(
+        data class  Memories(
             @SerializedName("memory")
             val memory: List<Memory> = listOf(),
             @SerializedName("name")
@@ -29,8 +29,10 @@ data class MemorieResponse(
             val type: Int = 0
         ): Serializable {
             data class Memory(
-                @SerializedName("creater_id ")
+                @SerializedName("creater_id")
                 val creater_id : Int = 0,
+                @SerializedName("viewCount")
+                val viewCount : Int = 0,
                 @SerializedName("file_type")
                 val fileType: Int = 0,
                 @SerializedName("id")
@@ -46,6 +48,7 @@ data class MemorieResponse(
                 @SerializedName("venue_id")
                 val venueId: String = ""
             ): Serializable {
+
                 data class Tagged(
                     @SerializedName("banner")
                     val banner: String = "",
@@ -56,6 +59,10 @@ data class MemorieResponse(
                     @SerializedName("website")
                     val website: String = ""
                 ): Serializable
+
+                override fun toString(): String {
+                    return "Memory(creater_id=$creater_id, viewCount=$viewCount, fileType=$fileType, id=$id, storyFile='$storyFile', thumb_video='$thumb_video', video_thumb='$video_thumb', tagged=$tagged, venueId='$venueId')"
+                }
             }
         }
     }

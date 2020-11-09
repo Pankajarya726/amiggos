@@ -19,7 +19,7 @@ import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 import com.tekzee.amiggos.ui.storieviewnew.StorieViewNew
 
-class MyMemorieFragment:BaseFragment() ,MyMemoriePresenter.MyMemoriePresenterMainView{
+class OurMemorieFragment:BaseFragment() ,OurMemorieFragmentPresenter.MyMemoriePresenterMainView{
 
 
     private val data = ArrayList<MemorieResponse.Data.Memories>()
@@ -27,7 +27,7 @@ class MyMemorieFragment:BaseFragment() ,MyMemoriePresenter.MyMemoriePresenterMai
     private var reyclerview: RecyclerView?=null
     private var languageData: LanguageData? = null
     private var sharedPreference: SharedPreference? = null
-    private var myMemorieImplementation: MyMemorieImplementation? = null
+    private var ourMemorieFragmentImplementation: OurMemorieFragmentImplementation? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,8 +46,8 @@ class MyMemorieFragment:BaseFragment() ,MyMemoriePresenter.MyMemoriePresenterMai
         super.onViewCreated(view, savedInstanceState)
         sharedPreference = SharedPreference(requireContext())
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        myMemorieImplementation =
-            MyMemorieImplementation(this, requireContext())
+        ourMemorieFragmentImplementation =
+            OurMemorieFragmentImplementation(this, requireContext())
         setupViews(view)
         setupRecyclerMyMemorie()
         setupClickListener()
@@ -62,13 +62,13 @@ class MyMemorieFragment:BaseFragment() ,MyMemoriePresenter.MyMemoriePresenterMai
 
     override fun onStop() {
         super.onStop()
-        myMemorieImplementation!!.onStop()
+        ourMemorieFragmentImplementation!!.onStop()
     }
 
     private fun callGetMyMemories() {
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
-        myMemorieImplementation!!.callGetOuryMemories(
+        ourMemorieFragmentImplementation!!.callGetOuryMemories(
             input,
             Utility.createHeaders(sharedPreference)
         )
@@ -79,7 +79,7 @@ class MyMemorieFragment:BaseFragment() ,MyMemoriePresenter.MyMemoriePresenterMai
         reyclerview!!.setHasFixedSize(true)
         val layoutManager = GridLayoutManager(activity,3)
         reyclerview!!.layoutManager = layoutManager
-        adapter = OurMemorieWithoutProductAdapter(data,object :MyMemorieClickListener{
+        adapter = OurMemorieWithoutProductAdapter(data,object :OurMemorieFragmentClickListener{
             override fun onMemorieClicked(storiesData: MemorieResponse.Data.Memories) {
                 if(storiesData.memory.isNotEmpty()){
 //                    val intent = Intent(activity, StorieViewNew::class.java)

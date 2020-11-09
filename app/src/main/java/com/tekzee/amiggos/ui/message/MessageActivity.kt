@@ -88,7 +88,7 @@ class MessageActivity : BaseActivity(), MessageEvent, KodeinAware,
     }
 
     private fun setupAdapter() {
-        adapter = MessageAdapter(this,prefs.getValueInt(ConstantLib.USER_ID).toString(),applicationContext)
+        adapter = MessageAdapter(this, applicationContext)
         binding!!.messageRecyclerview.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.VERTICAL,
@@ -108,7 +108,6 @@ class MessageActivity : BaseActivity(), MessageEvent, KodeinAware,
 //        }else{
 //            findNavController().navigate(R.id.addUserActivity)
 //        }
-
     }
 
     override fun onItemClicked(

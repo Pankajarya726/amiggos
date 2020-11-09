@@ -81,6 +81,8 @@ class UpdateUserLocationToServer : Service() {
     }
 
     private fun callLocationUpdateService(location: Location?) {
+        sharedPreferences!!.save(ConstantLib.CURRENTLAT,location!!.latitude.toString())
+        sharedPreferences!!.save(ConstantLib.CURRENTLNG,location!!.longitude.toString())
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("latitude", location!!.latitude.toString())

@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.tekzee.amiggos.ui.storieviewnew.customview.StoriesProgressView
 import com.tekzee.amiggos.ui.storieviewnew.data.Story
-import com.tekzee.amiggosvenueapp.ui.storieviewnew.data.StoryUser
+import com.tekzee.amiggos.ui.storieviewnew.data.StoryUser
 import com.tekzee.amiggos.ui.storieviewnew.utils.OnSwipeTouchListener
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayerFactory
@@ -38,6 +38,7 @@ import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 import com.tekzee.amiggos.ui.storieview.StorieEvent
 import com.tekzee.amiggos.ui.storieviewnew.*
 import com.tekzee.amiggos.ui.storieviewnew.utils.show
+import com.tekzee.amiggos.ui.viewfriends.ViewFriendsActivity
 import com.tekzee.amiggos.util.*
 import kotlinx.android.synthetic.main.fragment_story_display.*
 import org.kodein.di.Kodein
@@ -49,6 +50,7 @@ import kotlin.collections.ArrayList
 
 class StoryDisplayFragment : Fragment(),
     StoriesProgressView.StoriesListener, BannerClickListener, KodeinAware, StorieEvent {
+    private var storieId: String? = null
     val prefs: SharedPreference by instance<SharedPreference>()
     override val kodein: Kodein by closestKodein()
     private val position: Int by
@@ -99,6 +101,12 @@ class StoryDisplayFragment : Fragment(),
         setupLanguge()
         img_cancel.setOnClickListener {
             requireActivity().onBackPressed()
+        }
+
+        txt_view.setOnClickListener {
+            val intent = Intent(requireActivity(), ViewFriendsActivity::class.java)
+            intent.putExtra(ConstantLib.STORY,storieId)
+            startActivity(intent)
         }
 
     }
@@ -197,7 +205,9 @@ class StoryDisplayFragment : Fragment(),
 
     private fun updateStory() {
         observeList(stories[counter].banners)
-        Log.e("Url---->",stories[counter].url)
+        Log.e("Url---->",stories[counter].toString())
+        storieId = stories[counter].storieId.toString()
+        txt_view.text = stories[counter].viewCount.toString()
         txt_accept.setOnClickListener {
             viewModel.callAcceptDeclineApi(stories[counter].storieId, 1)
         }
@@ -356,6 +366,8 @@ class StoryDisplayFragment : Fragment(),
 
         Glide.with(this).load(storyUser.profilePicUrl).circleCrop().into(storyDisplayProfilePicture)
         storyDisplayNick.text = storyUser.username
+
+
     }
 
     private fun showStoryOverlay() {

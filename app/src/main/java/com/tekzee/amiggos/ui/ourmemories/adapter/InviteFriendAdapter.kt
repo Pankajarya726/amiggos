@@ -10,7 +10,7 @@ import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.ourmemories.InviteFriendAfterCreateMemory
-import com.tekzee.amiggos.ui.ourmemories.model.InviteFriendResponse
+import com.tekzee.amiggos.ui.ourmemories.model.GetFriendForInviteAfterCreateMemoryResponse
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import kotlinx.android.synthetic.main.single_invite_friend.view.*
 
@@ -20,7 +20,7 @@ class InviteFriendAdapter(
     mRecyclerView: RecyclerView,
     val mLayoutManager: LinearLayoutManager,
     mRecyclerViewAdapterCallback: InfiniteScrollRecyclerView.RecyclerViewAdapterCallback,
-    var mDataList: ArrayList<InviteFriendResponse.Data.RealFreind>,
+    var mDataList: ArrayList<GetFriendForInviteAfterCreateMemoryResponse.Data.RealFreind>,
     val mItemClickCallback: InviteFriendClick?,
     val languageData: LanguageData?
 )
@@ -83,7 +83,7 @@ class InviteFriendAdapter(
     interface InviteFriendClick {
         fun itemClickCallback(
             position: Int,
-            realFreind: InviteFriendResponse.Data.RealFreind,
+            realFreind: GetFriendForInviteAfterCreateMemoryResponse.Data.RealFreind,
             i: Int
         )
 
