@@ -22,6 +22,7 @@ import com.tekzee.amiggos.broadcasts.NotificationBroadcastReceiver
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.enums.FriendsAction
 import com.tekzee.amiggos.ui.attachid.AttachIdActivity
+import com.tekzee.amiggos.ui.cameranew.CameraActivity
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.MyFriendChatActivity
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.util.SharedPreference
@@ -146,7 +147,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
                 gotoRealFriend(title, body, userid)
             }
             "4" -> {
-                createDefaultNotification(title, body)
+                gotoCreateMemoryInvitation(title, body,senderid,storyid)
             }
             "5" -> {
                 gotoSendPartyInvitation(title, body,bookingid)
@@ -309,38 +310,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
 
     }
 
-    private fun gotoSendPartyInvitation(title: String, body: String, bookingid: String) {
-//        createNotificationChannel()
-//        playSound()
-//
-//
-//        val notificationId = System.currentTimeMillis().toInt()
-//        val intent = Intent(this, AHomeScreen::class.java).apply {
-//            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//            action = FriendsAction.PARTY_INVITATIONS.action
-//        }
-//
-//
-//        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
-//
-//        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-//            .setSmallIcon(R.drawable.ic_launcher_background)
-//            .setContentTitle(body)
-//            .setContentText(title)
-//            .setStyle(
-//                NotificationCompat.BigTextStyle()
-//                    .bigText(title)
-//            )
-//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//            .setContentIntent(pendingIntent)
-//
-//            .setAutoCancel(true)
-//        with(NotificationManagerCompat.from(this)) {
-//            // notificationId is a unique int for each notification that you must define
-//            notify(System.currentTimeMillis().toInt(), builder.build())
-//        }
-
-
+    private fun gotoCreateMemoryInvitation(title: String, body: String, senderid: String,ourstoryid: String) {
         createNotificationChannel()
         playSound()
 
@@ -359,7 +329,76 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
 
         val acceptIntent = Intent(
             this,
+            CameraActivity::class.java
+        )
+        acceptIntent.action = FriendsAction.ACCEPT_CREATE_MEMORY_INVITATIONS.action
+        acceptIntent.putExtra(ConstantLib.SENDER_ID, senderid)
+        acceptIntent.putExtra(ConstantLib.EXTRA_NOTIFICATION_ID, notificationId)
+        acceptIntent.putExtra(ConstantLib.FROM_ACTIVITY, ConstantLib.OURSTORYINVITE)
+        acceptIntent.putExtra(ConstantLib.SENDER_ID, senderid)
+        acceptIntent.putExtra(ConstantLib.OURSTORYID, ourstoryid)
+
+
+
+        val pendingAcceptIntent = PendingIntent.getActivity(
+            this,
+            0,
+            acceptIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val rejectIntent = Intent(
+            this,
             NotificationBroadcastReceiver::class.java
+        )
+        rejectIntent.action = FriendsAction.REJECT_CREATE_MEMORY_INVITATIONS.action
+        rejectIntent.putExtra(ConstantLib.SENDER_ID, senderid)
+        rejectIntent.putExtra(ConstantLib.EXTRA_NOTIFICATION_ID, notificationId)
+        rejectIntent.putExtra(ConstantLib.OURSTORYID, ourstoryid)
+
+        val pendingRejectIntentIntent = PendingIntent.getBroadcast(
+            this,
+            0,
+            rejectIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        val friendRequestBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_notification_icon)
+            .setContentTitle(body)
+            .setContentText(title)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .setContentIntent(contentIntent)
+            .addAction(android.R.drawable.ic_menu_gallery,ConstantLib.JOIN,pendingAcceptIntent)
+            .addAction(android.R.drawable.ic_menu_gallery,ConstantLib.REJECT,pendingRejectIntentIntent)
+            .setOnlyAlertOnce(true)
+            .setAutoCancel(true).build()
+
+        with(NotificationManagerCompat.from(this)) {
+            notify(notificationId, friendRequestBuilder)
+        }
+    }
+
+    private fun gotoSendPartyInvitation(title: String, body: String, bookingid: String) {
+        createNotificationChannel()
+        playSound()
+
+        val notificationId = System.currentTimeMillis().toInt()
+        val intent = Intent(this, AHomeScreen::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            action = FriendsAction.PARTY_INVITATIONS.action
+        }
+
+        val contentIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent,
+            0
+        )
+
+        val acceptIntent = Intent(
+            this,
+            CameraActivity::class.java
         )
         acceptIntent.action = FriendsAction.ACCEPT_PARTY_INVITATIONS.action
         acceptIntent.putExtra(ConstantLib.BOOKING_ID, bookingid)
@@ -393,8 +432,8 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setContentIntent(contentIntent)
-            .addAction(android.R.drawable.ic_menu_gallery,"ACCEPT",pendingAcceptIntent)
-            .addAction(android.R.drawable.ic_menu_gallery,"REJECT",pendingRejectIntentIntent)
+            .addAction(android.R.drawable.ic_menu_gallery,ConstantLib.ACCEPT,pendingAcceptIntent)
+            .addAction(android.R.drawable.ic_menu_gallery,ConstantLib.REJECT,pendingRejectIntentIntent)
             .setOnlyAlertOnce(true)
             .setAutoCancel(true).build()
 
@@ -487,8 +526,8 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setContentIntent(contentIntent)
-            .addAction(android.R.drawable.ic_menu_gallery,"ACCEPT",pendingAcceptIntent)
-            .addAction(android.R.drawable.ic_menu_gallery,"REJECT",pendingRejectIntentIntent)
+            .addAction(android.R.drawable.ic_menu_gallery,ConstantLib.ACCEPT,pendingAcceptIntent)
+            .addAction(android.R.drawable.ic_menu_gallery,ConstantLib.REJECT,pendingRejectIntentIntent)
             .setOnlyAlertOnce(true)
             .setAutoCancel(true).build()
 

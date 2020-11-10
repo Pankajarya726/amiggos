@@ -19,6 +19,7 @@ interface CommonClickListener {
 
     fun showAgeRestrictionPopup(view: View)
     fun showNotVerifiedMessage(isIdproofNotverifiedMessage: String)
+    fun showAlertForAgeRestriction(isIdproofNotverifiedMessage: String)
     fun viewImage(listItem: Menu?)
 
 }

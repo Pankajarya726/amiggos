@@ -52,22 +52,26 @@ class CommonAdapter(
                 }
             }
             holder.listitembinding.txtPlus.setOnClickListener {
-                if(prefs.getValueBoolean(ConstantLib.MYID,false)){
-                    val quantity =
-                        Integer.parseInt(holder.listitembinding.txtQty.text.toString()) + 1
-                    holder.listitembinding.txtQty.setText(quantity.toString())
-                    listItem.quantity = quantity
-                    listener.onItemClicked(position, listItem, quantity.toString())
-                    return@setOnClickListener
-                }
+//                if(prefs.getValueBoolean(ConstantLib.MYID,false)){
+//                    val quantity =
+//                        Integer.parseInt(holder.listitembinding.txtQty.text.toString()) + 1
+//                    holder.listitembinding.txtQty.setText(quantity.toString())
+//                    listItem.quantity = quantity
+//                    listener.onItemClicked(position, listItem, quantity.toString())
+//                    return@setOnClickListener
+//                }
 
 
-                if (!listItem.ageRestriction.equals("none",true) ) {
+                if (listItem.ageRestriction.equals("1",true) ) {
                     if(listItem.is_idproof_uploaded.equals("0")){
                         listener.showAgeRestrictionPopup(holder.listitembinding.txtPlus)
                     }else if(listItem.is_idproof_verified.equals("0")){
                         listener.showNotVerifiedMessage(listItem.is_idproof_notverified_message)
                     }else{
+
+                        if(Integer.parseInt(holder.listitembinding.txtQty.text.toString())==0 && listItem.ageRestriction.equals("1",true)){
+                            listener.showAlertForAgeRestriction(listItem.warning_age_restriction)
+                        }
                         val quantity =
                             Integer.parseInt(holder.listitembinding.txtQty.text.toString()) + 1
                         holder.listitembinding.txtQty.setText(quantity.toString())

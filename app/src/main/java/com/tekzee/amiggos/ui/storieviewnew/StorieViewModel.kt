@@ -52,6 +52,12 @@ class StorieViewModel(private val context: Context,
                 val jsoninput = JsonObject()
                 jsoninput.addProperty("userid",prefs.getValueInt(ConstantLib.USER_ID))
                 jsoninput.addProperty("memory_id",memorieId)
+                if(prefs.getValueString(ConstantLib.TYPEFROM).equals(ConstantLib.MEMORIES)){
+                    jsoninput.addProperty("type","1")
+                }else if(prefs.getValueString(ConstantLib.TYPEFROM).equals(ConstantLib.OURMEMORIES)){
+                    jsoninput.addProperty("type","2")
+                }
+
                 val response =  repository.docallDeleteApi(jsoninput, Utility.createHeaders(prefs))
                 if(response.status){
                     storieEvent?.onDeleteResponse(response.message)

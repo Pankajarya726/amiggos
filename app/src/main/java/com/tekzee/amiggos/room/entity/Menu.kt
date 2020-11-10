@@ -29,6 +29,8 @@ class Menu(
     val is_idproof_uploaded: String = "",
     @SerializedName("is_idproof_notverified_message")
     val is_idproof_notverified_message: String = "",
+    @SerializedName("warning_age_restriction")
+    val warning_age_restriction: String = "",
     @SerializedName("offer_type")
     val offerType: Int = 0,
     var quantity: Int = 0,

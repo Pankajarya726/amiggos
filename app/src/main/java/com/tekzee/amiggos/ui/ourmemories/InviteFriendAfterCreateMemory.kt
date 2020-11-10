@@ -295,6 +295,7 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
             selectUserIds.add(realFreind.userid)
         }
         adapter.notifyItemChanged(position)
+        binding.realFriendFragment.scrollToPosition(position)
 
     }
 

@@ -51,9 +51,13 @@ class OurMemorieFragment:BaseFragment() ,OurMemorieFragmentPresenter.MyMemoriePr
         setupViews(view)
         setupRecyclerMyMemorie()
         setupClickListener()
-        callGetMyMemories()
+
     }
 
+    override fun onResume() {
+        super.onResume()
+        callGetMyMemories()
+    }
 
     private fun setupClickListener() {
 
@@ -82,20 +86,10 @@ class OurMemorieFragment:BaseFragment() ,OurMemorieFragmentPresenter.MyMemoriePr
         adapter = OurMemorieWithoutProductAdapter(data,object :OurMemorieFragmentClickListener{
             override fun onMemorieClicked(storiesData: MemorieResponse.Data.Memories) {
                 if(storiesData.memory.isNotEmpty()){
-//                    val intent = Intent(activity, StorieViewNew::class.java)
-//                    intent.putExtra(ConstantLib.FROM,"OURMEMORIES")
-//                    intent.putExtra(ConstantLib.OURSTORYID,"")
-//                    intent.putExtra(ConstantLib.CONTENT, storiesData)
-//                    intent.putExtra(ConstantLib.PROFILE_IMAGE, storiesData.profile)
-//                    intent.putExtra(ConstantLib.USER_ID, storiesData.venueId)
-//                    intent.putExtra(ConstantLib.USER_NAME, storiesData.name)
-//                    context!!.startActivity(intent)
-
                     val intent = Intent(activity, StorieViewNew::class.java)
                     intent.putExtra(ConstantLib.MEMORIE_DATA,storiesData)
-                    intent.putExtra(ConstantLib.FROM,ConstantLib.MEMORIES)
                     intent.putExtra(ConstantLib.FROM,ConstantLib.OURMEMORIES)
-                    sharedPreference!!.save(ConstantLib.FROM,ConstantLib.OURMEMORIES)
+                    sharedPreference!!.save(ConstantLib.TYPEFROM,ConstantLib.OURMEMORIES)
                     context!!.startActivity(intent)
                 }
             }

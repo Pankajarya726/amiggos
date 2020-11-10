@@ -833,6 +833,13 @@ class ApiClient {
         return apiService.doRejectBookingInvitationApi(input, createHeaders)
     }
 
+    fun doRejectCreateMemoryInvitationApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.doRejectCreateMemoryInvitationApi(input, createHeaders)
+    }
+
 
     fun doCallGuestListApi(
         input: JsonObject,

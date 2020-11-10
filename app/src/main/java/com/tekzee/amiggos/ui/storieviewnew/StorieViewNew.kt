@@ -66,7 +66,8 @@ class StorieViewNew: AppCompatActivity(),
             if(memorieData.memory[i].storyFile!=null){
                 Log.e("data-------->",memorieData.memory[i].toString())
                 banners = memorieData.memory[i].tagged as ArrayList<MemorieResponse.Data.Memories.Memory.Tagged>
-                stories.add(Story(memorieData.memory[i].id.toString(),memorieData.memory[i].storyFile,1600148193438,banners,memorieData.venueId,memorieData.memory[i].viewCount))
+//                stories.add(Story(memorieData.memory[i].id.toString(),memorieData.memory[i].storyFile,1600148193438,banners,memorieData.venueId,memorieData.memory[i].viewCount))
+                stories.add(Story(memorieData.memory[i],memorieData.memory[i].storyFile,banners))
             }
 
         }

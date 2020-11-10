@@ -5,8 +5,14 @@ object ConstantLib {
 
 //    chat
     const val CONVERSATION = "conversation"
+    const val ACCEPT = "ACCEPT"
+    const val MYMEMORY = "MYMEMORY"
+    const val JOIN = "JOIN"
+    const val REJECT = "REJECT"
+    const val HOMEACTIVITY = "HOMEACTIVITY"
     const val SELECTED_VENUE_DIN_TOGO = "SELECTED_VENUE_DIN_TOGO"
     const val OURMEMORIES = "OURMEMORIES"
+    const val TYPEFROM = "TYPEFROM"
     const val CURRENTLAT = "CURRENTLAT"
     const val CURRENTLNG = "CURRENTLNG"
     const val TOGO = "TOGO"
@@ -44,6 +50,8 @@ object ConstantLib {
     const val RECEIVER_ID = "receiver_id"
     const val BOOKING_DATA = "booking_data"
     const val OURSTORYID = "ourstoryid"
+    const val OURSTORYINVITE = "OURSTORYINVITE"
+    const val SENDER_ID = "SENDER_ID"
     const val FROM_ACTIVITY = "from_activity"
     const val COUNT = "count"
     const val EXTRA_NOTIFICATION_ID = "EXTRA_NOTIFICATION_ID"

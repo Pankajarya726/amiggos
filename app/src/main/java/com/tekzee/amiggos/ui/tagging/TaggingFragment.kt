@@ -121,7 +121,7 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) {
             val imagefile = BitmapUtils.saveImageAndReturnFile(applicationContext, bitmap)
-            getimageUrifrombitmap( Compressor.getDefault(this).compressToBitmap(imagefile))
+            getimageUrifrombitmap(Compressor.getDefault(this).compressToBitmap(imagefile))
         }.onDeclined { e ->
             if (e.hasDenied()) {
 
@@ -244,47 +244,14 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ) {
-//                val mIntent = Intent(this, CreateMemorieService::class.java)
-//                mIntent.putExtra(ConstantLib.FILEURI, imageUri)
-//                mIntent.putExtra(ConstantLib.FROM, "IMAGE")
-//                mIntent.putExtra(ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(finaltaggedarray))
-//                CreateMemorieService.enqueueWork(this, mIntent)
-//                val intent = Intent(applicationContext, VenueDashboard::class.java)
-//                startActivity(intent)
-
-
-//                val mIntent = Intent(this, FileUploadService::class.java)
-//                mIntent.putExtra(ConstantLib.FILEURI, imageUri)
-//                mIntent.putExtra(ConstantLib.FROM, "IMAGE")
-//                mIntent.putExtra(ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(finaltaggedarray))
-//                FileUploadService.enqueueWork(this, mIntent)
-//                val intent = Intent(applicationContext, VenueDashboard::class.java)
-//                startActivity(intent)
-//                finishAffinity()
-
-//                val data = Data.Builder().putString(ConstantLib.FILEURI, imageUri.toString())
-//                    .putString(ConstantLib.FROM, "IMAGE")
-//                    .putString(ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(finaltaggedarray)).build()
-//
-//                val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
-//
-//
-//                val oneTimeWorkRequest = OneTimeWorkRequest.Builder(UploadWorkService::class.java).setInputData(
-//                    data
-//                ).setConstraints(constraints).addTag("Upload").build()
-//                WorkManager.getInstance(this).enqueue(oneTimeWorkRequest)
-//                val intent = Intent(applicationContext, HomeActivity::class.java)
-//                startActivity(intent)
-//                finishAffinity()
-
-                val intent = Intent(applicationContext, PostMemories::class.java)
-                intent.putExtra(ConstantLib.FILEURI, imageUri.toString())
-                intent.putExtra(ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(finaltaggedarray))
-                intent.putExtra(ConstantLib.FROM, "IMAGE")
-                startActivity(intent)
-
-
-
+                val intentPostMemory = Intent(applicationContext, PostMemories::class.java)
+                intentPostMemory.putExtra(ConstantLib.FILEURI, imageUri.toString())
+                intentPostMemory.putExtra(ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(finaltaggedarray))
+                intentPostMemory.putExtra(ConstantLib.SENDER_ID, intent.getStringExtra(ConstantLib.SENDER_ID))
+                intentPostMemory.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+                intentPostMemory.putExtra(ConstantLib.FROM_ACTIVITY, intent.getStringExtra(ConstantLib.FROM_ACTIVITY))
+                intentPostMemory.putExtra(ConstantLib.FROM, "IMAGE")
+                startActivity(intentPostMemory)
             }.onDeclined { e ->
                 if (e.hasDenied()) {
 
@@ -352,7 +319,7 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
     private fun showImageSaveDialog() {
 
         val pDialog = SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-        pDialog.titleText =languageConstant.imagesaved
+        pDialog.titleText = languageConstant.imagesaved
         pDialog.setCancelable(false)
         pDialog.setConfirmButton(languageConstant.klOk) {
             pDialog.dismiss()
@@ -421,9 +388,9 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
         position: Int,
         listItem: TaggingResponse.Data.Search
     ) {
-        if(getCountCombination(finaltaggedarray)){
+        if (getCountCombination(finaltaggedarray)) {
             Errortoast(languageConstant.max_venue_brand_limit);
-        }else{
+        } else {
             tagArraylist.add(listItem.name)
             taglist.postValue(tagArraylist)
             finaltaggedarray.add(listItem)
@@ -431,13 +398,13 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
     }
 
     private fun getCountCombination(finaltaggedarray: java.util.ArrayList<TaggingResponse.Data.Search>): Boolean {
-        var count:Int = 0
-        for(items in finaltaggedarray){
-            if(items.type.equals("2") || items.type.equals("3")){
+        var count: Int = 0
+        for (items in finaltaggedarray) {
+            if (items.type.equals("2") || items.type.equals("3")) {
                 count++
             }
         }
-        return count>1
+        return count > 1
     }
 
 

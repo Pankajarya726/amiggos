@@ -6,16 +6,14 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Story(
-    val storieId: String,
+    val storyData: MemorieResponse.Data.Memories.Memory,
     val url: String,
-    val storyDate: Long,
+//    val storyDate: Long,
     val banners: ArrayList<MemorieResponse.Data.Memories.Memory.Tagged>,
-    val creater_id : Int,
-    val viewCount : Int,
+//    val creater_id: Int,
+//    val viewCount: Int,
 ) : Parcelable {
 
     fun isVideo() =  url.contains(".mp4")
-    override fun toString(): String {
-        return "Story(storieId='$storieId', url='$url', storyDate=$storyDate, banners=$banners, creater_id=$creater_id, viewCount=$viewCount)"
-    }
+
 }

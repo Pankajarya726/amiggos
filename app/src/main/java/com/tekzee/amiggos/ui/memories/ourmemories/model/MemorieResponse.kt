@@ -37,8 +37,14 @@ data class MemorieResponse(
                 val fileType: Int = 0,
                 @SerializedName("id")
                 val id: Int = 0,
+                @SerializedName("profile")
+                val profile: String = "",
+                @SerializedName("user_id")
+                val user_id: Int = 0,
                 @SerializedName("story_file")
                 val storyFile: String = "",
+                @SerializedName("name")
+                val name: String = "",
                 @SerializedName("thumb_video")
                 val thumb_video: String = "",
                 @SerializedName("video_thumb")

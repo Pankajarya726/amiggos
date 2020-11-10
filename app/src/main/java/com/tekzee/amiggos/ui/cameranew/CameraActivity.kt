@@ -145,13 +145,20 @@ class CameraActivity : AppCompatActivity(),
             if (mCaptureTime == 0L) mCaptureTime = callbackTime - 300
             TaggingFragment.setPictureResult(result)
             mCaptureTime = 0
-            startActivity(Intent(applicationContext, TaggingFragment::class.java))
-
+            val tagIntent = Intent(applicationContext,TaggingFragment::class.java)
+            tagIntent.putExtra(ConstantLib.SENDER_ID,intent.getStringExtra(ConstantLib.SENDER_ID))
+            tagIntent.putExtra(ConstantLib.FROM,intent.getStringExtra(ConstantLib.FROM))
+            tagIntent.putExtra(ConstantLib.OURSTORYID,intent.getStringExtra(ConstantLib.OURSTORYID))
+            startActivity(tagIntent)
         }
 
         override fun onVideoTaken(result: VideoResult) {
             TaggingVideoActivity.setVideoResult(result)
-            startActivity(Intent(applicationContext, TaggingVideoActivity::class.java))
+            val tagVideoIntent = Intent(applicationContext,TaggingVideoActivity::class.java)
+            tagVideoIntent.putExtra(ConstantLib.SENDER_ID,intent.getStringExtra(ConstantLib.SENDER_ID))
+            tagVideoIntent.putExtra(ConstantLib.FROM,intent.getStringExtra(ConstantLib.FROM))
+            tagVideoIntent.putExtra(ConstantLib.OURSTORYID,intent.getStringExtra(ConstantLib.OURSTORYID))
+            startActivity(tagVideoIntent)
             super.onVideoTaken(result)
         }
 

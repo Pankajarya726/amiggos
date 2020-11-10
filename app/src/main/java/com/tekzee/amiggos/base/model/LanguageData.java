@@ -1455,7 +1455,7 @@ public class LanguageData {
     private String upload = "Upload";
 
     @SerializedName("agerestrictionmessage")
-    private String agerestrictionmessage = "To buy this product must \n upload your id";
+    private String agerestrictionmessage = "To buy this product must upload your id";
 
     @SerializedName("checkout")
     private String checkout = "Checkout";

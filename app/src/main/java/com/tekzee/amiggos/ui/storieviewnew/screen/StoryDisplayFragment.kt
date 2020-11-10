@@ -114,7 +114,7 @@ class StoryDisplayFragment : Fragment(),
 
     private fun setupLanguge() {
         if (prefs.getValueString(ConstantLib.FROM).equals(ConstantLib.APPROVAL, true)) {
-            layout_approve_decline.visibility = View.VISIBLE
+            layout_approve_decline.visibility = View.GONE
         } else {
             layout_approve_decline.visibility = View.GONE
         }
@@ -206,20 +206,26 @@ class StoryDisplayFragment : Fragment(),
     private fun updateStory() {
         observeList(stories[counter].banners)
         Log.e("Url---->",stories[counter].toString())
-        storieId = stories[counter].storieId.toString()
-        txt_view.text = stories[counter].viewCount.toString()
+        storieId = stories[counter].storyData.id.toString()
+        txt_view.text = stories[counter].storyData.viewCount.toString()
+
+        Glide.with(this).load(stories[counter].storyData.profile).circleCrop().into(storyDisplayProfilePicture)
+        storyDisplayNick.text = stories[counter].storyData.name
+
+
+
         txt_accept.setOnClickListener {
-            viewModel.callAcceptDeclineApi(stories[counter].storieId, 1)
+            viewModel.callAcceptDeclineApi(stories[counter].storyData.id.toString(), 1)
         }
 
 
         txt_decline.setOnClickListener {
-            viewModel.callAcceptDeclineApi(stories[counter].storieId, 2)
+            viewModel.callAcceptDeclineApi(stories[counter].storyData.id.toString(), 2)
         }
 
 
         img_delete.setOnClickListener {
-            viewModel.callDeleteApi(stories[counter].storieId)
+            viewModel.callDeleteApi(stories[counter].storyData.id.toString())
         }
 
 
@@ -237,11 +243,11 @@ class StoryDisplayFragment : Fragment(),
         }
 
         val cal: Calendar = Calendar.getInstance(Locale.ENGLISH).apply {
-            timeInMillis = stories[counter].storyDate
+            timeInMillis = 0
         }
         storyDisplayTime.text = DateFormat.format("MM-dd-yyyy HH:mm:ss", cal).toString()
 
-        if(prefs.getValueInt(ConstantLib.USER_ID) == stories[counter].creater_id){
+        if(prefs.getValueInt(ConstantLib.USER_ID) == stories[counter].storyData.user_id){
             img_delete.visibility = View.VISIBLE
         }else{
             img_delete.visibility = View.GONE
@@ -364,8 +370,7 @@ class StoryDisplayFragment : Fragment(),
         storiesProgressView?.setAllStoryDuration(4000L)
         storiesProgressView?.setStoriesListener(this)
 
-        Glide.with(this).load(storyUser.profilePicUrl).circleCrop().into(storyDisplayProfilePicture)
-        storyDisplayNick.text = storyUser.username
+
 
 
     }

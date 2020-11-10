@@ -235,7 +235,8 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
 
         binding!!.addMemorie.setOnClickListener {
             val intent = Intent(applicationContext, CameraActivity::class.java)
-            intent.putExtra(ConstantLib.FROM_ACTIVITY, "HOMEACTIVITY")
+            intent.putExtra(ConstantLib.FROM_ACTIVITY, ConstantLib.HOMEACTIVITY)
+            intent.putExtra(ConstantLib.OURSTORYID, "")
             intent.putExtra(
                 ConstantLib.PROFILE_IMAGE,
                 sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE)

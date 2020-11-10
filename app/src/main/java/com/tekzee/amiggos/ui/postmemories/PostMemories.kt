@@ -85,20 +85,20 @@ class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView 
 
             if (intent.getStringExtra(ConstantLib.FROM).equals("VIDEO", true)) {
                 val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
-                val intent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
-                intent.putExtra(ConstantLib.FILEURI, imageUri)
-                intent.putExtra(ConstantLib.OURSTORYID, "");
-                intent.putExtra(ConstantLib.TAGGED_ARRAY, getIntent().getStringExtra(ConstantLib.TAGGED_ARRAY))
-                intent.putExtra(ConstantLib.FROM, "VIDEO")
-                startActivity(intent)
+                val inviteFriendAfterCreateMemoryIntent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
+                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FILEURI, imageUri)
+                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, getIntent().getStringExtra(ConstantLib.TAGGED_ARRAY))
+                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM, "VIDEO")
+                startActivity(inviteFriendAfterCreateMemoryIntent)
             } else {
                 val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
-                val intent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
-                intent.putExtra(ConstantLib.FILEURI, imageUri)
-                intent.putExtra(ConstantLib.TAGGED_ARRAY, getIntent().getStringExtra(ConstantLib.TAGGED_ARRAY))
-                intent.putExtra(ConstantLib.OURSTORYID, "");
-                intent.putExtra(ConstantLib.FROM, "IMAGE")
-                startActivity(intent)
+                val inviteFriendAfterCreateMemoryIntent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
+                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FILEURI, imageUri)
+                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, getIntent().getStringExtra(ConstantLib.TAGGED_ARRAY))
+                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM, "IMAGE")
+                startActivity(inviteFriendAfterCreateMemoryIntent)
             }
 
         }
@@ -108,20 +108,6 @@ class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView 
     private fun callUploadImageToMyMemories() {
         if (intent.getStringExtra(ConstantLib.FROM).equals("VIDEO", true)) {
             val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
-//            val mIntent = Intent(this, FileUploadService::class.java)
-//            mIntent.putExtra(
-//                ConstantLib.USER_ID,
-//                sharedPreference!!.getValueInt(ConstantLib.USER_ID).toString()
-//            )
-//            mIntent.putExtra(ConstantLib.FILEURI, imageUri)
-//            mIntent.putExtra(ConstantLib.FROM, "VIDEO")
-//            FileUploadService.enqueueWork(this, mIntent)
-//
-//
-//            val intent = Intent(applicationContext, AHomeScreen::class.java)
-//            startActivity(intent)
-//            finishAffinity()
-
 
             val data = Data.Builder().putString(ConstantLib.FILEURI, imageUri.toString())
                 .putString(ConstantLib.FROM, "VIDEO")

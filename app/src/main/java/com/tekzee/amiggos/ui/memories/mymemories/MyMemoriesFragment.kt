@@ -64,6 +64,8 @@ class MyMemoriesFragment : Fragment(), KodeinAware, MemorieClickListener,
     private fun setupClickListener() {
         binding!!.userImage.setOnClickListener{
             val intent = Intent(requireContext(), CameraActivity::class.java)
+            intent.putExtra(ConstantLib.FROM_ACTIVITY, ConstantLib.MYMEMORY)
+            intent.putExtra(ConstantLib.OURSTORYID, "")
             intent.putExtra(ConstantLib.USERNAME,prefs.getValueString(ConstantLib.NAME))
             startActivity(intent)
         }
@@ -119,7 +121,7 @@ class MyMemoriesFragment : Fragment(), KodeinAware, MemorieClickListener,
             val intent = Intent(requireContext(), StorieViewNew::class.java)
             intent.putExtra(ConstantLib.MEMORIE_DATA,itemData)
             intent.putExtra(ConstantLib.FROM,ConstantLib.MEMORIES)
-            prefs.save(ConstantLib.FROM,ConstantLib.MEMORIES)
+            prefs.save(ConstantLib.TYPEFROM,ConstantLib.MEMORIES)
             startActivity(intent)
         }
 
@@ -150,7 +152,7 @@ class MyMemoriesFragment : Fragment(), KodeinAware, MemorieClickListener,
             val intent = Intent(requireContext(),StorieViewNew::class.java)
             intent.putExtra(ConstantLib.MEMORIE_DATA,itemData)
             intent.putExtra(ConstantLib.FROM,ConstantLib.MEMORIES)
-            prefs.save(ConstantLib.FROM,ConstantLib.MEMORIES)
+            prefs.save(ConstantLib.TYPEFROM,ConstantLib.MEMORIES)
             startActivity(intent)
         }
 

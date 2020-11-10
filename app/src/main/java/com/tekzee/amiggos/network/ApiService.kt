@@ -196,7 +196,7 @@ interface ApiService {
     fun doCreateOurMemorieApi(
         @Part file: MultipartBody.Part,
         @Part("userid") userid: RequestBody,
-        @Part("freind_ids") friendIds: RequestBody,
+        @Part("friend_ids") friendIds: RequestBody,
         @Part("our_story_id") our_story_id: RequestBody,
         @Part("tagged_array") taggedArray: RequestBody,
         @HeaderMap createHeaders: HashMap<String, String?>
@@ -782,6 +782,12 @@ interface ApiService {
 
     @POST("guest/rejectInvitation")
     fun doRejectBookingInvitationApi(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
+    @POST("guest/rejectOurStoryInvite")
+    fun doRejectCreateMemoryInvitationApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>>

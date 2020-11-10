@@ -291,11 +291,14 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
 //                            finishAffinity()
 
 
-                            val intent = Intent(applicationContext, PostMemories::class.java)
-                            intent.putExtra(ConstantLib.FILEURI, desFile.path)
-                            intent.putExtra(ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(finaltaggedarray))
-                            intent.putExtra(ConstantLib.FROM, "VIDEO")
-                            startActivity(intent)
+                            val intentPostMemory = Intent(applicationContext, PostMemories::class.java)
+                            intentPostMemory.putExtra(ConstantLib.FILEURI, desFile.path)
+                            intentPostMemory.putExtra(ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(finaltaggedarray))
+                            intentPostMemory.putExtra(ConstantLib.SENDER_ID, intent.getStringExtra(ConstantLib.SENDER_ID))
+                            intentPostMemory.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+                            intentPostMemory.putExtra(ConstantLib.FROM_ACTIVITY, intent.getStringExtra(ConstantLib.FROM_ACTIVITY))
+                            intentPostMemory.putExtra(ConstantLib.FROM, "VIDEO")
+                            startActivity(intentPostMemory)
 
                         }
 

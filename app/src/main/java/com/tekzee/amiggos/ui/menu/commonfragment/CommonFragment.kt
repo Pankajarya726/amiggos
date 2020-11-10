@@ -1,19 +1,18 @@
 package com.tekzee.amiggos.ui.menu.commonfragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.impulsiveweb.galleryview.GalleryView
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.base.repository.ItemRepository
+import com.tekzee.amiggos.custom.AlertAgeFragment
 import com.tekzee.amiggos.custom.MenuAgeSheetFragment
 import com.tekzee.amiggos.databinding.CommonFragmentBinding
 import com.tekzee.amiggos.room.database.AmiggoRoomDatabase
@@ -141,6 +140,11 @@ class CommonFragment() : Fragment(), CommonEvent, KodeinAware, CommonClickListen
 
     override fun showNotVerifiedMessage(isIdproofNotverifiedMessage: String) {
         requireActivity().Errortoast(isIdproofNotverifiedMessage)
+    }
+
+    override fun showAlertForAgeRestriction(message: String) {
+        val bottomSheetDialog: AlertAgeFragment = AlertAgeFragment.newInstance(message)
+        bottomSheetDialog.show(childFragmentManager, "AgeRestring Alert")
     }
 
     override fun viewImage(listItem: Menu?) {
