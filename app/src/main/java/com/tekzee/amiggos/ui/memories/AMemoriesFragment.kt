@@ -75,6 +75,28 @@ class AMemoriesFragment : BaseFragment() {
         viewPager.adapter = adapter
         viewPager.offscreenPageLimit = 1
 
+
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+            }
+
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                setUpHeading(position)
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
+            }
+        })
+
+
+
         TabLayoutMediator(tabs, viewPager) { tab, position ->
             when (position) {
                 0 -> {
@@ -91,6 +113,16 @@ class AMemoriesFragment : BaseFragment() {
                 }
             }
         }.attach()
+    }
+
+    private fun setUpHeading(selectedTabPosition: Int) {
+        if(selectedTabPosition ==0){
+            binding!!.memoriesHeading.text = languageData!!.klMemories
+        }else  if(selectedTabPosition ==1){
+            binding!!.memoriesHeading.text = languageData!!.pourmemories
+        }else if(selectedTabPosition ==2){
+            binding!!.memoriesHeading.text = languageData!!.venues
+        }
     }
 
     override fun validateError(message: String) {

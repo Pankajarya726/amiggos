@@ -564,7 +564,7 @@ class ApiClient {
     fun callTaggedVenueApi(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
-    ): Observable<Response<VenueTaggedResponse>> {
+    ): Observable<Response<MemorieResponse>> {
         return apiService.callTaggedVenueApi(input, createHeaders)
     }
 

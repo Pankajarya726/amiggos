@@ -27,6 +27,7 @@ import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
 import com.tekzee.amiggos.custom.ProfileRestrictionFragment
 import com.tekzee.amiggos.hiddensearchrecyclerview.utils.HiddenSearchWithRecyclerView
+import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.Heading
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.adapter.FirstFragmentAdapter
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
@@ -67,6 +68,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
 
 
         fun newInstance(): FirstFragment{
+
             if(firstFragment == null){
              return FirstFragment()
             }
@@ -89,7 +91,6 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
 
     override fun onResume() {
         super.onResume()
-        Logger.d("Onresume---> nearme")
     }
 
     override fun onCreateView(
@@ -98,10 +99,12 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.first_fragment, container, false)
+
         sharedPreference = SharedPreference(requireActivity())
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         firstFragmentPresenterImplementation =
             FirstFragmentPresenterImplementation(this, requireActivity())
+
         return view
     }
 

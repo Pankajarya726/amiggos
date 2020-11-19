@@ -159,6 +159,7 @@
                         app:unlike_drawable="@drawable/heart_unliked" />
 
                     <ImageView
+                        android:visibility="gone"
                         android:id="@+id/navigation"
                         android:layout_width="@dimen/_30sdp"
                         android:layout_height="@dimen/_30sdp"

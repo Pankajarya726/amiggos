@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.JsonObject
-import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
@@ -23,6 +22,7 @@ import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
+import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.Heading
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
 import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
 import com.tekzee.amiggos.util.RxSearchObservable
@@ -51,6 +51,7 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
 
 
         fun newInstance(): Invitations {
+
             if(invitation == null){
                 return Invitations()
             }
@@ -97,7 +98,7 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
 
     override fun onResume() {
         super.onResume()
-        Logger.d("Onresume---> Invitation")
+
     }
 
     override fun onCreateView(
@@ -119,11 +120,12 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
         setupView()
         callInvitationApi()
         setupRefreshLayout()
+
     }
 
     private fun setupRefreshLayout() {
-        binding!!.refreshlayout.setOnRefreshListener {
-            binding!!.refreshlayout.isRefreshing = false
+        binding.refreshlayout.setOnRefreshListener {
+            binding.refreshlayout.isRefreshing = false
             pageNo = 0
             items.clear()
             adapter.notifyDataSetChanged()

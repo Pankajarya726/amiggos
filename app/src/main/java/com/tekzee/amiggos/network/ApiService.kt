@@ -464,7 +464,7 @@ interface ApiService {
     fun callTaggedVenueApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<VenueTaggedResponse>>
+    ): Observable<Response<MemorieResponse>>
 
 
     @POST("guest/getbookings")

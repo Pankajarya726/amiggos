@@ -73,7 +73,6 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     private var autoSuggestAdapter: AutoSuggestAdapter? = null
     private var searchText: AutoCompleteTextView? = null
     private var placesApi: PlaceAPI? = null
-    private var symbolManager: SymbolManager? = null
     private var dataResponse = ArrayList<Venue>()
     private var longitude: String? = " 0.0"
     private var latitude: String? = "0.0"
@@ -370,8 +369,6 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
             } else {
                 marker = layoutInflater.inflate(R.layout.custom_marker_circular_user, null)
                 imageview = marker.findViewById(R.id.marker_image) as ImageView
-
-
             }
 
 
@@ -463,17 +460,13 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
             .debounce(500, TimeUnit.MILLISECONDS).subscribeOn(
                 Schedulers.io()
             ).observeOn(AndroidSchedulers.mainThread()).subscribe {
-                callApi("")
                 if (it.isEmpty()) {
                     requireView().findViewById<AutoCompleteTextView>(R.id.search_txt).hint =
                         languageData!!.pWhatWouldYouLikeToDo
                 } else {
-                    if (it.toString().length != 0)
-                        callApi("")
-//                it.toString()
+                    callApi(it.toString())
                 }
             }
-
         autoSuggestAdapter = AutoSuggestAdapter(
             requireContext(),
             android.R.layout.simple_dropdown_item_1line
@@ -497,7 +490,8 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                 )
                 .build()
             val padding = 50 // offset from edges of the map in pixels
-            val cu: CameraUpdate = CameraUpdateFactory.newLatLngBounds(latLngBounds, padding)
+            val cu: CameraUpdate =
+                CameraUpdateFactory.newLatLngBounds(latLngBounds, padding)
             mMap!!.moveCamera(cu)
         }
     }
@@ -513,7 +507,8 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
 
     override fun onExplanationNeeded(permissionsToExplain: MutableList<String>?) {
-        Toast.makeText(activity, "user_location_permission_explanation", Toast.LENGTH_LONG).show();
+        Toast.makeText(activity, "user_location_permission_explanation", Toast.LENGTH_LONG)
+            .show();
     }
 
     override fun onPermissionResult(granted: Boolean) {
@@ -565,7 +560,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
     override fun onMapReady(map: GoogleMap?) {
         mMap = map
-
+//        mMap!!.isMyLocationEnabled = true
         mMap!!.setMapStyle(
             MapStyleOptions.loadRawResourceStyle(
                 context, R.raw.style_json
@@ -581,7 +576,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         mMap!!.setInfoWindowAdapter(adapter)
 
         mMap!!.setOnInfoWindowClickListener {
-            val venueData = it.getTag() as Venue
+            val venueData = it.tag as Venue
             if (venueData.type.equals("user", true)) {
                 if (Utility.checkProfileComplete(sharedPreference)) {
                     val intent = Intent(activity, AProfileDetails::class.java)
@@ -615,8 +610,4 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
     }
 
-}
-
-interface onInfoWindowItemClicked {
-    fun onItemClicked(venueData: Venue)
 }

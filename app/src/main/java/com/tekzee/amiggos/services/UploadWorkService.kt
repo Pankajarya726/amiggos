@@ -171,6 +171,7 @@ class UploadWorkService(context: Context, workerParams: WorkerParameters) : Work
         successIntent.action = "com.wave.ACTION_UPLOADED"
         successIntent.putExtra("notificationId", FileUploadService.NOTIFICATION_ID)
         successIntent.putExtra("progress", 100)
+        BitmapUtils.deleteImageFile(applicationContext,File(imageUri!!))
         applicationContext.sendBroadcast(successIntent)
     }
 

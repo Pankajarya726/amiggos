@@ -12,12 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonObject
 import com.jakewharton.rxbinding2.widget.RxTextView
-import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
 import com.tekzee.amiggos.databinding.RealFriendFragmentBinding
+import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.Heading
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
 import com.tekzee.amiggos.ui.realfriends.adapter.OnlineFriendAdapter
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
@@ -56,6 +56,7 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
 
 
         fun newInstance(): RealFriend {
+
             if(realfriend == null){
                 return RealFriend()
             }
@@ -67,7 +68,7 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
 
     override fun onResume() {
         super.onResume()
-        Logger.d("Onresume---> realfriend")
+
     }
 
     override fun onStart() {
@@ -95,6 +96,7 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.real_friend_fragment,container,false)
         myView = binding.root
+
         return myView
 
     }
@@ -162,6 +164,7 @@ class RealFriend: BaseFragment(), RealFriendPresenter.RealFriendMainView, Infini
         }
         callRealFriendApi(false, "", isFragmentVisible)
         setupView()
+
     }
 
     private fun callRealFriendApi(

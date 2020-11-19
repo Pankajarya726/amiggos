@@ -59,6 +59,7 @@
             android:layout_marginTop="@dimen/_5sdp"
             android:id="@+id/real_friend_fragment"
             android:layout_width="match_parent"
+            android:layout_marginBottom="@dimen/_50sdp"
             android:layout_height="match_parent"/>
         </com.tekzee.amiggos.hiddensearchrecyclerview.utils.HiddenSearchWithRecyclerView>
 

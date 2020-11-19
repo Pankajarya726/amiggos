@@ -44,7 +44,7 @@ class FriendRequestFragmentImplementation(
                             val responseData: ANotificationResponse? = response.body()
                             if (responseData!!.status) {
 
-                                if (responseData.data.userNotification.size>0) {
+                                if (responseData.data.userNotification.isNotEmpty()) {
                                     if(requestDatFromServer){
                                         mainView.onNotificationInfiniteSuccess(responseData.data.userNotification)
                                     }else{

@@ -42,6 +42,7 @@ object ConstantLib {
     const val TIME = "TIME"
     const val METHOD = "METHOD"
     const val MEMORIES = "MEMORIES"
+    const val VENUEMEMORIES = "VENUEMEMORIES"
     const val USER = "users"
     var NOTIFICATIONCOUNT = "0"
     const val NO_DAY_REGISTER = "no_day_register"

@@ -125,7 +125,9 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesFragmentPresenter.PartyI
     }
 
     override fun onNotificationFailure(message: String) {
-        Log.e("message-->",message)
+        data.removeAt(data.size - 1)
+        adapter?.notifyDataSetChanged()
+        adapter?.setLoadingStatus(false)
     }
 
 //    private fun setupErrorVisibility(){

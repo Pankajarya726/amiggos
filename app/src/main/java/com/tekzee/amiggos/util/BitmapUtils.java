@@ -88,13 +88,13 @@ public class BitmapUtils {
      * @param context   The application context.
      * @param imagePath The path of the photo to be deleted.
      */
-    public static boolean deleteImageFile(Context context, String imagePath) {
+    public static boolean deleteImageFile(Context context, File imagePath) {
 
         // Get the file
-        File imageFile = new File(imagePath);
+//        File imageFile = new File(imagePath);
 
         // Delete the image
-        boolean deleted = imageFile.delete();
+        boolean deleted = imagePath.delete();
 
         // If there is an error deleting the file, show a Toast
         if (!deleted) {

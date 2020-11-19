@@ -79,7 +79,10 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:tag_clickable="true"
                 app:tag_enable_cross="true"
-                app:tag_theme="pure_teal"
+                app:tag_theme="none"
+                app:tag_text_color="@color/white"
+                app:tag_border_color="@color/white"
+                app:tag_cross_color="@color/white"
                 app:vertical_interval="10dp" />
 
             <EditText

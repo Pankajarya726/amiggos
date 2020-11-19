@@ -426,7 +426,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.tekzee.amiggosvenueapp.ui.tagging.TaggingFragment"
+            android:name=".ui.tagging.TaggingFragment"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" /> <!-- optional (needed if default theme has no action bar) -->
 

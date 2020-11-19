@@ -45,7 +45,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         if (remoteMessage.data.isNotEmpty()) {
             val jsonData = JSONObject(remoteMessage.data as Map<String, String>)
-            Log.d(TAG, "Message Notification Body: " + jsonData);
+            Log.d(TAG, "Message Notification Body: $jsonData")
             handleNotifications(remoteMessage)
         }
 

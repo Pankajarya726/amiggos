@@ -185,6 +185,9 @@ class UploadWorkOurMemoryService(context: Context, workerParams: WorkerParameter
         successIntent.action = "com.wave.ACTION_UPLOADED"
         successIntent.putExtra("notificationId", FileUploadService.NOTIFICATION_ID)
         successIntent.putExtra("progress", 100)
+        if(type == 1){
+            BitmapUtils.deleteImageFile(applicationContext,File(imageUri!!))
+        }
         applicationContext.sendBroadcast(successIntent)
     }
 

@@ -9,7 +9,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.tekzee.amiggos.R;
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse;
-import com.tekzee.amiggos.ui.homescreen_new.homefragment.onInfoWindowItemClicked;
 
 public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 

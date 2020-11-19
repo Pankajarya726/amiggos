@@ -1,4 +1,4 @@
-package com.tekzee.amiggosvenueapp.ui.tagging
+package com.tekzee.amiggos.ui.tagging
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -12,17 +12,15 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.work.*
-import androidx.work.WorkManager
 import cn.pedant.SweetAlert.SweetAlertDialog
 import co.lujun.androidtagview.TagView
+import com.bumptech.glide.Glide
 import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -34,10 +32,11 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
 import com.tekzee.amiggos.databinding.TaggingFragmentBinding
-import com.tekzee.amiggos.services.UploadWorkService
 import com.tekzee.amiggos.ui.postmemories.PostMemories
-import com.tekzee.amiggos.ui.tagging.TaggingViewModelFactory
 import com.tekzee.amiggos.util.*
+import com.tekzee.amiggosvenueapp.ui.tagging.TaggingClickListener
+import com.tekzee.amiggosvenueapp.ui.tagging.TaggingEvent
+import com.tekzee.amiggosvenueapp.ui.tagging.TaggingViewModel
 import com.tekzee.amiggosvenueapp.ui.tagging.adapter.TaggingAdapter
 import com.tekzee.amiggosvenueapp.ui.tagging.model.TaggingResponse
 import id.zelory.compressor.Compressor
@@ -51,6 +50,7 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener, KodeinAware {
+
 
 
     override val kodein: Kodein by closestKodein()
@@ -72,6 +72,7 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
 
     companion object {
         private var picture: PictureResult? = null
+        var imagefile: File?=null
         fun newInstance() = TaggingFragment()
         fun setPictureResult(result: PictureResult) {
             picture = result
@@ -120,8 +121,9 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) {
-            val imagefile = BitmapUtils.saveImageAndReturnFile(applicationContext, bitmap)
+            imagefile = BitmapUtils.saveImageAndReturnFile(applicationContext, bitmap)
             getimageUrifrombitmap(Compressor.getDefault(this).compressToBitmap(imagefile))
+            BitmapUtils.deleteImageFile(applicationContext, imagefile)
         }.onDeclined { e ->
             if (e.hasDenied()) {
 
@@ -184,6 +186,7 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
             binding!!.go.visibility = View.GONE
             binding!!.bottomLayout.visibility = View.GONE
             binding!!.save.visibility = View.GONE
+            Glide.with(this).load(R.drawable.text).placeholder(R.drawable.noimage).into(binding!!.touchText)
             showKeyboard(binding!!.tagSearch)
         }
 
@@ -213,12 +216,7 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
         binding!!.tagSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    hideKeyboard(binding!!.tagSearch)
-                    binding!!.recyclerViewTagging.visibility = View.GONE
-                    binding!!.tagSearch.visibility = View.GONE
-                    binding!!.go.visibility = View.VISIBLE
-                    binding!!.bottomLayout.visibility = View.VISIBLE
-                    binding!!.save.visibility = View.VISIBLE
+                   setvisibilityofViews()
                     return true
                 }
                 return false
@@ -227,7 +225,7 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
         })
 
 
-        RxTextView.textChanges(binding!!.tagSearch).filter { it.length > 2 }
+        RxTextView.textChanges(binding!!.tagSearch).filter { it.isNotEmpty() }
             .debounce(500, TimeUnit.MILLISECONDS).subscribeOn(
                 Schedulers.io()
             ).observeOn(AndroidSchedulers.mainThread()).subscribe {
@@ -306,6 +304,16 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
         binding!!.close.setOnClickListener {
             onBackPressed()
         }
+    }
+
+    private fun setvisibilityofViews() {
+        hideKeyboard(binding!!.tagSearch)
+        binding!!.recyclerViewTagging.visibility = View.GONE
+        binding!!.tagSearch.visibility = View.GONE
+        binding!!.go.visibility = View.VISIBLE
+        Glide.with(this).load(R.drawable.ic_t).placeholder(R.drawable.noimage).into(binding!!.touchText)
+        binding!!.bottomLayout.visibility = View.VISIBLE
+        binding!!.save.visibility = View.VISIBLE
     }
 
 
@@ -407,5 +415,10 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
         return count > 1
     }
 
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+    }
 
 }

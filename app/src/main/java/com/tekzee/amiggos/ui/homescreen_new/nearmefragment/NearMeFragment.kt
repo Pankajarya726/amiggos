@@ -8,14 +8,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.badge.BadgeDrawable
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.NearMeFragmentBinding
-import com.tekzee.amiggos.enums.FriendsAction
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.adapter.ViewPagerTwoAdapter
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.FirstFragment
 import com.tekzee.amiggos.ui.realfriends.invitations.Invitations
@@ -36,6 +35,8 @@ class NearMeFragment : BaseFragment() {
         private lateinit var mIntent: Intent
         private var mtab: Int = 0
         private val nearmefragment: NearMeFragment? = null
+
+
 
         fun newInstance(intent: Intent, tab: Int): NearMeFragment{
             mIntent = intent
@@ -90,14 +91,11 @@ class NearMeFragment : BaseFragment() {
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
 
         setupViews(view)
-        setupLanguage(view)
+
         return binding!!.root
     }
 
-    private fun setupLanguage(view: View?) {
 
-        binding!!.nearMeHeading.text = languageData!!.pNearme
-    }
 
     private fun setupAdapter(
         viewPager: ViewPager2,
@@ -123,27 +121,58 @@ class NearMeFragment : BaseFragment() {
                     tab.text = languageData!!.pRealFriends
                     realFriendBadge = tab
 
+
                 }
                 2 -> {
                     Invitations.newInstance()
                     tab.text = languageData!!.pInvitaion
                     invitationBadge = tab
+
                 }
             }
         }.attach()
+        viewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+            }
 
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                setUpHeading(position)
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
+            }
+        })
         viewPager.currentItem = mtab
     }
 
+    private fun setUpHeading(selectedTabPosition: Int) {
+        if(selectedTabPosition ==0){
+            binding!!.nearMeHeading.text = languageData!!.pNearme
+        }else  if(selectedTabPosition ==1){
+            binding!!.nearMeHeading.text = languageData!!.pRealFriends
+        }else if(selectedTabPosition ==2){
+            binding!!.nearMeHeading.text = languageData!!.pInvitaion
+        }
+    }
 
 
     override fun validateError(message: String) {
-       Toast.makeText(context,message,Toast.LENGTH_LONG).show()
+       Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
     private fun setupViews(view: View?) {
         setupAdapter(binding!!.nearMeViewPager, binding!!.nearMeTabs)
     }
 
+}
 
+interface Heading{
+    fun setHeading(heading: String)
 }

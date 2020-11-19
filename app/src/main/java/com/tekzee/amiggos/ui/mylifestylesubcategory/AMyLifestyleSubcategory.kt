@@ -49,6 +49,7 @@ class AMyLifestyleSubcategory : BaseActivity(), MyLifestyleSubcategoryPresenter.
         setupLanguage()
         callMyLifestyle()
         setupAdapter()
+        binding!!.badge.setNumber(Integer.parseInt(ConstantLib.NOTIFICATIONCOUNT))
         setupClickListener()
     }
 

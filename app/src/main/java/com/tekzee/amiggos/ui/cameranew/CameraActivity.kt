@@ -11,14 +11,13 @@ import com.iammert.library.cameravideobuttonlib.CameraVideoButton
 import com.otaliastudios.cameraview.*
 import com.otaliastudios.cameraview.controls.Facing
 import com.otaliastudios.cameraview.controls.Flash
-import com.otaliastudios.cameraview.controls.Preview
 import com.otaliastudios.cameraview.size.AspectRatio
 import com.otaliastudios.cameraview.size.SizeSelectors
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.NewCameraActivityBinding
 import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.amiggosvenueapp.ui.tagging.TaggingFragment
+import com.tekzee.amiggos.ui.tagging.TaggingFragment
 import com.tekzee.amiggos.ui.taggingvideo.TaggingVideoActivity
 import java.io.File
 
@@ -145,7 +144,7 @@ class CameraActivity : AppCompatActivity(),
             if (mCaptureTime == 0L) mCaptureTime = callbackTime - 300
             TaggingFragment.setPictureResult(result)
             mCaptureTime = 0
-            val tagIntent = Intent(applicationContext,TaggingFragment::class.java)
+            val tagIntent = Intent(applicationContext, TaggingFragment::class.java)
             tagIntent.putExtra(ConstantLib.SENDER_ID,intent.getStringExtra(ConstantLib.SENDER_ID))
             tagIntent.putExtra(ConstantLib.FROM,intent.getStringExtra(ConstantLib.FROM))
             tagIntent.putExtra(ConstantLib.OURSTORYID,intent.getStringExtra(ConstantLib.OURSTORYID))

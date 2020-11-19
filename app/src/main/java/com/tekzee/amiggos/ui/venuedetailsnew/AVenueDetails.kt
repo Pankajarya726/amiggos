@@ -3,6 +3,7 @@ package com.tekzee.amiggos.ui.venuedetailsnew
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -109,6 +110,28 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
             }
         }
 
+        binding!!.txtAddress.setOnClickListener {
+            val uri = java.lang.String.format(
+                Locale.ENGLISH,
+                "http://maps.google.com/maps?saddr="+sharedPreference!!.getValueString(ConstantLib.CURRENTLAT)+","+sharedPreference!!.getValueString(ConstantLib.CURRENTLNG)+"&daddr="+response!!.clubData.latitude+","+response!!.clubData.longitude,
+                12f,
+                2f,
+            )
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+            intent.setPackage("com.google.android.apps.maps")
+            try {
+                startActivity(intent)
+            } catch (ex: ActivityNotFoundException) {
+                try {
+                    val unrestrictedIntent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                    startActivity(unrestrictedIntent)
+                } catch (innerEx: ActivityNotFoundException) {
+                    Toast.makeText(this, "Please install a maps application", Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+        }
+
         binding!!.imgBack.setOnClickListener {
             onBackPressed()
         }
@@ -184,6 +207,7 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         binding!!.txtAgegroup.text = response.clubData.agelimit
         binding!!.imgHeart.isLiked = response.clubData.isFavorite == 1
         binding!!.txtDescription.text = response.clubData.clubDescription
+        binding!!.txtAddress.paintFlags = binding!!.txtAddress.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         binding!!.txtAddress.text = response.clubData.address
         binding!!.txtPhone.text = response.clubData.phoneNumber
         isBookingAvailable = response.clubData.isBookingAvailable.toInt()
