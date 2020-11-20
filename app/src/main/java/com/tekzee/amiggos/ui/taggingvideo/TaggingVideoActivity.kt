@@ -30,6 +30,7 @@ import co.lujun.androidtagview.TagView
 import com.abedelazizshe.lightcompressorlibrary.CompressionListener
 import com.abedelazizshe.lightcompressorlibrary.VideoCompressor
 import com.abedelazizshe.lightcompressorlibrary.VideoQuality
+import com.bumptech.glide.Glide
 import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -181,6 +182,7 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
             binding!!.go.visibility = View.GONE
             binding!!.bottomLayout.visibility = View.GONE
             binding!!.save.visibility = View.GONE
+            Glide.with(this).load(R.drawable.text).placeholder(R.drawable.noimage).into(binding!!.touchText)
             showKeyboard(binding!!.tagSearch)
         }
 
@@ -210,12 +212,8 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
         binding!!.tagSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    hideKeyboard(binding!!.tagSearch)
-                    binding!!.recyclerViewTagging.visibility = View.GONE
-                    binding!!.tagSearch.visibility = View.GONE
-                    binding!!.go.visibility = View.VISIBLE
-                    binding!!.bottomLayout.visibility = View.VISIBLE
-                    binding!!.save.visibility = View.VISIBLE
+                    setvisibilityofViews()
+
                     return true
                 }
                 return false
@@ -360,6 +358,16 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
         binding!!.close.setOnClickListener {
             onBackPressed()
         }
+    }
+
+    private fun setvisibilityofViews() {
+        hideKeyboard(binding!!.tagSearch)
+        binding!!.recyclerViewTagging.visibility = View.GONE
+        binding!!.tagSearch.visibility = View.GONE
+        binding!!.go.visibility = View.VISIBLE
+        binding!!.bottomLayout.visibility = View.VISIBLE
+        binding!!.save.visibility = View.VISIBLE
+        Glide.with(this).load(R.drawable.ic_t).placeholder(R.drawable.noimage).into(binding!!.touchText)
     }
 
 
