@@ -29,6 +29,9 @@ class PaymentActivityPresenter {
             cards: List<CardListResponse.Data.Card>,
             customerStripId: String
         )
+        fun onCardListFailure(
+            message: CardListResponse?
+        )
         fun onBookingSuccess(message: BookingPaymentResponse?)
         fun onBookingFailure(message: String)
         fun onSetDefaultCardSuccess(message: String)

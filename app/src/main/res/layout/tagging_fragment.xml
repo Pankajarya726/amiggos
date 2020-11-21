@@ -80,6 +80,7 @@
                 app:tag_enable_cross="true"
                 app:tag_theme="none"
                 app:tag_text_color="@color/white"
+                app:container_background_color="@color/white"
                 app:tag_border_color="@color/white"
                 app:tag_cross_color="@color/white"
                 app:vertical_interval="10dp" />

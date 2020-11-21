@@ -55,7 +55,7 @@ data class VenueDetails(
             val menuTypeName: String = "",
             @SerializedName("name")
             val name: String = "",
-            @SerializedName("phone_number")
+            @SerializedName("phone")
             val phoneNumber: String = "",
             @SerializedName("price_category")
             val priceCategory: String = "",

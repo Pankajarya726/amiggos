@@ -9,8 +9,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
-import com.braintreepayments.cardform.view.ErrorEditText
 import com.google.gson.JsonObject
+import com.stripe.android.model.PaymentMethod
+import com.stripe.android.view.PaymentMethodsActivity
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
@@ -19,8 +20,9 @@ import com.tekzee.amiggos.ui.stripepayment.model.CardListResponse
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.PaymentActivityBinding
 import com.tekzee.amiggos.room.database.AmiggoRoomDatabase
-import com.tekzee.amiggos.ui.friendinviteconfirmation.FriendInviteConfirmation
 import com.tekzee.amiggos.ui.invitefriendnew.InviteFriendNewActivity
+import com.tekzee.amiggos.ui.stripepayment.APaymentMethod
+import com.tekzee.amiggos.ui.stripepayment.addnewcard.AAddCard
 import com.tekzee.amiggos.ui.stripepayment.paymentactivity.adapter.PaymentActivityAdapter
 import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.BookingPaymentResponse
 import com.tekzee.amiggos.util.*
@@ -36,6 +38,7 @@ class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodP
     private var aPaymentMehtodImplementation: PaymentActivityImplementation? = null
     private val data = ArrayList<CardListResponse.Data.Card>()
     private var repository: ItemRepository? = null
+    private var isCardAvailable = false;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,11 +117,18 @@ class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodP
 
     private fun setupClickListener() {
         binding!!.paynow.setOnClickListener {
-            if(intent.getStringExtra(ConstantLib.PURCHASE_AMOUNT).toFloat()>0){
-                setDefaultCard()
+            if(isCardAvailable){
+                if(intent.getStringExtra(ConstantLib.PURCHASE_AMOUNT).toFloat()>0){
+                    setDefaultCard()
+                }else{
+                    Errortoast("Amount can not be zero")
+                }
             }else{
-                Errortoast("Amount can not be zero")
+                val intent = Intent(this, AAddCard ::class.java)
+                startActivity(intent)
+                Animatoo.animateSlideLeft(this)
             }
+
         }
     }
 
@@ -177,11 +187,25 @@ class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodP
         responseData: List<CardListResponse.Data.Card>,
         customerStripId: String
     ) {
+        isCardAvailable = true
         customStripeId = customerStripId;
         data.clear()
         adapter!!.notifyDataSetChanged()
         data.addAll(responseData)
         adapter!!.notifyDataSetChanged()
+        binding!!.paynow.visibility = View.GONE
+        binding!!.paynow.text = languageData!!.pay
+    }
+
+    override fun onCardListFailure(responseData: CardListResponse?) {
+        if(responseData!!.data.cards.isEmpty()){
+            binding!!.paynow.visibility = View.VISIBLE
+            binding!!.paynow.text = languageData!!.addcard
+            isCardAvailable = false
+        }else{
+            isCardAvailable = false
+            Toast.makeText(applicationContext,responseData.message,Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun onBookingSuccess(response: BookingPaymentResponse?) {

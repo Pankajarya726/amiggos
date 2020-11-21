@@ -5,6 +5,7 @@ object ConstantLib {
 
 //    chat
     const val CONVERSATION = "conversation"
+    const val PAYMENTACTIVITY = "PAYMENTACTIVITY"
     const val ACCEPT = "ACCEPT"
     const val MYMEMORY = "MYMEMORY"
     const val JOIN = "JOIN"

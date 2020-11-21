@@ -3,7 +3,6 @@ package com.tekzee.amiggos.ui.stripepayment.paymentactivity
 import android.content.Context
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
-import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.network.ApiClient
 import com.tekzee.amiggos.ui.stripepayment.model.CardListResponse
 import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.BookingPaymentResponse
@@ -41,7 +40,7 @@ class PaymentActivityImplementation(private var mainView: PaymentActivityPresent
                             if (responseData!!.success) {
                                 mainView.onCardListSuccess(responseData.data.cards,responseData.customerStripId)
                             } else {
-                                mainView.validateError(responseData.message)
+                                mainView.onCardListFailure(responseData)
                             }
                         }
                     }

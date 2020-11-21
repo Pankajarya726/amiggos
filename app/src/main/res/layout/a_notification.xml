@@ -24,17 +24,26 @@
 
 
                 <ImageView
-                    android:layout_width="match_parent"
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/logo_header"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView10"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
-
-
+                <ImageView
+                    android:visibility="invisible"
+                    android:id="@+id/imageView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_30sdp"
+                    android:src="@drawable/ic_back_black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

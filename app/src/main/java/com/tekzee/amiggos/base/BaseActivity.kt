@@ -9,8 +9,7 @@ import com.kaopiz.kprogresshud.KProgressHUD
 import com.tekzee.amiggos.util.NetWorkConection
 
 
-abstract class BaseActivity : AppCompatActivity(), BaseMainView
-{
+abstract class BaseActivity : AppCompatActivity(), BaseMainView {
     lateinit var hud: KProgressHUD
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,9 +18,6 @@ abstract class BaseActivity : AppCompatActivity(), BaseMainView
             .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
             .setLabel("Please wait")
             .setCancellable(false)
-
-
-
     }
 
     override fun showProgressbar() {
@@ -37,7 +33,7 @@ abstract class BaseActivity : AppCompatActivity(), BaseMainView
         return NetWorkConection.isNEtworkConnected(this)
     }
 
-    override fun hideKeyboard(){
+    override fun hideKeyboard() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         var view = this.currentFocus
         if (view == null) {
@@ -45,7 +41,6 @@ abstract class BaseActivity : AppCompatActivity(), BaseMainView
         }
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
-
 
 
 }
