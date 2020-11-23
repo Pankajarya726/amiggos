@@ -227,6 +227,7 @@ class StepOne: BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
         sharedPreferences!!.save(ConstantLib.PROFILE_IMAGE, data.profile)
         sharedPreferences!!.save(ConstantLib.ISAGREE, false)
         sharedPreferences!!.save(ConstantLib.USER_AGE, data.age)
+        sharedPreferences!!.save(ConstantLib.USER_TYPE, data.type)
         sharedPreferences!!.save(ConstantLib.MYID, data.myid)
     }
 
@@ -247,7 +248,7 @@ class StepOne: BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
 
     override fun onDateSet(view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
         val month = monthOfYear + 1
-        binding!!.sdateOfBirth.setText("$dayOfMonth/$month/$year")
+        binding!!.sdateOfBirth.setText("$month/$dayOfMonth/$year")
         dateOfBirth = "$year-$month-$dayOfMonth"
     }
 }

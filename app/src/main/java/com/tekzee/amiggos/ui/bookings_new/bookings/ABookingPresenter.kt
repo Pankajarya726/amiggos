@@ -16,7 +16,10 @@ class ABookingPresenter{
     }
 
     interface ABookingPresenterMainView: BaseMainView {
-        fun onBookingSuccess(taggedVenue: List<ABookingResponse.Data.BookingData>)
+        fun onBookingSuccess(
+            taggedVenue: List<ABookingResponse.Data.BookingData>,
+            responseData: ABookingResponse
+        )
         fun onBookingFailure(message: String)
     }
 }

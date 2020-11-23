@@ -16,7 +16,10 @@ class OurMemorieFragmentPresenter{
     }
 
     interface MyMemoriePresenterMainView: BaseMainView {
-        fun onMyMemorieSuccess(ourStory: List<MemorieResponse.Data.Memories>)
+        fun onMyMemorieSuccess(
+            ourStory: List<MemorieResponse.Data.Memories>,
+            responseData: MemorieResponse
+        )
         fun onMyMemorieFailure(message: String)
 
     }

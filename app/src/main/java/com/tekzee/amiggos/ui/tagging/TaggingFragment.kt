@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.view.KeyEvent
@@ -104,6 +105,7 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
 
         try {
             result.toBitmap(
+
                 BitmapCallback { bitmap: Bitmap? ->
                     binding!!.imgPicture.setImageBitmap(bitmap)
                     mbitmap = bitmap
@@ -123,7 +125,7 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
         ) {
             imagefile = BitmapUtils.saveImageAndReturnFile(applicationContext, bitmap)
             getimageUrifrombitmap(Compressor.getDefault(this).compressToBitmap(imagefile))
-            BitmapUtils.deleteImageFile(applicationContext, imagefile)
+//            BitmapUtils.deleteImageFile(applicationContext, imagefile)
         }.onDeclined { e ->
             if (e.hasDenied()) {
 

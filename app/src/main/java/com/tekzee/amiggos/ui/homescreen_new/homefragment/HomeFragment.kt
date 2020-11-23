@@ -35,9 +35,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.gson.JsonObject
 import com.jakewharton.rxbinding2.widget.RxTextView
-import com.mapbox.android.core.permissions.PermissionsListener
-import com.mapbox.android.core.permissions.PermissionsManager
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
@@ -65,7 +62,7 @@ import java.util.concurrent.TimeUnit
 
 
 class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
-    PermissionsListener, Listener, com.google.android.gms.maps.OnMapReadyCallback {
+     Listener, com.google.android.gms.maps.OnMapReadyCallback {
     private var mMap: GoogleMap? = null
     private lateinit var notifylistner: NotifyNotification
     private var finalDataList = ArrayList<Venue>()
@@ -78,7 +75,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     private var latitude: String? = "0.0"
     private lateinit var homepresenterImplementation: HomePresenterImplementation
 
-    private var permissionsManager: PermissionsManager? = null
+
     private var sharedPreference: SharedPreference? = null
     private var categoryId: String = ""
     private var searchkeyword: String = ""
@@ -272,9 +269,15 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                 longitude = placeDetails.lng.toString()
                 requireActivity().runOnUiThread(Runnable {
                     hideKeyboard()
-//                    val position = CameraPosition.Builder()
-//                        .target(LatLng(latitude!!.toDouble(), longitude!!.toDouble())).zoom(12.0)
-//                        .bearing(0.0).tilt(30.0).build()
+                    mMap!!.moveCamera(
+                        CameraUpdateFactory.newLatLng(
+                            LatLng(
+                                latitude!!.toDouble(),
+                                longitude!!.toDouble()
+                            )
+                        )
+                    )
+                    mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
                     callHomeApi(0)
                 })
 
@@ -356,22 +359,25 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
             if (items.type.equals("venue")) {
                 marker = layoutInflater.inflate(R.layout.custom_marker_circular, null)
                 imageview = marker.findViewById(R.id.marker_image) as ImageView
-                BadgeFactory.create(requireContext())
-                    .setTextColor(resources.getColor(R.color.white))
-                    .setWidthAndHeight(20, 20)
-                    .setBadgeBackground(resources.getColor(R.color.red))
-                    .setTextSize(8)
-                    .setBadgeGravity(Gravity.RIGHT)
-                    .setBadgeCount(items.nearByCount)
-                    .setShape(BadgeView.SHAPE_CIRCLE)
-                    .setSpace(10, 10)
-                    .bind(imageview)
+
+                if(items.nearByCount.toInt()>0){
+                    BadgeFactory.create(requireContext())
+                        .setTextColor(resources.getColor(R.color.white))
+                        .setWidthAndHeight(20, 20)
+                        .setBadgeBackground(resources.getColor(R.color.red))
+                        .setTextSize(8)
+                        .setBadgeGravity(Gravity.RIGHT)
+                        .setBadgeCount(items.nearByCount)
+                        .setShape(BadgeView.SHAPE_CIRCLE)
+                        .setSpace(10, 10)
+                        .bind(imageview)
+                }
+
+
             } else {
                 marker = layoutInflater.inflate(R.layout.custom_marker_circular_user, null)
                 imageview = marker.findViewById(R.id.marker_image) as ImageView
             }
-
-
 
             Glide.with(this)
                 .asBitmap()
@@ -386,6 +392,8 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                         resource: Bitmap,
                         transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
                     ) {
+
+
                         mMap!!.addMarker(
                             MarkerOptions().position(
                                 LatLng(
@@ -430,6 +438,22 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         drawable?.draw(canvas)
         view.draw(canvas)
         return returnedBitmap
+
+
+//        mMarkerImageView.setImageBitmap(bitmap)
+//        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+//        view.layout(0, 0, view.measuredWidth, view.measuredHeight)
+//        view.buildDrawingCache()
+//        val returnedBitmap = Bitmap.createBitmap(
+//            view.measuredWidth, view.measuredHeight,
+//            Bitmap.Config.ARGB_8888
+//        )
+//        val canvas = Canvas(returnedBitmap)
+//        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN)
+//        val drawable = view.background
+//        drawable?.draw(canvas)
+//        view.draw(canvas)
+//        return returnedBitmap
     }
 
 
@@ -496,31 +520,6 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-
-        permissionsManager!!.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-
-    override fun onExplanationNeeded(permissionsToExplain: MutableList<String>?) {
-        Toast.makeText(activity, "user_location_permission_explanation", Toast.LENGTH_LONG)
-            .show();
-    }
-
-    override fun onPermissionResult(granted: Boolean) {
-
-//        if (granted) {
-//            mmapboxMap!!.getStyle { style -> enableLocationComponent(style) }
-//        } else {
-//            Toast.makeText(activity, "user_location_permission_not_granted", Toast.LENGTH_LONG)
-//                .show()
-//            requireActivity().finish()
-//        }
-    }
 
     override fun locationCancelled() {
         Logger.d("Location cancelled called")

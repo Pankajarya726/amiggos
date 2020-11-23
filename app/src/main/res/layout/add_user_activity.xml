@@ -59,7 +59,7 @@
             android:layout_marginRight="@dimen/_15sdp"
             android:layout_marginBottom="@dimen/_8sdp"
             android:background="@drawable/search_bg"
-            android:drawableLeft="@drawable/ic_search"
+            android:drawableLeft="@drawable/ic_search_grey"
             android:drawablePadding="@dimen/_8sdp"
             android:hint="Search"
             android:textSize="@dimen/_12sdp"

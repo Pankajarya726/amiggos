@@ -5,7 +5,6 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.network.ApiClient
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
-import com.tekzee.amiggos.ui.memories.venuefragment.model.VenueTaggedResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -38,7 +37,7 @@ class VenueFragmentPresenterImplementation (private var mainView: VenueFragmentP
                             200 -> {
                                 val responseData: MemorieResponse? = response.body()
                                 if (responseData!!.status) {
-                                    mainView.onVenueResponse(responseData.data.memoriesList)
+                                    mainView.onVenueResponse(responseData.data.memoriesList,responseData)
                                 } else {
                                     mainView.onVenueFailure(responseData.message)
                                 }

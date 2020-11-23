@@ -16,18 +16,30 @@
         android:background="@color/white"
         android:orientation="vertical">
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/header_layout"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
+            android:layout_margin="@dimen/_12sdp"
+            android:layout_height="wrap_content">
 
             <ImageView
+                android:padding="@dimen/_5sdp"
                 android:id="@+id/ic_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_15sdp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_back_black"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_back_black" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:src="@drawable/logo_header"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -170,12 +182,10 @@
                 android:background="@drawable/specialinstruction"
                 android:gravity="top|left"
                 android:hint="Special Instructions"
-                android:imeOptions="actionDone"
-                android:inputType="textMultiLine"
-                android:lines="3"
                 android:maxEms="4"
-                android:minLines="3"
+                android:maxLines="3"
                 android:scrollHorizontally="false"
+                android:minLines="3"
                 android:padding="@dimen/_8sdp" />
 
 
@@ -314,7 +324,7 @@
             <TextView
                 android:id="@+id/payButton"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_30sdp"
+                android:layout_height="@dimen/_40sdp"
                 android:layout_alignParentBottom="true"
                 android:background="#077910"
                 android:fontFamily="@font/opensans_semibold"

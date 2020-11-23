@@ -241,7 +241,7 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
         adapter.notifyDataSetChanged()
         items.addAll(responseData.data.freindRequest)
         adapter.notifyDataSetChanged()
-//        setupErrorVisibility()
+        setupErrorVisibility(responseData.message)
     }
 
 
@@ -255,16 +255,29 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
         callInvitationApi()
     }
 
-    override fun onInvitationFailure(responseData: String) {
+    override fun onInvitationFailure(message: String) {
         items.clear()
         adapter.notifyDataSetChanged()
-//        setupErrorVisibility()
+        setupErrorVisibility(message)
     }
 
 
     override fun onStop() {
         super.onStop()
         invitationPresenterImplementation!!.onStop()
+    }
+
+
+    fun setupErrorVisibility(message: String) {
+        if (items.size == 0) {
+            binding.errorLayout.visibility = View.VISIBLE
+            binding.errortext.text = message
+            binding.invitationRecyclerview.visibility = View.GONE
+        } else {
+            binding.invitationRecyclerview.visibility = View.VISIBLE
+            binding.errortext.text = ""
+            binding.errorLayout.visibility = View.GONE
+        }
     }
 
 

@@ -224,12 +224,12 @@ dependencies {
 
 
 
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.2.1'
+//    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.2.1'
 
 
 
 
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v8:0.7.0'
+//    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v8:0.7.0'
 
 
     implementation 'com.github.mohammadatif:Animatoo:master'

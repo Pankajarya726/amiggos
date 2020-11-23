@@ -36,7 +36,6 @@ class AAddCard : BaseActivity(), AAddCardPresenter.AAddCardPresenterMainView {
         sharedPreferences = SharedPreference(this)
         languageData = sharedPreferences!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         implementation = AAddCardImplementation(this, this)
-        setupToolBar()
         setupLanguage()
         setupClickListener()
     }
@@ -48,6 +47,10 @@ class AAddCard : BaseActivity(), AAddCardPresenter.AAddCardPresenterMainView {
 
 
     private fun setupClickListener() {
+
+        binding!!.imgClose.setOnClickListener {
+            onBackPressed()
+        }
 
         binding!!.cardForm.cardRequired(true)
             .expirationRequired(true)
@@ -147,13 +150,6 @@ class AAddCard : BaseActivity(), AAddCardPresenter.AAddCardPresenterMainView {
     }
 
 
-    private fun setupToolBar() {
-        val toolbar: Toolbar = binding!!.toolbar
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-    }
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

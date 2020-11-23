@@ -14,6 +14,7 @@ import com.tekzee.amiggos.room.entity.Menu
 import com.tekzee.amiggos.ui.finalbasket.FinalBasketClickListener
 import com.tekzee.amiggos.util.SharedPreference
 import kotlinx.android.synthetic.main.single_common_staff_list.view.*
+import java.text.DecimalFormat
 
 
 class FinalBasketAdapter(
@@ -52,6 +53,7 @@ class FinalBasketAdapter(
 
     class FinalBasketStaffViewHolder(val listitembinding: SingleFinalbasketListBinding) :
         RecyclerView.ViewHolder(listitembinding.root) {
+        private val df2: DecimalFormat = DecimalFormat("#.##")
         fun bind(
             listItem: Menu?,
             context: Context?
@@ -60,6 +62,7 @@ class FinalBasketAdapter(
                 .placeholder(R.drawable.noimage).into(itemView.menuimage)
             listitembinding.commonitem = listItem
             listitembinding.executePendingBindings()
+            listitembinding.amout.text = "$"+String.format("%.2f", listItem.price)
         }
     }
 

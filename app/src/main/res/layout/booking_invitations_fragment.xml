@@ -6,9 +6,25 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/error_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <include android:id="@+id/error"
-            layout="@layout/error_layout"/>
+            <TextView
+                android:id="@+id/errortext"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:fontFamily="@font/opensans_semibold"
+                android:textSize="@dimen/_15sdp"
+                android:text="No Booking found"/>
+
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/invitation_recyclerview"

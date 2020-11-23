@@ -46,9 +46,9 @@ class RealFriendPresenterImplementation(
                             val responseData: RealFriendV2Response? = response.body()
                             if (responseData!!.data.realFreind.isNotEmpty()) {
                                 if(requestDatFromServer){
-                                    mainView.onRealFriendInfiniteSuccess(responseData.data.realFreind)
+                                    mainView.onRealFriendInfiniteSuccess(responseData.data.realFreind,responseData)
                                 }else{
-                                    mainView.onRealFriendSuccess(responseData.data.realFreind,responseData.data.total_count)
+                                    mainView.onRealFriendSuccess(responseData.data.realFreind,responseData.data.total_count,responseData)
                                 }
                             } else {
                                 mainView.onRealFriendFailure(responseData.message)

@@ -213,6 +213,8 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
                         pickImageFor = 2
                         FilePickerBuilder.instance
                             .setMaxCount(5) //optional
+                            .showFolderView(false)
+                            .enableCameraSupport(false)
 //                        .setSelectedFiles(filePaths) //optional
                             .setActivityTheme(R.style.LibAppTheme) //optional
                             .pickPhoto(this)
@@ -375,11 +377,12 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
     }
 
     private fun setupView() {
-        if (intent.getStringExtra(ConstantLib.FROM).equals("EDIT", true)) {
-            setupEditProfile()
-        } else {
-            setupViewProfile()
-        }
+//        if (intent.getStringExtra(ConstantLib.FROM).equals("EDIT", true)) {
+//            setupEditProfile()
+//        } else {
+//            setupViewProfile()
+//        }
+        setupEditProfile()
     }
 
     private fun setupViewProfile() {
@@ -603,9 +606,12 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == FilePickerConst.REQUEST_CODE_PHOTO) {
-            val photoPaths = ArrayList<Uri>()
-            photoPaths.addAll(data!!.getParcelableArrayListExtra<Uri>(FilePickerConst.KEY_SELECTED_MEDIA));
-            uploadMultipleUserImage(photoPaths)
+            if(data!=null && data!!.getParcelableArrayListExtra<Uri>(FilePickerConst.KEY_SELECTED_MEDIA).size>0){
+                val photoPaths = ArrayList<Uri>()
+                photoPaths.addAll(data!!.getParcelableArrayListExtra<Uri>(FilePickerConst.KEY_SELECTED_MEDIA))
+                uploadMultipleUserImage(photoPaths)
+            }
+
         } else
             if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 val result =

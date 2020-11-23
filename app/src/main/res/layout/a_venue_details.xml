@@ -177,6 +177,7 @@
                     android:text="TextView"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/_12sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/layout_name"
                     tools:text="Columbus, Ohio" />
@@ -190,6 +191,7 @@
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:fontFamily="@font/opensans_semibold"
                     android:gravity="center"
+                    android:visibility="gone"
                     android:text="TextView"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/_12sdp"

@@ -48,7 +48,7 @@
                     android:layout_marginTop="@dimen/_3sdp"
                     android:fontFamily="@font/opensans_regular"
                     android:gravity="center"
-                    android:text='@{"$ "+commonitem.price}'
+
                     android:textColor="@color/grey" />
 
 

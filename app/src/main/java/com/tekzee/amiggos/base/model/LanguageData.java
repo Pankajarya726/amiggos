@@ -1490,6 +1490,17 @@ public class LanguageData {
     @SerializedName("exit_warning")
     private String exitwarning="Are you sure you want to exit?";
 
+    @SerializedName("memory")
+    private String memory="Memories";
+
+    public String getMemory() {
+        return memory;
+    }
+
+    public void setMemory(String memory) {
+        this.memory = memory;
+    }
+
     public String getExitwarning() {
         return exitwarning;
     }

@@ -64,10 +64,8 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
         var bottomNavigation: BottomNavigationView? = null
 
 
-
-
         fun setupNearByCountBadge(badgeCount: Int) {
-            if(badgeCount>0){
+            if (badgeCount > 0) {
                 val badge = bottomNavigation!!.getOrCreateBadge(R.id.navigation_near_me)
                 badge.isVisible = true
                 badge.number = badgeCount
@@ -77,7 +75,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
 
 
         fun setupMemoryCountBadge(badgeCount: Int) {
-            if(badgeCount>0){
+            if (badgeCount > 0) {
                 val badge = bottomNavigation!!.getOrCreateBadge(R.id.navigation_memories)
                 badge.isVisible = true
                 badge.number = badgeCount
@@ -86,7 +84,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
         }
 
         fun setupBookingCountBadge(badgeCount: Int) {
-            if(badgeCount>0){
+            if (badgeCount > 0) {
                 val badge = bottomNavigation!!.getOrCreateBadge(R.id.navigation_bookings)
                 badge.isVisible = true
                 badge.number = badgeCount
@@ -105,8 +103,6 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         bottomNavigation = binding!!.bottomNavigation
         bottomNavigation!!.setOnNavigationItemSelectedListener(this)
-
-
 
         setupLanguage()
         setupClickListener()
@@ -210,7 +206,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
         bottomNavigation!!.menu.getItem(0).title = languageData!!.pHome
         bottomNavigation!!.menu.getItem(1).title = languageData!!.pNearme
         bottomNavigation!!.menu.getItem(2).title = languageData!!.pMylifestyle
-        bottomNavigation!!.menu.getItem(3).title = languageData!!.pMemories
+        bottomNavigation!!.menu.getItem(3).title = languageData!!.memory
         bottomNavigation!!.menu.getItem(4).title = languageData!!.pBooking
 
     }
@@ -225,7 +221,10 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             } else {
                 val intent = Intent(this, AViewAndEditProfile::class.java)
                 intent.putExtra(ConstantLib.FROM, "EDIT")
-                intent.putExtra(ConstantLib.NAME, sharedPreference!!.getValueString(ConstantLib.NAME))
+                intent.putExtra(
+                    ConstantLib.NAME,
+                    sharedPreference!!.getValueString(ConstantLib.NAME)
+                )
                 startActivity(intent)
                 Animatoo.animateSlideRight(this)
             }

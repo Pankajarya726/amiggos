@@ -43,7 +43,7 @@ class OurMemorieFragmentImplementation(
                         200 -> {
                             val responseData: MemorieResponse? = response.body()
                             if (responseData!!.status) {
-                                mainView.onMyMemorieSuccess(responseData.data.memoriesList)
+                                mainView.onMyMemorieSuccess(responseData.data.memoriesList,responseData)
                             } else {
                                 mainView.onMyMemorieFailure(responseData.message)
                             }

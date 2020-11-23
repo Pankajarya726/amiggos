@@ -60,7 +60,7 @@ class VenueFragment : BaseFragment(), VenueFragmentPresenter.VenueFragmentPresen
     }
 
     private fun setupClickListener() {
-        binding.error.errorLayout.setOnClickListener {
+        binding.errorLayout.setOnClickListener {
             callTaggedVenueApi()
         }
     }
@@ -92,21 +92,24 @@ class VenueFragment : BaseFragment(), VenueFragmentPresenter.VenueFragmentPresen
         )
     }
 
-    override fun onVenueResponse(taggedVenue: List<MemorieResponse.Data.Memories>) {
+    override fun onVenueResponse(
+        taggedVenue: List<MemorieResponse.Data.Memories>,
+        responseData: MemorieResponse
+    ) {
         data.clear()
         adapter!!.notifyDataSetChanged()
         data.addAll(taggedVenue)
         adapter!!.notifyDataSetChanged()
-        setupErrorVisibility()
+        setupErrorVisibility(responseData.message)
     }
 
     override fun onVenueFailure(message: String) {
-        setupErrorVisibility()
+        setupErrorVisibility(message)
     }
 
 
     override fun validateError(message: String) {
-        setupErrorVisibility()
+        setupErrorVisibility(message)
     }
 
     override fun onStop() {
@@ -115,13 +118,15 @@ class VenueFragment : BaseFragment(), VenueFragmentPresenter.VenueFragmentPresen
     }
 
 
-    fun setupErrorVisibility(){
+    fun setupErrorVisibility(message: String) {
         if(data.size == 0){
-            binding.error.errorLayout.visibility = View.VISIBLE
+            binding.errorLayout.visibility = View.VISIBLE
             binding.aVenueRecyclerview.visibility = View.GONE
+            binding!!.errortext.text = message
         }else{
             binding.aVenueRecyclerview.visibility = View.VISIBLE
-            binding.error.errorLayout.visibility = View.GONE
+            binding.errorLayout.visibility = View.GONE
+            binding!!.errortext.text = ""
         }
     }
 

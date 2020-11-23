@@ -102,6 +102,7 @@ class CameraActivity : AppCompatActivity(),
         binding!!.videobutton.actionListener = this
         binding!!.camera.addCameraListener(Listener())
         binding!!.username.text = "@"+sharedPreferences.getValueString(ConstantLib.USER_NAME)
+
     }
 
     override fun onDurationTooShortError() {}
@@ -130,6 +131,7 @@ class CameraActivity : AppCompatActivity(),
 
         override fun onPictureTaken(result: PictureResult) {
             super.onPictureTaken(result)
+            Log.e("Rotation----->",result.rotation.toString())
             if (binding!!.camera.isTakingVideo) {
                 Log.d(
                     TAG,

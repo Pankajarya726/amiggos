@@ -46,7 +46,7 @@ class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodP
         sharedPreferences = SharedPreference(this)
         languageData = sharedPreferences!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         aPaymentMehtodImplementation = PaymentActivityImplementation(this, this)
-        setupToolBar()
+//        setupToolBar()
         setupRepository()
         setupClickListener()
         setupLanguage()
@@ -116,6 +116,11 @@ class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodP
     }
 
     private fun setupClickListener() {
+
+        binding!!.imgClose.setOnClickListener {
+            onBackPressed()
+        }
+
         binding!!.paynow.setOnClickListener {
             if(isCardAvailable){
                 if(intent.getStringExtra(ConstantLib.PURCHASE_AMOUNT).toFloat()>0){
@@ -155,13 +160,13 @@ class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodP
        return cardSeleted!!
     }
 
-    private fun setupToolBar() {
-        val toolbar: Toolbar = binding!!.toolbar
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-    }
+//    private fun setupToolBar() {
+//        val toolbar: Toolbar = binding!!.toolbar
+//        setSupportActionBar(toolbar)
+//        supportActionBar?.setDisplayShowTitleEnabled(true)
+//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//        supportActionBar?.setDisplayShowHomeEnabled(true)
+//    }
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

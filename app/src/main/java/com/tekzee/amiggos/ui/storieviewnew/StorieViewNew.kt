@@ -8,6 +8,8 @@ import android.util.Log
 import android.util.SparseIntArray
 import androidx.appcompat.app.AppCompatActivity
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.Glide
 import com.tekzee.amiggos.ui.storieviewnew.customview.StoryPagerAdapter
 import com.tekzee.amiggos.ui.storieviewnew.data.Story
@@ -54,22 +56,15 @@ class StorieViewNew: AppCompatActivity(),
         }
     }
 
-
-
-
-
     private fun setupStorieData(): ArrayList<StoryUser> {
         val storieUser = ArrayList<StoryUser>()
         val stories = ArrayList<Story>()
         var banners = ArrayList<MemorieResponse.Data.Memories.Memory.Tagged>()
         for (i in memorieData.memory.indices) {
             if(memorieData.memory[i].storyFile!=null){
-                Log.e("data-------->",memorieData.memory[i].toString())
                 banners = memorieData.memory[i].tagged as ArrayList<MemorieResponse.Data.Memories.Memory.Tagged>
-//                stories.add(Story(memorieData.memory[i].id.toString(),memorieData.memory[i].storyFile,1600148193438,banners,memorieData.venueId,memorieData.memory[i].viewCount))
                 stories.add(Story(memorieData.memory[i],memorieData.memory[i].storyFile,banners))
             }
-
         }
         storieUser.add(StoryUser(memorieData.name,memorieData.profile,stories))
         return storieUser

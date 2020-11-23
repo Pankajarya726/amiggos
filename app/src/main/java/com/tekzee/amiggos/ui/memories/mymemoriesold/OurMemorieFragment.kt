@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonObject
@@ -16,12 +17,14 @@ import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.databinding.MyMemoriesFragmentBinding
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 import com.tekzee.amiggos.ui.storieviewnew.StorieViewNew
 
 class OurMemorieFragment:BaseFragment() ,OurMemorieFragmentPresenter.MyMemoriePresenterMainView{
 
 
+    private var binding: MyMemoriesFragmentBinding? =null
     private val data = ArrayList<MemorieResponse.Data.Memories>()
     private var adapter: OurMemorieWithoutProductAdapter?=null
     private var reyclerview: RecyclerView?=null
@@ -35,10 +38,10 @@ class OurMemorieFragment:BaseFragment() ,OurMemorieFragmentPresenter.MyMemoriePr
         savedInstanceState: Bundle?
     ): View? {
 
-
-        val view = inflater.inflate(R.layout.my_memories_fragment, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.my_memories_fragment, container, false)
+//        val view = inflater.inflate(R.layout.my_memories_fragment, container, false)
        
-        return view
+        return binding!!.root
     }
 
 
@@ -105,21 +108,35 @@ class OurMemorieFragment:BaseFragment() ,OurMemorieFragmentPresenter.MyMemoriePr
     
     
     override fun onMyMemorieSuccess(
-        responseData: List<MemorieResponse.Data.Memories>
+        responseData: List<MemorieResponse.Data.Memories>,
+        dataResponse: MemorieResponse
     ) {
         data.clear()
         adapter!!.notifyDataSetChanged()
         data.addAll(responseData)
-
+        setupErrorVisibility(dataResponse.message)
     }
 
     override fun onMyMemorieFailure(message: String) {
-
+        setupErrorVisibility(message)
     }
 
 
     override fun validateError(message: String) {
         Toast.makeText(activity,message,Toast.LENGTH_LONG).show()
+    }
+
+
+    fun setupErrorVisibility(message: String) {
+        if (data.size == 0) {
+            binding!!.errorLayout.visibility = View.VISIBLE
+            binding!!.errortext.text = message
+            reyclerview!!.visibility = View.GONE
+        } else {
+            reyclerview!!.visibility = View.VISIBLE
+            binding!!.errortext.text = ""
+            binding!!.errorLayout.visibility = View.GONE
+        }
     }
 
 

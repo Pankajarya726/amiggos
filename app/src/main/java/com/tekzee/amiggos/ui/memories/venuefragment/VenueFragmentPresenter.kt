@@ -16,7 +16,10 @@ class VenueFragmentPresenter{
     }
 
     interface VenueFragmentPresenterMainView: BaseMainView {
-        fun onVenueResponse(taggedVenue: List<MemorieResponse.Data.Memories>)
+        fun onVenueResponse(
+            taggedVenue: List<MemorieResponse.Data.Memories>,
+            responseData: MemorieResponse
+        )
         fun onVenueFailure(message: String)
     }
 }

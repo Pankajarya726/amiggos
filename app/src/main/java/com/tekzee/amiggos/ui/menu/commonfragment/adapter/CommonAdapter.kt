@@ -42,6 +42,9 @@ class CommonAdapter(
     override fun onBindViewHolder(holder: CommonStaffViewHolder, position: Int) {
         getItem(position).let { listItem ->
             holder.bind(listItem, context)
+
+            holder.listitembinding.txtAmout.text = "$ "+String.format("%.2f", listItem.price)
+
             Coroutines.main {
                 val dataResponse = repository!!.getItemDetail(listItem!!.id.toString())
                 if (dataResponse != null) {

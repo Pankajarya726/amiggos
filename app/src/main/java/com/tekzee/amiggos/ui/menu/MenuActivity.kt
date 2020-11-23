@@ -27,6 +27,7 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
 import org.kodein.di.generic.instance
+import java.text.DecimalFormat
 
 class MenuActivity : AppCompatActivity(), MenuEvent, KodeinAware {
 
@@ -35,6 +36,7 @@ class MenuActivity : AppCompatActivity(), MenuEvent, KodeinAware {
     val languageConstant: LanguageData by instance<LanguageData>()
     val prefs: SharedPreference by instance<SharedPreference>()
     val factory: MenuModelFactory by instance<MenuModelFactory>()
+    private val df2: DecimalFormat = DecimalFormat("#.##")
 
     companion object {
         fun newInstance() = MenuActivity()
@@ -46,32 +48,38 @@ class MenuActivity : AppCompatActivity(), MenuEvent, KodeinAware {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.menu_fragment)
-        viewModel = ViewModelProvider(this,factory).get(MenuViewModel::class.java)
+        binding = DataBindingUtil.setContentView(this, R.layout.menu_fragment)
+        viewModel = ViewModelProvider(this, factory).get(MenuViewModel::class.java)
         binding!!.staffviewmodel = viewModel
         viewModel.menuEvent = this
         binding!!.headertitle.text = languageConstant.selectyourpacakge
         setupclickListener()
-        Log.e("venue id------>",intent.getStringExtra(ConstantLib.VENUE_ID)!!)
+        Log.e("venue id------>", intent.getStringExtra(ConstantLib.VENUE_ID)!!)
         setupAmount()
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.callMenuApi(intent.getStringExtra(ConstantLib.VENUE_ID),intent.getStringExtra(ConstantLib.DATE),intent.getStringExtra(ConstantLib.TIME))
+        viewModel.callMenuApi(
+            intent.getStringExtra(ConstantLib.VENUE_ID), intent.getStringExtra(
+                ConstantLib.DATE
+            ), intent.getStringExtra(ConstantLib.TIME)
+        )
     }
 
     private fun setupAmount() {
         val itemDao = AmiggoRoomDatabase.getDatabase(this).itemDao()
         repository = ItemRepository(itemDao)
         Coroutines.main {
-            repository!!.getTotalCartAmount(intent.getStringExtra(ConstantLib.VENUE_ID)!!).observe(this, Observer {
-               totalAmout = 0.0
-                for(item in it){
-                    totalAmout += (item.quantity * item.price)
-               }
-                binding!!.headerAmount.text = "Total $: $totalAmout"
-            })
+            repository!!.getTotalCartAmount(intent.getStringExtra(ConstantLib.VENUE_ID)!!).observe(
+                this,
+                Observer {
+                    totalAmout = 0.0
+                    for (item in it) {
+                        totalAmout += (item.quantity * item.price)
+                    }
+                    binding!!.headerAmount.text = "Total $"+String.format("%.2f", totalAmout)
+                })
         }
 
     }
@@ -84,11 +92,24 @@ class MenuActivity : AppCompatActivity(), MenuEvent, KodeinAware {
         binding!!.btnNextCart.setOnClickListener {
             if(totalAmout>0){
                 val intentFinalBasket = Intent(applicationContext, FinalBasketActivity::class.java)
-                intentFinalBasket.putExtra(ConstantLib.TAX,responseData.data.tax)
-                intentFinalBasket.putExtra(ConstantLib.TIME, intent.getStringExtra(ConstantLib.TIME))
-                intentFinalBasket.putExtra(ConstantLib.DATE, intent.getStringExtra(ConstantLib.DATE))
-                intentFinalBasket.putExtra(ConstantLib.VENUE_ID, intent.getStringExtra(ConstantLib.VENUE_ID))
-                intentFinalBasket.putExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO, intent.getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO))
+                intentFinalBasket.putExtra(ConstantLib.TAX, responseData.data.tax)
+                intentFinalBasket.putExtra(
+                    ConstantLib.TIME,
+                    intent.getStringExtra(ConstantLib.TIME)
+                )
+                intentFinalBasket.putExtra(
+                    ConstantLib.DATE,
+                    intent.getStringExtra(ConstantLib.DATE)
+                )
+                intentFinalBasket.putExtra(
+                    ConstantLib.VENUE_ID,
+                    intent.getStringExtra(ConstantLib.VENUE_ID)
+                )
+                intentFinalBasket.putExtra(
+                    ConstantLib.SELECTED_VENUE_DIN_TOGO, intent.getStringExtra(
+                        ConstantLib.SELECTED_VENUE_DIN_TOGO
+                    )
+                )
                 startActivity(intentFinalBasket)
             }else{
                 Errortoast(languageConstant.selectanyonemenuitem)
@@ -106,7 +127,7 @@ class MenuActivity : AppCompatActivity(), MenuEvent, KodeinAware {
         val fragmentManager =supportFragmentManager
         val adapter = ViewPagerAdapter(fragmentManager)
         for (item in menuList) {
-            adapter.addFragment(CommonFragment.newInstance(item.id,item), item.name)
+            adapter.addFragment(CommonFragment.newInstance(item.id, item), item.name)
         }
 //        staffViewPager.adapter = adapter
         staffViewPager.adapter = adapter
@@ -120,7 +141,7 @@ class MenuActivity : AppCompatActivity(), MenuEvent, KodeinAware {
 
     override fun onLoaded(menuList: List<MenuResponse.Data.Section>, response: MenuResponse) {
         binding!!.progressCircular.visibility = View.GONE
-        setupAdapter(menuList,binding!!.viewpager,binding!!.staffTabs)
+        setupAdapter(menuList, binding!!.viewpager, binding!!.staffTabs)
         responseData = response
     }
 
