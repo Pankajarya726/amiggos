@@ -69,7 +69,9 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
     }
 
     private fun callLanguageConstantApi() {
-        mainSplashPresenterImplementation!!.doLanguageConstantApi(Utility.createHeaders(sharedPreferences))
+        val json = JsonObject()
+        json.addProperty("type",1)
+        mainSplashPresenterImplementation!!.doLanguageConstantApi(Utility.createHeaders(sharedPreferences),json)
     }
 
 

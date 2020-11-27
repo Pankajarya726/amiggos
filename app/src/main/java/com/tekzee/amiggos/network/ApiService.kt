@@ -39,7 +39,6 @@ import com.tekzee.amiggos.ui.invitefriendnew.model.GetUserForInviteResponse
 import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
-import com.tekzee.amiggos.ui.memories.venuefragment.model.VenueTaggedResponse
 import com.tekzee.amiggos.ui.menu.commonfragment.model.CommonMenuResponse
 import com.tekzee.amiggos.ui.menu.model.MenuResponse
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingResponse
@@ -74,6 +73,7 @@ import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.BookingPaymentR
 import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.SetDefaultCardResponse
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
 import com.tekzee.amiggos.ui.venuedetailsnew.model.VenueDetails
+import com.tekzee.amiggos.ui.viewandeditprofile.model.AddImageResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewResponse
@@ -224,8 +224,8 @@ interface ApiService {
     ): Observable<Response<ValidateAppVersionResponse>>
 
 
-    @GET("guest/getLanguageConstant")
-    fun doLanguageConstantApi(@HeaderMap headers: HashMap<String, String?>): Observable<Response<JsonObject>>
+    @POST("getLanguageConstant_v1")
+    fun doLanguageConstantApi(@HeaderMap headers: HashMap<String, String?>,@Body json: JsonObject): Observable<Response<JsonObject>>
 
 
     @GET("auth/language")
@@ -280,7 +280,7 @@ interface ApiService {
     fun deletePhotoApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<CommonResponse>>
+    ): Observable<Response<AddImageResponse>>
 
 
     @POST("guest/set_defaultprofile")
@@ -396,13 +396,23 @@ interface ApiService {
     ): Observable<Response<UpdateProfileResponse>>
 
 
+
+    @Multipart
+    @POST("guest/updateProfile_image")
+    fun douploadprofileimage(
+        @Part filesMultipart: MultipartBody.Part?,
+        @Part("userid") userid: RequestBody,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
+
     @Multipart
     @POST("guest/addImage")
     fun doUpdateImage(
         @Part filesMultipart: Array<MultipartBody.Part?>,
         @Part("userid") userid: RequestBody,
         @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<CommonResponse>>
+    ): Observable<Response<AddImageResponse>>
 
     @Multipart
     @POST("guest/addImage")
@@ -985,7 +995,7 @@ interface ApiService {
     ): Observable<Response<AttachIdResponse>>
 
 
-    @POST("partner/chat_setting")
+    @POST("chat_setting")
     suspend fun sendNotification(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>

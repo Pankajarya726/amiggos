@@ -64,6 +64,24 @@ class Utility {
         }
 
 
+
+        fun checkMinimumAndMaximumPasswordCharacter(password: String): Boolean {
+            return password.length in 7..15
+        }
+
+        fun checkFirstName_lastname_phone_CharacterCount(email: String): Boolean {
+            return email.length <=12
+        }
+
+        fun checkMinimumAndMaximumUsernameCharacter(username: String): Boolean {
+            return username.length in 5..13
+        }
+
+        fun checkEmailCharacter(email: String): Boolean {
+            return email.length >= 255
+        }
+
+
         fun createHeaders(sharedPreferences: SharedPreference?): HashMap<String, String?> {
             val headers = HashMap<String, String?>()
             headers["language-code"] = if(sharedPreferences!!.getValueString(ConstantLib.LANGUAGE_CODE).isNullOrEmpty()){"en"}else{
@@ -147,8 +165,8 @@ class Utility {
             FirebaseAuth.getInstance().signOut()
             sharedPreference.clearSharedPreference()
             val intent = Intent(context, MainSplashActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }
 

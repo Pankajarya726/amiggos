@@ -7,25 +7,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/error_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:visibility="gone">
 
-            <TextView
-                android:id="@+id/errortext"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="@font/opensans_semibold"
-                android:gravity="center"
-                android:text="No Booking found"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15sdp" />
-
-
-        </LinearLayout>
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/refreshlayout"
             android:layout_width="match_parent"
@@ -46,6 +28,26 @@
                     android:id="@+id/invitation_recyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
+
+                <LinearLayout
+                    android:id="@+id/error_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/errortext"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:gravity="center"
+                        android:text="No Booking found"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_15sdp" />
+
+
+                </LinearLayout>
             </com.tekzee.amiggos.hiddensearchrecyclerview.utils.HiddenSearchWithRecyclerView>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

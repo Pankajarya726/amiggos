@@ -1,6 +1,7 @@
 package com.tekzee.amiggos.ui.stripepayment.addnewcard
 
 import android.os.Bundle
+import android.text.InputType
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
@@ -52,6 +53,7 @@ class AAddCard : BaseActivity(), AAddCardPresenter.AAddCardPresenterMainView {
             onBackPressed()
         }
 
+
         binding!!.cardForm.cardRequired(true)
             .expirationRequired(true)
             .cvvRequired(true)
@@ -59,6 +61,7 @@ class AAddCard : BaseActivity(), AAddCardPresenter.AAddCardPresenterMainView {
             .postalCodeRequired(false)
             .mobileNumberRequired(false)
             .actionLabel("Done")
+            .maskCvv(true)
             .setup(this)
 
 

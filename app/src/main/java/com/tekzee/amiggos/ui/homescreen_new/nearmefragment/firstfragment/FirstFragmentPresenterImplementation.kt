@@ -49,9 +49,9 @@ class FirstFragmentPresenterImplementation(
                             val responseData: NearByV2Response? = response.body()
                             if (responseData!!.data.nearestFreind.isNotEmpty()) {
                                 if (requestDatFromServer) {
-                                    mainView.onOnlineFriendInfiniteSuccess(responseData.data.nearestFreind)
+                                    mainView.onOnlineFriendInfiniteSuccess(responseData.data.nearestFreind,responseData)
                                 } else {
-                                    mainView.onOnlineFriendSuccess(responseData.data.nearestFreind,responseData.data.total_count)
+                                    mainView.onOnlineFriendSuccess(responseData.data.nearestFreind,responseData.data.total_count,responseData)
                                 }
                             } else {
                                 mainView.onOnlineFriendFailure(responseData.message)

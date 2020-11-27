@@ -11,7 +11,8 @@ class ChooseLanguagePresenter {
             createHeaders: HashMap<String, String?>
         )
         fun doLanguageConstantApi(
-            headers: HashMap<String, String?>
+            headers: HashMap<String, String?>,
+            json: JsonObject
         )
         fun onStop()
     }

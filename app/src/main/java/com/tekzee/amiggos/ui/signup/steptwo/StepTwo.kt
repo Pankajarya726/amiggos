@@ -27,6 +27,7 @@ import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.signup.steptwo.model.UserData
+import com.tekzee.amiggos.util.Errortoast
 
 class StepTwo: BaseActivity(), StepTwoPresenter.StepTwoPresenterMainView {
 
@@ -109,25 +110,28 @@ class StepTwo: BaseActivity(), StepTwoPresenter.StepTwoPresenterMainView {
 
     private fun validateFields(): Boolean {
         if(binding!!.tfirstname.text.toString().trim().isEmpty()){
-            Toast.makeText(applicationContext,"First name can not be blank...",Toast.LENGTH_LONG).show()
+            Errortoast(languageData!!.firstname_can_not_be_blank)
+            return false
+        }else if(!Utility.checkFirstName_lastname_phone_CharacterCount(binding!!.tfirstname.text.toString().trim())){
+            Errortoast(languageData!!.firstname_should_not_be_15_characters)
             return false
         }else if(binding!!.tlastname.text.toString().trim().isEmpty()){
-            Toast.makeText(applicationContext,"Last name can not be blank...",Toast.LENGTH_LONG).show()
+            Errortoast(languageData!!.last_can_not_be_blank)
+            return false
+        }else if(!Utility.checkFirstName_lastname_phone_CharacterCount(binding!!.tlastname.text.toString().trim())){
+            Errortoast(languageData!!.lastname_should_not_be_15_characters)
             return false
         } else if(stateId!!.isEmpty()){
-            Toast.makeText(applicationContext,"State can not be blank...",Toast.LENGTH_LONG).show()
+            Errortoast(languageData!!.please_select_state)
             return false
         }else if(cityId!!.isEmpty()){
-            Toast.makeText(applicationContext,"City can not be blank...",Toast.LENGTH_LONG).show()
+            Errortoast(languageData!!.please_select_city)
             return false
         }else if(binding!!.tphone.text.toString().trim().isEmpty()){
-            Toast.makeText(applicationContext,"Phone no can not be blank...",Toast.LENGTH_LONG).show()
+            Errortoast(languageData!!.phone_number_can_not_be_blank)
             return false
-        }else if(stateId!!.isEmpty()){
-            Toast.makeText(applicationContext,"State can not be blank...",Toast.LENGTH_LONG).show()
-            return false
-        }else if(cityId!!.isEmpty()){
-            Toast.makeText(applicationContext,"City can not be blank...",Toast.LENGTH_LONG).show()
+        }else if(!Utility.checkFirstName_lastname_phone_CharacterCount(binding!!.tphone.text.toString().trim())){
+            Errortoast(languageData!!.phone_number_should_not_be_15_characters)
             return false
         }
         return true

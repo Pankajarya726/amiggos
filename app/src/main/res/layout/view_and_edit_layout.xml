@@ -168,6 +168,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         android:enabled="false"
+                        android:imeOptions="actionNext"
                         android:fontFamily="@font/opensans_regular"
                         android:minHeight="@dimen/_35sdp"
                         android:textColor="@android:color/black" />
@@ -189,6 +190,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         android:enabled="false"
+                        android:imeOptions="actionDone"
                         android:fontFamily="@font/opensans_regular"
                         android:minHeight="@dimen/_35sdp"
                         android:textColor="@android:color/black" />
@@ -211,6 +213,7 @@
                         android:enabled="false"
                         android:fontFamily="@font/opensans_regular"
                         android:minHeight="@dimen/_35sdp"
+                        android:imeOptions="actionDone"
                         android:textColor="@android:color/black" />
 
                     <TextView
@@ -231,6 +234,7 @@
                         android:enabled="false"
                         android:fontFamily="@font/opensans_regular"
                         android:minHeight="@dimen/_35sdp"
+                        android:imeOptions="actionDone"
                         android:textColor="@android:color/black" />
 
                     <TextView
@@ -251,6 +255,7 @@
                         android:enabled="false"
                         android:fontFamily="@font/opensans_regular"
                         android:minHeight="@dimen/_35sdp"
+                        android:imeOptions="actionDone"
                         android:textColor="@android:color/black" />
 
 
@@ -269,7 +274,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
+                        android:imeOptions="actionDone"
                         android:enabled="false"
+                        android:inputType="phone"
                         android:fontFamily="@font/opensans_regular"
                         android:minHeight="@dimen/_35sdp"
                         android:textColor="@android:color/black" />
@@ -280,6 +287,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+
                         android:layout_marginTop="@dimen/_8sdp"
                         android:drawableLeft="@drawable/ic_add_photos"
                         android:drawablePadding="@dimen/_8sdp"

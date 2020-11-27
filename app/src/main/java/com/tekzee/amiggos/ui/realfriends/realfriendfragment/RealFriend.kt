@@ -200,7 +200,7 @@ class RealFriend : BaseFragment(), RealFriendPresenter.RealFriendMainView,
         totalCount: Int,
         responseData1: RealFriendV2Response
     ) {
-        NearMeFragment.setRealFriendBadge(totalCount)
+        //NearMeFragment.setRealFriendBadge(totalCount)
         realFriendPageNo++
         mydataList.addAll(responseData)
         adapter!!.notifyDataSetChanged()
@@ -211,7 +211,7 @@ class RealFriend : BaseFragment(), RealFriendPresenter.RealFriendMainView,
         if (mydataList.size == 0) {
             binding.errorLayout.visibility = View.VISIBLE
             binding.errortext.text = message
-            onlineFriendRecyclerview.visibility = View.GONE
+            onlineFriendRecyclerview.visibility = View.VISIBLE
         } else {
             onlineFriendRecyclerview.visibility = View.VISIBLE
             binding.errortext.text = ""

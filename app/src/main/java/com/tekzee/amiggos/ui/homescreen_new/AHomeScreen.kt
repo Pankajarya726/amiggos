@@ -244,6 +244,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
         }
 
         binding!!.notification.setOnClickListener {
+            binding!!.badge.setNumber(0)
             val intent = Intent(this, ANotification::class.java)
             startActivity(intent)
         }

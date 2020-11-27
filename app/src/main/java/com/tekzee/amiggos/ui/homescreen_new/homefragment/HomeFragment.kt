@@ -49,6 +49,7 @@ import com.tekzee.amiggos.ui.homescreen_new.homefragment.adapter.AutoSuggestAdap
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse.Data.Venue
 import com.tekzee.amiggos.ui.homescreen_new.model.BadgeCountResponse
+import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.ui.venuedetailsnew.AVenueDetails
 import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
@@ -62,7 +63,7 @@ import java.util.concurrent.TimeUnit
 
 
 class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
-     Listener, com.google.android.gms.maps.OnMapReadyCallback {
+    Listener, com.google.android.gms.maps.OnMapReadyCallback {
     private var mMap: GoogleMap? = null
     private lateinit var notifylistner: NotifyNotification
     private var finalDataList = ArrayList<Venue>()
@@ -82,9 +83,13 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     private var languageData: LanguageData? = null
     private var easyWayLocation: EasyWayLocation? = null
     private lateinit var arrayAdapter: AutoCompleteAdapter
+    private var groupradio: RadioGroup? = null
 
     companion object {
         private val homefragment: HomeFragment? = null
+         var staticRequestBadgeCount: Int = 0
+         var staticReaFriendBadgeCount: Int = 0
+         var staticNearMeBadgeCount: Int = 0
 
         fun newInstance(): HomeFragment {
             if (homefragment == null) {
@@ -113,9 +118,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         val mapFragment: SupportMapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
-
-
+        groupradio = view.findViewById(R.id.radiogroup);
         return view
     }
 
@@ -360,7 +363,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                 marker = layoutInflater.inflate(R.layout.custom_marker_circular, null)
                 imageview = marker.findViewById(R.id.marker_image) as ImageView
 
-                if(items.nearByCount.toInt()>0){
+                if (items.nearByCount.toInt() > 0) {
                     BadgeFactory.create(requireContext())
                         .setTextColor(resources.getColor(R.color.white))
                         .setWidthAndHeight(20, 20)
@@ -462,9 +465,15 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     }
 
     override fun onBadgeApiSuccess(responseData: BadgeCountResponse) {
-        AHomeScreen.setupNearByCountBadge(responseData.data.nearByCountBatch.toInt())
+        val bottomNearMeBatchCount =
+            responseData.data.nearByCountBatch.toInt() + responseData.data.realFreind.toInt() + responseData.data.request.toInt()
+        AHomeScreen.setupNearByCountBadge(bottomNearMeBatchCount)
         AHomeScreen.setupMemoryCountBadge(responseData.data.memoryCountBatch.toInt())
         AHomeScreen.setupBookingCountBadge(responseData.data.bookingCountBatch.toInt())
+        AHomeScreen.setupBookingCountBadge(responseData.data.bookingCountBatch.toInt())
+        staticRequestBadgeCount = responseData.data.request.toInt()
+        staticReaFriendBadgeCount = responseData.data.realFreind.toInt()
+        staticNearMeBadgeCount = responseData.data.nearByCountBatch.toInt()
         ConstantLib.NOTIFICATIONCOUNT = responseData.data.notificationCountBatch
         notifylistner.onNotify()
     }
@@ -529,6 +538,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         Logger.d("Location on called")
     }
 
+
     override fun currentLocation(location: Location?) {
         latitude = location!!.latitude.toString()
         longitude = location.longitude.toString()
@@ -581,7 +591,8 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                     val intent = Intent(activity, AProfileDetails::class.java)
                     intent.putExtra(ConstantLib.FRIEND_ID, venueData.id.toString())
                     intent.putExtra(ConstantLib.PROFILE_IMAGE, venueData.image)
-                    startActivity(intent)
+//                    startActivity(intent)
+                    startActivityForResult(intent, 111)
                     Animatoo.animateSlideRight(activity)
                 } else {
                     val dialog: BottomDialogExtended =
@@ -595,18 +606,49 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                             requireContext(),
                             AViewAndEditProfile::class.java
                         )
-                        startActivity(intent)
+//                        startActivity(intent)
+                        startActivityForResult(intent, 111)
                     }
                 }
 
             } else {
-                val intent = Intent(activity, AVenueDetails::class.java)
-                intent.putExtra(ConstantLib.VENUE_ID, venueData.id.toString())
-                intent.putExtra(ConstantLib.IS_GOOGLE_VENUE, venueData.is_google_venue.toInt())
-                startActivity(intent)
+                if (Utility.checkProfileComplete(sharedPreference)) {
+                    val intent = Intent(activity, AVenueDetails::class.java)
+                    intent.putExtra(ConstantLib.VENUE_ID, venueData.id.toString())
+                    intent.putExtra(ConstantLib.IS_GOOGLE_VENUE, venueData.is_google_venue.toInt())
+//                startActivity(intent)
+                    startActivityForResult(intent, 111)
+                } else {
+                    val dialog: BottomDialogExtended =
+                        BottomDialogExtended.newInstance(
+                            languageData!!.profilecompletedata,
+                            arrayOf(languageData!!.yes)
+                        )
+                    dialog.show(childFragmentManager, "dialog")
+                    dialog.setListener { position ->
+                        val intent = Intent(
+                            requireContext(),
+                            AViewAndEditProfile::class.java
+                        )
+//                        startActivity(intent)
+                        startActivityForResult(intent, 111)
+                    }
+                }
             }
         }
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == 2) {
+            searchkeyword = ""
+            categoryId = ""
+            groupradio!!.clearCheck()
+            requireView().findViewById<AutoCompleteTextView>(R.id.autoCompleteEditText).setText("")
+            requireView().findViewById<AutoCompleteTextView>(R.id.search_txt).setText("")
+            callHomeApi(0)
+        }
     }
 
 }

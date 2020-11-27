@@ -15,6 +15,7 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.NearMeFragmentBinding
+import com.tekzee.amiggos.ui.homescreen_new.homefragment.HomeFragment
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.adapter.ViewPagerTwoAdapter
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.FirstFragment
 import com.tekzee.amiggos.ui.realfriends.invitations.Invitations
@@ -25,9 +26,10 @@ import com.tekzee.mallortaxi.base.BaseFragment
 
 class NearMeFragment : BaseFragment() {
 
-    private var binding: NearMeFragmentBinding? =null
+    private var binding: NearMeFragmentBinding? = null
     private var sharedPreference: SharedPreference? = null
     private var languageData: LanguageData? = null
+
     companion object {
         private var nearMebadge: TabLayout.Tab? = null
         private var realFriendBadge: TabLayout.Tab? = null
@@ -37,39 +39,40 @@ class NearMeFragment : BaseFragment() {
         private val nearmefragment: NearMeFragment? = null
 
 
-
-        fun newInstance(intent: Intent, tab: Int): NearMeFragment{
+        fun newInstance(intent: Intent, tab: Int): NearMeFragment {
             mIntent = intent
             mtab = tab
-            if(nearmefragment == null){
+            if (nearmefragment == null) {
                 return NearMeFragment()
             }
             return nearmefragment
         }
 
         fun setNearmeBadge(count: Int) {
-            if(count>0){
+            if (count > 0) {
                 val badge = nearMebadge!!.orCreateBadge
                 badge.number = count
-            }else{
+            } else {
                 nearMebadge!!.removeBadge()
             }
 
         }
+
         fun setRealFriendBadge(count: Int) {
-            if(count>0){
+            if (count > 0) {
                 val badge = realFriendBadge!!.orCreateBadge
                 badge.number = count
-            }else{
+            } else {
                 realFriendBadge!!.removeBadge()
             }
 
         }
+
         fun setInvitationBadge(count: Int) {
-            if(count>0){
+            if (count > 0) {
                 val badge = invitationBadge!!.orCreateBadge
                 badge.number = count
-            }else{
+            } else {
                 invitationBadge!!.removeBadge()
             }
         }
@@ -96,7 +99,6 @@ class NearMeFragment : BaseFragment() {
     }
 
 
-
     private fun setupAdapter(
         viewPager: ViewPager2,
         tabs: TabLayout
@@ -114,20 +116,21 @@ class NearMeFragment : BaseFragment() {
                     FirstFragment.newInstance()
                     tab.text = languageData!!.pNearme
                     nearMebadge = tab
+                    setNearmeBadge(HomeFragment.staticNearMeBadgeCount)
 
                 }
                 1 -> {
                     RealFriend.newInstance()
                     tab.text = languageData!!.pRealFriends
                     realFriendBadge = tab
-
+                    setRealFriendBadge(HomeFragment.staticReaFriendBadgeCount)
 
                 }
                 2 -> {
                     Invitations.newInstance()
                     tab.text = languageData!!.pInvitaion
                     invitationBadge = tab
-
+                    setInvitationBadge(HomeFragment.staticRequestBadgeCount)
                 }
             }
         }.attach()
@@ -153,18 +156,21 @@ class NearMeFragment : BaseFragment() {
     }
 
     private fun setUpHeading(selectedTabPosition: Int) {
-        if(selectedTabPosition ==0){
+        if (selectedTabPosition == 0) {
             binding!!.nearMeHeading.text = languageData!!.pNearme
-        }else  if(selectedTabPosition ==1){
+            setNearmeBadge(0)
+        } else if (selectedTabPosition == 1) {
             binding!!.nearMeHeading.text = languageData!!.pRealFriends
-        }else if(selectedTabPosition ==2){
+            setRealFriendBadge(0)
+        } else if (selectedTabPosition == 2) {
             binding!!.nearMeHeading.text = languageData!!.pInvitaion
+            setInvitationBadge(0)
         }
     }
 
 
     override fun validateError(message: String) {
-       Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
     private fun setupViews(view: View?) {
@@ -173,6 +179,6 @@ class NearMeFragment : BaseFragment() {
 
 }
 
-interface Heading{
+interface Heading {
     fun setHeading(heading: String)
 }

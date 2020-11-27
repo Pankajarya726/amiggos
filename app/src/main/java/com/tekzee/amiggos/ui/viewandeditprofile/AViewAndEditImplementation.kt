@@ -7,6 +7,7 @@ import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.network.ApiClient
 import com.tekzee.amiggos.ui.signup.steptwo.model.CityResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.StateResponse
+import com.tekzee.amiggos.ui.viewandeditprofile.model.AddImageResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -72,9 +73,9 @@ class AViewAndEditImplementation(
                     val responseCode = response.code()
                     when (responseCode) {
                         200 -> {
-                            val responseData: CommonResponse? = response.body()
+                            val responseData: AddImageResponse? = response.body()
                             if (responseData!!.status) {
-                                mainView.onPhotoDeleted(responseData.message)
+                                mainView.onPhotoDeleted(responseData.message,responseData)
                             } else {
                                 mainView.validateError(responseData.message)
                             }
@@ -121,6 +122,8 @@ class AViewAndEditImplementation(
             mainView.validateError(context!!.getString(R.string.check_internet))
         }
     }
+
+
 
 
     override fun doCallStateApi(input: JsonObject, createHeaders: HashMap<String, String?>) {
@@ -231,6 +234,44 @@ class AViewAndEditImplementation(
         }
     }
 
+
+    override fun doUploadSingleProfileApi(
+        fileMultipartBody: MultipartBody.Part?,
+        useridRequestBody: RequestBody,
+        createHeaders: HashMap<String, String?>
+    ) {
+        mainView.showProgressbar()
+        if (mainView.checkInternet()) {
+            disposable = ApiClient.instance.doUploadeProfileApi(
+                fileMultipartBody,
+                useridRequestBody,
+                createHeaders
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    mainView.hideProgressbar()
+                    val responseCode = response.code()
+                    when (responseCode) {
+                        200 -> {
+                            val responseData: CommonResponse? = response.body()
+                            if (responseData!!.status) {
+                                mainView.onSingleProfileUploadSuccess(responseData.message)
+                            } else {
+                                mainView.validateError(responseData.message.toString())
+                            }
+                        }
+                    }
+                }, { error ->
+                    mainView.hideProgressbar()
+                    mainView.validateError(error.message.toString())
+                })
+        } else {
+            mainView.hideProgressbar()
+            mainView.validateError(context!!.getString(R.string.check_internet))
+        }
+    }
+
     override fun doUpdateUserImageApi(
         file: Array<MultipartBody.Part?>,
         useridRequestBody: RequestBody,
@@ -250,9 +291,9 @@ class AViewAndEditImplementation(
                     val responseCode = response.code()
                     when (responseCode) {
                         200 -> {
-                            val responseData: CommonResponse? = response.body()
+                            val responseData: AddImageResponse? = response.body()
                             if (responseData!!.status) {
-                                mainView.onUploadImageSuccess(responseData.message)
+                                mainView.onUploadImageSuccess(responseData.message,responseData)
                             } else {
                                 mainView.validateError(responseData.message.toString())
                             }
@@ -290,7 +331,7 @@ class AViewAndEditImplementation(
                         200 -> {
                             val responseData: CommonResponse? = response.body()
                             if (responseData!!.status) {
-                                mainView.onUploadImageSuccess(responseData.message)
+                                mainView.onUploadImageSingleSuccess(responseData.message)
                             } else {
                                 mainView.validateError(responseData.message.toString())
                             }

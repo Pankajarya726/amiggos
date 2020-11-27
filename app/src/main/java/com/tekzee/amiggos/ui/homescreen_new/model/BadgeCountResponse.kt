@@ -18,6 +18,10 @@ data class BadgeCountResponse(
         val memoryCountBatch: String = "",
         @SerializedName("near_by_count_batch")
         val nearByCountBatch: String = "",
+        @SerializedName("real_freind")
+        val realFreind: String = "",
+        @SerializedName("request")
+        val request: String = "",
         @SerializedName("notification_count_batch")
         val notificationCountBatch: String = ""
     )

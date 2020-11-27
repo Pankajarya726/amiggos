@@ -27,7 +27,6 @@ import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
 import com.tekzee.amiggos.custom.ProfileRestrictionFragment
 import com.tekzee.amiggos.hiddensearchrecyclerview.utils.HiddenSearchWithRecyclerView
-import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.Heading
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.adapter.FirstFragmentAdapter
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
@@ -42,6 +41,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import io.reactivex.functions.Predicate
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.first_fragment.*
 import java.util.concurrent.TimeUnit
 
 
@@ -196,40 +196,47 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
 
     override fun onOnlineFriendSuccess(
         responseData: List<NearByV2Response.Data.NearestFreind>,
-        totalCount: Int
+        totalCount: Int,
+        responseData1: NearByV2Response
     ) {
-        NearMeFragment.setNearmeBadge(totalCount)
+//        NearMeFragment.setNearmeBadge(totalCount)
         onlineFriendPageNo++
         mydataList.addAll(responseData)
         adapter!!.notifyDataSetChanged()
-        setupErrorVisibility()
+        setupErrorVisibility(responseData1.message)
     }
 
-    override fun onOnlineFriendInfiniteSuccess(responseData: List<NearByV2Response.Data.NearestFreind>) {
+    override fun onOnlineFriendInfiniteSuccess(
+        responseData: List<NearByV2Response.Data.NearestFreind>,
+        responseData1: NearByV2Response
+    ) {
         onlineFriendPageNo++
         adapter?.setLoadingStatus(true)
         mydataList.removeAt(mydataList.size - 1)
         mydataList.addAll(responseData)
         adapter?.notifyDataSetChanged()
-        setupErrorVisibility()
+        setupErrorVisibility(responseData1.message)
     }
 
-    override fun onOnlineFriendFailure(responseData: String) {
+    override fun onOnlineFriendFailure(message: String) {
         if (mydataList.size > 0) {
             adapter?.setLoadingStatus(false)
             mydataList.removeAt(mydataList.size - 1)
             adapter?.notifyDataSetChanged()
         }
 
-        setupErrorVisibility()
+        setupErrorVisibility(message)
     }
 
-    fun setupErrorVisibility(){
-        if(mydataList.size == 0){
-            errorLayout!!.visibility = View.GONE
-            searchView!!.visibility = View.VISIBLE
-        }else{
-            searchView!!.visibility = View.VISIBLE
+    fun setupErrorVisibility(message: String) {
+
+        if (mydataList.size == 0) {
+            errorLayout!!.visibility = View.VISIBLE
+            errortext.text = message
+            first_fragment_recyclierview.visibility = View.VISIBLE
+        } else {
+            first_fragment_recyclierview.visibility = View.VISIBLE
+            errortext.text  = ""
             errorLayout!!.visibility = View.GONE
         }
     }
@@ -243,7 +250,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
     private fun setupViews(view: View?) {
         searchView = requireView().findViewById<HiddenSearchWithRecyclerView>(R.id.hidden_search_with_recycler)
         searchView!!.searchBarSearchView.queryHint = languageData!!.klSearchTitle
-        errorLayout = requireView().findViewById(R.id.error)
+        errorLayout = requireView().findViewById(R.id.error_layout)
 
         RxSearchObservable.fromView(searchView!!.searchBarSearchView)
             .debounce(500, TimeUnit.MILLISECONDS)
@@ -365,4 +372,6 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         callOnlineFriendApi(false, "", isFragmentVisible)
 
     }
+
+
 }

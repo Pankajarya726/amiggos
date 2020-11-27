@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.bumptech.glide.Glide
 import com.google.gson.JsonObject
 import com.impulsiveweb.galleryview.GalleryView
@@ -136,6 +137,8 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
             onBackPressed()
         }
 
+
+
         binding!!.bookNow.setOnClickListener {
             if (isBookingAvailable == 1) {
                 if (response!!.clubData.goOrder == 1 && response!!.clubData.reservation == 1) {
@@ -175,6 +178,14 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         })
     }
 
+    override fun onBackPressed() {
+//        super.onBackPressed()
+
+        val intent = Intent()
+        setResult(2, intent)
+        finish()
+        Animatoo.animateSlideLeft(this)
+    }
 
     private fun callLikeUnlikeApi() {
         val input: JsonObject = JsonObject()

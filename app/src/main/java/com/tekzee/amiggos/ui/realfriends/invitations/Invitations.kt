@@ -272,7 +272,7 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
         if (items.size == 0) {
             binding.errorLayout.visibility = View.VISIBLE
             binding.errortext.text = message
-            binding.invitationRecyclerview.visibility = View.GONE
+            binding.invitationRecyclerview.visibility = View.VISIBLE
         } else {
             binding.invitationRecyclerview.visibility = View.VISIBLE
             binding.errortext.text = ""

@@ -26,17 +26,18 @@ import com.tekzee.amiggos.firebasemodel.User
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.settings.model.SettingsResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.UserData
+import com.tekzee.amiggos.util.Errortoast
 import com.tsongkha.spinnerdatepicker.DatePicker
 import com.tsongkha.spinnerdatepicker.DatePickerDialog
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder
 import java.util.*
 
 
-class StepOne: BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
+class StepOne : BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
     DatePickerDialog.OnDateSetListener {
 
-    private var dateOfBirth: String?=""
-    private var binding: StepOneBinding? =null
+    private var dateOfBirth: String? = ""
+    private var binding: StepOneBinding? = null
     private var sharedPreferences: SharedPreference? = null
     private var languageData: LanguageData? = null
     private var stepOneImplementation: StepOneImplementation? = null
@@ -49,7 +50,7 @@ class StepOne: BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
         database = FirebaseDatabase.getInstance().reference
         sharedPreferences = SharedPreference(this)
         languageData = sharedPreferences!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        stepOneImplementation = StepOneImplementation(this,this)
+        stepOneImplementation = StepOneImplementation(this, this)
         setupLanguage()
         setupClickListener()
 
@@ -62,7 +63,7 @@ class StepOne: BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
         }
 
         binding!!.btnNextStepOne.setOnClickListener {
-            if(validateFields()){
+            if (validateFields()) {
                 callSignUpActivity()
             }
         }
@@ -70,23 +71,31 @@ class StepOne: BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
 
 
         binding!!.sdateOfBirth.setOnTouchListener { v: View, event: MotionEvent ->
-           if(event.action == MotionEvent.ACTION_UP){
+            if (event.action == MotionEvent.ACTION_UP) {
 
-               val todaysDate = Calendar.getInstance()
-               todaysDate.add(Calendar.YEAR,-18)
-               SpinnerDatePickerDialogBuilder()
-                   .context(this)
-                   .callback(this)
-                   .showTitle(true)
-                   .showDaySpinner(true)
-                   .spinnerTheme(R.style.NumberPickerStyle)
-                   .defaultDate(todaysDate.get(Calendar.YEAR), todaysDate.get(Calendar.MONTH), todaysDate.get(Calendar.DAY_OF_MONTH))
-                   .maxDate(todaysDate.get(Calendar.YEAR), todaysDate.get(Calendar.MONTH), todaysDate.get(Calendar.DAY_OF_MONTH))
-                   .minDate(1900, 0, 1)
-                   .build()
-                   .show()
+                val todaysDate = Calendar.getInstance()
+                todaysDate.add(Calendar.YEAR, -18)
+                SpinnerDatePickerDialogBuilder()
+                    .context(this)
+                    .callback(this)
+                    .showTitle(true)
+                    .showDaySpinner(true)
+                    .spinnerTheme(R.style.NumberPickerStyle)
+                    .defaultDate(
+                        todaysDate.get(Calendar.YEAR),
+                        todaysDate.get(Calendar.MONTH),
+                        todaysDate.get(Calendar.DAY_OF_MONTH)
+                    )
+                    .maxDate(
+                        todaysDate.get(Calendar.YEAR),
+                        todaysDate.get(Calendar.MONTH),
+                        todaysDate.get(Calendar.DAY_OF_MONTH)
+                    )
+                    .minDate(1900, 0, 1)
+                    .build()
+                    .show()
 
-           }
+            }
             true
         }
     }
@@ -94,11 +103,11 @@ class StepOne: BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
 
     private fun callSignUpActivity() {
         val input = JsonObject()
-        input.addProperty("username",binding!!.susername.text.toString().trim())
-        input.addProperty("email",binding!!.semail.text.toString().trim())
-        input.addProperty("password",binding!!.spassword.text.toString().trim())
-        input.addProperty("date_of_birth",dateOfBirth)
-        input.addProperty("device_id",sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN))
+        input.addProperty("username", binding!!.susername.text.toString().trim())
+        input.addProperty("email", binding!!.semail.text.toString().trim())
+        input.addProperty("password", binding!!.spassword.text.toString().trim())
+        input.addProperty("date_of_birth", dateOfBirth)
+        input.addProperty("device_id", sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN))
         input.addProperty("device_type", ConstantLib.DEVICETYPE)
         input.addProperty("latitude", "")
         input.addProperty("longitude", "")
@@ -106,26 +115,68 @@ class StepOne: BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
     }
 
     private fun validateFields(): Boolean {
-        if(binding!!.semail.text.toString().trim().isEmpty()){
-            Toast.makeText(applicationContext,"Email can not be blank..",Toast.LENGTH_LONG).show()
+
+        if (binding!!.semail.text.toString().trim().isEmpty()) {
+            Errortoast(languageData!!.email_can_not_be_blank)
             return false
-        }else if(!Utility.isEmailValid(binding!!.semail.text.toString().trim())){
-            Toast.makeText(applicationContext,"Please provide valid email..",Toast.LENGTH_LONG).show()
+        }
+
+        if (!Utility.isEmailValid(binding!!.semail.text.toString().trim())) {
+            Errortoast(languageData!!.please_provide_valid_email)
             return false
-        }else if(binding!!.spassword.text.toString().trim().isEmpty()){
-            Toast.makeText(applicationContext,"Password can not be blank..",Toast.LENGTH_LONG).show()
+        }
+
+        if (Utility.checkEmailCharacter(binding!!.semail.text.toString().trim())) {
+            Errortoast(languageData!!.please_provide_valid_email)
             return false
-        }else if(binding!!.sconfirmpassword.text.toString().trim().isEmpty()){
-            Toast.makeText(applicationContext,"Confirm password can not be blank..",Toast.LENGTH_LONG).show()
+        }
+
+        if (binding!!.spassword.text.toString().trim().isEmpty()) {
+            Errortoast(languageData!!.password_can_not_blank)
             return false
-        }else if(binding!!.spassword.text.toString().trim()!= binding!!.sconfirmpassword.text.toString().trim()){
-            Toast.makeText(applicationContext,"Password and Confirm password should be same..",Toast.LENGTH_LONG).show()
+        }
+
+        if (!Utility.checkMinimumAndMaximumPasswordCharacter(
+                binding!!.spassword.text.toString().trim()
+            )
+        ) {
+            Errortoast(languageData!!.password_should_be_greater_than_6_and_smaller_than_16)
             return false
-        }else if(binding!!.susername.text.toString().trim().isEmpty()){
-            Toast.makeText(applicationContext,"Username can not be blank..",Toast.LENGTH_LONG).show()
+        }
+
+        if (binding!!.sconfirmpassword.text.toString().trim().isEmpty()) {
+
+            Errortoast(languageData!!.confirm_password_can_not_be_blank)
             return false
-        }else if(binding!!.sdateOfBirth.text.toString().trim().isEmpty()){
-            Toast.makeText(applicationContext,"Date of birth can not be blank..",Toast.LENGTH_LONG).show()
+        }
+
+        if (!Utility.checkMinimumAndMaximumPasswordCharacter(binding!!.sconfirmpassword.text.toString().trim())) {
+            Errortoast(languageData!!.confirm_password_should_be_greater_than_6_and_smaller_than_16)
+            return false
+        }
+
+        if (binding!!.spassword.text.toString()
+                .trim()!=binding!!.sconfirmpassword.text.toString().trim()
+        ) {
+            Errortoast(languageData!!.password_and_confirm_password_can_not_be_blank)
+            return false
+        }
+
+        if (binding!!.susername.text.toString().trim().isEmpty()) {
+            Errortoast(languageData!!.username_can_not_be_blank)
+            return false
+        }
+
+        if (!Utility.checkMinimumAndMaximumUsernameCharacter(
+                binding!!.susername.text.toString().trim()
+            )
+        ) {
+            Errortoast(languageData!!.username_should_be_between_4_to_12_characters)
+            return false
+        }
+
+        if (binding!!.sdateOfBirth.text.toString().trim().isEmpty()) {
+            Errortoast(languageData!!.date_of_birth_can_not_be_blank)
             return false
         }
         return true
@@ -148,18 +199,28 @@ class StepOne: BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
 
     private fun checkIfFirebaseUserExist(responseData: UserData.Data) {
 
-        val email = responseData.userid.toString().toLowerCase()+"_1" + "@amiggos.com"
+        val email = responseData.userid.toString().toLowerCase() + "_1" + "@amiggos.com"
         val password = "amiggos@123"
 
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                createOrUpdateUserFirebaseUser(responseData,sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN)!!)
+                createOrUpdateUserFirebaseUser(
+                    responseData,
+                    sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN)!!
+                )
             } else {
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        createOrUpdateUserFirebaseUser(responseData,sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN)!!)
+                        createOrUpdateUserFirebaseUser(
+                            responseData,
+                            sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN)!!
+                        )
                     } else {
-                        Toast.makeText(applicationContext,task.exception!!.message!!,Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            applicationContext,
+                            task.exception!!.message!!,
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
             }
@@ -233,12 +294,12 @@ class StepOne: BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
 
 
     override fun onSignUpFailure(message: String) {
-        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
 
     override fun validateError(message: String) {
-        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
     override fun onBackPressed() {

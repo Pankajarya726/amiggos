@@ -47,11 +47,12 @@ class ChooseLanguagePresenterImplementation(private var mainView: ChooseLanguage
     }
 
     override fun doLanguageConstantApi(
-        headers: HashMap<String, String?>
+        headers: HashMap<String, String?>,
+        json: JsonObject
     ) {
         mainView.showProgressbar()
         if (mainView.checkInternet()) {
-            disposable = ApiClient.instance.doLanguageConstantApi(headers)
+            disposable = ApiClient.instance.doLanguageConstantApi(headers, json)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->

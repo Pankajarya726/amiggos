@@ -185,6 +185,12 @@ class ABookingDetails : BaseActivity(), ABookingDetailsPresenter.ABookingDetails
         adapter.notifyDataSetChanged()
         data.addAll(responseData!!.data)
         adapter.notifyDataSetChanged()
+        if(responseData.data[0].allow_invite.equals("0")){
+            binding!!.txtInviteFriend.visibility = View.GONE
+        }else{
+            binding!!.txtInviteFriend.visibility = View.VISIBLE
+        }
+
 
     }
 

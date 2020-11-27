@@ -6,6 +6,7 @@ import com.tekzee.amiggos.ui.signup.steptwo.model.StateResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
 import com.tekzee.amiggos.base.BaseMainView
+import com.tekzee.amiggos.ui.viewandeditprofile.model.AddImageResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
@@ -47,6 +48,12 @@ class AViewAndEditPresenter  {
             createHeaders1: HashMap<String, String?>
         )
 
+        fun doUploadSingleProfileApi(
+            file: MultipartBody.Part?,
+            useridRequestBody: RequestBody,
+            createHeaders1: HashMap<String, String?>
+        )
+
         fun doUpdateUserImageApi(
             file: Array<MultipartBody.Part?>,
             useridRequestBody: RequestBody,
@@ -68,11 +75,13 @@ class AViewAndEditPresenter  {
         fun onStateSuccess(responseData: List<StateResponse.Data.States>)
         fun onCitySuccess(responseData: List<CityResponse.Data.City>)
         fun onProfileUpdateSuccess(message: UpdateProfileResponse?)
-        fun onUploadImageSuccess(message: String)
+        fun onSingleProfileUploadSuccess(message: String)
+        fun onUploadImageSuccess(message: String, responseData: AddImageResponse?)
+        fun onUploadImageSingleSuccess(message: String)
         fun onUpdateProfileImage(message: String)
         fun onProfileUpdateFailure(message: String)
         fun onStateFailure(responseData: String)
         fun onCityFailure(responseData: String)
-        fun onPhotoDeleted(message: String)
+        fun onPhotoDeleted(message: String, responseData: AddImageResponse)
     }
 }

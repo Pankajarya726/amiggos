@@ -87,6 +87,7 @@ class AttachIdActivity : BaseActivity(), AttachIdActivityPresenter.AttachIdMainV
     private fun pickImage() {
         CropImage.activity()
             .setCropShape(CropImageView.CropShape.RECTANGLE)
+            .setAspectRatio(1,1)
             .start(this)
     }
 

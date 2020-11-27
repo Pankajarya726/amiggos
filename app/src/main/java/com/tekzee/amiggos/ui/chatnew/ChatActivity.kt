@@ -146,10 +146,10 @@ class ChatActivity : AppCompatActivity(), ChatEvent, KodeinAware, ChatActivityLi
                                     reciverUser,
                                     prefs.getValueInt(ConstantLib.USER_ID).toString()
                                 )
-//                                sendNotification(
-//                                    binding!!.etChat.text.trim().toString(),
-//                                    friendId!!
-//                                )
+                                sendNotification(
+                                    binding!!.etChat.text.trim().toString(),
+                                    friendId!!
+                                )
                                 binding!!.etChat.setText("")
                             }
 

@@ -38,7 +38,6 @@ import com.tekzee.amiggos.ui.invitefriendnew.model.GetUserForInviteResponse
 import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
-import com.tekzee.amiggos.ui.memories.venuefragment.model.VenueTaggedResponse
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingResponse
 import com.tekzee.amiggos.ui.mylifestyle.model.MyLifestyleResponse
 import com.tekzee.amiggos.ui.mylifestylesubcategory.model.MyLifestyleSubcategoryResponse
@@ -71,6 +70,7 @@ import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.BookingPaymentR
 import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.SetDefaultCardResponse
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
 import com.tekzee.amiggos.ui.venuedetailsnew.model.VenueDetails
+import com.tekzee.amiggos.ui.viewandeditprofile.model.AddImageResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewResponse
@@ -149,9 +149,10 @@ class ApiClient {
 
 
     fun doLanguageConstantApi(
-        headers: HashMap<String, String?>
+        headers: HashMap<String, String?>,
+        json: JsonObject
     ): Observable<Response<JsonObject>> {
-        return apiService.doLanguageConstantApi(headers)
+        return apiService.doLanguageConstantApi(headers,json)
     }
 
     fun doCallLanguageApi(
@@ -248,13 +249,24 @@ class ApiClient {
             createHeaders
         )
     }
+    fun doUploadeProfileApi(
+        fileMultipartBody: MultipartBody.Part?,
+        useridRequestBody: RequestBody,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.douploadprofileimage(
+            fileMultipartBody,
+            useridRequestBody,
+            createHeaders
+        )
+    }
 
 
     fun doUpdateImage(
         fileMultipartBody: Array<MultipartBody.Part?>,
         useridRequestBody: RequestBody,
         createHeaders: HashMap<String, String?>
-    ): Observable<Response<CommonResponse>> {
+    ): Observable<Response<AddImageResponse>> {
         return apiService.doUpdateImage(
             fileMultipartBody,
             useridRequestBody,
@@ -351,7 +363,7 @@ class ApiClient {
     fun deletePhotoApi(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
-    ): Observable<Response<CommonResponse>> {
+    ): Observable<Response<AddImageResponse>> {
         return apiService.deletePhotoApi(input, createHeaders)
     }
 
