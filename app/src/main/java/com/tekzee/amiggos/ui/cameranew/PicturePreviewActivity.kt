@@ -21,6 +21,7 @@ import com.tekzee.amiggos.util.AppExecutor
 import com.tekzee.amiggos.util.BitmapUtils
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.util.Utility
 
 
 class PicturePreviewActivity : BaseActivity() {
@@ -128,6 +129,10 @@ class PicturePreviewActivity : BaseActivity() {
             message,
             Toast.LENGTH_LONG
         ).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
     companion object {

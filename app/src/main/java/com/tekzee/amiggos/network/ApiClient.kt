@@ -49,6 +49,7 @@ import com.tekzee.amiggos.ui.mypreferences.model.PreferenceSavedResponse
 import com.tekzee.amiggos.ui.newpreferences.amusictypefragment.model.AMusicTypeResponse
 import com.tekzee.amiggos.ui.newpreferences.avenuetypefragment.model.AVenueTypeResponse
 import com.tekzee.amiggos.ui.notification_new.model.ANotificationResponse
+import com.tekzee.amiggos.ui.notification_new.model.PartyInvitesNotificationResponse
 //import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
 import com.tekzee.amiggos.ui.ourmemories.model.GetFriendForInviteAfterCreateMemoryResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
@@ -329,7 +330,7 @@ class ApiClient {
     fun doUpdateFirebaseApi(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
-    ): Observable<Response<LoginResponse>> {
+    ): Observable<Response<CommonResponse>> {
         return apiService.doUpdateFirebaseApi(input, createHeaders)
     }
 
@@ -428,6 +429,20 @@ class ApiClient {
         createHeaders: HashMap<String, String?>
     ): Observable<Response<ANotificationResponse>> {
         return apiService.doCallNotification(input, createHeaders)
+    }
+
+    fun doCallPartyInvitesNotification(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<PartyInvitesNotificationResponse>> {
+        return apiService.doCallPartyInvitesNotification(input, createHeaders)
+    }
+
+    fun doCallNotificationnew(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<String>> {
+        return apiService.doCallNotificationnew(input, createHeaders)
     }
 
 //    fun getNearByUser(

@@ -46,7 +46,9 @@ class PartyInvitesPresenterImplementation(private var mainView: PartyInvitesPres
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -79,7 +81,9 @@ class PartyInvitesPresenterImplementation(private var mainView: PartyInvitesPres
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -113,7 +117,9 @@ class PartyInvitesPresenterImplementation(private var mainView: PartyInvitesPres
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

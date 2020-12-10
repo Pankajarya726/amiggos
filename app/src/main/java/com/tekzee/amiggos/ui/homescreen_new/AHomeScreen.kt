@@ -46,7 +46,9 @@ import com.tekzee.amiggos.ui.mylifestyle.AMyLifeStyle
 import com.tekzee.amiggos.ui.notification_new.ANotification
 import com.tekzee.amiggos.ui.settings_new.ASettings
 import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
+import com.tekzee.amiggos.util.BitmapUtils
 import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 
 
 class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
@@ -63,11 +65,13 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
     companion object {
         var bottomNavigation: BottomNavigationView? = null
 
-
         fun setupNearByCountBadge(badgeCount: Int) {
+            val badge = bottomNavigation!!.getOrCreateBadge(R.id.navigation_near_me)
             if (badgeCount > 0) {
-                val badge = bottomNavigation!!.getOrCreateBadge(R.id.navigation_near_me)
                 badge.isVisible = true
+                badge.number = badgeCount
+            }else{
+                badge.isVisible = false
                 badge.number = badgeCount
             }
 
@@ -113,7 +117,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             if (intent.action == FriendsAction.CLICK.action) {
                 bottomNavigation!!.menu.getItem(1).isChecked = true
                 setHeaders(R.id.navigation_bookings)
-                openFragment(BookingFragment.newInstance(intent, 2), "5")
+                openFragment(BookingFragment.newInstance(intent, 1), "5")
             } else if (intent.action == FriendsAction.SHOW_FRIENDS.action) {
                 bottomNavigation!!.menu.getItem(4).isChecked = true
                 setHeaders(R.id.navigation_near_me)
@@ -130,6 +134,12 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
                 bottomNavigation!!.menu.getItem(3).isChecked = true
                 setHeaders(R.id.navigation_memories)
                 openFragment(AMemoriesFragment.newInstance(), "4")
+            }  else if (intent.action == FriendsAction.CREATE_MEMORY_INVITATIONS.action) {
+                setHeaders(R.id.navigation_home)
+                openFragment(HomeFragment.newInstance(), "1")
+                val intent = Intent(applicationContext,ANotification::class.java)
+                intent.putExtra(ConstantLib.SUB_TAB,2)
+                startActivity(intent)
             } else {
                 setHeaders(R.id.navigation_home)
                 openFragment(HomeFragment.newInstance(), "1")
@@ -246,6 +256,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
         binding!!.notification.setOnClickListener {
             binding!!.badge.setNumber(0)
             val intent = Intent(this, ANotification::class.java)
+            intent.putExtra(ConstantLib.SUB_TAB,0)
             startActivity(intent)
         }
 
@@ -272,6 +283,10 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
 
     override fun validateError(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
@@ -379,7 +394,6 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
 
     override fun onResume() {
         super.onResume()
-
     }
 
     override fun onNotify() {

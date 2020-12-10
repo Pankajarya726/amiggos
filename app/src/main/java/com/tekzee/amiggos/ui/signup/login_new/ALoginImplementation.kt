@@ -3,9 +3,9 @@ package com.tekzee.amiggos.ui.signup.login_new
 import android.content.Context
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
+import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.ui.signup.login_new.model.ALoginResponse
 import com.tekzee.amiggos.network.ApiClient
-import com.tekzee.amiggos.ui.login.model.LoginResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -43,7 +43,9 @@ class ALoginImplementation(private var mainView: ALoginPresenter.ALoginPresenter
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -71,13 +73,15 @@ class ALoginImplementation(private var mainView: ALoginPresenter.ALoginPresenter
                     val responseCode = response.code()
                     when (responseCode) {
                         200 -> {
-                            val responseData: LoginResponse? = response.body()
+                            val responseData: CommonResponse? = response.body()
                             if (responseData!!.status) {
                                 mainView.onFirebaseUpdateSuccess(responseData)
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

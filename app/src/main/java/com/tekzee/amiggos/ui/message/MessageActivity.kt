@@ -18,6 +18,7 @@ import com.tekzee.amiggos.ui.message.adapter.MessageAdapter
 import com.tekzee.amiggos.ui.message.model.MyConversation
 import com.tekzee.amiggos.ui.message.model.MyFriendChatModel
 import com.tekzee.amiggos.ui.addusers.AddUserFragment
+import com.tekzee.amiggos.util.Utility
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
@@ -132,6 +133,10 @@ class MessageActivity : BaseActivity(), MessageEvent, KodeinAware,
 
     override fun validateError(message: String) {
 
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageConstant.session_error)
     }
 
 }

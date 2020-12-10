@@ -126,7 +126,7 @@ class StepOne : BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
             return false
         }
 
-        if (Utility.checkEmailCharacter(binding!!.semail.text.toString().trim())) {
+        if (!Utility.checkEmailCharacter(binding!!.semail.text.toString().trim())) {
             Errortoast(languageData!!.please_provide_valid_email)
             return false
         }
@@ -300,6 +300,10 @@ class StepOne : BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
 
     override fun validateError(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
     override fun onBackPressed() {

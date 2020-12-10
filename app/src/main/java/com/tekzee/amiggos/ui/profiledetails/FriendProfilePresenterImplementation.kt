@@ -41,7 +41,9 @@ class FriendProfilePresenterImplementation(private var mainView: FriendProfilePr
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -75,7 +77,9 @@ class FriendProfilePresenterImplementation(private var mainView: FriendProfilePr
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -104,7 +108,9 @@ class FriendProfilePresenterImplementation(private var mainView: FriendProfilePr
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -132,7 +138,9 @@ class FriendProfilePresenterImplementation(private var mainView: FriendProfilePr
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -161,7 +169,9 @@ class FriendProfilePresenterImplementation(private var mainView: FriendProfilePr
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -191,7 +201,9 @@ class FriendProfilePresenterImplementation(private var mainView: FriendProfilePr
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -220,7 +232,9 @@ class FriendProfilePresenterImplementation(private var mainView: FriendProfilePr
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -249,7 +263,9 @@ class FriendProfilePresenterImplementation(private var mainView: FriendProfilePr
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -277,7 +293,9 @@ class FriendProfilePresenterImplementation(private var mainView: FriendProfilePr
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

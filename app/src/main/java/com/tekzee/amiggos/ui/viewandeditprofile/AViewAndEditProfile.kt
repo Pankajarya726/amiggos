@@ -648,6 +648,10 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
     private fun pickImage() {
         CropImage.activity()
             .setCropShape(CropImageView.CropShape.RECTANGLE)

@@ -53,7 +53,9 @@ class RealFriendPresenterImplementation(
                             } else {
                                 mainView.onRealFriendFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

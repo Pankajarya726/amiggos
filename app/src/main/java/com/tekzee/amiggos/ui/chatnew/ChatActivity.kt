@@ -53,9 +53,6 @@ class ChatActivity : AppCompatActivity(), ChatEvent, KodeinAware, ChatActivityLi
     }
 
 
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.chat_fragment)
@@ -67,7 +64,7 @@ class ChatActivity : AppCompatActivity(), ChatEvent, KodeinAware, ChatActivityLi
         myFirebaseUserid = FirebaseAuth.getInstance().currentUser!!.uid
         callGetChat()
         listener = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent){
+            override fun onReceive(context: Context, intent: Intent) {
                 when (intent.action) {
                     ConstantLib.CHAT_NOTIFICATION -> {
                         val title = intent.getStringExtra("title")
@@ -129,42 +126,25 @@ class ChatActivity : AppCompatActivity(), ChatEvent, KodeinAware, ChatActivityLi
             if (binding!!.etChat.text.trim().isEmpty()) {
                 Errortoast(languageConstant.entermessage)
             } else {
-                ChatHelper.getReceiverFirebaseId(friendId!!,
-                    object : ReceiverIdInterface {
-                        override fun getReceiverId(
-                            receiverId: String,
-                            reciverUser: User
-                        ) {
-                            if (binding!!.etChat.text.trim().toString().isNotEmpty()) {
-
-                                ChatHelper.sendMessage(
-                                    myFirebaseUserid!!,
-                                    receiverId,
-                                    binding!!.etChat.text.trim().toString(),
-                                    false,
-                                    System.currentTimeMillis(),
-                                    reciverUser,
-                                    prefs.getValueInt(ConstantLib.USER_ID).toString()
-                                )
-                                sendNotification(
-                                    binding!!.etChat.text.trim().toString(),
-                                    friendId!!
-                                )
-                                binding!!.etChat.setText("")
-                            }
-
-                        }
-                    })
+                checkUserIsBlocked(friendId!!)
             }
 
         }
 
     }
 
+    private fun checkUserIsBlocked(receiverId: String) {
+        val input = JsonObject()
+        input.addProperty("userid", prefs.getValueInt(ConstantLib.USER_ID).toString())
+        input.addProperty("freind_id", receiverId)
+        viewModel.checkUserisBlocked(input)
+    }
+
     private fun sendNotification(message: String, receiverId: String) {
         val input = JsonObject()
         input.addProperty("userid", prefs.getValueInt(ConstantLib.USER_ID).toString())
         input.addProperty("receiveramiggosid", receiverId)
+        input.addProperty("type", "1")
         input.addProperty("message", message)
         viewModel.sendNotification(input)
     }
@@ -194,6 +174,39 @@ class ChatActivity : AppCompatActivity(), ChatEvent, KodeinAware, ChatActivityLi
     override fun onBackButtonPressed() {
         onBackPressed()
         hideKeyboard(binding!!.drawerIcon)
+    }
+
+    override fun isBlockedUserSuccess() {
+        ChatHelper.getReceiverFirebaseId(friendId!!,
+            object : ReceiverIdInterface {
+                override fun getReceiverId(
+                    receiverId: String,
+                    reciverUser: User
+                ) {
+                    if (binding!!.etChat.text.trim().toString().isNotEmpty()) {
+
+                        ChatHelper.sendMessage(
+                            myFirebaseUserid!!,
+                            receiverId,
+                            binding!!.etChat.text.trim().toString(),
+                            false,
+                            System.currentTimeMillis(),
+                            reciverUser,
+                            prefs.getValueInt(ConstantLib.USER_ID).toString()
+                        )
+                        sendNotification(
+                            binding!!.etChat.text.trim().toString(),
+                            friendId!!
+                        )
+                        binding!!.etChat.setText("")
+                    }
+
+                }
+            })
+    }
+
+    override fun isBlockedUserFailure(message: String) {
+        Errortoast(message);
     }
 
 

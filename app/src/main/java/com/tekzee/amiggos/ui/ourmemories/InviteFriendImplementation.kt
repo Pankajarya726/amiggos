@@ -54,7 +54,9 @@ class InviteFriendImplementation(
                             } else {
                                 mainView.onOurMemoriesFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

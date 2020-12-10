@@ -105,7 +105,7 @@ class CommonAdapter(
                     }
                     return@setOnClickListener
                 }
-                if (listItem.ageRestriction.isNotEmpty() && Integer.parseInt(prefs.getValueString(ConstantLib.USER_AGE)!!)<= Integer.parseInt(listItem.ageRestriction) ) {
+                if (listItem.ageRestriction.isNotEmpty() && prefs.getValueInt(ConstantLib.USER_AGE)<= Integer.parseInt(listItem.ageRestriction) ) {
                     listener.showAgeRestrictionPopup(holder.listitembinding.txtMinus)
                 } else {
                     val quantity =

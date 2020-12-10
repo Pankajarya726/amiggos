@@ -117,7 +117,7 @@ class BookingDetailNewActivity : BaseActivity(),
             languageData!!.referencenumber + responseData.data.booking.bookingId.toString()
         binding.txtPuchasedBy.text =
             languageData!!.purchasedby + responseData.data.booking.purchasedBy
-        Glide.with(this).load(responseData.data.booking.qrCode).placeholder(R.drawable.noimage)
+        Glide.with(this).load(responseData.data.booking.qrCode)
             .into(binding.imgBarcode)
         if(intent.getStringExtra(ConstantLib.FROM).equals(ConstantLib.BOOKING_INVITATION)){
             binding.viewmenu.visibility = View.GONE
@@ -134,6 +134,10 @@ class BookingDetailNewActivity : BaseActivity(),
 
     override fun validateError(message: String) {
         Errortoast(message)
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
 }

@@ -26,7 +26,9 @@ data class MemorieResponse(
             @SerializedName("venue_id")
             val venueId: Int = 0,
             @SerializedName("type")
-            val type: Int = 0
+            val type: Int = 0,
+            @SerializedName("our_story_id")
+            val our_story_id: String = "0"
         ): Serializable {
             data class Memory(
                 @SerializedName("creater_id")

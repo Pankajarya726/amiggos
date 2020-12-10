@@ -27,13 +27,22 @@ import com.tekzee.amiggos.util.Utility
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.closestKodein
+import org.kodein.di.android.x.closestKodein
+import org.kodein.di.generic.instance
 import java.util.concurrent.TimeUnit
 
 
 class InviteFriendAfterCreateMemory : BaseActivity(),
     InviteFriendPresenter.InviteFriendPresenterMainView,
     InfiniteScrollRecyclerView.RecyclerViewAdapterCallback,
-    InviteFriendAdapter.InviteFriendClick {
+    InviteFriendAdapter.InviteFriendClick ,
+    KodeinAware {
+
+    override val kodein: Kodein by closestKodein()
+    val languageConstant: LanguageData by instance()
 
     private lateinit var adapter: InviteFriendAdapter
     private lateinit var binding: ActivityOurMemoriesBinding
@@ -120,33 +129,6 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
             }
         }
 
-//        RxSearchObservable.fromView(binding.searchfriend)
-//            .debounce(1000, TimeUnit.MILLISECONDS)
-//            .filter(Predicate { t ->
-//                t.isNotEmpty()
-//            })
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe(Consumer<String>() { t ->
-//                onlineFriendPageNo = 0
-//                mydataList.clear()
-//                adapter!!.notifyDataSetChanged()
-//                doCallGetFriends(false, t.toString())
-//            })
-
-//        val closeButton: View? =
-//            binding.hiddenSearchWithRecycler.findViewById(androidx.appcompat.R.id.search_close_btn)
-//        closeButton?.setOnClickListener {
-//
-//            binding.hiddenSearchWithRecycler.searchBarSearchView.clearFocus()
-//            binding.hiddenSearchWithRecycler.searchBarSearchView.isIconified = false
-//            binding.hiddenSearchWithRecycler.clearSearchview()
-//            onlineFriendPageNo = 0
-//            mydataList.clear()
-//            adapter!!.notifyDataSetChanged()
-//            doCallGetFriends(false, "")
-//        }
-
         binding.btnInviteFriend.setOnClickListener {
             callUploadImageToMyMemories(toCommaSeparated()!!)
         }
@@ -208,6 +190,10 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
 
     override fun validateError(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageConstant.session_error)
     }
 
 

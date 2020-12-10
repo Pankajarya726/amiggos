@@ -147,7 +147,7 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
         binding!!.imageoptions.setOnClickListener {
 
 
-            if (!isMyFriend) {
+            if (!isMyFriend && !isMyFriendBlocked) {
                 val dialog: BottomDialog = BottomDialog.newInstance(
                     "",
                     arrayOf(
@@ -171,7 +171,7 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
 
                     }
                 }
-            } else if (isMyFriend && !isMyFriendBlocked) {
+            }else if (isMyFriend && !isMyFriendBlocked) {
                 val dialog: BottomDialog = BottomDialog.newInstance(
                     "",
                     arrayOf(
@@ -372,6 +372,10 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
     override fun validateError(message: String) {
         binding!!.htabMaincontent.visibility = View.VISIBLE
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
 

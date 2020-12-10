@@ -85,6 +85,10 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware,
         Errortoast(message)
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageConstant!!.session_error)
+    }
+
     private fun getCartItems(tip: Float) {
         Coroutines.main {
             repository!!.getItemCount(intent.getStringExtra(ConstantLib.VENUE_ID)!!).observe(
@@ -311,7 +315,7 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware,
 
     override fun onCreateBookingSuccess(response: CreateBookingResponse) {
         hideProgressBar()
-        Successtoast(response.message)
+//        Successtoast(response.message)
         val intent = Intent(this, PaymentActivity::class.java)
         intent.putExtra(ConstantLib.FROM, ConstantLib.FINALBASKET)
         intent.putExtra(ConstantLib.PURCHASE_AMOUNT, response.data.booking.amount.toString())

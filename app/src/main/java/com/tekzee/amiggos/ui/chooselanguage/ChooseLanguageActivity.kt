@@ -107,6 +107,10 @@ class ChooseLanguageActivity: BaseActivity(),ChooseLanguagePresenter.ChooseLangu
         Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
     override fun onLanguageSuccess(responseData: LanguageResponse) {
         data.clear()
         languageAdapter!!.notifyDataSetChanged()

@@ -228,6 +228,9 @@ class MyPreferences : BaseActivity(), MyPreferencesPresenter.MyPreferencesMainVi
         finish()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
 
 
     override fun onGetSettingSuccess(responseData: MyPreferenceResponse?) {

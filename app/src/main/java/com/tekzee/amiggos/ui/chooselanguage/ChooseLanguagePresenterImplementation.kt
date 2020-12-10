@@ -34,7 +34,9 @@ class ChooseLanguagePresenterImplementation(private var mainView: ChooseLanguage
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -66,7 +68,9 @@ class ChooseLanguagePresenterImplementation(private var mainView: ChooseLanguage
                             } else {
                                 mainView.validateError(responseData.get("message").asString)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                                             mainView.hideProgressbar()

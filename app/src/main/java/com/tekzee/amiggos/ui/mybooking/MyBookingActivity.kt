@@ -94,6 +94,10 @@ class MyBookingActivity : BaseFragment(), MyBookingPresenter.MyBookingMainView {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
+    }
+
 
     override fun onMyBookingSuccess(responseData: MyBookingResponse?) {
         data.clear()

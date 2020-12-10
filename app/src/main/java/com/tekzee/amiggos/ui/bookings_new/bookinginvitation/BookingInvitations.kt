@@ -22,6 +22,7 @@ import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.BookingInvitationsFragmentBinding
 import com.tekzee.amiggos.ui.bookingdetailnew.BookingDetailNewActivity
 import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
+import com.tekzee.amiggos.ui.bookings_new.bookings.ABooking
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 
 class BookingInvitations : BaseFragment(), BookingInvitationPresenter.BookingInvitationMainView {
@@ -38,15 +39,19 @@ class BookingInvitations : BaseFragment(), BookingInvitationPresenter.BookingInv
     private val items: ArrayList<BookingInvitationResponse.Data.BookingDetail> = ArrayList()
     private var isFragmentVisible = false
 
+
+
     companion object {
-        private val INVITATION: BookingInvitations? = null
+        private val bookingInvitations: BookingInvitations? = null
 
 
         fun newInstance(): BookingInvitations {
-            if(INVITATION == null){
+
+            if(bookingInvitations == null){
                 return BookingInvitations()
             }
-            return INVITATION
+            return bookingInvitations
+
         }
     }
 
@@ -155,6 +160,10 @@ class BookingInvitations : BaseFragment(), BookingInvitationPresenter.BookingInv
 
     override fun validateError(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
     }
 
     override fun onInvitaionSuccess(responseData: BookingInvitationResponse?) {

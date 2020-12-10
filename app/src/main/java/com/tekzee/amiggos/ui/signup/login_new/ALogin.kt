@@ -15,11 +15,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
+import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.LoginNewBinding
 import com.tekzee.amiggos.firebasemodel.User
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
-import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.signup.login_new.model.ALoginResponse
 import com.tekzee.amiggos.ui.signup.stepone.StepOne
 import com.tekzee.amiggos.util.SharedPreference
@@ -107,15 +107,16 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
                     val firebaseUser = FirebaseAuth.getInstance().currentUser
                     if (firebaseUser != null) {
                         updateFirebaseUser(responseData)
-                        callUpdateFirebaseApi(responseData.userid)
+
                         callHomePage(responseData)
+                        callUpdateFirebaseApi(responseData.userid)
                     }else{
                         auth.createUserWithEmailAndPassword(email, "amiggos@123")
                             .addOnCompleteListener(this) { task ->
                                 if (task.isSuccessful) {
                                     createFirebaseUser(responseData)
-                                    callUpdateFirebaseApi(responseData.userid)
                                     callHomePage(responseData)
+                                    callUpdateFirebaseApi(responseData.userid)
                                 }else{
                                     SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                                         .setTitleText("Error login for chat module")
@@ -132,8 +133,8 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
                         .addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
                                 createFirebaseUser(responseData)
-                                callUpdateFirebaseApi(responseData.userid)
                                 callHomePage(responseData)
+                                callUpdateFirebaseApi(responseData.userid)
                             }else{
                                 SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                                     .setTitleText("Error login for chat module")
@@ -184,7 +185,7 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
         finishAffinity()
     }
 
-    override fun onFirebaseUpdateSuccess(responseData: LoginResponse) {
+    override fun onFirebaseUpdateSuccess(responseData: CommonResponse?) {
         Log.d("Firebase id updated","Updated")
     }
 
@@ -215,5 +216,9 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
 
     override fun validateError(message: String) {
         Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 }

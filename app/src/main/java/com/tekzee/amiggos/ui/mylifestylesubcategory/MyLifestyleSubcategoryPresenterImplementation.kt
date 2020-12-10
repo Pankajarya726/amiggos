@@ -52,7 +52,7 @@ class MyLifestyleSubcategoryPresenterImplementation(
 
                         }
                         404 -> {
-                                Utility.showLogoutPopup(context!!,"your Session has been expired,please logout")
+                            mainView.logoutUser()
                         }
                     }
                     mainView.hideProgressbar()
@@ -90,7 +90,7 @@ class MyLifestyleSubcategoryPresenterImplementation(
 
                         }
                         404 -> {
-                                Utility.showLogoutPopup(context!!,"your Session has been expired,please logout")
+                            mainView.logoutUser()
                         }
                     }
                     mainView.hideProgressbar()

@@ -40,7 +40,9 @@ class StepTwoImplementation(private var mainView: StepTwoPresenter.StepTwoPresen
                             } else {
                                 mainView.onSignUpFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -70,7 +72,9 @@ class StepTwoImplementation(private var mainView: StepTwoPresenter.StepTwoPresen
                             } else {
                                 mainView.onStateFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -99,7 +103,9 @@ class StepTwoImplementation(private var mainView: StepTwoPresenter.StepTwoPresen
                             } else {
                                 mainView.onCityFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

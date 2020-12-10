@@ -34,7 +34,9 @@ class ImagePanaromaPresenterImplementation(private var mainView: ImagePanaromaPr
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

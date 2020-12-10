@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
+import kotlinx.coroutines.coroutineScope
 import org.json.JSONArray
 import java.math.RoundingMode
 import java.security.MessageDigest
@@ -70,15 +71,15 @@ class Utility {
         }
 
         fun checkFirstName_lastname_phone_CharacterCount(email: String): Boolean {
-            return email.length <=12
+            return email.length <=15
         }
 
         fun checkMinimumAndMaximumUsernameCharacter(username: String): Boolean {
-            return username.length in 5..13
+            return username.length in 4..13
         }
 
         fun checkEmailCharacter(email: String): Boolean {
-            return email.length >= 255
+            return email.length <=255
         }
 
 
@@ -173,20 +174,27 @@ class Utility {
         fun showLogoutPopup(context: Context, message: String) {
 
             val sharedPreference = SharedPreference(context)
-            val languageData = sharedPreference.getLanguageData(ConstantLib.LANGUAGE_DATA)
-            SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
-                .setTitleText(message)
-                .setConfirmText(languageData!!.klOk)
-                .setConfirmClickListener { sDialog ->
-                    sDialog.dismissWithAnimation()
-                    FirebaseAuth.getInstance().signOut()
-                    sharedPreference.clearSharedPreference()
-                    val intent = Intent(context, MainSplashActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent)
-                }
-                .show()
+            Toast.makeText(context,message,Toast.LENGTH_LONG).show()
+            FirebaseAuth.getInstance().signOut()
+            sharedPreference.clearSharedPreference()
+            val intent = Intent(context, MainSplashActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent)
+
+//            SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+//                .setTitleText(message)
+//                .setConfirmText(languageData!!.klOk)
+//                .setConfirmClickListener { sDialog ->
+//                    sDialog.dismissWithAnimation()
+//                    FirebaseAuth.getInstance().signOut()
+//                    sharedPreference.clearSharedPreference()
+//                    val intent = Intent(context, MainSplashActivity::class.java)
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    context.startActivity(intent)
+//                }
+//                .show()
         }
 
         fun checkNullorEmptyData(data: String?): String {
@@ -255,3 +263,10 @@ class Utility {
 
 
 }
+
+
+
+
+
+
+

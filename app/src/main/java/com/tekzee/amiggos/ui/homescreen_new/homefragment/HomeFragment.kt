@@ -106,7 +106,6 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-//        mapView!!.onSaveInstanceState(outState)
     }
 
     override fun onCreateView(
@@ -140,6 +139,9 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         homepresenterImplementation = HomePresenterImplementation(this, requireContext())
         sharedPreference = SharedPreference(requireContext())
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
+
+        showProgressbar()
+
         easyWayLocation = EasyWayLocation(activity, false, this)
         easyWayLocation!!.startLocation()
     }
@@ -197,34 +199,38 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
     private fun setupClickListener(view: View) {
 
+        view.findViewById<RadioButton>(R.id.img_icon_four).setOnClickListener {
+            categoryId = "180"
+            callHomeApi(0)
+        }
+
+
+
+        view.findViewById<RadioButton>(R.id.img_icon_five).setOnClickListener {
+            categoryId = "102"
+            callHomeApi(0)
+        }
+
+
+        view.findViewById<RadioButton>(R.id.img_icon_three).setOnClickListener {
+            categoryId = "104"
+            callHomeApi(0)
+        }
+
         view.findViewById<RadioButton>(R.id.img_icon_two).setOnClickListener {
-            categoryId = "5"
+            categoryId = "105"
             callHomeApi(0)
             setupRadioButton(R.id.img_icon_two)
         }
 
+
         view.findViewById<RadioButton>(R.id.img_icon_one).setOnClickListener {
-            categoryId = "4"
-            callHomeApi(0)
-        }
-
-        view.findViewById<RadioButton>(R.id.img_icon_three).setOnClickListener {
-            categoryId = "3"
-            callHomeApi(0)
-        }
-
-        view.findViewById<RadioButton>(R.id.img_icon_four).setOnClickListener {
-            categoryId = "1"
-            callHomeApi(0)
-        }
-
-        view.findViewById<RadioButton>(R.id.img_icon_five).setOnClickListener {
-            categoryId = "2"
+            categoryId = "103"
             callHomeApi(0)
         }
 
         view.findViewById<RadioButton>(R.id.img_icon_six).setOnClickListener {
-            categoryId = "37"
+            categoryId = "106"
             callHomeApi(0)
         }
     }
@@ -484,6 +490,10 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
+    }
+
 
     @SuppressLint("CheckResult")
     private fun setupSearchAutocomplete() {
@@ -531,6 +541,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
 
     override fun locationCancelled() {
+        hideProgressbar()
         Logger.d("Location cancelled called")
     }
 
@@ -544,7 +555,20 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         longitude = location.longitude.toString()
         easyWayLocation!!.endUpdates()
         Logger.d("Location updates--->$latitude----$longitude")
-        callHomeApi(0)
+        hideProgressbar()
+        requireActivity().runOnUiThread(Runnable {
+            hideKeyboard()
+            mMap!!.moveCamera(
+                CameraUpdateFactory.newLatLng(
+                    LatLng(
+                        latitude!!.toDouble(),
+                        longitude!!.toDouble()
+                    )
+                )
+            )
+            mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15.0f))
+            callHomeApi(0)
+        })
         callBadgeApi()
     }
 

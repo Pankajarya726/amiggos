@@ -45,6 +45,7 @@ class ViewFriendsActivity: BaseActivity(), ViewFriendPresenter.ViewFriendMainVie
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("memory_id", intent.getStringExtra(ConstantLib.STORY))
+        input.addProperty("file_id", intent.getStringExtra(ConstantLib.FILEID))
 //        input.addProperty("file_id", "0")
         viewPresenterImplementation!!.docallViewFriendApi(
             input,
@@ -110,6 +111,10 @@ class ViewFriendsActivity: BaseActivity(), ViewFriendPresenter.ViewFriendMainVie
 
     override fun validateError(message: String) {
         Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
     override fun onViewFriendSuccess(responseData: StorieViewResponse?) {

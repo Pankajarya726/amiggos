@@ -84,4 +84,8 @@ class AMusicTypeFragment:BaseFragment(), AMusicTypePresenter.AMusicTypePresenter
     override fun validateError(message: String) {
         Toast.makeText(context,message,Toast.LENGTH_LONG).show()
     }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
+    }
 }

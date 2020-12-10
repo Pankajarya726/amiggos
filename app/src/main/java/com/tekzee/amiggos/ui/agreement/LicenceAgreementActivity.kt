@@ -12,6 +12,8 @@ import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.util.Errortoast
+import com.tekzee.amiggos.util.Utility
 
 class LicenceAgreementActivity: BaseActivity() {
 
@@ -102,7 +104,11 @@ class LicenceAgreementActivity: BaseActivity() {
 
 
     override fun validateError(message: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+       Errortoast(message)
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
     override fun onBackPressed() {

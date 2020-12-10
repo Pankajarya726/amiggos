@@ -22,7 +22,6 @@ import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
-import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.Heading
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
 import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
 import com.tekzee.amiggos.util.RxSearchObservable
@@ -235,11 +234,15 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
+    }
+
     override fun onInvitaionSuccess(responseData: InvitationResponseV2?) {
-        NearMeFragment.setInvitationBadge(responseData!!.data.total_count)
+//        NearMeFragment.setInvitationBadge(responseData!!.data.total_count)
         items.clear()
         adapter.notifyDataSetChanged()
-        items.addAll(responseData.data.freindRequest)
+        items.addAll(responseData!!.data.freindRequest)
         adapter.notifyDataSetChanged()
         setupErrorVisibility(responseData.message)
     }

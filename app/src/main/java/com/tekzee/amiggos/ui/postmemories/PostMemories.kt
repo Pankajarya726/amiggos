@@ -21,6 +21,7 @@ import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.enums.FriendsAction
 import com.tekzee.amiggos.services.UploadWorkService
+import com.tekzee.amiggos.util.Utility
 
 
 class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView {
@@ -192,6 +193,10 @@ class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView 
 
     override fun validateError(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
     override fun onDestroy() {

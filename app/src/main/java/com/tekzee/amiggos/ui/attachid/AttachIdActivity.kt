@@ -130,6 +130,10 @@ class AttachIdActivity : BaseActivity(), AttachIdActivityPresenter.AttachIdMainV
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
 
     override fun onActivityResult(
         requestCode: Int,

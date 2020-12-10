@@ -18,6 +18,7 @@ import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.MyMemoriesFragmentBinding
+import com.tekzee.amiggos.ui.memories.mymemories.MyMemoriesFragment
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 import com.tekzee.amiggos.ui.storieviewnew.StorieViewNew
 
@@ -44,6 +45,20 @@ class OurMemorieFragment:BaseFragment() ,OurMemorieFragmentPresenter.MyMemoriePr
         return binding!!.root
     }
 
+
+    companion object {
+        private val ourMemorieFragment: OurMemorieFragment? = null
+
+
+        fun newInstance(): OurMemorieFragment {
+
+            if(ourMemorieFragment == null){
+                return OurMemorieFragment()
+            }
+            return ourMemorieFragment
+
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -124,6 +139,10 @@ class OurMemorieFragment:BaseFragment() ,OurMemorieFragmentPresenter.MyMemoriePr
 
     override fun validateError(message: String) {
         Toast.makeText(activity,message,Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
     }
 
 

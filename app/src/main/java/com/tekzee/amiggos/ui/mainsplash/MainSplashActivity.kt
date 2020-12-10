@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import cn.pedant.SweetAlert.SweetAlertDialog
@@ -14,17 +15,19 @@ import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.BuildConfig
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.databinding.MainSplashActivityBinding
-import com.tekzee.amiggos.ui.agegroup.AgeGroupActivity
+
 import com.tekzee.amiggos.ui.attachid.AttachIdActivity
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
 //import com.tekzee.amiggos.ui.statusview.StatusViewActivity
 import com.tekzee.amiggos.base.BaseActivity
+import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.signup.login_new.ALogin
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.util.BitmapUtils
 
 
 class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresenterMainView {
@@ -38,11 +41,11 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
         binding = DataBindingUtil.setContentView(this, R.layout.main_splash_activity);
         mainSplashPresenterImplementation = MainSplashPresenterImplementation(this, this)
         sharedPreferences = SharedPreference(this)
-
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(this) { instanceIdResult ->
             sharedPreferences!!.save(ConstantLib.FCMTOKEN,instanceIdResult.token)
         }
-
+        BitmapUtils.deleteFolder()
+        BitmapUtils.deleteVideoFolder()
         callValidateAppVersionApi()
 
 
@@ -57,6 +60,11 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
 
     override fun validateError(message: String) {
         Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Log.e("logout","user")
+        //Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
     private fun callValidateAppVersionApi() {
@@ -241,11 +249,7 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
         finish()
     }
 
-    private fun showSelectAgeGroupScreen() {
-        val intent = Intent(applicationContext, AgeGroupActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
+
 
 //    private fun showApprovalController() {
 //        val intent = Intent(applicationContext, StatusViewActivity::class.java)

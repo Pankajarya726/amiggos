@@ -157,6 +157,7 @@ dependencies {
     api project(':autocompleteplace')
 //    api project(':hiddensearchwithrecyclerview')
     api project(':customimage')
+    api project(':instagramvideobutton')
 
     //circular image view
     implementation 'com.library.tangxiaolv:effectiveshapeview:1.0.1'
@@ -307,4 +308,6 @@ dependencies {
     kapt "androidx.room:room-compiler:$rootProject.roomVersion"
     implementation "androidx.room:room-ktx:$rootProject.roomVersion"
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
+
+
 }

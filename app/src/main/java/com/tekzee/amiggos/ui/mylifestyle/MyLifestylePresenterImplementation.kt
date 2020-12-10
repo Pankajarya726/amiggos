@@ -51,7 +51,7 @@ class MyLifestylePresenterImplementation(
 
                         }
                         404 -> {
-                                Utility.showLogoutPopup(context!!,"your Session has been expired,please logout")
+                            mainView.logoutUser()
                         }
                     }
                     mainView.hideProgressbar()

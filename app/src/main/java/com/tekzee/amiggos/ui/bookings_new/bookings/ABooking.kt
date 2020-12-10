@@ -35,12 +35,18 @@ class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
     private var adapter: BookingAdapter?=null
 
     companion object {
+        private val aBooking: ABooking? = null
+
 
         fun newInstance(): ABooking {
-            return ABooking()
+
+            if(aBooking == null){
+                return ABooking()
+            }
+            return aBooking
+
         }
     }
-
 
 
     override fun onCreateView(
@@ -49,7 +55,6 @@ class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater,R.layout.a_booking_fragment, container, false)
-
         return binding.root
     }
 
@@ -123,6 +128,10 @@ class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
 
     override fun validateError(message: String) {
         setupErrorVisibility(message)
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
     }
 
     override fun onStop() {

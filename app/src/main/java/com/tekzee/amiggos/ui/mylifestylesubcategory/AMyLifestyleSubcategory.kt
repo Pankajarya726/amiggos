@@ -60,6 +60,7 @@ class AMyLifestyleSubcategory : BaseActivity(), MyLifestyleSubcategoryPresenter.
 
         binding!!.notification.setOnClickListener{
             val intent = Intent(this, ANotification::class.java)
+            intent.putExtra(ConstantLib.SUB_TAB,0)
             startActivity(intent)
         }
         binding!!.save.setOnClickListener{
@@ -172,6 +173,10 @@ class AMyLifestyleSubcategory : BaseActivity(), MyLifestyleSubcategoryPresenter.
 
     override fun validateError(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
     override fun onPause() {

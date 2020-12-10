@@ -52,6 +52,7 @@ import com.tekzee.amiggos.ui.mypreferences.model.PreferenceSavedResponse
 import com.tekzee.amiggos.ui.newpreferences.amusictypefragment.model.AMusicTypeResponse
 import com.tekzee.amiggos.ui.newpreferences.avenuetypefragment.model.AVenueTypeResponse
 import com.tekzee.amiggos.ui.notification_new.model.ANotificationResponse
+import com.tekzee.amiggos.ui.notification_new.model.PartyInvitesNotificationResponse
 //import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
 import com.tekzee.amiggos.ui.ourmemories.model.GetFriendForInviteAfterCreateMemoryResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
@@ -245,7 +246,7 @@ interface ApiService {
     fun doUpdateFirebaseApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
-    ): Observable<Response<LoginResponse>>
+    ): Observable<Response<CommonResponse>>
 
 
     @POST("user/turningUp")
@@ -509,6 +510,18 @@ interface ApiService {
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<ANotificationResponse>>
+
+    @POST("guest/getAllNotification")
+    fun doCallPartyInvitesNotification(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<PartyInvitesNotificationResponse>>
+
+    @POST("guest/getAllNotification")
+    fun doCallNotificationnew(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<String>>
 
 //    @POST("user/getNearByUser")
 //    fun getNearByUser(
@@ -997,6 +1010,12 @@ interface ApiService {
 
     @POST("chat_setting")
     suspend fun sendNotification(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Response<CommonResponse>
+
+    @POST("guest/check_blockStatus")
+    suspend fun checkUserisBlocked(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Response<CommonResponse>

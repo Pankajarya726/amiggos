@@ -69,7 +69,9 @@ class CheckOutActivityImplementation (private var mainView: CheckOutActivityPres
                             } else {
                                 mainView.onChargeFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -101,7 +103,9 @@ class CheckOutActivityImplementation (private var mainView: CheckOutActivityPres
                             } else {
                                 mainView.onChargeFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -135,7 +139,9 @@ class CheckOutActivityImplementation (private var mainView: CheckOutActivityPres
                             } else {
                                 mainView.onUpdatePaymentFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -164,7 +170,9 @@ class CheckOutActivityImplementation (private var mainView: CheckOutActivityPres
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

@@ -33,7 +33,9 @@ class ASettingsPresenterImplementation (private var mainView: ASettingsPresenter
                             } else {
                                 mainView.onUserProfileFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

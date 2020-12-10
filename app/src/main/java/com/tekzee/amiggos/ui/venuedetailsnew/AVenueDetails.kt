@@ -263,6 +263,10 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
 
     fun showCustomDialog(view: View, response: VenueDetails.Data) {
         val bottomSheetDialog: BottomSheetFragment =

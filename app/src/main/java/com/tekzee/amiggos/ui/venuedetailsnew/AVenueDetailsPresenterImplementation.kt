@@ -45,7 +45,9 @@ class AVenueDetailsPresenterImplementation(private var mainView: AVenueDetailsPr
                             } else {
                                 mainView.onVenueDetailsFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -78,7 +80,9 @@ class AVenueDetailsPresenterImplementation(private var mainView: AVenueDetailsPr
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

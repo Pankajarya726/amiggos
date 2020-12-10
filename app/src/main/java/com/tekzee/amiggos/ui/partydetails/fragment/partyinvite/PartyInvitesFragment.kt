@@ -107,6 +107,10 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesPresenter.PartyInviteMai
         Toast.makeText(activity,message,Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
+    }
+
     override fun onPartyInviteSuccess(responseData: BookingInvitationResponse?) {
         items.clear()
         adapter.notifyDataSetChanged()

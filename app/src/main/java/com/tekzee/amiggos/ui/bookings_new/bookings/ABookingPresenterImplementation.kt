@@ -41,7 +41,9 @@ class ABookingPresenterImplementation (private var mainView: ABookingPresenter.A
                                 } else {
                                     mainView.onBookingFailure(responseData.message)
                                 }
-                            }
+                            } 404 -> {
+                            mainView.logoutUser()
+                        }
                         }
                     }, { error ->
                         mainView.hideProgressbar()

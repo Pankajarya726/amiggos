@@ -34,7 +34,9 @@ class AgeGroupActivityPresenterImplementation(private var mainView: AgeGroupActi
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

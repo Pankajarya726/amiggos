@@ -52,8 +52,18 @@ class ChatViewModel(
         Coroutines.main {
             val response =  notificatRepository.sendNotification(input, Utility.createHeaders(prefs))
         }
+    }
 
 
+    fun checkUserisBlocked(input: JsonObject){
+        Coroutines.main {
+            val response =  notificatRepository.checkUserisBlocked(input, Utility.createHeaders(prefs))
+            if(response.status){
+                chatEvent!!.isBlockedUserSuccess()
+            }else{
+                chatEvent!!.isBlockedUserFailure(response.message)
+            }
+        }
     }
 
 

@@ -39,7 +39,9 @@ class ChoosePackagePresenterImplementation(private var mainView: ChoosePackagePr
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -69,7 +71,9 @@ override fun doBookPackage(input: JsonObject, createHeaders: HashMap<String, Str
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

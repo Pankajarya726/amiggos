@@ -15,4 +15,10 @@ class NotificationRepository(private val apiService: ApiService): SafeApiRequest
         return apiRequest { apiService.sendNotification(input,createHeaders) }
     }
 
+    suspend fun checkUserisBlocked(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): CommonResponse {
+        return apiRequest { apiService.checkUserisBlocked(input,createHeaders) }
+    }
 }

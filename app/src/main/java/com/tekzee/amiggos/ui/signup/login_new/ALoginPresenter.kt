@@ -1,9 +1,9 @@
 package com.tekzee.amiggos.ui.signup.login_new
 
 import com.google.gson.JsonObject
-import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.signup.login_new.model.ALoginResponse
 import com.tekzee.amiggos.base.BaseMainView
+import com.tekzee.amiggos.base.model.CommonResponse
 
 class ALoginPresenter {
     interface ALoginPresenterMain{
@@ -21,6 +21,6 @@ class ALoginPresenter {
 
     interface ALoginPresenterMainView: BaseMainView {
         fun OnLoginSuccess(responseData: ALoginResponse.Data)
-        fun onFirebaseUpdateSuccess(responseData: LoginResponse)
+        fun onFirebaseUpdateSuccess(responseData: CommonResponse?)
     }
 }

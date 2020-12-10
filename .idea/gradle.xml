@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/autocompleteplace" />
             <option value="$PROJECT_DIR$/cropper" />
             <option value="$PROJECT_DIR$/customimage" />
+            <option value="$PROJECT_DIR$/instagramvideobutton" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

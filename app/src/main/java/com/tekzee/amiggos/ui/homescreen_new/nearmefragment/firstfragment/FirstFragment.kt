@@ -246,6 +246,10 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireActivity(), languageData!!.session_error)
+    }
+
     @SuppressLint("CheckResult")
     private fun setupViews(view: View?) {
         searchView = requireView().findViewById<HiddenSearchWithRecyclerView>(R.id.hidden_search_with_recycler)

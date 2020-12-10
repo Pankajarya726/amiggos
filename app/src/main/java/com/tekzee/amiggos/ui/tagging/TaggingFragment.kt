@@ -33,6 +33,7 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
 import com.tekzee.amiggos.databinding.TaggingFragmentBinding
+import com.tekzee.amiggos.ui.ourmemories.InviteFriendAfterCreateMemory
 import com.tekzee.amiggos.ui.postmemories.PostMemories
 import com.tekzee.amiggos.util.*
 import com.tekzee.amiggosvenueapp.ui.tagging.TaggingClickListener
@@ -125,7 +126,6 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
         ) {
             imagefile = BitmapUtils.saveImageAndReturnFile(applicationContext, bitmap)
             getimageUrifrombitmap(Compressor.getDefault(this).compressToBitmap(imagefile))
-//            BitmapUtils.deleteImageFile(applicationContext, imagefile)
         }.onDeclined { e ->
             if (e.hasDenied()) {
 
@@ -244,14 +244,37 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ) {
-                val intentPostMemory = Intent(applicationContext, PostMemories::class.java)
-                intentPostMemory.putExtra(ConstantLib.FILEURI, imageUri.toString())
-                intentPostMemory.putExtra(ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(finaltaggedarray))
-                intentPostMemory.putExtra(ConstantLib.SENDER_ID, intent.getStringExtra(ConstantLib.SENDER_ID))
-                intentPostMemory.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
-                intentPostMemory.putExtra(ConstantLib.FROM_ACTIVITY, intent.getStringExtra(ConstantLib.FROM_ACTIVITY))
-                intentPostMemory.putExtra(ConstantLib.FROM, "IMAGE")
-                startActivity(intentPostMemory)
+
+                if(intent.getStringExtra(ConstantLib.FROM_ACTIVITY).equals(ConstantLib.OURSTORYINVITE)){
+//                    val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
+                    val inviteFriendAfterCreateMemoryIntent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FILEURI, imageUri.toString())
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY,  getTaggedArrayJson(finaltaggedarray))
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM, "IMAGE")
+                    startActivity(inviteFriendAfterCreateMemoryIntent)
+                }else {
+                    val intentPostMemory = Intent(applicationContext, PostMemories::class.java)
+                    intentPostMemory.putExtra(ConstantLib.FILEURI, imageUri.toString())
+                    intentPostMemory.putExtra(
+                        ConstantLib.TAGGED_ARRAY,
+                        getTaggedArrayJson(finaltaggedarray)
+                    )
+                    intentPostMemory.putExtra(
+                        ConstantLib.SENDER_ID,
+                        intent.getStringExtra(ConstantLib.SENDER_ID)
+                    )
+                    intentPostMemory.putExtra(
+                        ConstantLib.OURSTORYID,
+                        intent.getStringExtra(ConstantLib.OURSTORYID)
+                    )
+                    intentPostMemory.putExtra(
+                        ConstantLib.FROM_ACTIVITY,
+                        intent.getStringExtra(ConstantLib.FROM_ACTIVITY)
+                    )
+                    intentPostMemory.putExtra(ConstantLib.FROM, "IMAGE")
+                    startActivity(intentPostMemory)
+                }
             }.onDeclined { e ->
                 if (e.hasDenied()) {
 

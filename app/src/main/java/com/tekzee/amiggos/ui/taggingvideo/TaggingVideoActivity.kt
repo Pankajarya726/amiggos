@@ -42,6 +42,7 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
 import com.tekzee.amiggos.databinding.TaggingVideoFragmentBinding
+import com.tekzee.amiggos.ui.ourmemories.InviteFriendAfterCreateMemory
 import com.tekzee.amiggos.ui.postmemories.PostMemories
 import com.tekzee.amiggos.util.*
 import com.tekzee.amiggosvenueapp.ui.tagging.TaggingClickListener
@@ -247,6 +248,9 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
 //                startActivity(intent)
 //                finishAffinity()
 
+
+
+
                 val desFile = saveVideoFile(filename)
                 VideoCompressor.start(
                     filename,
@@ -288,15 +292,27 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
 //                            startActivity(intent)
 //                            finishAffinity()
 
+                            if(intent.getStringExtra(ConstantLib.FROM_ACTIVITY).equals(ConstantLib.OURSTORYINVITE)){
+//                    val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
+                                val inviteFriendAfterCreateMemoryIntent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
+                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FILEURI, desFile.path)
+                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY,  getTaggedArrayJson(finaltaggedarray))
+                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.SENDER_ID, intent.getStringExtra(ConstantLib.SENDER_ID))
+                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM, "VIDEO")
+                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM_ACTIVITY, intent.getStringExtra(ConstantLib.FROM_ACTIVITY))
+                                startActivity(inviteFriendAfterCreateMemoryIntent)
+                            }else{
+                                val intentPostMemory = Intent(applicationContext, PostMemories::class.java)
+                                intentPostMemory.putExtra(ConstantLib.FILEURI, desFile.path)
+                                intentPostMemory.putExtra(ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(finaltaggedarray))
+                                intentPostMemory.putExtra(ConstantLib.SENDER_ID, intent.getStringExtra(ConstantLib.SENDER_ID))
+                                intentPostMemory.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+                                intentPostMemory.putExtra(ConstantLib.FROM_ACTIVITY, intent.getStringExtra(ConstantLib.FROM_ACTIVITY))
+                                intentPostMemory.putExtra(ConstantLib.FROM, "VIDEO")
+                                startActivity(intentPostMemory)
+                            }
 
-                            val intentPostMemory = Intent(applicationContext, PostMemories::class.java)
-                            intentPostMemory.putExtra(ConstantLib.FILEURI, desFile.path)
-                            intentPostMemory.putExtra(ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(finaltaggedarray))
-                            intentPostMemory.putExtra(ConstantLib.SENDER_ID, intent.getStringExtra(ConstantLib.SENDER_ID))
-                            intentPostMemory.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
-                            intentPostMemory.putExtra(ConstantLib.FROM_ACTIVITY, intent.getStringExtra(ConstantLib.FROM_ACTIVITY))
-                            intentPostMemory.putExtra(ConstantLib.FROM, "VIDEO")
-                            startActivity(intentPostMemory)
 
                         }
 
@@ -317,15 +333,8 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
                     },
                     VideoQuality.MEDIUM,
                     isMinBitRateEnabled = false,
-                    keepOriginalResolution = false
+                    keepOriginalResolution = true
                 )
-
-
-
-
-
-
-
 
 
             }.onDeclined { e ->
@@ -352,6 +361,7 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
 
         binding!!.save.setOnClickListener {
             saveVideo(filename)
+
         }
 
 
@@ -375,7 +385,7 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
         filePath?.let {
             val videoFile = File(filePath)
             val videoFileName = "${System.currentTimeMillis()}_${videoFile.name}"
-            val folderName = Environment.DIRECTORY_MOVIES
+            val folderName = Environment.DIRECTORY_MOVIES+"/AmiggosMovies"
             if (Build.VERSION.SDK_INT >= 29) {
 
                 val values = ContentValues().apply {
@@ -484,7 +494,7 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
             val timeStamp = SimpleDateFormat("ddMMyyHHmm").format(Date())
             val VideoFile = "ammigos-$timeStamp.mp4"
             val sdCard =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)
                     .toString()
             val dir = File(sdCard + "/ammigos/")
             if (!dir.exists()) {

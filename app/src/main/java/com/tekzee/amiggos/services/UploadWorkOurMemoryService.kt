@@ -135,6 +135,7 @@ class UploadWorkOurMemoryService(context: Context, workerParams: WorkerParameter
             }, { throwable -> // call onErrors() if error occurred during file upload
                 onErrors(throwable)
             }) { // call onSuccess() while file upload successful
+
                 this@UploadWorkOurMemoryService.onSuccess()
             }
 
@@ -181,13 +182,12 @@ class UploadWorkOurMemoryService(context: Context, workerParams: WorkerParameter
      * Send Broadcast to FileProgressReceiver while file upload successful
      */
     private fun onSuccess() {
+        BitmapUtils.deleteFolder()
+        BitmapUtils.deleteVideoFolder()
         val successIntent = Intent(applicationContext, FileProgressReceiver::class.java)
         successIntent.action = "com.wave.ACTION_UPLOADED"
         successIntent.putExtra("notificationId", FileUploadService.NOTIFICATION_ID)
         successIntent.putExtra("progress", 100)
-        if(type == 1){
-            BitmapUtils.deleteImageFile(applicationContext,File(imageUri!!))
-        }
         applicationContext.sendBroadcast(successIntent)
     }
 

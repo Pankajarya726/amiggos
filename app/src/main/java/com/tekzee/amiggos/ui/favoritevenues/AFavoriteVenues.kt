@@ -115,6 +115,10 @@ class AFavoriteVenues(var friendId: String?, var aProfileDetails: AProfileDetail
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
+    }
+
 
     private fun setupRecyclerRealFriend() {
 

@@ -19,6 +19,8 @@ import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.AmemoriesFragmentBinding
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.adapter.ViewPagerTwoAdapter
 import com.tekzee.amiggos.ui.memories.mymemories.MyMemoriesFragment
+import com.tekzee.amiggos.util.Utility
+import kotlinx.android.synthetic.main.menu_fragment.*
 
 
 class AMemoriesFragment : BaseFragment() {
@@ -47,15 +49,16 @@ class AMemoriesFragment : BaseFragment() {
 
 //        val view = inflater.inflate(R.layout.amemories_fragment, container, false)
         binding = DataBindingUtil.inflate(inflater, R.layout.amemories_fragment, container, false)
+        sharedPreference = SharedPreference(requireContext())
+        languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
+        setupViews(view)
+        setupLanguage(view)
         return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedPreference = SharedPreference(requireContext())
-        languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        setupViews(view)
-        setupLanguage(view)
+
     }
 
     private fun setupLanguage(view: View?) {
@@ -69,9 +72,9 @@ class AMemoriesFragment : BaseFragment() {
         val fragmentManager = childFragmentManager
         val adapter = ViewPagerTwoAdapter(this)
         viewPager.isUserInputEnabled = false
-        adapter.addFragment(MyMemoriesFragment(), languageData!!.klMemories)
-        adapter.addFragment(OurMemorieFragment(), languageData!!.pourmemories)
-        adapter.addFragment(VenueFragment(), languageData!!.venues)
+        adapter.addFragment(MyMemoriesFragment.newInstance(), languageData!!.klMemories)
+        adapter.addFragment(OurMemorieFragment.newInstance(), languageData!!.pourmemories)
+        adapter.addFragment(VenueFragment.newInstance(), languageData!!.venues)
         viewPager.adapter = adapter
         viewPager.offscreenPageLimit = 1
 
@@ -100,19 +103,21 @@ class AMemoriesFragment : BaseFragment() {
         TabLayoutMediator(tabs, viewPager) { tab, position ->
             when (position) {
                 0 -> {
-                    MyMemoriesFragment()
+                    MyMemoriesFragment.newInstance()
                     tab.text = languageData!!.klMemories
                 }
                 1 -> {
-                    OurMemorieFragment()
+                    OurMemorieFragment.newInstance()
                     tab.text = languageData!!.pourmemories
                 }
                 2 -> {
-                    VenueFragment()
+                    VenueFragment.newInstance()
                     tab.text = languageData!!.venues
                 }
             }
         }.attach()
+
+
     }
 
     private fun setUpHeading(selectedTabPosition: Int) {
@@ -127,6 +132,10 @@ class AMemoriesFragment : BaseFragment() {
 
     override fun validateError(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
     }
 
     private fun setupViews(view: View?) {

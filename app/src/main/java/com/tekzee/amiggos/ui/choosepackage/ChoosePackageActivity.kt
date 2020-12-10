@@ -160,6 +160,10 @@ class ChoosePackageActivity : BaseActivity(), ChoosePackagePresenter.ChoosePacka
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
     override fun onChoosePackageSuccess(responseData: PackageResponse?) {
         response = responseData
         data.addAll(responseData!!.data.packageData)

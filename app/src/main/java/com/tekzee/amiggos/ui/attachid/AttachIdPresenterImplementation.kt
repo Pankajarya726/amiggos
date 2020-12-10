@@ -41,7 +41,9 @@ class AttachIdPresenterImplementation(private var mainView: AttachIdActivityPres
                             } else {
                                 mainView.onAttachIdFailure(responseData.message.toString(),flag_save_or_delet)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -75,7 +77,9 @@ class AttachIdPresenterImplementation(private var mainView: AttachIdActivityPres
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

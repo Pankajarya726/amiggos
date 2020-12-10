@@ -12,6 +12,7 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.VenueFragmentBinding
+import com.tekzee.amiggos.ui.memories.mymemoriesold.OurMemorieFragment
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 import com.tekzee.amiggos.ui.memories.venuefragment.adapter.VenueFragmentAdapter
 import com.tekzee.amiggos.ui.storieviewnew.StorieViewNew
@@ -30,10 +31,18 @@ class VenueFragment : BaseFragment(), VenueFragmentPresenter.VenueFragmentPresen
     private var venueFragmentPresenterImplementation: VenueFragmentPresenterImplementation? = null
     private var adapter:VenueFragmentAdapter?=null
 
+
     companion object {
+        private val venueFragment: VenueFragment? = null
+
 
         fun newInstance(): VenueFragment {
-            return VenueFragment()
+
+            if(venueFragment == null){
+                return VenueFragment()
+            }
+            return venueFragment
+
         }
     }
 
@@ -110,6 +119,10 @@ class VenueFragment : BaseFragment(), VenueFragmentPresenter.VenueFragmentPresen
 
     override fun validateError(message: String) {
         setupErrorVisibility(message)
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
     }
 
     override fun onStop() {

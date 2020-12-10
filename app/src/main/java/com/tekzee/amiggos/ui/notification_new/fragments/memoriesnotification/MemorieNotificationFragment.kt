@@ -1,5 +1,6 @@
 package com.tekzee.amiggos.ui.notification_new.fragments.memoriesnotification
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
+import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.APartyInvitesFragmentBinding
 import com.tekzee.amiggos.ui.notification_new.adapter.ANotificationAdapter
 import com.tekzee.amiggos.ui.notification_new.model.ANotificationResponse
@@ -17,17 +19,29 @@ import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.custom.BottomDialog
+import com.tekzee.amiggos.ui.cameranew.CameraActivity
 import com.tekzee.amiggos.ui.notification_new.adapter.ANotificationAdapterFriend
+import com.tekzee.amiggos.util.Errortoast
+import com.tekzee.amiggos.util.Successtoast
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.closestKodein
+import org.kodein.di.generic.instance
 
-class MemorieNotificationFragment: BaseFragment(), MemorieNotificationFragmentPresenter.MemorieNotificationFragmentPresenterMainView,
-    InfiniteScrollRecyclerView.RecyclerViewAdapterCallback, ANotificationAdapter.HomeItemClick {
+class MemorieNotificationFragment : BaseFragment(),
+    MemorieNotificationFragmentPresenter.MemorieNotificationFragmentPresenterMainView,
+    InfiniteScrollRecyclerView.RecyclerViewAdapterCallback, ANotificationAdapter.HomeItemClick,
+    KodeinAware {
 
+    override val kodein: Kodein by closestKodein()
+    val languageConstant: LanguageData by instance()
     private lateinit var memorieNotificationFragmentImplementation: MemorieNotificationFragmentImplementation
     private var myView: View? = null
     private var binding: APartyInvitesFragmentBinding? = null
     private var sharedPreference: SharedPreference? = null
-    private var adapter: ANotificationAdapter? =null
+    private var adapter: ANotificationAdapter? = null
     private var data = ArrayList<ANotificationResponse.Data.UserNotification>()
     private var pageNo = 0
     private val mLoadingData = ANotificationResponse.Data.UserNotification(loadingStatus = true)
@@ -37,7 +51,7 @@ class MemorieNotificationFragment: BaseFragment(), MemorieNotificationFragmentPr
 
 
         fun newInstance(): MemorieNotificationFragment {
-            if(partyInvitesFragment == null){
+            if (partyInvitesFragment == null) {
                 return MemorieNotificationFragment()
             }
             return partyInvitesFragment
@@ -50,9 +64,10 @@ class MemorieNotificationFragment: BaseFragment(), MemorieNotificationFragmentPr
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.a_party_invites_fragment,container,false)
-        memorieNotificationFragmentImplementation=
-            MemorieNotificationFragmentImplementation(this,requireContext())
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.a_party_invites_fragment, container, false)
+        memorieNotificationFragmentImplementation =
+            MemorieNotificationFragmentImplementation(this, requireContext())
         sharedPreference = SharedPreference(requireContext())
         myView = binding!!.root
         setupClickListener()
@@ -95,7 +110,8 @@ class MemorieNotificationFragment: BaseFragment(), MemorieNotificationFragmentPr
 
     private fun setupReyclerview() {
 
-        val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        val layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding!!.fragmentOneRecyclerview.layoutManager = layoutManager
         adapter = ANotificationAdapter(
             mContext = requireContext(),
@@ -113,12 +129,12 @@ class MemorieNotificationFragment: BaseFragment(), MemorieNotificationFragmentPr
 
     override fun onNotificationSuccess(responseData: List<ANotificationResponse.Data.UserNotification>) {
         pageNo++
-        data= responseData as ArrayList<ANotificationResponse.Data.UserNotification>
+        data = responseData as ArrayList<ANotificationResponse.Data.UserNotification>
         setupReyclerview()
     }
 
 
-    override fun onNotificationInfiniteSuccess(responseData:  List<ANotificationResponse.Data.UserNotification>) {
+    override fun onNotificationInfiniteSuccess(responseData: List<ANotificationResponse.Data.UserNotification>) {
         pageNo++
         data.removeAt(data.size - 1)
         adapter?.notifyDataSetChanged()
@@ -131,6 +147,15 @@ class MemorieNotificationFragment: BaseFragment(), MemorieNotificationFragmentPr
         data.removeAt(data.size - 1)
         adapter?.notifyDataSetChanged()
         adapter?.setLoadingStatus(false)
+        callNotificationApi(false)
+    }
+
+    override fun onMemoryInviteRejected(message: String) {
+        pageNo = 0
+        data.clear()
+        adapter?.notifyDataSetChanged()
+        requireActivity().Successtoast(message)
+        callNotificationApi(false)
     }
 
 
@@ -145,7 +170,11 @@ class MemorieNotificationFragment: BaseFragment(), MemorieNotificationFragmentPr
 //    }
 
     override fun validateError(message: String) {
-        Log.e("message-->",message)
+        requireActivity().Errortoast(message)
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageConstant.session_error)
     }
 
     override fun onLoadMoreData() {
@@ -155,11 +184,46 @@ class MemorieNotificationFragment: BaseFragment(), MemorieNotificationFragmentPr
     }
 
     override fun itemClickCallback(position: Int) {
-        Log.e("message-->",""+position)
+
+        if (data[position].notificationKey == 4) {
+            val dialog: BottomDialog =
+                BottomDialog.newInstance("", arrayOf(ConstantLib.JOIN, ConstantLib.REJECT))
+            dialog.show(childFragmentManager, "dialog")
+            dialog.setListener {
+                if (it == 0) {
+                    dialog.dismiss()
+                    val intent = Intent(requireContext(), CameraActivity::class.java)
+                    intent.putExtra(ConstantLib.FROM_ACTIVITY, ConstantLib.OURSTORYINVITE)
+                    intent.putExtra(ConstantLib.SENDER_ID, data[position].data.sender_id.toString())
+                    intent.putExtra(
+                        ConstantLib.OURSTORYID,
+                        data[position].data.our_story_id.toString()
+                    )
+                    requireContext().startActivity(intent)
+                } else
+                    if (it == 1) {
+                        dialog.dismiss()
+                        val input = JsonObject()
+                        input.addProperty(
+                            "userid",
+                            sharedPreference!!.getValueInt(ConstantLib.USER_ID)
+                        )
+                        input.addProperty("sender_id", data[position].data.sender_id.toString())
+                        input.addProperty(
+                            "our_story_id",
+                            data[position].data.our_story_id.toString()
+                        )
+                        memorieNotificationFragmentImplementation.doCallRejectMemoryInvite(
+                            input,
+                            Utility.createHeaders(sharedPreference)
+                        )
+                    }
+            }
+        }
     }
 
     override fun onItemLongClickListener(position: Int) {
-        Log.e("message-->",""+position)
+        Log.e("message-->", "" + position)
 
     }
 }

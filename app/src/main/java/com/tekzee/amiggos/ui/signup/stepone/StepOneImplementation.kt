@@ -73,7 +73,9 @@ class StepOneImplementation(private var mainView: StepOnePresenter.StepOnePresen
                             } else {
                                 mainView.onSignUpFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

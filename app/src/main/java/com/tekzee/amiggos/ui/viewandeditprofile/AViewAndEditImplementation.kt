@@ -10,6 +10,7 @@ import com.tekzee.amiggos.ui.signup.steptwo.model.StateResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.AddImageResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
+import com.tekzee.amiggos.util.Utility
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -47,6 +48,9 @@ class AViewAndEditImplementation(
                                 mainView.validateError(responseData.message)
                             }
                         }
+                        404 -> {
+                            mainView.logoutUser()
+                        }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -75,11 +79,13 @@ class AViewAndEditImplementation(
                         200 -> {
                             val responseData: AddImageResponse? = response.body()
                             if (responseData!!.status) {
-                                mainView.onPhotoDeleted(responseData.message,responseData)
+                                mainView.onPhotoDeleted(responseData.message, responseData)
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -111,7 +117,9 @@ class AViewAndEditImplementation(
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -122,8 +130,6 @@ class AViewAndEditImplementation(
             mainView.validateError(context!!.getString(R.string.check_internet))
         }
     }
-
-
 
 
     override fun doCallStateApi(input: JsonObject, createHeaders: HashMap<String, String?>) {
@@ -143,7 +149,9 @@ class AViewAndEditImplementation(
                             } else {
                                 mainView.onStateFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -172,7 +180,9 @@ class AViewAndEditImplementation(
                             } else {
                                 mainView.onCityFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -222,7 +232,9 @@ class AViewAndEditImplementation(
                             } else {
                                 mainView.validateError(responseData.message.toString())
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -260,7 +272,9 @@ class AViewAndEditImplementation(
                             } else {
                                 mainView.validateError(responseData.message.toString())
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -293,11 +307,13 @@ class AViewAndEditImplementation(
                         200 -> {
                             val responseData: AddImageResponse? = response.body()
                             if (responseData!!.status) {
-                                mainView.onUploadImageSuccess(responseData.message,responseData)
+                                mainView.onUploadImageSuccess(responseData.message, responseData)
                             } else {
                                 mainView.validateError(responseData.message.toString())
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -335,7 +351,9 @@ class AViewAndEditImplementation(
                             } else {
                                 mainView.validateError(responseData.message.toString())
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

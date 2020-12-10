@@ -38,6 +38,9 @@ class MainSplashPresenterImplementation(private var mainView: MainSplashPresente
                                     mainView.validateError(responseData.message)
                                 }
                             }
+                            404 -> {
+                                mainView.logoutUser()
+                            }
                         }
                     }, { error ->
 //                        mainView.hideProgressbar()
@@ -69,7 +72,9 @@ class MainSplashPresenterImplementation(private var mainView: MainSplashPresente
                                 } else {
                                     mainView.validateError(responseData.get("message").asString)
                                 }
-                            }
+                            } 404 -> {
+                            mainView.logoutUser()
+                        }
                         }
                     }, { error ->
 //                        mainView.hideProgressbar()

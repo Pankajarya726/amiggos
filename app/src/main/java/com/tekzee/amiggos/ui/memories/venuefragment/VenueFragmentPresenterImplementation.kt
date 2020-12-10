@@ -41,7 +41,9 @@ class VenueFragmentPresenterImplementation (private var mainView: VenueFragmentP
                                 } else {
                                     mainView.onVenueFailure(responseData.message)
                                 }
-                            }
+                            } 404 -> {
+                            mainView.logoutUser()
+                        }
                         }
                     }, { error ->
                         //                    mainView.hideProgressbar()

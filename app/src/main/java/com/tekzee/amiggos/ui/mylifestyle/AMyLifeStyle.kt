@@ -105,6 +105,10 @@ class AMyLifeStyle : BaseFragment(), MyLifestylePresenter.MyLifestylePresenterMa
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
+    }
+
     override fun onPause() {
         super.onPause()
 

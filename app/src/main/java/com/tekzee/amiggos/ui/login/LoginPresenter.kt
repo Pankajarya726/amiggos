@@ -3,6 +3,7 @@ package com.tekzee.amiggos.ui.login
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.base.BaseMainView
+import com.tekzee.amiggos.base.model.CommonResponse
 
 class LoginPresenter {
     interface LoginMainPresenter{
@@ -20,6 +21,6 @@ class LoginPresenter {
 
     interface LoginMainView: BaseMainView {
         fun onLoginSuccess(responseData: LoginResponse)
-        fun onFirebaseUpdateSuccess(responseData: LoginResponse)
+        fun onFirebaseUpdateSuccess(responseData: CommonResponse?)
     }
 }

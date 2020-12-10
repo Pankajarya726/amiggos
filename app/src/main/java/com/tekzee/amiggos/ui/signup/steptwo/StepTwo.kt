@@ -240,6 +240,10 @@ class StepTwo: BaseActivity(), StepTwoPresenter.StepTwoPresenterMainView {
         Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
     override fun onBackPressed() {
         super.onBackPressed()
         Animatoo.animateSlideRight(this)

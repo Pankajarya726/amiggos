@@ -86,6 +86,10 @@ class AVenueTypeFragment : BaseFragment(), AVenueTypePresenter.AVenueTypePresent
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
+    }
+
     fun getWidth(): Int {
         val display: Display = activity!!.windowManager.defaultDisplay
         val size: Point = Point()

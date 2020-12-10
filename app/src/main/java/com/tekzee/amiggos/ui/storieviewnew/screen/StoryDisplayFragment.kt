@@ -34,6 +34,8 @@ import com.tekzee.amiggos.ApplicationController
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.enums.FriendsAction
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 import com.tekzee.amiggos.ui.storieview.StorieEvent
 import com.tekzee.amiggos.ui.storieviewnew.*
@@ -51,6 +53,7 @@ import kotlin.collections.ArrayList
 class StoryDisplayFragment : Fragment(),
     StoriesProgressView.StoriesListener, BannerClickListener, KodeinAware, StorieEvent {
     private var storieId: String? = null
+    private var fileid: String? = null
     val prefs: SharedPreference by instance<SharedPreference>()
     override val kodein: Kodein by closestKodein()
     private val position: Int by
@@ -105,7 +108,8 @@ class StoryDisplayFragment : Fragment(),
 
         txt_view.setOnClickListener {
             val intent = Intent(requireActivity(), ViewFriendsActivity::class.java)
-            intent.putExtra(ConstantLib.STORY,storieId)
+            intent.putExtra(ConstantLib.STORY, storieId)
+            intent.putExtra(ConstantLib.FILEID, fileid)
             startActivity(intent)
         }
 
@@ -137,7 +141,7 @@ class StoryDisplayFragment : Fragment(),
         if (tagged.isNotEmpty() && adapter != null) {
             banner_recyclerview.visibility = View.VISIBLE
             adapter!!.submitList(tagged)
-        }else{
+        } else {
             banner_recyclerview.visibility = View.GONE
         }
     }
@@ -205,11 +209,25 @@ class StoryDisplayFragment : Fragment(),
 
     private fun updateStory() {
         observeList(stories[counter].banners)
-        Log.e("Url---->",stories[counter].toString())
-        storieId = stories[counter].storyData.id.toString()
+        Log.e("Url---->", stories[counter].toString())
+        if (stories[counter].from.equals(ConstantLib.OURMEMORIES)) {
+            fileid = stories[counter].storyData.id.toString()
+            storieId = stories[counter].ourstorieid
+        } else {
+            fileid = ""
+            storieId = stories[counter].storyData.id.toString()
+        }
+
+
+        if (stories[counter].storyData.user_id == prefs.getValueInt(ConstantLib.USER_ID)) {
+            txt_view.visibility = View.VISIBLE
+        } else {
+            txt_view.visibility = View.GONE
+        }
         txt_view.text = stories[counter].storyData.viewCount.toString()
 
-        Glide.with(this).load(stories[counter].storyData.profile).circleCrop().placeholder(R.drawable.user).into(storyDisplayProfilePicture)
+        Glide.with(this).load(stories[counter].storyData.profile).circleCrop()
+            .placeholder(R.drawable.user).into(storyDisplayProfilePicture)
         storyDisplayNick.text = stories[counter].storyData.name
 
 
@@ -239,7 +257,8 @@ class StoryDisplayFragment : Fragment(),
             storyDisplayVideo.hide()
             storyDisplayVideoProgress.hide()
             storyDisplayImage.show()
-            Glide.with(this).load(stories[counter].url).placeholder(R.drawable.noimage).into(storyDisplayImage)
+            Glide.with(this).load(stories[counter].url).placeholder(R.drawable.noimage)
+                .into(storyDisplayImage)
         }
 
         val cal: Calendar = Calendar.getInstance(Locale.ENGLISH).apply {
@@ -247,9 +266,9 @@ class StoryDisplayFragment : Fragment(),
         }
         storyDisplayTime.text = DateFormat.format("MM-dd-yyyy HH:mm:ss", cal).toString()
 
-        if(prefs.getValueInt(ConstantLib.USER_ID) == stories[counter].storyData.user_id){
+        if (prefs.getValueInt(ConstantLib.USER_ID) == stories[counter].storyData.user_id) {
             img_delete.visibility = View.VISIBLE
-        }else{
+        } else {
             img_delete.visibility = View.GONE
         }
     }
@@ -314,11 +333,11 @@ class StoryDisplayFragment : Fragment(),
     private fun setUpUi() {
         val touchListener = object : OnSwipeTouchListener(requireActivity()) {
             override fun onSwipeTop() {
-               // Toast.makeText(activity, "onSwipeTop", Toast.LENGTH_LONG).show()
+                // Toast.makeText(activity, "onSwipeTop", Toast.LENGTH_LONG).show()
             }
 
             override fun onSwipeBottom() {
-               // Toast.makeText(activity, "onSwipeBottom", Toast.LENGTH_LONG).show()
+                // Toast.makeText(activity, "onSwipeBottom", Toast.LENGTH_LONG).show()
             }
 
             override fun onClick(view: View) {
@@ -369,8 +388,6 @@ class StoryDisplayFragment : Fragment(),
         )
         storiesProgressView?.setAllStoryDuration(4000L)
         storiesProgressView?.setStoriesListener(this)
-
-
 
 
     }
@@ -432,11 +449,11 @@ class StoryDisplayFragment : Fragment(),
         listItem: MemorieResponse.Data.Memories.Memory.Tagged
     ) {
         try {
-            var websiteUrl=""
-            if(listItem.website.contains("http://")){
-               websiteUrl =  listItem.website
-            }else{
-                websiteUrl ="http://"+listItem.website
+            var websiteUrl = ""
+            if (listItem.website.contains("http://")) {
+                websiteUrl = listItem.website
+            } else {
+                websiteUrl = "http://" + listItem.website
             }
             val openUrlIntent = Intent(Intent.ACTION_VIEW, Uri.parse(websiteUrl))
             startActivity(openUrlIntent)
@@ -456,8 +473,14 @@ class StoryDisplayFragment : Fragment(),
     }
 
     override fun onDeleteResponse(message: String) {
-        Toast.makeText(requireContext(),message,Toast.LENGTH_LONG).show()
-        requireActivity().finish()
+        requireActivity().hideProgressBar()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+//        requireActivity().finish()
+        val intent = Intent(requireContext(), AHomeScreen::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            action = FriendsAction.SHOW_MY_MEMORY.action
+        }
+        requireActivity().startActivity(intent)
     }
 
     override fun onFailure(message: String) {
@@ -467,7 +490,6 @@ class StoryDisplayFragment : Fragment(),
 
     override fun sessionExpired(message: String) {
         requireActivity().Errortoast(message)
-//        Utility.logoutUser(prefs, requireActivity())
     }
 
 

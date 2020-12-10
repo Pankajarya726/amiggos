@@ -2,6 +2,7 @@ package com.tekzee.amiggos.ui.memories.mymemories
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.MyMemoriesFragmentNewBinding
 import com.tekzee.amiggos.ui.cameranew.CameraActivity
+import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.FirstFragment
 
 import com.tekzee.amiggos.ui.memories.mymemories.pagingfeaturedbrand.NewFeaturedBrandAdapter
 import com.tekzee.amiggos.ui.memories.mymemories.pagingfeaturedbrand.NewMemorieAdapter
@@ -29,13 +31,24 @@ import org.kodein.di.generic.instance
 class MyMemoriesFragment : Fragment(), KodeinAware, MemorieClickListener,
     FeaturedBrandClickListener {
 
+    private var memorieAdapter: NewMemorieAdapter?=null
     override val kodein: Kodein by closestKodein()
     val factory: MyMemorieViewModelFactory by instance<MyMemorieViewModelFactory>()
 
     val prefs: SharedPreference by instance<SharedPreference>()
+
     companion object {
-        fun newInstance() =
-            MyMemoriesFragment()
+        private val myMemoriesFragment: MyMemoriesFragment? = null
+
+
+        fun newInstance(): MyMemoriesFragment {
+
+            if(myMemoriesFragment == null){
+                return MyMemoriesFragment()
+            }
+            return myMemoriesFragment
+
+        }
     }
 
     private var binding: MyMemoriesFragmentNewBinding? = null
@@ -53,9 +66,6 @@ class MyMemoriesFragment : Fragment(), KodeinAware, MemorieClickListener,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this, factory).get(MyMemoriesViewModel::class.java)
-
-        setupMemorieAdapter()
-        setupFeaturedBrandNew()
         setupClickListener()
 
 
@@ -77,11 +87,11 @@ class MyMemoriesFragment : Fragment(), KodeinAware, MemorieClickListener,
     }
 
     private fun observeMemorieLiveData() {
-        val memorieAdapter = NewMemorieAdapter(this)
+
 
         //observe live data emitted by view model
         viewModel.getMemorieProducts().observe(viewLifecycleOwner, Observer {
-            memorieAdapter.submitList(it)
+            memorieAdapter!!.submitList(it)
             onLoadedMemorie()
         })
 
@@ -158,5 +168,12 @@ class MyMemoriesFragment : Fragment(), KodeinAware, MemorieClickListener,
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.e("Onresume is called","-----------------")
+        memorieAdapter = NewMemorieAdapter(this)
+        setupMemorieAdapter()
+        setupFeaturedBrandNew()
+    }
 
 }

@@ -99,11 +99,55 @@ public class BitmapUtils {
         // If there is an error deleting the file, show a Toast
         if (!deleted) {
             String errorMessage = "Something went wrong";
-
+            Log.e("File Not Deleted","----------------------------"+imagePath.getAbsolutePath());
+        }else{
+            Log.e("File Deleted","----------------------------"+imagePath.getAbsolutePath());
         }
 
         return deleted;
     }
+
+
+     public static void deleteFolder() {
+        try {
+            File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/.AmiggosImageFolder");
+            if (dir.isDirectory())
+            {
+                String[] children = dir.list();
+                for (int i = 0; i < children.length; i++)
+                {
+                    File file = new File(dir, children[i]);
+                    file.delete();
+                    Log.e("file delete----->",file.getAbsolutePath());
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+
+     public static void deleteVideoFolder() {
+        try {
+            File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)+"/AmiggosMovies");
+            if (dir.isDirectory())
+            {
+                String[] children = dir.list();
+                for (int i = 0; i < children.length; i++)
+                {
+                    File file = new File(dir, children[i]);
+                    file.delete();
+                    Log.e("file delete----->",file.getAbsolutePath());
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+
 
     /**
      * Helper method for adding the photo to the system photo gallery so it can be accessed
@@ -196,7 +240,7 @@ public class BitmapUtils {
         String imageFileName = "JPEG_" + timeStamp + ".jpg";
         File storageDir = new File(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                        + "/amiggos");
+                        + "/.AmiggosImageFolder");
         boolean success = true;
         if (!storageDir.exists()) {
             success = storageDir.mkdirs();
@@ -237,7 +281,7 @@ public class BitmapUtils {
         String imageFileName = "JPEG_" + timeStamp + ".jpg";
         File storageDir = new File(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                        + "/amiggos");
+                        + "/.AmiggosImageFolder");
         boolean success = true;
         if (!storageDir.exists()) {
             success = storageDir.mkdirs();

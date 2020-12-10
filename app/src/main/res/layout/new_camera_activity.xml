@@ -16,7 +16,7 @@
             app:cameraUseDeviceOrientation="false"
             app:cameraAudio="on"
             app:cameraAutoFocusMarker="@string/cameraview_default_autofocus_marker"
-            app:cameraEngine="camera1"
+            app:cameraEngine="camera2"
             app:cameraExperimental="true"
             app:cameraFacing="back"
             app:cameraFlash="auto"
@@ -88,12 +88,12 @@
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="20dp">
 
-            <com.iammert.library.cameravideobuttonlib.CameraVideoButton
+                <com.jackandphantom.instagramvideobutton.InstagramVideoButton
                 android:id="@+id/videobutton"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_gravity="bottom|center"
-                app:cvb_recording_color="#000000"
+                app:progressColor="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

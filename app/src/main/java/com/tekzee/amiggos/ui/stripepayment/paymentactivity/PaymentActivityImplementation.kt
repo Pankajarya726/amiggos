@@ -42,7 +42,9 @@ class PaymentActivityImplementation(private var mainView: PaymentActivityPresent
                             } else {
                                 mainView.onCardListFailure(responseData)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -70,7 +72,9 @@ class PaymentActivityImplementation(private var mainView: PaymentActivityPresent
                             } else {
                                 mainView.onBookingFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -98,7 +102,9 @@ class PaymentActivityImplementation(private var mainView: PaymentActivityPresent
                             } else {
                                 mainView.onSetDefaultCardFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

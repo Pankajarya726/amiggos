@@ -8,6 +8,12 @@ public class LanguageData {
     @SerializedName("firstname_should_not_be_15_characters")
     @Expose
     private String firstname_should_not_be_15_characters;
+    @SerializedName("bookingunavailable")
+    @Expose
+    private String bookingunavailable;
+    @SerializedName("session_error")
+    @Expose
+    private String session_error;
 
     @SerializedName("confirm_password_should_be_greater_than_6_and_smaller_than_16")
     @Expose
@@ -5977,5 +5983,21 @@ public class LanguageData {
 
     public void setConfirm_password_should_be_greater_than_6_and_smaller_than_16(String confirm_password_should_be_greater_than_6_and_smaller_than_16) {
         this.confirm_password_should_be_greater_than_6_and_smaller_than_16 = confirm_password_should_be_greater_than_6_and_smaller_than_16;
+    }
+
+    public String getSession_error() {
+        return session_error;
+    }
+
+    public void setSession_error(String session_error) {
+        this.session_error = session_error;
+    }
+
+    public String getBookingunavailable() {
+        return bookingunavailable;
+    }
+
+    public void setBookingunavailable(String bookingunavailable) {
+        this.bookingunavailable = bookingunavailable;
     }
 }

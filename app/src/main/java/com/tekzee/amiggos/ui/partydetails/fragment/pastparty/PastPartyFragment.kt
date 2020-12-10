@@ -93,4 +93,8 @@ class PastPartyFragment: BaseFragment(), PastPartyPresenter.PastPartyMainView {
         adapter.notifyDataSetChanged()
         Toast.makeText(activity,message, Toast.LENGTH_LONG).show()
     }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
+    }
 }

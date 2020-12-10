@@ -53,7 +53,9 @@ class InviteFriendNewImplementation(
                             } else {
                                 mainView.onOurMemoriesFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -86,7 +88,9 @@ class InviteFriendNewImplementation(
                             } else {
                                 mainView.onFriendInviteFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

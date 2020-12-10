@@ -3,6 +3,7 @@ package com.tekzee.amiggos.ui.notification_new.fragments.memoriesnotification
 import android.content.Context
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
+import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.network.ApiClient
 import com.tekzee.amiggos.ui.notification_new.model.ANotificationResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -31,7 +32,7 @@ class MemorieNotificationFragmentImplementation(
         requestDatFromServer: Boolean
     ) {
 
-        if(!requestDatFromServer){
+        if (!requestDatFromServer) {
             mainView.showProgressbar()
         }
         if (mainView.checkInternet()) {
@@ -44,10 +45,10 @@ class MemorieNotificationFragmentImplementation(
                         200 -> {
                             val responseData: ANotificationResponse? = response.body()
                             if (responseData!!.status) {
-                                if (responseData.data.userNotification.size>0) {
-                                    if(requestDatFromServer){
+                                if (responseData.data.userNotification.isNotEmpty()) {
+                                    if (requestDatFromServer) {
                                         mainView.onNotificationInfiniteSuccess(responseData.data.userNotification)
-                                    }else{
+                                    } else {
                                         mainView.onNotificationSuccess(responseData.data.userNotification)
                                     }
                                 } else {
@@ -57,7 +58,43 @@ class MemorieNotificationFragmentImplementation(
                             } else {
                                 mainView.onNotificationFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
+                    }
+                }, { error ->
+                    mainView.hideProgressbar()
+                    mainView.onNotificationFailure(error.message.toString())
+                })
+        } else {
+            mainView.hideProgressbar()
+            mainView.validateError(context!!.getString(R.string.check_internet))
+        }
+    }
+
+    override fun doCallRejectMemoryInvite(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ) {
+
+        mainView.showProgressbar()
+        if (mainView.checkInternet()) {
+            disposable = ApiClient.instance.doRejectCreateMemoryInvitationApi(input, createHeaders)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    mainView.hideProgressbar()
+                    when (response.code()) {
+                        200 -> {
+                            val responseData: CommonResponse? = response.body()
+                            if (responseData!!.status) {
+                                mainView.onMemoryInviteRejected(responseData.message)
+                            } else {
+                                mainView.validateError(responseData.message)
+                            }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

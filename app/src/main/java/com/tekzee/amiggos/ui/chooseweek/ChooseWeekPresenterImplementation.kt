@@ -38,7 +38,9 @@ class ChooseWeekPresenterImplementation(private var mainView: ChooseWeekPresente
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

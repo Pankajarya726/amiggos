@@ -102,6 +102,10 @@ class ChooseWeekActivity: BaseActivity(), ChooseWeekPresenter.ChooseWeekMainView
         Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
     override fun onChooseWeekSuccess(responseData: ChooseWeekResponse?) {
         response = responseData
         data.addAll(responseData!!.data.dayData)

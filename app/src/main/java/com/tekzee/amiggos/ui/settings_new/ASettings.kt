@@ -207,6 +207,10 @@ class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView 
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
     override fun onStop() {
         super.onStop()
         asettingspresenterimplementation.onStop()

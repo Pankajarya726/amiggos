@@ -204,6 +204,10 @@ class ABookingDetails : BaseActivity(), ABookingDetailsPresenter.ABookingDetails
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
     override fun onBackPressed() {
         super.onBackPressed()
         Animatoo.animateSlideLeft(this)

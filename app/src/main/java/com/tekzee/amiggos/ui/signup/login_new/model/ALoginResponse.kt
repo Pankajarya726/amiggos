@@ -39,7 +39,7 @@ data class ALoginResponse(
         @SerializedName("is_profile_complete")
         var is_profile_complete: Int = 0,
         @SerializedName("age")
-        var age: String = "0",
+        var age: Int = 0,
         @SerializedName("myid")
         var myid: Boolean = false,
         @SerializedName("type")

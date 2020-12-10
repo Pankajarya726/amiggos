@@ -33,7 +33,9 @@ class MyPreferencesPresenterImplementation(private var mainView: MyPreferencesPr
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -66,7 +68,9 @@ class MyPreferencesPresenterImplementation(private var mainView: MyPreferencesPr
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

@@ -13,6 +13,7 @@ import com.tekzee.amiggos.base.repository.MemorieRepository
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.postmemories.service.FileUploadService
+import com.tekzee.amiggos.ui.tagging.TaggingFragment
 import com.tekzee.amiggos.util.*
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -121,7 +122,8 @@ class UploadWorkService(context: Context, workerParams: WorkerParameters) : Work
             }, { throwable -> // call onErrors() if error occurred during file upload
                 onErrors(throwable)
             }) { // call onSuccess() while file upload successful
-                this@UploadWorkService.onSuccess()
+
+                this@UploadWorkService.onSuccess(type!!)
             }
 
     }
@@ -166,12 +168,13 @@ class UploadWorkService(context: Context, workerParams: WorkerParameters) : Work
     /**
      * Send Broadcast to FileProgressReceiver while file upload successful
      */
-    private fun onSuccess() {
+    private fun onSuccess(type: Int) {
+        BitmapUtils.deleteFolder()
+        BitmapUtils.deleteVideoFolder()
         val successIntent = Intent(applicationContext, FileProgressReceiver::class.java)
         successIntent.action = "com.wave.ACTION_UPLOADED"
         successIntent.putExtra("notificationId", FileUploadService.NOTIFICATION_ID)
         successIntent.putExtra("progress", 100)
-        BitmapUtils.deleteImageFile(applicationContext,File(imageUri!!))
         applicationContext.sendBroadcast(successIntent)
     }
 

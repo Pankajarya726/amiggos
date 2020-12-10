@@ -59,11 +59,11 @@ class StorieViewNew: AppCompatActivity(),
     private fun setupStorieData(): ArrayList<StoryUser> {
         val storieUser = ArrayList<StoryUser>()
         val stories = ArrayList<Story>()
-        var banners = ArrayList<MemorieResponse.Data.Memories.Memory.Tagged>()
+        var banners: java.util.ArrayList<MemorieResponse.Data.Memories.Memory.Tagged>
         for (i in memorieData.memory.indices) {
             if(memorieData.memory[i].storyFile!=null){
                 banners = memorieData.memory[i].tagged as ArrayList<MemorieResponse.Data.Memories.Memory.Tagged>
-                stories.add(Story(memorieData.memory[i],memorieData.memory[i].storyFile,banners))
+                stories.add(Story(memorieData.memory[i],memorieData.memory[i].storyFile,banners,memorieData.our_story_id,intent.getStringExtra(ConstantLib.FROM)))
             }
         }
         storieUser.add(StoryUser(memorieData.name,memorieData.profile,stories))
