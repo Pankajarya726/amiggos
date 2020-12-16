@@ -1,5 +1,6 @@
 package com.tekzee.amiggos.ui.chatnew
 
+import android.util.Log
 import com.google.firebase.database.*
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.firebasemodel.User
@@ -75,6 +76,7 @@ class ChatHelper {
 
                     for (items in dataSnapshot.children) {
                         val user: User? = items.getValue(User::class.java)
+                        Log.e("user---->",user.toString())
                         if (user!!.amiggosID.equals(amiggosId, true)) {
                             listener.getReceiverId(items.key!!, user)
                             break

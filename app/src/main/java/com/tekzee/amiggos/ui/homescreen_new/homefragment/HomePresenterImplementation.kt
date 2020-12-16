@@ -35,9 +35,7 @@ class HomePresenterImplementation(
         languageData: LanguageData?,
         callFrom: Int
     ) {
-
         if (mainView.checkInternet()) {
-            mainView.showProgressbar()
             disposable = ApiClient.instance.doCallHomeApi(input,createHeaders)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -57,13 +55,11 @@ class HomePresenterImplementation(
                                 Utility.showLogoutPopup(context!!,"your Session has been expired,please logout")
                         }
                     }
-                    mainView.hideProgressbar()
+
                 }, { error ->
-                    mainView.hideProgressbar()
                     mainView.onHomeApiFailure(error.message.toString())
                 })
         } else {
-            mainView.hideProgressbar()
             mainView.validateError(context!!.getString(R.string.check_internet))
         }
     }

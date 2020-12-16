@@ -17,8 +17,10 @@ import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
+import com.tekzee.amiggos.base.repository.ItemRepository
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.ActivityCalendarBinding
+import com.tekzee.amiggos.room.database.AmiggoRoomDatabase
 import com.tekzee.amiggos.ui.calendarview.adapter.TimeAdapter
 import com.tekzee.amiggos.ui.calendarview.model.TimeSlotResponse
 import com.tekzee.amiggos.ui.choosepackage.ChoosePackageActivity
@@ -48,7 +50,7 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
     var selectedDate = ""
     var seletctedTime = ""
     private var calendarviewpresenterimplementation: CalendarViewPresenterImplementation? = null
-
+    private var repository: ItemRepository? = null
     var displayFormat = SimpleDateFormat("HH:mm")
     var parseFormat = SimpleDateFormat("hh:mm a")
 
@@ -63,7 +65,7 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
         setupClickListener()
         setupAdapter()
         setupLangauge()
-
+        setupRepository()
         dataVenue = intent.getSerializableExtra(ConstantLib.CALENDAR_DATA) as VenueDetails.Data
         binding.timepicker.setIs24HourView(false)
         checkTimeSlot()
@@ -134,7 +136,10 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
 //        binding.calendarView.setDisabledDays(disabledDates)
 
     }
-
+    private fun setupRepository() {
+        val itemDao = AmiggoRoomDatabase.getDatabase(this).itemDao()
+        repository = ItemRepository(itemDao)
+    }
 
     private fun setupCalendar() {
         val cal = Calendar.getInstance()
@@ -197,6 +202,9 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
         binding.btnNext.setOnClickListener {
             if (!checkDisabledDate(meventDay!!.calendar)) {
                 if (dataVenue.clubData.isclock == 0 && dataVenue.clubData.timeslot == 0) {
+                    Coroutines.main {
+                        repository!!.clearCart()
+                    }
                     val menuIntent = Intent(applicationContext, MenuActivity::class.java)
                     menuIntent.putExtra(
                         ConstantLib.VENUE_ID,
@@ -213,6 +221,9 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
                     )
                     startActivity(menuIntent)
                 } else if (dataVenue.clubData.isclock == 1) {
+                    Coroutines.main {
+                        repository!!.clearCart()
+                    }
                     val menuIntent = Intent(applicationContext, MenuActivity::class.java)
                     menuIntent.putExtra(
                         ConstantLib.VENUE_ID,
@@ -231,6 +242,9 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
                     )
                     startActivity(menuIntent)
                 } else if (dataVenue.clubData.timeslot == 1) {
+                    Coroutines.main {
+                        repository!!.clearCart()
+                    }
                     if (adapter.selected != null) {
                         val menuIntent = Intent(applicationContext, MenuActivity::class.java)
                         menuIntent.putExtra(

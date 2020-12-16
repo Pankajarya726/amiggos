@@ -460,7 +460,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
                 pendingRejectIntentIntent
             )
             .setOnlyAlertOnce(true)
-            .setAutoCancel(true).build()
+            .setAutoCancel(false).build()
 
         with(NotificationManagerCompat.from(this)) {
             notify(notificationId, friendRequestBuilder)

@@ -25,8 +25,10 @@ import com.tekzee.amiggos.ui.settings.SettingsActivity
 import com.tekzee.amiggos.ui.stripepayment.APaymentMethod
 import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
+import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
+import com.tekzee.amiggos.util.toast
 
 class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView {
 
@@ -42,7 +44,7 @@ class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView 
         binding = DataBindingUtil.setContentView(this, R.layout.a_settings)
         sharedPreference = SharedPreference(this)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        asettingspresenterimplementation =  ASettingsPresenterImplementation(this, this)
+        asettingspresenterimplementation = ASettingsPresenterImplementation(this, this)
         setupClickListener()
         setupLanguage()
 
@@ -80,9 +82,9 @@ class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView 
 
     private fun setupView(data: GetUserProfileResponse.Data) {
         sharedPreference!!.save(ConstantLib.ISPROFILECOMPLETE, data.isProfileComplete)
-        binding!!.txtName.text = data.name+" "+data.lastName
+        binding!!.txtName.text = data.name + " " + data.lastName
         binding!!.age.text = data.age.toString()
-        binding!!.address.text = data.city+", "+data.state
+        binding!!.address.text = data.city + ", " + data.state
         Glide.with(this).load(data.profile)
             .placeholder(R.drawable.noimage)
             .into(binding!!.imgUser)
@@ -103,7 +105,7 @@ class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView 
                 )
                 sendIntent.type = "text/plain"
                 startActivity(sendIntent)
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
@@ -112,7 +114,7 @@ class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView 
             startActivity(Intent(applicationContext, AttachIdActivity::class.java))
         }
 
-        binding!!.paymentMethod.setOnClickListener{
+        binding!!.paymentMethod.setOnClickListener {
             val intent = Intent(this, APaymentMethod::class.java);
             intent.putExtra(ConstantLib.FROM, ConstantLib.PAYMENTMETHOD)
             startActivity(intent)
@@ -179,11 +181,14 @@ class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView 
             }
             pDialog.setConfirmButton(languageData!!.klOk) {
                 pDialog.dismiss()
-                FirebaseAuth.getInstance().signOut()
-                sharedPreference!!.clearSharedPreference()
-                val intent = Intent(this, MainSplashActivity::class.java)
-                startActivity(intent)
-                finishAffinity()
+                val input: JsonObject = JsonObject()
+                input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
+                asettingspresenterimplementation.doLogoutUser(
+                    input, Utility.createHeaders(
+                        sharedPreference
+                    )
+                )
+
             }
             pDialog.show()
         }
@@ -201,6 +206,18 @@ class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView 
 
     override fun onUserProfileFailure(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onUserLogoutSuccess(message: String) {
+        FirebaseAuth.getInstance().signOut()
+        sharedPreference!!.clearSharedPreference()
+        val intent = Intent(this, MainSplashActivity::class.java)
+        startActivity(intent)
+        finishAffinity()
+    }
+
+    override fun onUserLogoutFailure(message: String) {
+        Errortoast(message)
     }
 
     override fun validateError(message: String) {

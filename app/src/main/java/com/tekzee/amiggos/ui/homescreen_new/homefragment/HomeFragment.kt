@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.databinding.DataBindingUtil
 import com.allenliu.badgeview.BadgeFactory
 import com.allenliu.badgeview.BadgeView
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
@@ -40,6 +41,7 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
+import com.tekzee.amiggos.databinding.HomeFragmentBinding
 import com.tekzee.amiggos.ui.cameranew.CameraActivity
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.homescreen_new.CustomInfoWindowAdapter
@@ -64,6 +66,7 @@ import java.util.concurrent.TimeUnit
 
 class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     Listener, com.google.android.gms.maps.OnMapReadyCallback {
+    private var binding: HomeFragmentBinding? = null
     private var mMap: GoogleMap? = null
     private lateinit var notifylistner: NotifyNotification
     private var finalDataList = ArrayList<Venue>()
@@ -83,13 +86,13 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     private var languageData: LanguageData? = null
     private var easyWayLocation: EasyWayLocation? = null
     private lateinit var arrayAdapter: AutoCompleteAdapter
-    private var groupradio: RadioGroup? = null
+
 
     companion object {
         private val homefragment: HomeFragment? = null
-         var staticRequestBadgeCount: Int = 0
-         var staticReaFriendBadgeCount: Int = 0
-         var staticNearMeBadgeCount: Int = 0
+        var staticRequestBadgeCount: Int = 0
+        var staticReaFriendBadgeCount: Int = 0
+        var staticNearMeBadgeCount: Int = 0
 
         fun newInstance(): HomeFragment {
             if (homefragment == null) {
@@ -113,12 +116,11 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.home_fragment, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.home_fragment, container, false)
         val mapFragment: SupportMapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        groupradio = view.findViewById(R.id.radiogroup);
-        return view
+        return binding!!.root
     }
 
     private fun callBadgeApi() {
@@ -140,10 +142,16 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         sharedPreference = SharedPreference(requireContext())
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
 
-        showProgressbar()
+        showProgressbarNew()
 
         easyWayLocation = EasyWayLocation(activity, false, this)
         easyWayLocation!!.startLocation()
+    }
+
+    private fun showProgressbarNew() {
+        binding!!.headerlayout.visibility = View.GONE
+        binding!!.maplayout.visibility = View.GONE
+        binding!!.homeprogressbar.visibility = View.VISIBLE
     }
 
 
@@ -322,8 +330,16 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
+        hideProgressbarNew()
+    }
+
+    private fun hideProgressbarNew() {
+        binding!!.headerlayout.visibility = View.VISIBLE
+        binding!!.maplayout.visibility = View.VISIBLE
+        binding!!.homeprogressbar.visibility = View.GONE
     }
 
     override fun onHomeApiSuccess(responseData: HomeResponse) {
@@ -541,7 +557,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
 
     override fun locationCancelled() {
-        hideProgressbar()
+        hideProgressbarNew()
         Logger.d("Location cancelled called")
     }
 
@@ -554,8 +570,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         latitude = location!!.latitude.toString()
         longitude = location.longitude.toString()
         easyWayLocation!!.endUpdates()
-        Logger.d("Location updates--->$latitude----$longitude")
-        hideProgressbar()
+        hideProgressbarNew()
         requireActivity().runOnUiThread(Runnable {
             hideKeyboard()
             mMap!!.moveCamera(
@@ -668,7 +683,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         if (resultCode == 2) {
             searchkeyword = ""
             categoryId = ""
-            groupradio!!.clearCheck()
+            binding!!.radiogroup.clearCheck()
             requireView().findViewById<AutoCompleteTextView>(R.id.autoCompleteEditText).setText("")
             requireView().findViewById<AutoCompleteTextView>(R.id.search_txt).setText("")
             callHomeApi(0)

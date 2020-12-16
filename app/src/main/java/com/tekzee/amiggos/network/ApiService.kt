@@ -276,6 +276,12 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<GetUserProfileResponse>>
 
+    @POST("guest/logout")
+    fun callLogoutUser(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
 
     @POST("guest/removeOtherImage")
     fun deletePhotoApi(

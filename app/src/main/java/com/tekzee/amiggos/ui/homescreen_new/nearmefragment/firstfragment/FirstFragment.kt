@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,7 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
 import com.tekzee.amiggos.custom.ProfileRestrictionFragment
+import com.tekzee.amiggos.databinding.FirstFragmentBinding
 import com.tekzee.amiggos.hiddensearchrecyclerview.utils.HiddenSearchWithRecyclerView
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.adapter.FirstFragmentAdapter
@@ -49,6 +51,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
     InfiniteScrollRecyclerView.RecyclerViewAdapterCallback, FirstFragmentAdapter.HomeItemClick,
     Listener {
 
+    private var binding: FirstFragmentBinding? = null
     private var errorLayout: LinearLayout? = null
     private var searchView: HiddenSearchWithRecyclerView? = null
     private val mLoadingData = NearByV2Response.Data.NearestFreind(loadingStatus = true)
@@ -98,14 +101,14 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.first_fragment, container, false)
-
+//        val view = inflater.inflate(R.layout.first_fragment, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.first_fragment, container, false)
         sharedPreference = SharedPreference(requireActivity())
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         firstFragmentPresenterImplementation =
             FirstFragmentPresenterImplementation(this, requireActivity())
 
-        return view
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -117,7 +120,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
 
         //check permissions
         askPermission(Manifest.permission.ACCESS_FINE_LOCATION) {
-            showProgressbar()
+            showProgressbarNew()
             easyWayLocation!!.startLocation()
         }.onDeclined { e ->
             if (e.hasDenied()) {
@@ -137,6 +140,11 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
             }
         }
         setupClickListener()
+    }
+
+    private fun showProgressbarNew() {
+        binding!!.firstfragmentprogressbar.visibility = View.VISIBLE
+        binding!!.hiddenSearchWithRecycler.visibility = View.GONE
     }
 
     private fun setupClickListener() {
@@ -200,6 +208,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         responseData1: NearByV2Response
     ) {
 //        NearMeFragment.setNearmeBadge(totalCount)
+        hideProgressbarNew()
         onlineFriendPageNo++
         mydataList.addAll(responseData)
         adapter!!.notifyDataSetChanged()
@@ -210,6 +219,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         responseData: List<NearByV2Response.Data.NearestFreind>,
         responseData1: NearByV2Response
     ) {
+        hideProgressbarNew()
         onlineFriendPageNo++
         adapter?.setLoadingStatus(true)
         mydataList.removeAt(mydataList.size - 1)
@@ -219,6 +229,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
     }
 
     override fun onOnlineFriendFailure(message: String) {
+        hideProgressbarNew()
         if (mydataList.size > 0) {
             adapter?.setLoadingStatus(false)
             mydataList.removeAt(mydataList.size - 1)
@@ -243,6 +254,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
 
 
     override fun validateError(message: String) {
+        hideProgressbarNew()
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
@@ -342,6 +354,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        showProgressbarNew()
         if(requestCode == 100 && resultCode ==2 ){
             mydataList.clear()
             adapter!!.notifyDataSetChanged()
@@ -373,8 +386,14 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         onlineFriendPageNo = 0
         mydataList.clear()
         adapter!!.notifyDataSetChanged()
+        hideProgressbarNew()
         callOnlineFriendApi(false, "", isFragmentVisible)
 
+    }
+
+    private fun hideProgressbarNew() {
+        binding!!.firstfragmentprogressbar.visibility = View.GONE
+        binding!!.hiddenSearchWithRecycler.visibility = View.VISIBLE
     }
 
 

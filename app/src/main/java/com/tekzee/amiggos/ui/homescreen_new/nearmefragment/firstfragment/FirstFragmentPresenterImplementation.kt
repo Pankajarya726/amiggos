@@ -35,9 +35,9 @@ class FirstFragmentPresenterImplementation(
         requestDatFromServer: Boolean,
         fragmentVisible: Boolean
     ) {
-        if (!requestDatFromServer && fragmentVisible) {
-            mainView.showProgressbar()
-        }
+//        if (!requestDatFromServer && fragmentVisible) {
+//            mainView.showProgressbar()
+//        }
         if (mainView.checkInternet()) {
             disposable = ApiClient.instance.getNearByUserv2(input, createHeaders)
                 .subscribeOn(Schedulers.io())
@@ -65,11 +65,11 @@ class FirstFragmentPresenterImplementation(
                         }
                     }
                 }, { error ->
-                    mainView.hideProgressbar()
+//                    mainView.hideProgressbar()
                     mainView.onOnlineFriendFailure(error.message.toString())
                 })
         } else {
-            mainView.hideProgressbar()
+//            mainView.hideProgressbar()
             mainView.validateError(context!!.getString(R.string.check_internet))
         }
     }

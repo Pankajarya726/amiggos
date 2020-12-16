@@ -74,6 +74,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />-->
 
+
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
         <activity
             android:name="com.tekzee.amiggos.ui.forgetpassword.AForgetPassword"
             android:screenOrientation="portrait"

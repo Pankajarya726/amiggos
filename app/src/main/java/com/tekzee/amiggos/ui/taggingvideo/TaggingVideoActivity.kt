@@ -108,6 +108,11 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
             binding!!.tagcontainerlayout.setTags(it)
         })
         setupVideoView()
+        if(intent.getStringExtra(ConstantLib.FROM_ACTIVITY)!!.equals(ConstantLib.OURSTORYINVITE)){
+            binding!!.touchText.visibility = View.GONE
+        }else{
+            binding!!.touchText.visibility = View.VISIBLE
+        }
     }
 
     private fun setupVideoView() {

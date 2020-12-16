@@ -1,50 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-
-    <com.tekzee.amiggos.hiddensearchrecyclerview.utils.HiddenSearchWithRecyclerView
-        android:id="@+id/hidden_search_with_recycler"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:filterWhileTyping="false"
-        app:scrollToBottomBeforeHide="true"
-        app:scrollToTopBeforeShow="false"
-        app:hideAtScroll="true"
-        app:visibleAtInit="true">
+        android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/first_fragment_recyclierview"
+        <com.tekzee.amiggos.hiddensearchrecyclerview.utils.HiddenSearchWithRecyclerView
+            android:id="@+id/hidden_search_with_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="55dp"
-            android:layout_marginTop="8dp" />
-        <LinearLayout
-            android:id="@+id/error_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            app:filterWhileTyping="false"
+            app:hideAtScroll="true"
+            app:scrollToBottomBeforeHide="true"
+            app:scrollToTopBeforeShow="false"
+            app:visibleAtInit="true">
 
-            <TextView
-                android:id="@+id/errortext"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/first_fragment_recyclierview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/opensans_semibold"
-                android:gravity="center"
-                android:text="No Booking found"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15sdp" />
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="55dp" />
+
+            <LinearLayout
+                android:id="@+id/error_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/errortext"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:gravity="center"
+                    android:text="No Booking found"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15sdp" />
 
 
-        </LinearLayout>
+            </LinearLayout>
 
-    </com.tekzee.amiggos.hiddensearchrecyclerview.utils.HiddenSearchWithRecyclerView>
+        </com.tekzee.amiggos.hiddensearchrecyclerview.utils.HiddenSearchWithRecyclerView>
 
 
-
-</LinearLayout>
+        <ProgressBar
+            android:visibility="gone"
+            android:id="@+id/firstfragmentprogressbar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+    </LinearLayout>
+</layout>

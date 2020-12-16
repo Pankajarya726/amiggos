@@ -73,6 +73,7 @@ class ALoginImplementation(private var mainView: ALoginPresenter.ALoginPresenter
                     val responseCode = response.code()
                     when (responseCode) {
                         200 -> {
+                            mainView.hideProgressbar()
                             val responseData: CommonResponse? = response.body()
                             if (responseData!!.status) {
                                 mainView.onFirebaseUpdateSuccess(responseData)
@@ -80,6 +81,7 @@ class ALoginImplementation(private var mainView: ALoginPresenter.ALoginPresenter
                                 mainView.validateError(responseData.message)
                             }
                         } 404 -> {
+                        mainView.hideProgressbar()
                         mainView.logoutUser()
                     }
                     }

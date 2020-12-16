@@ -2,6 +2,7 @@ package com.tekzee.amiggos.ui.viewandeditprofile
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -17,6 +18,7 @@ import com.ajithvgiri.searchdialog.SearchListItem
 import com.ajithvgiri.searchdialog.SearchableDialog
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.bumptech.glide.Glide
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -35,8 +37,6 @@ import com.tekzee.amiggos.ui.viewandeditprofile.model.AddImageResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
 import com.tekzee.amiggos.util.*
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
 import com.tsongkha.spinnerdatepicker.DatePicker
 import com.tsongkha.spinnerdatepicker.DatePickerDialog
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder
@@ -219,7 +219,7 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
                             .pickPhoto(this)
                     } else {
                         pickImageFor = 2
-                        pickImage()
+                        pickNewImage()
                     }
 
                 }
@@ -244,6 +244,16 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
 
 
         }
+    }
+
+    private fun pickNewImage() {
+        ImagePicker.with(this)
+            .cameraOnly()
+            .crop(1f, 1f)
+            .compress(1024)
+            .maxResultSize(1080, 1080)
+            .start()
+
     }
 
     private fun validateFields(): Boolean {
@@ -653,9 +663,12 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
     }
 
     private fun pickImage() {
-        CropImage.activity()
-            .setCropShape(CropImageView.CropShape.RECTANGLE)
-            .start(this)
+        ImagePicker.with(this)
+            .crop(1f, 1f)
+            .compress(1024)
+            .maxResultSize(1080, 1080)
+            .start()
+
     }
 
 
@@ -674,25 +687,14 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
             }
 
         } else
-            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-                val result =
-                    CropImage.getActivityResult(data)
-                if (resultCode == RESULT_OK) {
-                    imagePath = ImagePickerUtils.getPath(this, result.uri)
-                    if (pickImageFor == 1) {
-                        binding!!.imgUser.setImageURI(Uri.parse(imagePath))
-                        uploadSingleProfileImage()
-                    } else {
-                        uploadUserImage()
-                    }
-
-
-                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                    Toast.makeText(
-                        this,
-                        "Cropping failed: " + result.error,
-                        Toast.LENGTH_LONG
-                    ).show()
+            if (resultCode == Activity.RESULT_OK) {
+                val fileUri = data?.data
+                imagePath = ImagePickerUtils.getPath(this, fileUri)
+                if (pickImageFor == 1) {
+                    binding!!.imgUser.setImageURI(Uri.parse(imagePath))
+                    uploadSingleProfileImage()
+                } else {
+                    uploadUserImage()
                 }
             }
     }

@@ -117,6 +117,13 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
         } catch (e: UnsupportedOperationException) {
             binding!!.imgPicture.setImageDrawable(ColorDrawable(Color.GREEN))
         }
+
+        if(intent.getStringExtra(ConstantLib.FROM_ACTIVITY)!!.equals(ConstantLib.OURSTORYINVITE)){
+            binding!!.touchText.visibility = View.GONE
+        }else{
+            binding!!.touchText.visibility = View.VISIBLE
+        }
+
     }
 
     private fun getimageUri(bitmap: Bitmap?) {

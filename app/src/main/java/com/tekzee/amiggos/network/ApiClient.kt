@@ -115,7 +115,7 @@ class ApiClient {
             .client(okHttpClient)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .build();
+            .build()
 
         apiService = retrofit.create(ApiService::class.java)
 
@@ -360,6 +360,12 @@ class ApiClient {
         createHeaders: HashMap<String, String?>
     ): Observable<Response<GetUserProfileResponse>> {
         return apiService.callGetProfile(input, createHeaders)
+    }
+    fun callLogoutUser(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.callLogoutUser(input, createHeaders)
     }
     fun deletePhotoApi(
         input: JsonObject,

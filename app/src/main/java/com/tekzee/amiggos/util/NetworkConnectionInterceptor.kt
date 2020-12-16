@@ -13,7 +13,6 @@ class NetworkConnectionInterceptor(context: Context) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         if (!isInternetAvailable())
             throw NoInternetException("Make sure you have active internet connection")
-
         return chain.proceed(chain.request())
     }
 
