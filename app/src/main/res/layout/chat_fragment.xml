@@ -7,7 +7,7 @@
 
         <variable
             name="chatviewmodel"
-            type="com.tekzee.amiggosvenueapp.ui.chat.ChatViewModel" />
+            type="com.tekzee.amiggos.ui.chatnew.ChatViewModel" />
     </data>
 
 

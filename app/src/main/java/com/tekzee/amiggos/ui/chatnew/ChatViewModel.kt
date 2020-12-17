@@ -1,4 +1,4 @@
-package com.tekzee.amiggosvenueapp.ui.chat
+package com.tekzee.amiggos.ui.chatnew
 
 import android.content.Context
 import android.view.View
@@ -59,7 +59,13 @@ class ChatViewModel(
         Coroutines.main {
             val response =  notificatRepository.checkUserisBlocked(input, Utility.createHeaders(prefs))
             if(response.status){
-                chatEvent!!.isBlockedUserSuccess()
+                if(response.data.isUserBlocked == 1 && response.data.isMessageBlocked == 1){
+                    chatEvent!!.isBlockedUserSuccess()
+                 }else if(response.data.isMessageBlocked ==0){
+                    chatEvent!!.isBlockedUserFailure(response.data.messageBlockedMessage)
+                 }else if(response.data.isUserBlocked ==0){
+                    chatEvent!!.isBlockedUserFailure(response.data.blockedUserMessage)
+                 }
             }else{
                 chatEvent!!.isBlockedUserFailure(response.message)
             }

@@ -19,6 +19,7 @@ import com.tekzee.amiggos.ui.bookingqrcode.model.BookinQrCodeResponse
 import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
 import com.tekzee.amiggos.ui.bookings_new.bookings.model.ABookingResponse
 import com.tekzee.amiggos.ui.calendarview.model.TimeSlotResponse
+import com.tekzee.amiggos.ui.chat.model.BlockedUserMessageResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
 import com.tekzee.amiggos.ui.choosepackage.model.PackageBookResponse
 import com.tekzee.amiggos.ui.choosepackage.model.PackageResponse
@@ -1024,7 +1025,7 @@ interface ApiService {
     suspend fun checkUserisBlocked(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
-    ): Response<CommonResponse>
+    ): Response<BlockedUserMessageResponse>
 
 
     @POST("user/create_stripepayment")
