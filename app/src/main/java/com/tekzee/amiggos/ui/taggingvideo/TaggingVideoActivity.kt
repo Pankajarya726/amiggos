@@ -647,7 +647,7 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
     private fun getCountCombination(finaltaggedarray: java.util.ArrayList<TaggingResponse.Data.Search>): Boolean {
         var count:Int = 0
         for(items in finaltaggedarray){
-            if(items.type.equals("2") || items.type.equals("3")){
+            if(items.type == "1" || items.type == "2"){
                 count++
             }
         }
