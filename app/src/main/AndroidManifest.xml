@@ -68,17 +68,17 @@
         <!--            android:name="com.tekzee.amiggos.ui.ourmemories.service.FileOurMemoryUploadService"-->
         <!--            android:permission="android.permission.BIND_JOB_SERVICE" />-->
 
-<!--
-        <activity
-            android:name="com.tekzee.amiggos.ui.splash.SplashActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />-->
+        <!--
+                <activity
+                    android:name="com.tekzee.amiggos.ui.splash.SplashActivity"
+                    android:screenOrientation="portrait"
+                    android:theme="@style/AppTheme.NoActionBar" />-->
 
-
-        <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <!--
+                <activity
+                    android:name="com.yalantis.ucrop.UCropActivity"
+                    android:screenOrientation="portrait"
+                    android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>-->
 
         <activity
             android:name="com.tekzee.amiggos.ui.forgetpassword.AForgetPassword"
@@ -158,10 +158,10 @@
         <!--            android:screenOrientation="portrait"-->
         <!--            android:theme="@style/AppTheme.NoActionBar" />-->
 
-<!--        <activity-->
-<!--            android:name="com.tekzee.amiggos.ui.login.LoginActivity"-->
-<!--            android:screenOrientation="portrait"-->
-<!--            android:theme="@style/AppTheme.NoActionBar" />-->
+        <!--        <activity-->
+        <!--            android:name="com.tekzee.amiggos.ui.login.LoginActivity"-->
+        <!--            android:screenOrientation="portrait"-->
+        <!--            android:theme="@style/AppTheme.NoActionBar" />-->
 
         <activity
             android:name="com.tekzee.amiggos.ui.chat.myfriendchatlist.MyFriendChatActivity"
@@ -173,15 +173,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
-<!--        <activity-->
-<!--            android:name="com.tekzee.amiggos.ui.searchamiggos.SearchActivity"-->
-<!--            android:screenOrientation="portrait"-->
-<!--            android:theme="@style/AppTheme.NoActionBar" />-->
+        <!--        <activity-->
+        <!--            android:name="com.tekzee.amiggos.ui.searchamiggos.SearchActivity"-->
+        <!--            android:screenOrientation="portrait"-->
+        <!--            android:theme="@style/AppTheme.NoActionBar" />-->
 
-<!--        <activity-->
-<!--            android:name="com.tekzee.amiggos.ui.groupfriends.GroupFriendActivity"-->
-<!--            android:screenOrientation="portrait"-->
-<!--            android:theme="@style/AppTheme.NoActionBar" />-->
+        <!--        <activity-->
+        <!--            android:name="com.tekzee.amiggos.ui.groupfriends.GroupFriendActivity"-->
+        <!--            android:screenOrientation="portrait"-->
+        <!--            android:theme="@style/AppTheme.NoActionBar" />-->
 
         <activity
             android:name="com.tekzee.amiggos.ui.friendlist.FriendListActivity"
@@ -225,8 +225,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
 
-
-
         <activity
             android:name="com.tekzee.amiggos.ui.partydetails.PartyDetailsActivity"
             android:screenOrientation="portrait"
@@ -264,22 +262,22 @@
             android:theme="@style/MyTheme" />
 
 
-       <!-- <activity
-            android:name="com.tekzee.amiggos.ui.realfriends.RealFriendsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <!-- <activity
+             android:name="com.tekzee.amiggos.ui.realfriends.RealFriendsActivity"
+             android:screenOrientation="portrait"
+             android:theme="@style/AppTheme.NoActionBar" />
 
--->
+ -->
         <activity
             android:name="com.tekzee.amiggos.ui.mypreferences.MyPreferences"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
 
-   <!--     <activity
-            android:name="com.tekzee.amiggos.ui.myprofile.MyProfileActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />-->
+        <!--     <activity
+                 android:name="com.tekzee.amiggos.ui.myprofile.MyProfileActivity"
+                 android:screenOrientation="portrait"
+                 android:theme="@style/AppTheme.NoActionBar" />-->
 
 
         <activity
@@ -287,25 +285,25 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
-       <!-- <activity
-            android:name="com.tekzee.amiggos.ui.turningup.TurningUpActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />-->
+        <!-- <activity
+             android:name="com.tekzee.amiggos.ui.turningup.TurningUpActivity"
+             android:screenOrientation="portrait"
+             android:theme="@style/AppTheme.NoActionBar" />-->
 
-   <!--     <activity
-            android:name="com.tekzee.amiggos.ui.referalcode.ReferalCodeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />-->
+        <!--     <activity
+                 android:name="com.tekzee.amiggos.ui.referalcode.ReferalCodeActivity"
+                 android:screenOrientation="portrait"
+                 android:theme="@style/AppTheme.NoActionBar" />-->
 
-<!--        <activity-->
-<!--            android:name="com.tekzee.amiggos.ui.friendprofile.FriendProfile"-->
-<!--            android:screenOrientation="portrait"-->
-<!--            android:theme="@style/AppTheme.NoActionBar" />-->
+        <!--        <activity-->
+        <!--            android:name="com.tekzee.amiggos.ui.friendprofile.FriendProfile"-->
+        <!--            android:screenOrientation="portrait"-->
+        <!--            android:theme="@style/AppTheme.NoActionBar" />-->
 
-<!--        <activity-->
-<!--            android:name="com.tekzee.amiggos.ui.notification.NotificationActivity"-->
-<!--            android:screenOrientation="portrait"-->
-<!--            android:theme="@style/AppTheme.NoActionBar" />-->
+        <!--        <activity-->
+        <!--            android:name="com.tekzee.amiggos.ui.notification.NotificationActivity"-->
+        <!--            android:screenOrientation="portrait"-->
+        <!--            android:theme="@style/AppTheme.NoActionBar" />-->
 
 
         <activity
@@ -313,10 +311,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
-<!--        <activity-->
-<!--            android:name="com.tekzee.amiggos.ui.statusview.StatusViewActivity"-->
-<!--            android:screenOrientation="portrait"-->
-<!--            android:theme="@style/AppTheme.NoActionBar" />-->
+        <!--        <activity-->
+        <!--            android:name="com.tekzee.amiggos.ui.statusview.StatusViewActivity"-->
+        <!--            android:screenOrientation="portrait"-->
+        <!--            android:theme="@style/AppTheme.NoActionBar" />-->
 
         <activity
             android:name="com.tekzee.amiggos.ui.venuedetails.VenueDetailsActivity"
@@ -324,10 +322,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
 
-<!--        <activity-->
-<!--            android:name="com.tekzee.amiggos.ui.videoplayer.MyPlayerActivity"-->
-<!--            android:screenOrientation="portrait"-->
-<!--            android:theme="@style/AppTheme.NoActionBar" />-->
+        <!--        <activity-->
+        <!--            android:name="com.tekzee.amiggos.ui.videoplayer.MyPlayerActivity"-->
+        <!--            android:screenOrientation="portrait"-->
+        <!--            android:theme="@style/AppTheme.NoActionBar" />-->
 
 
         <activity
@@ -354,10 +352,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
 
-<!--        <activity-->
-<!--            android:name="com.tekzee.amiggos.ui.imagepanaroma.ImagePanaromaActivity"-->
-<!--            android:screenOrientation="portrait"-->
-<!--            android:theme="@style/AppTheme.NoActionBar" />-->
+        <!--        <activity-->
+        <!--            android:name="com.tekzee.amiggos.ui.imagepanaroma.ImagePanaromaActivity"-->
+        <!--            android:screenOrientation="portrait"-->
+        <!--            android:theme="@style/AppTheme.NoActionBar" />-->
 
         <activity
             android:name="com.tekzee.amiggos.ui.agegroup.AgeGroupActivity"
@@ -365,14 +363,14 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
 
-<!--        <activity-->
-<!--            android:name="com.tekzee.amiggos.ui.mymemories.MyMemoriesActivity"-->
-<!--            android:screenOrientation="portrait"-->
-<!--            android:theme="@style/AppTheme.NoActionBar" />-->
-     <!--   <activity
-            android:name="com.tekzee.amiggos.ui.onlinefriends.OnlineFriendActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />-->
+        <!--        <activity-->
+        <!--            android:name="com.tekzee.amiggos.ui.mymemories.MyMemoriesActivity"-->
+        <!--            android:screenOrientation="portrait"-->
+        <!--            android:theme="@style/AppTheme.NoActionBar" />-->
+        <!--   <activity
+               android:name="com.tekzee.amiggos.ui.onlinefriends.OnlineFriendActivity"
+               android:screenOrientation="portrait"
+               android:theme="@style/AppTheme.NoActionBar" />-->
 
         <activity
             android:name="com.tekzee.amiggos.ui.settings_new.ASettings"
@@ -385,27 +383,26 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
 
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-<!--        <activity-->
-<!--            android:name="com.facebook.FacebookActivity"-->
-<!--            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"-->
-<!--            android:label="@string/app_name" />-->
-<!--        <activity-->
-<!--            android:name="com.facebook.CustomTabActivity"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.VIEW" />-->
+        <!--        <activity-->
+        <!--            android:name="com.facebook.FacebookActivity"-->
+        <!--            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"-->
+        <!--            android:label="@string/app_name" />-->
+        <!--        <activity-->
+        <!--            android:name="com.facebook.CustomTabActivity"-->
+        <!--            android:exported="true">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.VIEW" />-->
 
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
-<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+        <!--                <category android:name="android.intent.category.DEFAULT" />-->
+        <!--                <category android:name="android.intent.category.BROWSABLE" />-->
 
-<!--                <data android:scheme="@string/fb_login_protocol_scheme" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
+        <!--                <data android:scheme="@string/fb_login_protocol_scheme" />-->
+        <!--            </intent-filter>-->
+        <!--        </activity>-->
 
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
@@ -479,9 +476,8 @@
         <activity
             android:name=".ui.invitefriendnew.InviteFriendNewActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AppTheme.NoActionBar" />
-
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
 
 
         <service
@@ -507,7 +503,13 @@
         </provider>
 
         <receiver android:name="com.tekzee.amiggos.broadcasts.NotificationBroadcastReceiver" />
-
+        <!--        <receiver android:name=".FileProgressReceiver">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="com.wave.ACTION_CLEAR_NOTIFICATION" />-->
+        <!--                <action android:name="com.wave.ACTION_PROGRESS_NOTIFICATION" />-->
+        <!--                <action android:name="com.wave.ACTION_UPLOADED" />-->
+        <!--            </intent-filter>-->
+        <!--        </receiver>-->
     </application>
 
 </manifest>

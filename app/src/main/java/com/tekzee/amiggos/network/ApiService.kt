@@ -1071,6 +1071,7 @@ interface ApiService {
             val okHttpClient: OkHttpClient = clientBuilder
                 .readTimeout(5, TimeUnit.MINUTES)
                 .connectTimeout(5, TimeUnit.MINUTES)
+                .writeTimeout(5, TimeUnit.MINUTES)
                 .build()
 
             return Retrofit.Builder().baseUrl(ConstantLib.BASE_URL)

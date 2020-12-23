@@ -7,7 +7,6 @@ import com.bumptech.glide.Glide
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 import com.tekzee.amiggos.ui.memories.venuefragment.VenueItemClickListener
-import com.tekzee.amiggos.ui.memories.venuefragment.model.VenueTaggedResponse
 import kotlinx.android.synthetic.main.single_first_fragment.view.*
 import java.util.ArrayList
 
@@ -28,14 +27,15 @@ class VenueFragmentAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             holder.bind()
-            holder.itemView.img_layout.setOnClickListener {
-                listener.onVenueItemClicked(mDataList[position])
-            }
+
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind() {
             Glide.with(itemView.context).load(mDataList[adapterPosition].profile).placeholder(R.drawable.noimage).into(itemView.img_user_firstfragment)
+            itemView.img_layout.setOnClickListener {
+                listener.onVenueItemClicked(mDataList[adapterPosition],adapterPosition)
+            }
         }
     }
 

@@ -18,7 +18,6 @@ import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.MyMemoriesFragmentBinding
-import com.tekzee.amiggos.ui.memories.mymemories.MyMemoriesFragment
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 import com.tekzee.amiggos.ui.storieviewnew.StorieViewNew
 
@@ -102,12 +101,25 @@ class OurMemorieFragment:BaseFragment() ,OurMemorieFragmentPresenter.MyMemoriePr
         val layoutManager = GridLayoutManager(activity,3)
         reyclerview!!.layoutManager = layoutManager
         adapter = OurMemorieWithoutProductAdapter(data,object :OurMemorieFragmentClickListener{
-            override fun onMemorieClicked(storiesData: MemorieResponse.Data.Memories) {
+            override fun onMemorieClicked(
+                storiesData: MemorieResponse.Data.Memories,
+                adapterPosition: Int
+            ) {
                 if(storiesData.memory.isNotEmpty()){
+                    val showMemoryList: ArrayList<MemorieResponse.Data.Memories> = ArrayList()
+                    for(position in data.indices){
+                        if(position>=adapterPosition){
+                            showMemoryList.add(data[position])
+                        }
+                    }
+
                     val intent = Intent(activity, StorieViewNew::class.java)
                     intent.putExtra(ConstantLib.MEMORIE_DATA,storiesData)
                     intent.putExtra(ConstantLib.FROM,ConstantLib.OURMEMORIES)
+                    intent.putExtra(ConstantLib.COMPLETE_MEMORY,showMemoryList)
                     sharedPreference!!.save(ConstantLib.TYPEFROM,ConstantLib.OURMEMORIES)
+                    intent.putExtra(ConstantLib.BACKFROM,"")
+                    intent.putExtra(ConstantLib.DELETED_POSITION, 0)
                     context!!.startActivity(intent)
                 }
             }

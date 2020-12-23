@@ -256,6 +256,77 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
 
 
 
+//                val desFile = saveVideoFile(filename)
+//                VideoCompressor.start(
+//                    filename,
+//                    desFile!!.path,
+//                    object : CompressionListener {
+//                        override fun onProgress(percent: Float) {
+//                            // Update UI with progress value
+//                            runOnUiThread {
+//                                binding!!.saveProgressBar.visibility = View.VISIBLE
+//                                binding!!.go.visibility = View.GONE
+//                            }
+//                        }
+//
+//                        override fun onStart() {
+//                            runOnUiThread {
+//                                binding!!.saveProgressBar.visibility = View.GONE
+//                                binding!!.go.visibility = View.VISIBLE
+//                            }
+//                        }
+//
+//                        override fun onSuccess() {
+//
+//                            runOnUiThread {
+//                                binding!!.saveProgressBar.visibility = View.GONE
+//                                binding!!.go.visibility = View.VISIBLE
+//                            }
+//
+//                            if(intent.getStringExtra(ConstantLib.FROM_ACTIVITY).equals(ConstantLib.OURSTORYINVITE)){
+//                                val inviteFriendAfterCreateMemoryIntent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
+//                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FILEURI, desFile.path)
+//                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY,  getTaggedArrayJson(finaltaggedarray))
+//                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.SENDER_ID, intent.getStringExtra(ConstantLib.SENDER_ID))
+//                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+//                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM, "VIDEO")
+//                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM_ACTIVITY, intent.getStringExtra(ConstantLib.FROM_ACTIVITY))
+//                                startActivity(inviteFriendAfterCreateMemoryIntent)
+//                            }else{
+//                                val intentPostMemory = Intent(applicationContext, PostMemories::class.java)
+//                                intentPostMemory.putExtra(ConstantLib.FILEURI, desFile.path)
+//                                intentPostMemory.putExtra(ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(finaltaggedarray))
+//                                intentPostMemory.putExtra(ConstantLib.SENDER_ID, intent.getStringExtra(ConstantLib.SENDER_ID))
+//                                intentPostMemory.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+//                                intentPostMemory.putExtra(ConstantLib.FROM_ACTIVITY, intent.getStringExtra(ConstantLib.FROM_ACTIVITY))
+//                                intentPostMemory.putExtra(ConstantLib.FROM, "VIDEO")
+//                                startActivity(intentPostMemory)
+//                            }
+//
+//
+//                        }
+//
+//                        override fun onFailure(failureMessage: String) {
+//                            runOnUiThread {
+//                                binding!!.saveProgressBar.visibility = View.VISIBLE
+//                                binding!!.go.visibility = View.GONE
+//                            }
+//                        }
+//
+//                        override fun onCancelled() {
+//                            runOnUiThread {
+//                                binding!!.saveProgressBar.visibility = View.GONE
+//                                binding!!.go.visibility = View.VISIBLE
+//                            }
+//                        }
+//
+//                    },
+//                    VideoQuality.MEDIUM,
+//                    isMinBitRateEnabled = false,
+//                    keepOriginalResolution = true
+//                )
+
+
                 val desFile = saveVideoFile(filename)
                 VideoCompressor.start(
                     filename,
@@ -283,22 +354,7 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
                                 binding!!.go.visibility = View.VISIBLE
                             }
 
-//                            val mIntent = Intent(applicationContext, FileUploadService::class.java)
-//                            mIntent.putExtra(ConstantLib.FILEURI, desFile.path)
-//                            mIntent.putExtra(ConstantLib.FROM, "VIDEO")
-//                            mIntent.putExtra(
-//                                ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(
-//                                    finaltaggedarray
-//                                )
-//                            )
-//                            FileUploadService.enqueueWork(applicationContext, mIntent)
-//
-//                            val intent = Intent(applicationContext, PostMemories::class.java)
-//                            startActivity(intent)
-//                            finishAffinity()
-
                             if(intent.getStringExtra(ConstantLib.FROM_ACTIVITY).equals(ConstantLib.OURSTORYINVITE)){
-//                    val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
                                 val inviteFriendAfterCreateMemoryIntent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
                                 inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FILEURI, desFile.path)
                                 inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY,  getTaggedArrayJson(finaltaggedarray))
@@ -317,6 +373,7 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
                                 intentPostMemory.putExtra(ConstantLib.FROM, "VIDEO")
                                 startActivity(intentPostMemory)
                             }
+
 
 
                         }
@@ -338,7 +395,7 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
                     },
                     VideoQuality.MEDIUM,
                     isMinBitRateEnabled = false,
-                    keepOriginalResolution = true
+                    keepOriginalResolution = false
                 )
 
 
@@ -618,9 +675,10 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
         listItem: TaggingResponse.Data.Search
     ) {
 
-        if(getCountCombination(finaltaggedarray)){
+        if(listItem.type !="3" && getCountCombination(finaltaggedarray)){
             Errortoast(languageConstant.max_venue_brand_limit);
         }else{
+            binding!!.tagSearch.setText("")
             tagArraylist.add(listItem.name)
             taglist.postValue(tagArraylist)
             finaltaggedarray.add(listItem)

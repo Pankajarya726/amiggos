@@ -74,12 +74,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tag_border_color="@color/white"
                 app:tag_clickable="true"
-                app:tag_cross_color="@color/white"
                 app:tag_enable_cross="true"
-                app:tag_text_color="@color/white"
+                app:tag_background_color="@color/white"
                 app:tag_theme="none"
+                app:tag_text_color="@color/black"
+                app:container_background_color="@color/white"
+                app:tag_border_color="@color/black"
+                app:tag_cross_color="@color/black"
                 app:vertical_interval="10dp" />
 
             <EditText

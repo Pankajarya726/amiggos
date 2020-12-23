@@ -1,12 +1,13 @@
-package com.tekzee.amiggos.util
+package com.tekzee.amiggos
 
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import com.tekzee.amiggos.R
+import com.tekzee.amiggos.enums.FriendsAction
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
+import com.tekzee.amiggos.util.NotificationHelper
 import java.util.*
 
 class FileProgressReceiver : BroadcastReceiver(){
@@ -29,7 +30,9 @@ class FileProgressReceiver : BroadcastReceiver(){
             }
             ACTION_CLEAR_NOTIFICATION -> mNotificationHelper!!.cancelNotification(notificationId)
             ACTION_UPLOADED -> {
-                val resultIntent = Intent(mContext, AHomeScreen::class.java)
+                val resultIntent = Intent(mContext, AHomeScreen::class.java).apply {
+                    action = FriendsAction.SHOW_MY_MEMORY.action
+                }
                 val resultPendingIntent = PendingIntent.getActivity(
                     mContext,
                     0 /* Request code */, resultIntent,

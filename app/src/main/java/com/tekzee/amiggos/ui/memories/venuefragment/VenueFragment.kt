@@ -12,7 +12,6 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.VenueFragmentBinding
-import com.tekzee.amiggos.ui.memories.mymemoriesold.OurMemorieFragment
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 import com.tekzee.amiggos.ui.memories.venuefragment.adapter.VenueFragmentAdapter
 import com.tekzee.amiggos.ui.storieviewnew.StorieViewNew
@@ -79,12 +78,27 @@ class VenueFragment : BaseFragment(), VenueFragmentPresenter.VenueFragmentPresen
         val layoutManager = GridLayoutManager(activity,2)
         binding.aVenueRecyclerview.layoutManager = layoutManager
         adapter = VenueFragmentAdapter(data,object:VenueItemClickListener{
-            override fun onVenueItemClicked(itemData: MemorieResponse.Data.Memories) {
+            override fun onVenueItemClicked(
+                itemData: MemorieResponse.Data.Memories,
+                adapterPosition: Int
+            ) {
                 if(itemData.memory.isNotEmpty()){
+
+                    val showMemoryList: ArrayList<MemorieResponse.Data.Memories> = ArrayList()
+                    for(position in data.indices){
+                        if(position>=adapterPosition){
+                            showMemoryList.add(data[position])
+                        }
+                    }
+
+
                     val intent = Intent(context, StorieViewNew::class.java)
-                    intent.putExtra(ConstantLib.MEMORIE_DATA,itemData)
+                    intent.putExtra(ConstantLib.MEMORIE_DATA, itemData)
                     intent.putExtra(ConstantLib.FROM, ConstantLib.VENUEMEMORIES)
+                    intent.putExtra(ConstantLib.COMPLETE_MEMORY,showMemoryList)
                     sharedPreference!!.save(ConstantLib.TYPEFROM, ConstantLib.VENUEMEMORIES)
+                    intent.putExtra(ConstantLib.BACKFROM,"")
+                    intent.putExtra(ConstantLib.DELETED_POSITION, 0)
                     startActivity(intent)
                 }
             }

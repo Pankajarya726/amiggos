@@ -1,5 +1,9 @@
 package com.tekzee.amiggos.network
 
+//import com.tekzee.amiggos.ui.mymemories.fragment.memories.model.MyMemoriesResponse
+//import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
+//import com.tekzee.amiggos.ui.myprofile.model.MyProfileResponse
+//import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.orhanobut.logger.AndroidLogAdapter
@@ -41,16 +45,12 @@ import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingResponse
 import com.tekzee.amiggos.ui.mylifestyle.model.MyLifestyleResponse
 import com.tekzee.amiggos.ui.mylifestylesubcategory.model.MyLifestyleSubcategoryResponse
-//import com.tekzee.amiggos.ui.mymemories.fragment.memories.model.MyMemoriesResponse
-//import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
 import com.tekzee.amiggos.ui.mypreferences.model.MyPreferenceResponse
 import com.tekzee.amiggos.ui.mypreferences.model.PreferenceSavedResponse
-//import com.tekzee.amiggos.ui.myprofile.model.MyProfileResponse
 import com.tekzee.amiggos.ui.newpreferences.amusictypefragment.model.AMusicTypeResponse
 import com.tekzee.amiggos.ui.newpreferences.avenuetypefragment.model.AVenueTypeResponse
 import com.tekzee.amiggos.ui.notification_new.model.ANotificationResponse
 import com.tekzee.amiggos.ui.notification_new.model.PartyInvitesNotificationResponse
-//import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
 import com.tekzee.amiggos.ui.ourmemories.model.GetFriendForInviteAfterCreateMemoryResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
 import com.tekzee.amiggos.ui.profiledetails.model.GetFriendProfileDetailsResponse
@@ -77,6 +77,7 @@ import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewResponse
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
+import okhttp3.ConnectionPool
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -97,6 +98,9 @@ class ApiClient {
     init {
         val gson = GsonBuilder().setLenient().create()
         val clientBuilder = OkHttpClient.Builder()
+
+        val pool = ConnectionPool(5, 10000, TimeUnit.MILLISECONDS)
+
         if (BuildConfig.DEBUG) {
             val loggingInterceptor = HttpLoggingInterceptor()
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
@@ -106,6 +110,7 @@ class ApiClient {
 
         val okHttpClient: OkHttpClient = clientBuilder
             .readTimeout(2, TimeUnit.MINUTES)
+            .connectionPool(pool)
             .connectTimeout(2, TimeUnit.MINUTES)
             .writeTimeout(2, TimeUnit.MINUTES)
             .build();
@@ -153,7 +158,7 @@ class ApiClient {
         headers: HashMap<String, String?>,
         json: JsonObject
     ): Observable<Response<JsonObject>> {
-        return apiService.doLanguageConstantApi(headers,json)
+        return apiService.doLanguageConstantApi(headers, json)
     }
 
     fun doCallLanguageApi(
@@ -431,9 +436,9 @@ class ApiClient {
 //        return apiService.doCallOnlineFriendApi(input, createHeaders)
 //    }
     fun doCallNotification(
-        input: JsonObject,
-        createHeaders: HashMap<String, String?>
-    ): Observable<Response<ANotificationResponse>> {
+    input: JsonObject,
+    createHeaders: HashMap<String, String?>
+): Observable<Response<ANotificationResponse>> {
         return apiService.doCallNotification(input, createHeaders)
     }
 
@@ -552,9 +557,9 @@ class ApiClient {
 //        return apiService.doCallOurMemoriesUploadApi(input, createHeaders)
 //    }
     fun doCallVenueTypeApi(
-        input: JsonObject,
-        createHeaders: HashMap<String, String?>
-    ): Observable<Response<AVenueTypeResponse>> {
+    input: JsonObject,
+    createHeaders: HashMap<String, String?>
+): Observable<Response<AVenueTypeResponse>> {
         return apiService.doCallVenueTypeApi(input, createHeaders)
     }
 
@@ -1022,20 +1027,20 @@ class ApiClient {
         apiParamMap: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<ClientSecretResponse>> {
-        return apiService.getPaymentIntentClientSecret(apiParamMap,createHeaders)
+        return apiService.getPaymentIntentClientSecret(apiParamMap, createHeaders)
     }
     fun chargeUserApi(
         apiParamMap: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<APaymentSuccessResponse>> {
-        return apiService.chargeUserApi(apiParamMap,createHeaders)
+        return apiService.chargeUserApi(apiParamMap, createHeaders)
     }
 
     fun callPaymentByCardId(
         apiParamMap: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<APaymentSuccessResponse>> {
-        return apiService.callPaymentByCardId(apiParamMap,createHeaders)
+        return apiService.callPaymentByCardId(apiParamMap, createHeaders)
     }
 
 
@@ -1043,7 +1048,7 @@ class ApiClient {
         apiParamMap: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>> {
-        return apiService.updatePaymentStatus(apiParamMap,createHeaders)
+        return apiService.updatePaymentStatus(apiParamMap, createHeaders)
     }
 
 

@@ -45,7 +45,7 @@ class StorieViewModel(private val context: Context,
     }
 
 
-    fun callDeleteApi(memorieId: String) {
+    fun callDeleteApi(memorieId: String, counter: Int) {
         Coroutines.main {
             storieEvent?.onAcceptDeclineCalled()
             try {
@@ -60,7 +60,7 @@ class StorieViewModel(private val context: Context,
 
                 val response =  repository.docallDeleteApi(jsoninput, Utility.createHeaders(prefs))
                 if(response.status){
-                    storieEvent?.onDeleteResponse(response.message)
+                    storieEvent?.onDeleteResponse(response.message,counter)
                 }else{
                     storieEvent?.onFailure(response.message)
                 }

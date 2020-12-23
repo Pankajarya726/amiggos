@@ -5,6 +5,10 @@ object ConstantLib {
 
 //    chat
     const val CONVERSATION = "conversation"
+    const val BACKFROM = "BACKFROM"
+    const val DELETED_POSITION = "DELETED_POSITION"
+    const val POSITION = "POSITION"
+    const val DISPLAYFRAGMENT = "DISPLAYFRAGMENT"
     const val PAYMENTACTIVITY = "PAYMENTACTIVITY"
     const val ACCEPT = "ACCEPT"
     const val MYMEMORY = "MYMEMORY"
@@ -37,6 +41,7 @@ object ConstantLib {
     const val BASE_URL = "http://tekdev.tekzee.in/Amiggos/api/"
     const val DRIVER_ID = "driver_id"
     const val MEMORIE_DATA = "MEMORIE_DATA"
+    const val COMPLETE_MEMORY = "COMPLETE_MEMORY"
     const val SELECTEDFRIENDS = "SELECTEDFRIENDS"
     const val VENUE_ID = "VENUE_ID"
     const val IS_GOOGLE_VENUE = "IS_GOOGLE_VENUE"

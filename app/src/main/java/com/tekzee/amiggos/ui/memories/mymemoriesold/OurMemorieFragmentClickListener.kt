@@ -4,5 +4,5 @@ import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 
 interface OurMemorieFragmentClickListener {
 
-    fun onMemorieClicked(storiesData: MemorieResponse.Data.Memories)
+    fun onMemorieClicked(storiesData: MemorieResponse.Data.Memories, adapterPosition: Int)
 }

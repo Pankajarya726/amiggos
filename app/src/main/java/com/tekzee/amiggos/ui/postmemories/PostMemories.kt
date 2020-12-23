@@ -122,7 +122,10 @@ class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView 
                 OneTimeWorkRequest.Builder(UploadWorkService::class.java).setInputData(
                     data
                 ).setConstraints(constraints).addTag("Upload").build()
+
             WorkManager.getInstance(this).enqueue(oneTimeWorkRequest)
+
+
             val intent = Intent(applicationContext, AHomeScreen::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 action = FriendsAction.SHOW_MY_MEMORY.action

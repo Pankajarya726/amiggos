@@ -52,6 +52,7 @@ class UpdateUserLocationToServer : Service() {
 
             SmartLocation.with(applicationContext).location().oneFix()
                 .start { locationData ->
+
                     getAddressFromLocation(locationData)
                     callLocationUpdateService(locationData)
                 }

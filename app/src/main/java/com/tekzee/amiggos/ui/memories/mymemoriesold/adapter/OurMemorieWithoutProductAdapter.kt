@@ -34,7 +34,7 @@ class OurMemorieWithoutProductAdapter(
         fun bind() {
             Glide.with(itemView.context).load(mDataList[adapterPosition].thumb_image).placeholder(R.drawable.noimage).into(itemView.img_user_firstfragment)
             itemView.img_layout.setOnClickListener {
-                listenerFragment.onMemorieClicked(mDataList[adapterPosition])
+                listenerFragment.onMemorieClicked(mDataList[adapterPosition],adapterPosition)
             }
         }
 

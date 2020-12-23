@@ -59,13 +59,14 @@ import com.tekzee.amiggos.util.OnSwipeTouchListener
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.base.BaseFragment
+import io.nlopez.smartlocation.SmartLocation
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 
 class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
-    Listener, com.google.android.gms.maps.OnMapReadyCallback {
+    /*Listener,*/ com.google.android.gms.maps.OnMapReadyCallback {
     private var binding: HomeFragmentBinding? = null
     private var mMap: GoogleMap? = null
     private lateinit var notifylistner: NotifyNotification
@@ -84,8 +85,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     private var categoryId: String = ""
     private var searchkeyword: String = ""
     private var languageData: LanguageData? = null
-    private var easyWayLocation: EasyWayLocation? = null
-    private lateinit var arrayAdapter: AutoCompleteAdapter
+//    private var easyWayLocation: EasyWayLocation? = null
 
 
     companion object {
@@ -104,11 +104,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
     override fun onPause() {
         super.onPause()
-        easyWayLocation!!.endUpdates()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+//        easyWayLocation!!.endUpdates()
     }
 
     override fun onCreateView(
@@ -117,6 +113,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.home_fragment, container, false)
+        showProgressbarNew()
         val mapFragment: SupportMapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -142,10 +139,34 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         sharedPreference = SharedPreference(requireContext())
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
 
-        showProgressbarNew()
+        try {
+            SmartLocation.with(requireContext()).location().oneFix()
+                .start { locationData ->
+                    SmartLocation.with(requireContext()).location().stop()
+                    latitude = locationData!!.latitude.toString()
+                    longitude = locationData.longitude.toString()
+                    hideProgressbarNew()
+                    requireActivity().runOnUiThread(Runnable {
+                        hideKeyboard()
+                        mMap!!.moveCamera(
+                            CameraUpdateFactory.newLatLng(
+                                LatLng(
+                                    latitude!!.toDouble(),
+                                    longitude!!.toDouble()
+                                )
+                            )
+                        )
+                        mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15.0f))
+                        callHomeApi(0)
+                    })
+                    callBadgeApi()
+                }
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
 
-        easyWayLocation = EasyWayLocation(activity, false, this)
-        easyWayLocation!!.startLocation()
+
+
     }
 
     private fun showProgressbarNew() {
@@ -556,36 +577,36 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     }
 
 
-    override fun locationCancelled() {
-        hideProgressbarNew()
-        Logger.d("Location cancelled called")
-    }
+//    override fun locationCancelled() {
+//        hideProgressbarNew()
+//        Logger.d("Location cancelled called")
+//    }
 
-    override fun locationOn() {
-        Logger.d("Location on called")
-    }
+//    override fun locationOn() {
+//        Logger.d("Location on called")
+//    }
 
 
-    override fun currentLocation(location: Location?) {
-        latitude = location!!.latitude.toString()
-        longitude = location.longitude.toString()
-        easyWayLocation!!.endUpdates()
-        hideProgressbarNew()
-        requireActivity().runOnUiThread(Runnable {
-            hideKeyboard()
-            mMap!!.moveCamera(
-                CameraUpdateFactory.newLatLng(
-                    LatLng(
-                        latitude!!.toDouble(),
-                        longitude!!.toDouble()
-                    )
-                )
-            )
-            mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15.0f))
-            callHomeApi(0)
-        })
-        callBadgeApi()
-    }
+//    override fun currentLocation(location: Location?) {
+//        latitude = location!!.latitude.toString()
+//        longitude = location.longitude.toString()
+//        easyWayLocation!!.endUpdates()
+//        hideProgressbarNew()
+//        requireActivity().runOnUiThread(Runnable {
+//            hideKeyboard()
+//            mMap!!.moveCamera(
+//                CameraUpdateFactory.newLatLng(
+//                    LatLng(
+//                        latitude!!.toDouble(),
+//                        longitude!!.toDouble()
+//                    )
+//                )
+//            )
+//            mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15.0f))
+//            callHomeApi(0)
+//        })
+//        callBadgeApi()
+//    }
 
     override fun onSearchApiSuccess(responseData: HomeResponse) {
         finalDataList.clear()

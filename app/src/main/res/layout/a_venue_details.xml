@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_15sdp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    app:srcCompat="@drawable/ic_back_black" />
+                    app:srcCompat="@drawable/back_with_white_arrow" />
 
                 <!--<androidx.appcompat.widget.Toolbar
                     android:id="@+id/htab_toolbar"

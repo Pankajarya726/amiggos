@@ -38,7 +38,6 @@ import com.tekzee.amiggos.ui.bookings_new.BookingFragment
 import com.tekzee.amiggos.ui.cameranew.CameraActivity
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.HomeFragment
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
-import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
 import com.tekzee.amiggos.ui.memories.AMemoriesFragment
 import com.tekzee.amiggos.ui.message.MessageActivity
 import com.tekzee.amiggos.ui.message.model.Message
@@ -46,7 +45,6 @@ import com.tekzee.amiggos.ui.mylifestyle.AMyLifeStyle
 import com.tekzee.amiggos.ui.notification_new.ANotification
 import com.tekzee.amiggos.ui.settings_new.ASettings
 import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
-import com.tekzee.amiggos.util.BitmapUtils
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 
@@ -99,6 +97,8 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
     }
 
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.a_home_screen)
@@ -140,6 +140,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
                 val intent = Intent(applicationContext,ANotification::class.java)
                 intent.putExtra(ConstantLib.SUB_TAB,2)
                 startActivity(intent)
+                return@askPermission
             } else {
                 setHeaders(R.id.navigation_home)
                 openFragment(HomeFragment.newInstance(), "1")

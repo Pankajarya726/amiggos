@@ -200,7 +200,10 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
             onBackPressed()
         }
         binding.btnNext.setOnClickListener {
-            if (!checkDisabledDate(meventDay!!.calendar)) {
+
+            val cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_MONTH,-1)
+            if (!checkDisabledDate(meventDay!!.calendar) && meventDay!!.calendar.after(cal)) {
                 if (dataVenue.clubData.isclock == 0 && dataVenue.clubData.timeslot == 0) {
                     Coroutines.main {
                         repository!!.clearCart()
@@ -283,19 +286,34 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
 
 
         binding.calendarView.setOnDayClickListener { eventDay: EventDay ->
-            meventDay = eventDay
+
             Log.e("meventdat---",""+eventDay!!.calendar.get(Calendar.DAY_OF_WEEK))
 
             val day = eventDay.calendar.get(Calendar.DAY_OF_MONTH).toString()
             val month = (eventDay.calendar.get(Calendar.MONTH) + 1).toString()
             val year = eventDay.calendar.get(Calendar.YEAR).toString()
+            val checkDate = Calendar.getInstance()
+            checkDate.add(Calendar.DAY_OF_MONTH,-1)
+            if(!eventDay.calendar.after(checkDate)){
+                val pDialog =
+                    SweetAlertDialog(this@CalendarViewActivity, SweetAlertDialog.ERROR_TYPE)
+                pDialog.titleText = languageData!!.bookingunavailable
+                pDialog.setCancelable(false)
+                pDialog.setConfirmButton(languageData!!.klDismiss) {
+                    pDialog.dismiss()
+                }
+                pDialog.show()
+                return@setOnDayClickListener
+            }
+            meventDay = eventDay
             selectedDate = "$year-$month-$day"
-
             val cal: Calendar = Calendar.getInstance()
             cal.set(Calendar.YEAR, eventDay.calendar.get(Calendar.YEAR))
             cal.set(Calendar.MONTH, eventDay.calendar.get(Calendar.MONTH))
             cal.set(Calendar.DAY_OF_MONTH, eventDay.calendar.get(Calendar.DAY_OF_MONTH))
+
             binding.calendarView.setDate(cal)
+
 
             if (!checkDisabledDate(eventDay.calendar)) {
                 checkTimeSlot()

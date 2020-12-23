@@ -16,7 +16,7 @@ data class MemorieResponse(
     ) {
         data class  Memories(
             @SerializedName("memory")
-            val memory: List<Memory> = listOf(),
+            val memory: ArrayList<Memory> = ArrayList(),
             @SerializedName("name")
             val name: String = "",
             @SerializedName("profile")
@@ -47,6 +47,10 @@ data class MemorieResponse(
                 val storyFile: String = "",
                 @SerializedName("name")
                 val name: String = "",
+                @SerializedName("type")
+                val type: String = "0",
+                @SerializedName("story_user_type")
+                val story_user_type: Int = 0,
                 @SerializedName("thumb_video")
                 val thumb_video: String = "",
                 @SerializedName("video_thumb")

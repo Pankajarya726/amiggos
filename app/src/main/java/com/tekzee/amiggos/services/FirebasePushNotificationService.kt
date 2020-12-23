@@ -59,7 +59,8 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         if (remoteMessage.data.isNotEmpty()) {
             val jsonData = JSONObject(remoteMessage.data as Map<String, String>)
-            Log.d(TAG, "Message Notification Body: $jsonData")
+            Log.e(TAG, "Message Notification Body: $jsonData")
+            Log.e(TAG, "remoteMessage: ${remoteMessage.notification}")
             handleNotifications(remoteMessage)
         }
 
@@ -228,10 +229,8 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
             )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
-
             .setAutoCancel(true)
         with(NotificationManagerCompat.from(this)) {
-            // notificationId is a unique int for each notification that you must define
             notify(System.currentTimeMillis().toInt(), builder.build())
         }
     }
@@ -460,7 +459,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
                 pendingRejectIntentIntent
             )
             .setOnlyAlertOnce(true)
-            .setAutoCancel(false).build()
+            .setAutoCancel(true).build()
 
         with(NotificationManagerCompat.from(this)) {
             notify(notificationId, friendRequestBuilder)
@@ -527,7 +526,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
                 pendingRejectIntentIntent
             )
             .setOnlyAlertOnce(true)
-            .setAutoCancel(false).build()
+            .setAutoCancel(true).build()
 
         with(NotificationManagerCompat.from(this)) {
             notify(notificationId, friendRequestBuilder)

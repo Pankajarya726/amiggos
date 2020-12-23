@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.view.KeyEvent
@@ -428,9 +427,10 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
         position: Int,
         listItem: TaggingResponse.Data.Search
     ) {
-        if (getCountCombination(finaltaggedarray)) {
+        if (listItem.type !="3" && getCountCombination(finaltaggedarray)) {
             Errortoast(languageConstant.max_venue_brand_limit);
         } else {
+            binding!!.tagSearch.setText("")
             tagArraylist.add(listItem.name)
             taglist.postValue(tagArraylist)
             finaltaggedarray.add(listItem)
