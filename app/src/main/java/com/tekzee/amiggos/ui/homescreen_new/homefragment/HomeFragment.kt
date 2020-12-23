@@ -140,7 +140,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
 
         try {
-            SmartLocation.with(requireContext()).location().oneFix()
+            SmartLocation.with(requireActivity()).location().oneFix()
                 .start { locationData ->
                     SmartLocation.with(requireContext()).location().stop()
                     latitude = locationData!!.latitude.toString()
