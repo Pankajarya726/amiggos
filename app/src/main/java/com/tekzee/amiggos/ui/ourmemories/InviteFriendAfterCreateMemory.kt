@@ -67,8 +67,8 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
         inviteFriendImplementation = InviteFriendImplementation(this, this)
         setupLanguage()
         setupclickListener()
-        doCallGetFriends(false, "")
         ourMemoryId = intent.getStringExtra(ConstantLib.OURSTORYID)!!
+        doCallGetFriends(false, "")
         hideKeyboard()
 
     }
@@ -96,6 +96,7 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("page_no", onlineFriendPageNo)
+        input.addProperty("our_story_id", ourMemoryId)
         input.addProperty("search", searchvalue)
         inviteFriendImplementation!!.doCallGetFriends(
             input,

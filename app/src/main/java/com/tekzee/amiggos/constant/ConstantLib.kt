@@ -5,7 +5,9 @@ object ConstantLib {
 
 //    chat
     const val CONVERSATION = "conversation"
+    const val UNIQUEFRIENDID = "UNIQUEFRIENDID"
     const val BACKFROM = "BACKFROM"
+    const val UNIQUE_TIMESTAMP = "UNIQUE_TIMESTAMP"
     const val DELETED_POSITION = "DELETED_POSITION"
     const val POSITION = "POSITION"
     const val DISPLAYFRAGMENT = "DISPLAYFRAGMENT"

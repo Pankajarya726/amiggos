@@ -123,7 +123,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
                 setHeaders(R.id.navigation_near_me)
                 openFragment(NearMeFragment.newInstance(intent, 1), "2")
             } else if (intent.action == FriendsAction.SHOW_FRIEND_REQUEST.action) {
-                bottomNavigation!!.menu.getItem(4).isChecked = true
+                bottomNavigation!!.menu.getItem(1).isChecked = true
                 setHeaders(R.id.navigation_near_me)
                 openFragment(NearMeFragment.newInstance(intent, 2), "2")
             } else if (intent.action == FriendsAction.PARTY_INVITATIONS.action) {

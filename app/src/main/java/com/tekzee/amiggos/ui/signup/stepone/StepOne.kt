@@ -235,7 +235,7 @@ class StepOne : BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
     ) {
         val firebaseUser = auth.currentUser
         val user = User()
-        user.amiggosID = data.userid.toString()
+        user.amiggosID = data.unique_timestamp.toString()
         user.deviceToken = data.apiToken
         user.email = data.email
         user.fcmToken = fcmToken
@@ -281,6 +281,7 @@ class StepOne : BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
 
     private fun saveUserInfo(data: UserData.Data) {
         sharedPreferences!!.save(ConstantLib.USER_ID, data.userid.toInt())
+        sharedPreferences!!.save(ConstantLib.UNIQUE_TIMESTAMP, data.unique_timestamp.toString())
         sharedPreferences!!.save(ConstantLib.USER_NAME, data.username)
         sharedPreferences!!.save(ConstantLib.USER_EMAIL, data.email)
         sharedPreferences!!.save(ConstantLib.USER_DOB, data.dob)

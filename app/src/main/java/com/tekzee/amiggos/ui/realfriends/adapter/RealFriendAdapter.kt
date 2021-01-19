@@ -84,7 +84,8 @@ class RealFriendAdapter(
                 myFriendChatModel.name = mDataList[adapterPosition].name
                 myFriendChatModel.image = mDataList[adapterPosition].profile
                 val intent = Intent(mContext, ChatActivity::class.java)
-                intent.putExtra(ConstantLib.FRIEND_ID,mDataList[adapterPosition].userid.toString())
+                intent.putExtra(ConstantLib.UNIQUEFRIENDID,mDataList[adapterPosition].userid.toString())
+                intent.putExtra(ConstantLib.FRIEND_ID,mDataList[adapterPosition].unique_user_id)
                 intent.putExtra(ConstantLib.CHAT_DATA,myFriendChatModel)
                 mContext.startActivity(intent)
 

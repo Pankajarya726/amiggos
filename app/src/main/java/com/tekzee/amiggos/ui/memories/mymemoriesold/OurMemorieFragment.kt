@@ -109,7 +109,10 @@ class OurMemorieFragment:BaseFragment() ,OurMemorieFragmentPresenter.MyMemoriePr
                     val showMemoryList: ArrayList<MemorieResponse.Data.Memories> = ArrayList()
                     for(position in data.indices){
                         if(position>=adapterPosition){
-                            showMemoryList.add(data[position])
+                            if(data[position].memory.size>0){
+                                showMemoryList.add(data[position])
+                            }
+
                         }
                     }
 

@@ -7,22 +7,29 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <ProgressBar
+            android:id="@+id/progressbar"
             android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+
+        <LinearLayout
             android:id="@+id/error_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/errortext"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:textColor="@color/black"
                 android:fontFamily="@font/opensans_semibold"
-                android:textSize="@dimen/_15sdp"
-                android:text="No Booking found"/>
+                android:gravity="center"
+                android:text="No Booking found"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_15sdp" />
 
 
         </LinearLayout>
@@ -31,12 +38,10 @@
             android:id="@+id/a_booking_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="60dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </LinearLayout>

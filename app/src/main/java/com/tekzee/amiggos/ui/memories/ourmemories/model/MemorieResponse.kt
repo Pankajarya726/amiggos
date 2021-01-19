@@ -49,6 +49,8 @@ data class MemorieResponse(
                 val name: String = "",
                 @SerializedName("type")
                 val type: String = "0",
+                @SerializedName("featured_brand_id")
+                val featured_brand_id: String = "0",
                 @SerializedName("story_user_type")
                 val story_user_type: Int = 0,
                 @SerializedName("thumb_video")
@@ -69,8 +71,9 @@ data class MemorieResponse(
                     @SerializedName("name")
                     val name: String = "",
                     @SerializedName("website")
-                    val website: String = ""
-                ): Serializable
+                    val website: String = "",
+                    val featured_brand_id: String = "0"
+                    ): Serializable
 
                 override fun toString(): String {
                     return "Memory(creater_id=$creater_id, viewCount=$viewCount, fileType=$fileType, id=$id, storyFile='$storyFile', thumb_video='$thumb_video', video_thumb='$video_thumb', tagged=$tagged, venueId='$venueId')"

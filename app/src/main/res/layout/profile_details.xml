@@ -54,11 +54,11 @@
 
                 <ImageView
                     android:id="@+id/img_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
                     android:layout_margin="15dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    app:srcCompat="@drawable/ic_back_black" />
+                    app:srcCompat="@drawable/myback" />
 
                 <!--<androidx.appcompat.widget.Toolbar
                     android:id="@+id/htab_toolbar"

@@ -52,7 +52,7 @@ class MessageAdapter(
 
     override fun onBindViewHolder(holder: ChatListViewHolder, position: Int) {
         getItem(position).let { listItem ->
-            Log.e("listitem--->", listItem.toString())
+
             holder.bind(listItem)
             holder.itemView.setOnClickListener {
                 listener.onItemClicked(position, listItem)
@@ -129,7 +129,6 @@ class MessageAdapter(
 
                 ref.child(ConstantLib.MESSAGE).orderByChild("roomid").equalTo(finalUserId).limitToLast(1).addValueEventListener(object: ValueEventListener{
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        Log.e("data-------->",snapshot.toString())
                         for(item in snapshot.children){
                             val messageData = item.getValue(Message::class.java)
                             holder.itemView.txt_message.setText(messageData!!.msg)

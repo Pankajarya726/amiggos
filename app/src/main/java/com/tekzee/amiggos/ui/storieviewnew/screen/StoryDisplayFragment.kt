@@ -133,8 +133,11 @@ class StoryDisplayFragment : Fragment(),
             false
         )
         banner_recyclerview.adapter = adapter
-        if(stories.size>0)
-        observeList(stories[0].banners)
+        if(stories.size>0){
+            stories[0].banners
+            observeList(stories[0].banners)
+        }
+
     }
 
     private fun observeList(tagged: List<MemorieResponse.Data.Memories.Memory.Tagged>) {
@@ -458,18 +461,19 @@ class StoryDisplayFragment : Fragment(),
         position: Int,
         listItem: MemorieResponse.Data.Memories.Memory.Tagged
     ) {
-        try {
-            var websiteUrl = ""
-            if (listItem.website.contains("http://")) {
-                websiteUrl = listItem.website
-            } else {
-                websiteUrl = "http://" + listItem.website
-            }
-            val openUrlIntent = Intent(Intent.ACTION_VIEW, Uri.parse(websiteUrl))
-            startActivity(openUrlIntent)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+
+
+        callBannercountApi(listItem,stories[counter].storyData.featured_brand_id.toString())
+
+
+    }
+
+    private fun callBannercountApi(
+        listItem: MemorieResponse.Data.Memories.Memory.Tagged,
+        featured_brand_id: String
+    ) {
+        pauseCurrentStory()
+        viewModel.callBannerCountApi(stories[counter].storyData.id.toString(),listItem,featured_brand_id)
     }
 
     override fun onAcceptDeclineCalled() {
@@ -517,12 +521,33 @@ class StoryDisplayFragment : Fragment(),
     }
 
     override fun onFailure(message: String) {
+        resumeCurrentStory()
         requireActivity().hideProgressBar()
         requireActivity().Errortoast(message)
     }
 
     override fun sessionExpired(message: String) {
         requireActivity().Errortoast(message)
+    }
+
+    override fun onBannerCountSuccess(
+        message: String,
+        listItem: MemorieResponse.Data.Memories.Memory.Tagged
+    ) {
+        resumeCurrentStory()
+        requireActivity().hideProgressBar()
+        try {
+            var websiteUrl = ""
+            if (listItem.website.contains("http://")) {
+                websiteUrl = listItem.website
+            } else {
+                websiteUrl = "http://" + listItem.website
+            }
+            val openUrlIntent = Intent(Intent.ACTION_VIEW, Uri.parse(websiteUrl))
+            startActivity(openUrlIntent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 

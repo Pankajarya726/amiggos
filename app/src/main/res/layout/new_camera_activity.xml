@@ -13,7 +13,6 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:keepScreenOn="true"
-            app:cameraUseDeviceOrientation="false"
             app:cameraAudio="on"
             app:cameraAutoFocusMarker="@string/cameraview_default_autofocus_marker"
             app:cameraEngine="camera2"
@@ -31,6 +30,7 @@
             app:cameraPlaySounds="true"
             app:cameraPreviewFrameRate="30"
             app:cameraRequestPermissions="true"
+            app:cameraUseDeviceOrientation="false"
             app:cameraWhiteBalance="auto"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,10 +41,10 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 app:layout_drawOnPictureSnapshot="true"
                 app:layout_drawOnPreview="true"
-                app:layout_drawOnVideoSnapshot="true"
-                android:layout_height="match_parent">
+                app:layout_drawOnVideoSnapshot="true">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -55,8 +55,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.75"
-                   >
+                    app:layout_constraintVertical_bias="0.75">
 
                     <TextView
                         android:id="@+id/username"
@@ -78,7 +77,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
         </com.otaliastudios.cameraview.CameraView>
 
 
@@ -88,16 +86,16 @@
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="20dp">
 
-                <com.jackandphantom.instagramvideobutton.InstagramVideoButton
+            <com.jackandphantom.instagramvideobutton.InstagramVideoButton
                 android:id="@+id/videobutton"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_gravity="bottom|center"
-                app:progressColor="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:progressColor="#000000" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -110,11 +108,11 @@
 
             <ImageView
                 android:id="@+id/img_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_gravity="top"
                 android:layout_margin="15dp"
-                android:src="@drawable/ic_arrow_back_black_24dp" />
+                android:src="@drawable/myback" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

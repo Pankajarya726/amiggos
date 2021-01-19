@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.work.*
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.github.florent37.runtimepermission.kotlin.askPermission
+import com.google.gson.JsonArray
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.databinding.PostMemoriesBinding
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
@@ -84,23 +85,63 @@ class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView 
 
         binding.layoutourmemories.setOnClickListener {
 
-            if (intent.getStringExtra(ConstantLib.FROM).equals("VIDEO", true)) {
-                val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
-                val inviteFriendAfterCreateMemoryIntent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
-                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FILEURI, imageUri)
-                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
-                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, getIntent().getStringExtra(ConstantLib.TAGGED_ARRAY))
-                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM, "VIDEO")
-                startActivity(inviteFriendAfterCreateMemoryIntent)
-            } else {
-                val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
-                val inviteFriendAfterCreateMemoryIntent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
-                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FILEURI, imageUri)
-                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, getIntent().getStringExtra(ConstantLib.TAGGED_ARRAY))
-                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
-                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM, "IMAGE")
-                startActivity(inviteFriendAfterCreateMemoryIntent)
+            val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+            if(getIntent().getStringExtra(ConstantLib.TAGGED_ARRAY).equals("[]")){
+                if (intent.getStringExtra(ConstantLib.FROM).equals("VIDEO", true)) {
+                    val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
+                    val inviteFriendAfterCreateMemoryIntent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FILEURI, imageUri)
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, JsonArray().toString())
+//                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, getIntent().getStringExtra(ConstantLib.TAGGED_ARRAY))
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM, "VIDEO")
+                    startActivity(inviteFriendAfterCreateMemoryIntent)
+                } else {
+                    val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
+                    val inviteFriendAfterCreateMemoryIntent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FILEURI, imageUri)
+//                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, getIntent().getStringExtra(ConstantLib.TAGGED_ARRAY))
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, JsonArray().toString())
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM, "IMAGE")
+                    startActivity(inviteFriendAfterCreateMemoryIntent)
+                }
+            }else{
+
+                pDialog.titleText = languageData!!.tagging_will_not_work
+                pDialog.setCancelable(false)
+                pDialog.setCancelButton(languageData!!.klCancel) {
+                    pDialog.dismiss()
+                }
+                pDialog.setConfirmButton(languageData!!.klOk) {
+                    pDialog.dismiss()
+                    if (intent.getStringExtra(ConstantLib.FROM).equals("VIDEO", true)) {
+                        val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
+                        val inviteFriendAfterCreateMemoryIntent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
+                        inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FILEURI, imageUri)
+                        inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+                        inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, JsonArray().toString())
+//                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, getIntent().getStringExtra(ConstantLib.TAGGED_ARRAY))
+                        inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM, "VIDEO")
+                        startActivity(inviteFriendAfterCreateMemoryIntent)
+                    } else {
+                        val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
+                        val inviteFriendAfterCreateMemoryIntent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
+                        inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FILEURI, imageUri)
+//                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, getIntent().getStringExtra(ConstantLib.TAGGED_ARRAY))
+                        inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, JsonArray().toString())
+                        inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+                        inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM, "IMAGE")
+                        startActivity(inviteFriendAfterCreateMemoryIntent)
+                    }
+                }
+                pDialog.show()
             }
+
+
+
+
+
 
         }
 

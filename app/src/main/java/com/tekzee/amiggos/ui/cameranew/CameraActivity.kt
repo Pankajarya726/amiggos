@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
-//import com.iammert.library.cameravideobuttonlib.InstagramVideoButton
 import com.jackandphantom.instagramvideobutton.InstagramVideoButton
 import com.otaliastudios.cameraview.*
 import com.otaliastudios.cameraview.controls.Facing
@@ -24,7 +24,7 @@ import java.io.File
 
 
 class CameraActivity : AppCompatActivity()
-    /*InstagramVideoButton.ActionListener*/ {
+/*InstagramVideoButton.ActionListener*/ {
     private lateinit var sharedPreferences: SharedPreference
     private var binding: NewCameraActivityBinding? = null
     private var mCaptureTime: Long = 0
@@ -34,11 +34,19 @@ class CameraActivity : AppCompatActivity()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.new_camera_activity)
+        binding = DataBindingUtil.setContentView(this, R.layout.new_camera_activity)
         sharedPreferences = SharedPreference(this)
         CameraLogger.setLogLevel(CameraLogger.LEVEL_VERBOSE)
         setupView()
         setupClickListener()
+
+
+        NotificationManagerCompat.from(applicationContext!!).cancel(
+            intent!!.getIntExtra(
+                ConstantLib.EXTRA_NOTIFICATION_ID,
+                0
+            )
+        )
     }
 
 
@@ -65,7 +73,6 @@ class CameraActivity : AppCompatActivity()
         }
         binding!!.imgBack.setOnClickListener { v: View? -> onBackPressed() }
     }
-
 
 
     private fun setupView() {
@@ -108,13 +115,14 @@ class CameraActivity : AppCompatActivity()
 //        binding!!.videobutton.actionListener = this
 
 
-        binding!!.videobutton.actionListener =  object : InstagramVideoButton.ActionListener {
+        binding!!.videobutton.actionListener = object : InstagramVideoButton.ActionListener {
             override fun onStartRecord() {
                 Log.e("MY TAG", "CALL the on start record ")
                 captureVideoSnapshot()
                 binding!!.videobutton.enableVideoRecording(true)
 
             }
+
             override fun onEndRecord() {
                 binding!!.camera.stopVideo()
                 Log.e("MY TAG", "CALL the on end record ")
@@ -142,7 +150,7 @@ class CameraActivity : AppCompatActivity()
 
 
         binding!!.camera.addCameraListener(Listener())
-        binding!!.username.text = "@"+sharedPreferences.getValueString(ConstantLib.USER_NAME)
+        binding!!.username.text = "@" + sharedPreferences.getValueString(ConstantLib.USER_NAME)
 
     }
 
@@ -181,7 +189,7 @@ class CameraActivity : AppCompatActivity()
 
         override fun onPictureTaken(result: PictureResult) {
             super.onPictureTaken(result)
-            Log.e("Rotation----->",result.rotation.toString())
+            Log.e("Rotation----->", result.rotation.toString())
             if (binding!!.camera.isTakingVideo) {
                 Log.d(
                     TAG,
@@ -197,18 +205,33 @@ class CameraActivity : AppCompatActivity()
             TaggingFragment.setPictureResult(result)
             mCaptureTime = 0
             val tagIntent = Intent(applicationContext, TaggingFragment::class.java)
-            tagIntent.putExtra(ConstantLib.SENDER_ID,intent.getStringExtra(ConstantLib.SENDER_ID))
-            tagIntent.putExtra(ConstantLib.FROM_ACTIVITY,intent.getStringExtra(ConstantLib.FROM_ACTIVITY))
-            tagIntent.putExtra(ConstantLib.OURSTORYID,intent.getStringExtra(ConstantLib.OURSTORYID))
+            tagIntent.putExtra(ConstantLib.SENDER_ID, intent.getStringExtra(ConstantLib.SENDER_ID))
+            tagIntent.putExtra(
+                ConstantLib.FROM_ACTIVITY,
+                intent.getStringExtra(ConstantLib.FROM_ACTIVITY)
+            )
+            tagIntent.putExtra(
+                ConstantLib.OURSTORYID,
+                intent.getStringExtra(ConstantLib.OURSTORYID)
+            )
             startActivity(tagIntent)
         }
 
         override fun onVideoTaken(result: VideoResult) {
             TaggingVideoActivity.setVideoResult(result)
-            val tagVideoIntent = Intent(applicationContext,TaggingVideoActivity::class.java)
-            tagVideoIntent.putExtra(ConstantLib.SENDER_ID,intent.getStringExtra(ConstantLib.SENDER_ID))
-            tagVideoIntent.putExtra(ConstantLib.FROM_ACTIVITY,intent.getStringExtra(ConstantLib.FROM_ACTIVITY))
-            tagVideoIntent.putExtra(ConstantLib.OURSTORYID,intent.getStringExtra(ConstantLib.OURSTORYID))
+            val tagVideoIntent = Intent(applicationContext, TaggingVideoActivity::class.java)
+            tagVideoIntent.putExtra(
+                ConstantLib.SENDER_ID,
+                intent.getStringExtra(ConstantLib.SENDER_ID)
+            )
+            tagVideoIntent.putExtra(
+                ConstantLib.FROM_ACTIVITY,
+                intent.getStringExtra(ConstantLib.FROM_ACTIVITY)
+            )
+            tagVideoIntent.putExtra(
+                ConstantLib.OURSTORYID,
+                intent.getStringExtra(ConstantLib.OURSTORYID)
+            )
             startActivity(tagVideoIntent)
             super.onVideoTaken(result)
         }

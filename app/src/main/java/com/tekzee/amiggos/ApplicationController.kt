@@ -401,10 +401,10 @@ class ApplicationController : Application(), KodeinAware {
             "pk_test_E5sEgimoA8T4SexAo1GnNPkJ00sG6jBcdG"
         );
 
-        AutoErrorReporter.get(this)
-            .setEmailAddresses("himanshu.verma@tekzee.com")
-            .setEmailSubject("Auto Crash Report")
-            .start()
+//        AutoErrorReporter.get(this)
+//            .setEmailAddresses("himanshu.verma@tekzee.com")
+//            .setEmailSubject("Auto Crash Report")
+//            .start()
 
 
         val leastRecentlyUsedCacheEvictor = LeastRecentlyUsedCacheEvictor(90 * 1024 * 1024)

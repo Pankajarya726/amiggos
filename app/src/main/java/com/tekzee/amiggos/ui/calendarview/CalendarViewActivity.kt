@@ -122,19 +122,6 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
             day.add(Calendar.DATE, 1)
         }
         binding.calendarView.setDisabledDays(disabledDates)
-
-//        for (items in dataVenue.clubData.workingDays)
-//        {
-//            if(items.isOpen == 0){
-//                val cal: Calendar = Calendar.getInstance()
-//                cal.set(Calendar.YEAR,items.date.split("-")[0].toInt())
-//                cal.set(Calendar.MONTH,items.date.split("-")[1].toInt()-1)
-//                cal.set(Calendar.DAY_OF_MONTH,items.date.split("-")[2].toInt())
-//                disabledDates.add(cal)
-//            }
-//        }
-//        binding.calendarView.setDisabledDays(disabledDates)
-
     }
     private fun setupRepository() {
         val itemDao = AmiggoRoomDatabase.getDatabase(this).itemDao()

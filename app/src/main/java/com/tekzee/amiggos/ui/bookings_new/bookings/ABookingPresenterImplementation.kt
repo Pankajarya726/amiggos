@@ -26,13 +26,13 @@ class ABookingPresenterImplementation (private var mainView: ABookingPresenter.A
     }
 
     override fun docallGetBookings(input: JsonObject, createHeaders: HashMap<String, String?>) {
-
+            mainView.showProgress()
             if (mainView.checkInternet()) {
                 disposable = ApiClient.instance.docallGetBookings(input,createHeaders)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ response ->
-                        mainView.hideProgressbar()
+                        mainView.hideProgress()
                         when (response.code()) {
                             200 -> {
                                 val responseData: ABookingResponse? = response.body()
@@ -46,11 +46,11 @@ class ABookingPresenterImplementation (private var mainView: ABookingPresenter.A
                         }
                         }
                     }, { error ->
-                        mainView.hideProgressbar()
+                        mainView.hideProgress()
                         mainView.onBookingFailure(error.message.toString())
                     })
             } else {
-                mainView.hideProgressbar()
+                mainView.hideProgress()
                 mainView.validateError(context!!.getString(R.string.check_internet))
             }
         }

@@ -8,6 +8,7 @@ class ABookingPresenter{
 
     interface ABookingPresenterMain{
         fun onStop()
+
         fun docallGetBookings(
             input: JsonObject,
             createHeaders: HashMap<String, String?>
@@ -16,6 +17,8 @@ class ABookingPresenter{
     }
 
     interface ABookingPresenterMainView: BaseMainView {
+        fun showProgress()
+        fun hideProgress()
         fun onBookingSuccess(
             taggedVenue: List<ABookingResponse.Data.BookingData>,
             responseData: ABookingResponse

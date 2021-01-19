@@ -91,6 +91,9 @@ public class LanguageData {
     @SerializedName("yourmemorywillbeuploadedinbackgroud")
     @Expose
     private String yourmemorywillbeuploadedinbackgroud = "Your memory will be uploaded in backgroud and will take few moments to get updated";
+    @SerializedName("tagging_will_not_work")
+    @Expose
+    private String tagging_will_not_work = "Tagging will not work in our memory";
     @SerializedName("time")
     @Expose
     private String time = "Time";
@@ -5999,5 +6002,13 @@ public class LanguageData {
 
     public void setBookingunavailable(String bookingunavailable) {
         this.bookingunavailable = bookingunavailable;
+    }
+
+    public String getTagging_will_not_work() {
+        return tagging_will_not_work;
+    }
+
+    public void setTagging_will_not_work(String tagging_will_not_work) {
+        this.tagging_will_not_work = tagging_will_not_work;
     }
 }

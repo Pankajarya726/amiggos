@@ -175,7 +175,7 @@
         android:layout_marginBottom="@dimen/_20sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_delete" />
+        app:srcCompat="@drawable/ic_delete_icon" />
 
     <LinearLayout
         android:id="@+id/layout_approve_decline"

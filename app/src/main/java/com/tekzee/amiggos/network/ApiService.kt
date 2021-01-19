@@ -54,7 +54,6 @@ import com.tekzee.amiggos.ui.newpreferences.amusictypefragment.model.AMusicTypeR
 import com.tekzee.amiggos.ui.newpreferences.avenuetypefragment.model.AVenueTypeResponse
 import com.tekzee.amiggos.ui.notification_new.model.ANotificationResponse
 import com.tekzee.amiggos.ui.notification_new.model.PartyInvitesNotificationResponse
-//import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
 import com.tekzee.amiggos.ui.ourmemories.model.GetFriendForInviteAfterCreateMemoryResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
 import com.tekzee.amiggos.ui.profiledetails.model.GetFriendProfileDetailsResponse
@@ -151,6 +150,13 @@ interface ApiService {
 
     @POST("guest/rejectOurStoryInvite")
     suspend fun rejectOurStory(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Response<CommonResponse>
+
+
+    @POST("banner_click")
+    suspend fun doBannerCountApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Response<CommonResponse>

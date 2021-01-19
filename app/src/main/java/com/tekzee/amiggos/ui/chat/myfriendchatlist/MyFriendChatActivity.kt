@@ -109,7 +109,7 @@ class MyFriendChatActivity : BaseActivity() {
                         val messageData = Message(
                             data["isSeen"]!!.toString().toBoolean(),
                             data["msg"].toString(), data["receiver"].toString(), data["sender"].toString(),
-                            data["timeSpam"]!!.toString().toLong())
+                            data["timestamp"]!!.toString().toLong())
                         if (messageData!=null) {
                             if (messageData.sender.equals(sender)&& messageData.receiver.equals(FirebaseAuth.getInstance().uid.toString()) || messageData.sender.equals(FirebaseAuth.getInstance().uid.toString())&& messageData.receiver.equals(sender) ){
                                 messageBetweenSenderAndReceiver.add(messageData)

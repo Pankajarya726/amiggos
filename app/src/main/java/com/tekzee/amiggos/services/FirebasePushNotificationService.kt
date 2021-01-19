@@ -36,6 +36,7 @@ import com.tekzee.amiggos.enums.FriendsAction
 import com.tekzee.amiggos.ui.attachid.AttachIdActivity
 import com.tekzee.amiggos.ui.cameranew.CameraActivity
 import com.tekzee.amiggos.ui.chat.myfriendchatlist.MyFriendChatActivity
+import com.tekzee.amiggos.ui.chatnew.ChatActivity
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.message.MessageActivity
 import com.tekzee.amiggos.ui.notification_new.ANotification
@@ -144,6 +145,11 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
         } else {
             ""
         }
+        var chatSenderId = if (jsonData.has("chat_senderid")) {
+            jsonData.getString("chat_senderid")
+        } else {
+            ""
+        }
 
         sharedPreferences!!.save(ConstantLib.REJECTION_MESSAGE, rejectionMessage!!)
         when (notiKey) {
@@ -151,7 +157,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
                 Logger.d("do nothing")
             }
             "1" -> {
-                goToShowMemory(title,body)
+                goToShowMemory(title, body)
             }
             "2" -> {
                 gotoFriendRequest(title, body, userid)
@@ -172,7 +178,7 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
                 createDefaultNotification(title, body)
             }
             "8" -> {
-                createChatNotification(title, body)
+                createChatNotification(title, body, chatSenderId)
             }
             "9" -> {
                 gotoSendPartyInvitation(title, body, userid)
@@ -265,29 +271,62 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
 
     }
 
-    private fun createChatNotification(title: String, body: String) {
-        createNotificationChannel()
-        playSound()
-        val intent = Intent(this, MessageActivity::class.java)
+    private fun createChatNotification(title: String, body: String, chatSenderId: String) {
+        Log.e("chatid--->", chatSenderId)
+        Log.e("talkingUser--->", "ta===>" + ChatActivity.talkingUser)
 
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+        if (ChatActivity.iamActiveOnChat) {
+            if (chatSenderId.equals(ChatActivity.talkingUser)) {
+                return
+            } else {
+                createNotificationChannel()
+                playSound()
+                val intent = Intent(this, MessageActivity::class.java)
 
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_background)
-            .setContentTitle(title)
-            .setContentText(body)
-            .setStyle(
-                NotificationCompat.BigTextStyle()
-                    .bigText(body)
-            )
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setContentIntent(pendingIntent)
+                val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
-            .setAutoCancel(true)
-        with(NotificationManagerCompat.from(this)) {
-            // notificationId is a unique int for each notification that you must define
-            notify(System.currentTimeMillis().toInt(), builder.build())
+                val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setContentTitle(title)
+                    .setContentText(body)
+                    .setStyle(
+                        NotificationCompat.BigTextStyle()
+                            .bigText(body)
+                    )
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setContentIntent(pendingIntent)
+
+                    .setAutoCancel(true)
+                with(NotificationManagerCompat.from(this)) {
+                    // notificationId is a unique int for each notification that you must define
+                    notify(System.currentTimeMillis().toInt(), builder.build())
+                }
+            }
+        } else {
+            createNotificationChannel()
+            playSound()
+            val intent = Intent(this, MessageActivity::class.java)
+
+            val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
+            val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setStyle(
+                    NotificationCompat.BigTextStyle()
+                        .bigText(body)
+                )
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(pendingIntent)
+
+                .setAutoCancel(true)
+            with(NotificationManagerCompat.from(this)) {
+                // notificationId is a unique int for each notification that you must define
+                notify(System.currentTimeMillis().toInt(), builder.build())
+            }
         }
+
     }
 
     private fun createDefaultNotification(title: String, body: String) {
@@ -420,7 +459,6 @@ class FirebasePushNotificationService : FirebaseMessagingService() {
         acceptIntent.putExtra(ConstantLib.FROM_ACTIVITY, ConstantLib.OURSTORYINVITE)
         acceptIntent.putExtra(ConstantLib.SENDER_ID, senderid)
         acceptIntent.putExtra(ConstantLib.OURSTORYID, ourstoryid)
-
 
 
         val pendingAcceptIntent = PendingIntent.getActivity(

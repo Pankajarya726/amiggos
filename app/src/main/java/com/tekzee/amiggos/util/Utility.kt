@@ -5,12 +5,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.util.Base64
 import android.widget.Toast
-import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
-import kotlinx.coroutines.coroutineScope
 import org.json.JSONArray
 import java.math.RoundingMode
 import java.security.MessageDigest
@@ -84,11 +82,13 @@ class Utility {
 
 
         fun createHeaders(sharedPreferences: SharedPreference?): HashMap<String, String?> {
+            val tz = TimeZone.getDefault()
             val headers = HashMap<String, String?>()
             headers["language-code"] = if(sharedPreferences!!.getValueString(ConstantLib.LANGUAGE_CODE).isNullOrEmpty()){"en"}else{
                 sharedPreferences.getValueString(ConstantLib.LANGUAGE_CODE)}
             headers["api-key"] = sharedPreferences.getValueString(ConstantLib.API_TOKEN)
             headers["device_type"] = ConstantLib.DEVICETYPE
+            headers["time_zone"] = tz.id.toString()
             return headers
         }
 
@@ -174,7 +174,7 @@ class Utility {
         fun showLogoutPopup(context: Context, message: String) {
 
             val sharedPreference = SharedPreference(context)
-            Toast.makeText(context,message,Toast.LENGTH_LONG).show()
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             FirebaseAuth.getInstance().signOut()
             sharedPreference.clearSharedPreference()
             val intent = Intent(context, MainSplashActivity::class.java)

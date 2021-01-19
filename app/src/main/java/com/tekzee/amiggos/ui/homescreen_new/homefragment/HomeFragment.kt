@@ -28,6 +28,7 @@ import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.example.easywaylocation.EasyWayLocation
+import com.example.easywaylocation.EasyWayLocation.LOCATION_SETTING_REQUEST_CODE
 import com.example.easywaylocation.Listener
 import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -36,7 +37,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.gson.JsonObject
 import com.jakewharton.rxbinding2.widget.RxTextView
-import com.orhanobut.logger.Logger
+import com.kaopiz.kprogresshud.KProgressHUD
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
@@ -46,12 +47,10 @@ import com.tekzee.amiggos.ui.cameranew.CameraActivity
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.homescreen_new.CustomInfoWindowAdapter
 import com.tekzee.amiggos.ui.homescreen_new.NotifyNotification
-import com.tekzee.amiggos.ui.homescreen_new.homefragment.adapter.AutoCompleteAdapter
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.adapter.AutoSuggestAdapter
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse.Data.Venue
 import com.tekzee.amiggos.ui.homescreen_new.model.BadgeCountResponse
-import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.ui.venuedetailsnew.AVenueDetails
 import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
@@ -66,7 +65,9 @@ import java.util.concurrent.TimeUnit
 
 
 class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
-    /*Listener,*/ com.google.android.gms.maps.OnMapReadyCallback {
+    /*Listener,*/ com.google.android.gms.maps.OnMapReadyCallback, Listener {
+
+    private var progressDialog: KProgressHUD? = null
     private var binding: HomeFragmentBinding? = null
     private var mMap: GoogleMap? = null
     private lateinit var notifylistner: NotifyNotification
@@ -85,7 +86,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     private var categoryId: String = ""
     private var searchkeyword: String = ""
     private var languageData: LanguageData? = null
-//    private var easyWayLocation: EasyWayLocation? = null
+    private var easyWayLocation: EasyWayLocation? = null
 
 
     companion object {
@@ -104,7 +105,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
     override fun onPause() {
         super.onPause()
-//        easyWayLocation!!.endUpdates()
+        easyWayLocation!!.endUpdates()
     }
 
     override fun onCreateView(
@@ -113,11 +114,23 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.home_fragment, container, false)
+        homepresenterImplementation = HomePresenterImplementation(this, requireContext())
+        sharedPreference = SharedPreference(requireContext())
+        languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
+        setupProgressBar()
         showProgressbarNew()
         val mapFragment: SupportMapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         return binding!!.root
+    }
+
+    private fun setupProgressBar() {
+        progressDialog = KProgressHUD.create(context)
+            .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+            .setLabel("Please wait")
+            .setCancellable(false)
+
     }
 
     private fun callBadgeApi() {
@@ -135,44 +148,15 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        homepresenterImplementation = HomePresenterImplementation(this, requireContext())
-        sharedPreference = SharedPreference(requireContext())
-        languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-
-        try {
-            SmartLocation.with(requireActivity()).location().oneFix()
-                .start { locationData ->
-                    SmartLocation.with(requireContext()).location().stop()
-                    latitude = locationData!!.latitude.toString()
-                    longitude = locationData.longitude.toString()
-                    hideProgressbarNew()
-                    requireActivity().runOnUiThread(Runnable {
-                        hideKeyboard()
-                        mMap!!.moveCamera(
-                            CameraUpdateFactory.newLatLng(
-                                LatLng(
-                                    latitude!!.toDouble(),
-                                    longitude!!.toDouble()
-                                )
-                            )
-                        )
-                        mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15.0f))
-                        callHomeApi(0)
-                    })
-                    callBadgeApi()
-                }
-        }catch (e:Exception){
-            e.printStackTrace()
-        }
-
-
+        easyWayLocation = EasyWayLocation(requireContext(), false, this)
 
     }
 
     private fun showProgressbarNew() {
         binding!!.headerlayout.visibility = View.GONE
         binding!!.maplayout.visibility = View.GONE
-        binding!!.homeprogressbar.visibility = View.VISIBLE
+//        binding!!.homeprogressbar.visibility = View.VISIBLE
+        progressDialog!!.show()
     }
 
 
@@ -346,6 +330,11 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         homepresenterImplementation.onStop()
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        homepresenterImplementation.onStop()
+    }
+
     override fun onLowMemory() {
         super.onLowMemory()
 
@@ -361,6 +350,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         binding!!.headerlayout.visibility = View.VISIBLE
         binding!!.maplayout.visibility = View.VISIBLE
         binding!!.homeprogressbar.visibility = View.GONE
+        progressDialog!!.dismiss()
     }
 
     override fun onHomeApiSuccess(responseData: HomeResponse) {
@@ -701,6 +691,9 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            LOCATION_SETTING_REQUEST_CODE -> easyWayLocation!!.onActivityResult(resultCode)
+        }
         if (resultCode == 2) {
             searchkeyword = ""
             categoryId = ""
@@ -710,5 +703,81 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
             callHomeApi(0)
         }
     }
+
+    override fun locationOn() {
+        Log.d("test", "location on")
+    }
+
+    override fun currentLocation(location: Location?) {
+        try {
+            if(location!=null)
+            {
+                easyWayLocation!!.endUpdates()
+                latitude = location.latitude.toString()
+                longitude = location.longitude.toString()
+                hideProgressbarNew()
+                requireActivity().runOnUiThread(Runnable {
+                    hideKeyboard()
+                    mMap!!.moveCamera(
+                        CameraUpdateFactory.newLatLng(
+                            LatLng(
+                                latitude!!.toDouble(),
+                                longitude!!.toDouble()
+                            )
+                        )
+                    )
+                    mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15.0f))
+                    callHomeApi(0)
+                })
+                callBadgeApi()
+            }else{
+                easyWayLocation!!.startLocation()
+            }
+
+        }catch (e:Exception){
+            e.printStackTrace()
+            hideProgressbarNew()
+        }
+
+        /*try {
+            SmartLocation.with(requireActivity()).location().oneFix()
+                .start { locationData ->
+                    Log.e(
+                        "location Data----->",
+                        locationData.altitude.toString() + "---" + locationData.longitude
+                    )
+                    SmartLocation.with(requireActivity()).location().stop()
+                    latitude = locationData!!.latitude.toString()
+                    longitude = locationData.longitude.toString()
+                    hideProgressbarNew()
+                    requireActivity().runOnUiThread(Runnable {
+                        hideKeyboard()
+                        mMap!!.moveCamera(
+                            CameraUpdateFactory.newLatLng(
+                                LatLng(
+                                    latitude!!.toDouble(),
+                                    longitude!!.toDouble()
+                                )
+                            )
+                        )
+                        mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15.0f))
+                        callHomeApi(0)
+                    })
+                    callBadgeApi()
+                }
+        }catch (e: Exception){
+            e.printStackTrace()
+        }*/
+    }
+
+    override fun locationCancelled() {
+        Log.d("test", "current location cancelled")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        easyWayLocation!!.startLocation()
+    }
+
 
 }

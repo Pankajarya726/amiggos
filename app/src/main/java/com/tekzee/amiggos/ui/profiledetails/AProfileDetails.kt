@@ -127,6 +127,11 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
 
 
     private fun setupClickListener() {
+
+        binding!!.imgLike.setOnClickListener {
+            callSendFriendRequest()
+        }
+
         binding!!.imgBack.setOnClickListener {
             onBackPressed()
         }
@@ -258,7 +263,7 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
 
     private fun setupViews(data: GetFriendProfileDetailsResponse.Data) {
 
-        friendId = data.userid.toString()
+        friendId = data.unique_user_id
         friendName = data.name
         friendImage = data.profile[0]
 

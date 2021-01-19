@@ -28,6 +28,8 @@ data class RealFriendV2Response(
             var address: String = "",
             @SerializedName("userid")
             var userid: Int = 0,
+            @SerializedName("unique_user_id")
+            var unique_user_id: String = "0",
             @SerializedName("isMyFriend")
             var isMyFriend: Boolean = false,
             @SerializedName("isMyFriendBlocked")

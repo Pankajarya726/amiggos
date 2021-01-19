@@ -24,6 +24,6 @@ data class ChatMessage(
     val message_id: String = "",
     @SerializedName("roomid")
     val roomid: String = "",
-    @SerializedName("timeSpam")
+    @SerializedName("timestamp")
     val timeSpam: Long = 0
 ):Serializable

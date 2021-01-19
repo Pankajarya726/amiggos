@@ -14,6 +14,6 @@ data class Message(
     val sender: String = "",
     @SerializedName("message_id")
     val message_id: String = "",
-    @SerializedName("timeSpam")
+    @SerializedName("timestamp")
     val timeSpam: Long = 0
 ):Serializable

@@ -24,8 +24,7 @@ class HomePresenterImplementation(
     override fun onStop() {
         if (disposable != null) {
             disposable!!.dispose()
-            if(mainView!=null)
-                mainView.hideProgressbar()
+            mainView.hideProgressbar()
         }
     }
 

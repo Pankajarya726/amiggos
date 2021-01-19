@@ -108,6 +108,13 @@ class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
         )
     }
 
+    override fun showProgress() {
+        binding.progressbar.visibility=View.VISIBLE
+    }
+
+    override fun hideProgress() {
+        binding.progressbar.visibility=View.GONE
+    }
 
 
     override fun onBookingSuccess(

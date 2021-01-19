@@ -163,7 +163,7 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
         database.child(ConstantLib.USER).child(firebaseUser!!.uid).child("name").setValue(responseData.name)
         database.child(ConstantLib.USER).child(firebaseUser.uid).child("image").setValue(responseData.profile)
         database.child(ConstantLib.USER).child(firebaseUser.uid).child("deviceToken").setValue(responseData.apiToken)
-        database.child(ConstantLib.USER).child(firebaseUser.uid).child("amiggosID").setValue(responseData.userid.toString())
+        database.child(ConstantLib.USER).child(firebaseUser.uid).child("amiggosID").setValue(responseData.unique_timestamp.toString())
         database.child(ConstantLib.USER).child(firebaseUser.uid).child("email").setValue(responseData.email)
         database.child(ConstantLib.USER).child(firebaseUser.uid).child("fcmToken").setValue(sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN))
 
@@ -171,6 +171,7 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
 
     private fun callHomePage(responseData: ALoginResponse.Data) {
         sharedPreferences!!.save(ConstantLib.USER_ID, responseData.userid.toInt())
+        sharedPreferences!!.save(ConstantLib.UNIQUE_TIMESTAMP, responseData.unique_timestamp.toString())
         sharedPreferences!!.save(ConstantLib.USER_NAME, responseData.username)
         sharedPreferences!!.save(ConstantLib.USER_EMAIL, responseData.email)
         sharedPreferences!!.save(ConstantLib.USER_DOB, responseData.dob)
@@ -204,7 +205,7 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
     private fun createFirebaseUser(responseData: ALoginResponse.Data) {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
         val user = User()
-        user.amiggosID = responseData.userid.toString()
+        user.amiggosID = responseData.unique_timestamp.toString()
         user.deviceToken = responseData.apiToken
         user.email = responseData.email
         user.fcmToken = sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString()
@@ -220,5 +221,10 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
 
     override fun logoutUser() {
         Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        aLoginImplementation!!.onStop()
     }
 }

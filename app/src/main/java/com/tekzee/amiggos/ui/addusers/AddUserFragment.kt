@@ -140,11 +140,12 @@ class AddUserFragment : AppCompatActivity(), KodeinAware, AddUserEvent, AddUserC
 
     override fun onItemClicked(position: Int, listItem: AddUserResponse.Data.Staff) {
         val myFriendChatModel = MyFriendChatModel()
-        myFriendChatModel.amiggosID = prefs.getValueInt(ConstantLib.USER_ID).toString()
+//        myFriendChatModel.amiggosID = prefs.getValueInt(ConstantLib.USER_ID).toString()
+        myFriendChatModel.amiggosID = listItem.unique_user_id
         myFriendChatModel.name = listItem.firstName + " " + listItem.lastName
         myFriendChatModel.image = listItem.profileImage
         val intent = Intent(this, ChatActivity::class.java)
-        intent.putExtra(ConstantLib.FRIEND_ID, listItem.id.toString())
+        intent.putExtra(ConstantLib.FRIEND_ID, listItem.unique_user_id)
         intent.putExtra(ConstantLib.CHAT_DATA, myFriendChatModel)
         startActivity(intent)
     }

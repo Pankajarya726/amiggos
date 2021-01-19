@@ -67,7 +67,7 @@ class MessageActivity : BaseActivity(), MessageEvent, KodeinAware,
     private fun getAllConversation() {
         onStarted()
         viewModel.getAllMyConversation(
-            prefs.getValueInt(ConstantLib.USER_ID).toString()
+            prefs.getValueString(ConstantLib.UNIQUE_TIMESTAMP).toString()
         ).observe(this,
             Observer {
                 val newlist = ArrayList<MyConversation>()

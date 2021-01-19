@@ -132,7 +132,10 @@ class MyMemoriesFragment : Fragment(), KodeinAware, MemorieClickListener,
             val showMemoryList: ArrayList<MemorieResponse.Data.Memories> = ArrayList()
             for(position in memorieAdapter!!.currentList!!.toList().indices){
                 if(position>=adapterPosition){
-                    showMemoryList.add(memorieAdapter!!.currentList!!.toList()[position])
+                    if(memorieAdapter!!.currentList!![position]!!.memory.size>0){
+                        showMemoryList.add(memorieAdapter!!.currentList!!.toList()[position])
+                    }
+
                 }
             }
 
@@ -174,7 +177,9 @@ class MyMemoriesFragment : Fragment(), KodeinAware, MemorieClickListener,
             val showMemoryList: ArrayList<MemorieResponse.Data.Memories> = ArrayList()
             for(position in featuredbrandAdapter!!.currentList!!.toList().indices){
                 if(position>=adapterPosition){
-                    showMemoryList.add(featuredbrandAdapter!!.currentList!!.toList()[position])
+                    if(featuredbrandAdapter!!.currentList!![position]!!.memory.size>0){
+                        showMemoryList.add(featuredbrandAdapter!!.currentList!!.toList()[position])
+                    }
                 }
             }
             val intent = Intent(requireContext(),StorieViewNew::class.java)

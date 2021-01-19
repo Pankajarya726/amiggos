@@ -33,6 +33,8 @@ data class GetFriendProfileDetailsResponse(
         @SerializedName("state")
         val state: String = "",
         @SerializedName("userid")
-        val userid: Int = 0
+        val userid: Int = 0,
+        @SerializedName("unique_user_id")
+        val unique_user_id: String = "0"
     )
 }

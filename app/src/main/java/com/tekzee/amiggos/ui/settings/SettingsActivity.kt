@@ -128,4 +128,9 @@ class SettingsActivity: BaseActivity(), SettingsPresenter.SettingsMainView {
         Toast.makeText(applicationContext,responseData.message,Toast.LENGTH_LONG).show()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        settingsPresenterImplementation!!.onStop()
+    }
+
 }
