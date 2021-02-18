@@ -53,7 +53,7 @@ class FinalBasketAdapter(
 
     class FinalBasketStaffViewHolder(val listitembinding: SingleFinalbasketListBinding) :
         RecyclerView.ViewHolder(listitembinding.root) {
-        private val df2: DecimalFormat = DecimalFormat("#.##")
+//        private val df2: DecimalFormat = DecimalFormat("#.##")
         fun bind(
             listItem: Menu?,
             context: Context?
@@ -62,7 +62,7 @@ class FinalBasketAdapter(
                 .placeholder(R.drawable.noimage).into(itemView.menuimage)
             listitembinding.commonitem = listItem
             listitembinding.executePendingBindings()
-            listitembinding.amout.text = "$"+String.format("%.2f", listItem.price)
+            listitembinding.amout.text = "$"+listItem.price
         }
     }
 

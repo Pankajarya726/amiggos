@@ -10,6 +10,7 @@ object ConstantLib {
     const val UNIQUE_TIMESTAMP = "UNIQUE_TIMESTAMP"
     const val DELETED_POSITION = "DELETED_POSITION"
     const val POSITION = "POSITION"
+    const val GUEST = "GUEST"
     const val DISPLAYFRAGMENT = "DISPLAYFRAGMENT"
     const val PAYMENTACTIVITY = "PAYMENTACTIVITY"
     const val ACCEPT = "ACCEPT"
@@ -122,6 +123,7 @@ object ConstantLib {
     const val INVITE_FRIEND = "invite_friend"
     const val IS_INVITE_FRIEND = "is_invite_friend"
     const val INVITE_MESSAGE = "invite_message"
+    const val UPLOAD_BACKGROUDMEMORY_POPUP = "UPLOAD_BACKGROUDMEMORY_POPUP"
 
     const val LANGUAGE_CODE= "language_code"
     const val LANGUAGE_NAME= "language_name"

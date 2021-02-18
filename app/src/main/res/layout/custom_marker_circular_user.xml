@@ -4,22 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/custom_marker_view"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content">
 
     <com.github.siyamed.shapeimageview.CircularImageView
         android:id="@+id/marker_image"
-        android:layout_width="@dimen/_45sdp"
-        android:layout_height="@dimen/_40sdp"
+        android:layout_width="@dimen/_35sdp"
+        android:layout_height="@dimen/_30sdp"
         android:layout_gravity="center_horizontal"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
+        android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:siBorderColor="@color/white"
-        app:siBorderWidth="3dp"
-        />
+        app:siBorderWidth="3dp" />
 
     <ImageView
         android:layout_width="wrap_content"

@@ -26,6 +26,7 @@ import com.tekzee.amiggos.ui.stripepayment.addnewcard.AAddCard
 import com.tekzee.amiggos.ui.stripepayment.paymentactivity.adapter.PaymentActivityAdapter
 import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.BookingPaymentResponse
 import com.tekzee.amiggos.util.*
+import java.text.DecimalFormat
 import java.util.*
 
 class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodPresenterMainView {
@@ -39,7 +40,7 @@ class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodP
     private val data = ArrayList<CardListResponse.Data.Card>()
     private var repository: ItemRepository? = null
     private var isCardAvailable = false;
-
+//    private val df2: DecimalFormat = DecimalFormat("#.##")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.payment_activity)
@@ -62,7 +63,7 @@ class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodP
     private fun setupLanguage() {
         binding!!.paynow.text = languageData!!.pay
         binding!!.headertitle.text = languageData!!.ppaymentmethod
-        binding!!.headerAmount.text = "$ " + intent.getStringExtra(ConstantLib.PURCHASE_AMOUNT)
+        binding!!.headerAmount.text = Utility.formatCurrency(intent.getStringExtra(ConstantLib.PURCHASE_AMOUNT).toFloat())
         binding!!.savedCards.text = languageData!!.savedcards
     }
 
@@ -247,3 +248,4 @@ class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodP
         Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 }
+

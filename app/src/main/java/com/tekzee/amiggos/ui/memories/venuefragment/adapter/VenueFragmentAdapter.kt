@@ -19,7 +19,7 @@ class VenueFragmentAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.single_venue, parent, false))
+            return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.ourmemoriewithoutproduct_layout, parent, false))
     }
 
     override fun getItemCount(): Int = mDataList.size

@@ -70,6 +70,10 @@ data class MemorieResponse(
                     val id: Int = 0,
                     @SerializedName("name")
                     val name: String = "",
+                    @SerializedName("price")
+                    val price: String = "",
+                    @SerializedName("description")
+                    val description: String = "",
                     @SerializedName("website")
                     val website: String = "",
                     val featured_brand_id: String = "0"

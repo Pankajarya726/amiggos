@@ -309,5 +309,7 @@ dependencies {
     implementation "androidx.room:room-ktx:$rootProject.roomVersion"
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
     implementation 'com.github.dhaval2404:imagepicker-support:1.7.1'
-
+    implementation 'com.beloo.widget:ChipsLayoutManager:0.3.7@aar'
+    implementation 'com.github.ravindu1024:android-keyboardlistener:1.0.0'
+    implementation 'com.github.vipulasri.layouttoimage:library:1.0.0'
 }

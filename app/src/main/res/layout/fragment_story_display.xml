@@ -16,7 +16,7 @@
         android:id="@+id/storyDisplayImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:scaleType="fitXY" />
 
     <ProgressBar
         android:id="@+id/storyDisplayVideoProgress"
@@ -103,7 +103,7 @@
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:src="@drawable/header_logo"
-
+                app:civ_circle_background_color="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/header_logo" />

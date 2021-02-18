@@ -277,6 +277,7 @@
                         android:imeOptions="actionDone"
                         android:enabled="false"
                         android:inputType="phone"
+                        android:maxLength="14"
                         android:fontFamily="@font/opensans_regular"
                         android:minHeight="@dimen/_35sdp"
                         android:textColor="@android:color/black" />

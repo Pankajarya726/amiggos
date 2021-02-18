@@ -26,6 +26,7 @@ import com.tekzee.amiggos.util.NetworkConnectionInterceptor
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.ui.addusers.AddUserViewModelFactory
 import com.tekzee.amiggos.ui.finalbasket.FinalBasketViewModelFactory
+import com.tekzee.amiggos.ui.invitationlist.InvitationListViewModelFactory
 import com.tekzee.amiggos.ui.memories.mymemories.MyMemorieViewModelFactory
 import com.tekzee.amiggos.ui.menu.MenuModelFactory
 import com.tekzee.amiggos.ui.menu.commonfragment.CommonFragmentViewModelFactory
@@ -60,7 +61,6 @@ class ApplicationController : Application(), KodeinAware {
         bind() from singleton { CompositeDisposable() }
 
 
-
         //bind repository
 
         bind() from singleton { TaggingRepository(instance()) }
@@ -72,6 +72,7 @@ class ApplicationController : Application(), KodeinAware {
         bind() from singleton { MemorieFeaturedBrandRepository(instance()) }
         bind() from singleton { MenuRepository(instance()) }
         bind() from singleton { FinalBasketRepository(instance()) }
+        bind() from singleton { InvitationListRepository(instance()) }
 
 
 //        bind() from singleton { ValidateAppVersionRespository(instance()) }
@@ -193,200 +194,15 @@ class ApplicationController : Application(), KodeinAware {
             )
         }
 
+        bind() from singleton {
+            InvitationListViewModelFactory(
+                instance(),
+                instance(),
+                instance()
+            )
+        }
 
-//        bind() from singleton {
-//            LoginViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//        bind() from singleton {
-//            VenueDashboardViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//        bind() from singleton {
-//            BrandDashboardViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//        bind() from singleton { SplashViewModelFactory(instance(), instance()) }
-//        bind() from singleton { ForgetPasswordFactory(instance(), instance(), instance()) }
-//        bind() from singleton {
-//            SettingsViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//        bind() from singleton {
-//            PromotersViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//        bind() from singleton {
-//            AddUserViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//        bind() from singleton {
-//            BookingDetailsViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//        bind() from singleton {
-//            StaffViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//        bind() from singleton {
-//            CommonFragmentViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//
-//
-//        bind() from singleton {
-//            CommonViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//        bind() from singleton {
-//            MyMemorieViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//        bind() from singleton {
-//            DashboardCommonViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//        bind() from singleton {
-//            ApprovalViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//
 
-//
-//        bind() from singleton {
-//            ChatViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-
-//        bind() from singleton {
-//            CityViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//        bind() from singleton {
-//            SettingsMemorieViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//        bind() from singleton {
-//            LocationViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//        bind() from singleton {
-//            BrandViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//        bind() from singleton {
-//            BlockedViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//        bind() from singleton {
-//            LanguageViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//        bind() from singleton {
-//            StripeViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//        bind() from singleton {
-//            AddCardModelFactory(
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
     }
 
 
@@ -401,10 +217,10 @@ class ApplicationController : Application(), KodeinAware {
             "pk_test_E5sEgimoA8T4SexAo1GnNPkJ00sG6jBcdG"
         );
 
-//        AutoErrorReporter.get(this)
-//            .setEmailAddresses("himanshu.verma@tekzee.com")
-//            .setEmailSubject("Auto Crash Report")
-//            .start()
+        AutoErrorReporter.get(this)
+            .setEmailAddresses("himanshu.verma@tekzee.com")
+            .setEmailSubject("Auto Crash Report")
+            .start()
 
 
         val leastRecentlyUsedCacheEvictor = LeastRecentlyUsedCacheEvictor(90 * 1024 * 1024)

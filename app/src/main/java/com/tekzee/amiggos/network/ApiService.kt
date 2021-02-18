@@ -36,6 +36,7 @@ import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse
 import com.tekzee.amiggos.ui.homescreen_new.model.BadgeCountResponse
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
 import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailResponse
+import com.tekzee.amiggos.ui.invitationlist.model.InvitationListResponse
 import com.tekzee.amiggos.ui.invitefriendnew.model.GetUserForInviteResponse
 import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
@@ -99,6 +100,12 @@ const val FIRST_PAGE = 0
 
 interface ApiService {
 
+
+    @POST("guest/checkIn_customer")
+    suspend fun doCallInvitationList(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Response<InvitationListResponse>
 
     @POST("guest/getMenu")
     suspend fun doCallMenuApi(

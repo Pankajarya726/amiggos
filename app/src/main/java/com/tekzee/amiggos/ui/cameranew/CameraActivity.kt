@@ -1,6 +1,7 @@
 package com.tekzee.amiggos.ui.cameranew
 
 import android.content.Intent
+import android.gesture.Gesture
 import android.graphics.PointF
 import android.os.Bundle
 import android.util.Log
@@ -20,6 +21,7 @@ import com.tekzee.amiggos.databinding.NewCameraActivityBinding
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.ui.tagging.TaggingFragment
 import com.tekzee.amiggos.ui.taggingvideo.TaggingVideoActivity
+import com.tekzee.amiggos.util.MoveViewTouchListener
 import java.io.File
 
 
@@ -40,23 +42,30 @@ class CameraActivity : AppCompatActivity()
         setupView()
         setupClickListener()
 
-
         NotificationManagerCompat.from(applicationContext!!).cancel(
             intent!!.getIntExtra(
                 ConstantLib.EXTRA_NOTIFICATION_ID,
                 0
             )
         )
+
+//        binding!!.watermark.setOnTouchListener(MoveViewTouchListener(binding!!.watermark))
+
+
     }
 
 
     private fun setupClickListener() {
+
+
         binding!!.imgCameraFront.setOnClickListener { v: View? ->
+            checkFlashAvailability()
             binding!!.cameraFlipper.animate()
             binding!!.cameraFlipper.showPrevious()
             binding!!.camera.facing = Facing.FRONT
         }
         binding!!.imgCameraBack.setOnClickListener { v: View? ->
+            checkFlashAvailability()
             binding!!.cameraFlipper.animate()
             binding!!.cameraFlipper.showNext()
             binding!!.camera.facing = Facing.BACK
@@ -152,6 +161,21 @@ class CameraActivity : AppCompatActivity()
         binding!!.camera.addCameraListener(Listener())
         binding!!.username.text = "@" + sharedPreferences.getValueString(ConstantLib.USER_NAME)
 
+    }
+
+    fun checkFlashAvailability() {
+        val isFlashSupported: List<Flash> =
+            binding!!.camera.cameraOptions!!.supportedFlash.toList()
+        Log.e("supportedFlash", isFlashSupported.toString())
+        for (item in isFlashSupported) {
+            if (item == Flash.TORCH || item == Flash.ON) {
+                binding!!.flashOn.visibility = View.GONE
+                binding!!.flashOff.visibility = View.GONE
+                break
+            } else {
+                binding!!.flashOn.visibility = View.VISIBLE
+            }
+        }
     }
 
 //    override fun onCancelled() {

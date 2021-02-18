@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -30,6 +31,8 @@ import co.lujun.androidtagview.TagView
 import com.abedelazizshe.lightcompressorlibrary.CompressionListener
 import com.abedelazizshe.lightcompressorlibrary.VideoCompressor
 import com.abedelazizshe.lightcompressorlibrary.VideoQuality
+import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager
+import com.beloo.widget.chipslayoutmanager.SpacingItemDecoration
 import com.bumptech.glide.Glide
 import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.gson.JsonArray
@@ -37,6 +40,7 @@ import com.google.gson.JsonObject
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.otaliastudios.cameraview.VideoResult
 import com.otaliastudios.cameraview.size.AspectRatio
+import com.rw.keyboardlistener.KeyboardUtils
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
@@ -47,7 +51,9 @@ import com.tekzee.amiggos.ui.postmemories.PostMemories
 import com.tekzee.amiggos.util.*
 import com.tekzee.amiggosvenueapp.ui.tagging.TaggingClickListener
 import com.tekzee.amiggosvenueapp.ui.tagging.TaggingEvent
+import com.tekzee.amiggosvenueapp.ui.tagging.TaggingRecyclerviewClickListener
 import com.tekzee.amiggosvenueapp.ui.tagging.adapter.TaggingAdapter
+import com.tekzee.amiggosvenueapp.ui.tagging.adapter.TaggingRecyclerAdapter
 import com.tekzee.amiggosvenueapp.ui.tagging.model.TaggingResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -64,7 +70,8 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
-class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickListener, KodeinAware {
+class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickListener, KodeinAware,
+    TaggingRecyclerviewClickListener {
 
     override val kodein: Kodein by closestKodein()
     val languageConstant: LanguageData by instance<LanguageData>()
@@ -82,6 +89,7 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
     private var imageUri: Uri? = null
     private lateinit var mAppExcutor: AppExecutor
     private var mbitmap: Bitmap? = null
+    private lateinit var adapterTaggingRecycler:TaggingRecyclerAdapter
 
     companion object {
         fun newInstance() = TaggingVideoActivity()
@@ -101,8 +109,9 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
         viewModel.taggingEvent = this
         setupLanguage()
         setupClickListener()
-        callTaggingApi("")
 
+        callTaggingApi("")
+        setupTaggingReyclerViewAdapter()
 
         taglist.observe(this, Observer {
             binding!!.tagcontainerlayout.setTags(it)
@@ -113,8 +122,30 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
         }else{
             binding!!.touchText.visibility = View.VISIBLE
         }
-    }
 
+        KeyboardUtils.addKeyboardToggleListener(
+            this
+        ) { isVisible ->
+            if (!isVisible) {
+                setvisibilityofViews()
+            }
+        }
+    }
+    private fun setupTaggingReyclerViewAdapter() {
+        adapterTaggingRecycler = TaggingRecyclerAdapter(this)
+        val chipsLayoutManager =
+            ChipsLayoutManager.newBuilder(this)
+                .setChildGravity(Gravity.TOP)
+                .setScrollingEnabled(true)
+                .setGravityResolver { Gravity.START }
+                .setOrientation(ChipsLayoutManager.HORIZONTAL)
+                .setRowStrategy(ChipsLayoutManager.STRATEGY_DEFAULT) // whether strategy is applied to last row. FALSE by default
+                .withLastRow(true)
+                .build()
+        binding!!.taggingrecyclerview.addItemDecoration(SpacingItemDecoration(resources.getDimensionPixelOffset(R.dimen.chipmargin),resources.getDimensionPixelOffset(R.dimen.chipmargin)))
+        binding!!.taggingrecyclerview.layoutManager = chipsLayoutManager
+        binding!!.taggingrecyclerview.adapter = adapterTaggingRecycler
+    }
     private fun setupVideoView() {
         val result = videoResult
         if (result == null) {
@@ -154,9 +185,9 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
 
 
 
-        binding!!.videoview.setOnPreparedListener(MediaPlayer.OnPreparedListener { mp ->
+        binding!!.videoview.setOnPreparedListener { mp ->
             mp.isLooping = true
-            val lp = binding!!.videoview.getLayoutParams()
+            val lp = binding!!.videoview.layoutParams
             val videoWidth = mp.videoWidth.toFloat()
             val videoHeight = mp.videoHeight.toFloat()
             val viewWidth = binding!!.videoview.getWidth().toFloat()
@@ -170,7 +201,7 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
                     "The video full size is " + videoWidth + "x" + videoHeight
                 )
             }
-        })
+        }
     }
 
     private fun setupLanguage() {
@@ -228,7 +259,7 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
         })
 
 
-        RxTextView.textChanges(binding!!.tagSearch).filter { it.length > 2 }
+        RxTextView.textChanges(binding!!.tagSearch).filter { it.isNotEmpty() }
             .debounce(500, TimeUnit.MILLISECONDS).subscribeOn(
                 Schedulers.io()
             ).observeOn(AndroidSchedulers.mainThread()).subscribe {
@@ -395,7 +426,7 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
                     },
                     VideoQuality.MEDIUM,
                     isMinBitRateEnabled = false,
-                    keepOriginalResolution = false
+                    keepOriginalResolution = true
                 )
 
 
@@ -682,6 +713,8 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
             tagArraylist.add(listItem.name)
             taglist.postValue(tagArraylist)
             finaltaggedarray.add(listItem)
+            adapterTaggingRecycler.submitList(finaltaggedarray)
+            adapterTaggingRecycler.notifyDataSetChanged()
         }
 
     }
@@ -710,6 +743,15 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
             }
         }
         return count>1
+    }
+
+    override fun onItemCloseClicked(position: Int, listItem: TaggingResponse.Data.Search) {
+        if(finaltaggedarray.size>0){
+            finaltaggedarray.removeAt(position)
+            adapterTaggingRecycler.submitList(finaltaggedarray)
+            adapterTaggingRecycler.notifyItemRemoved(position)
+            adapterTaggingRecycler.notifyItemRangeChanged(position,adapterTaggingRecycler.itemCount -position)
+        }
     }
 
 }

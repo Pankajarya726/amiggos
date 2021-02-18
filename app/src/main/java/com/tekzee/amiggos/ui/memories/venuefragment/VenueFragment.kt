@@ -74,7 +74,7 @@ class VenueFragment : BaseFragment(), VenueFragmentPresenter.VenueFragmentPresen
 
     private fun setupVenueTaggedRecycler() {
         binding.aVenueRecyclerview.setHasFixedSize(true)
-        val layoutManager = GridLayoutManager(activity, 2)
+        val layoutManager = GridLayoutManager(activity, 3)
         binding.aVenueRecyclerview.layoutManager = layoutManager
         adapter = VenueFragmentAdapter(data, object : VenueItemClickListener {
             override fun onVenueItemClicked(
@@ -151,11 +151,11 @@ class VenueFragment : BaseFragment(), VenueFragmentPresenter.VenueFragmentPresen
         if (data.size == 0) {
             binding.errorLayout.visibility = View.VISIBLE
             binding.aVenueRecyclerview.visibility = View.GONE
-            binding!!.errortext.text = message
+            binding.errortext.text = message
         } else {
             binding.aVenueRecyclerview.visibility = View.VISIBLE
             binding.errorLayout.visibility = View.GONE
-            binding!!.errortext.text = ""
+            binding.errortext.text = ""
         }
     }
 

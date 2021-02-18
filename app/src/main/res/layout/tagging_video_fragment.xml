@@ -76,13 +76,25 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:tag_clickable="true"
                 app:tag_enable_cross="true"
-                app:tag_background_color="@color/white"
+                app:tag_background_color="@color/transparent"
                 app:tag_theme="none"
-                app:tag_text_color="@color/black"
-                app:container_background_color="@color/white"
-                app:tag_border_color="@color/black"
-                app:tag_cross_color="@color/black"
+                app:tag_text_color="@color/white"
+                app:container_background_color="@color/transparent"
+                app:tag_border_color="@color/white"
+                app:tag_cross_color="@color/white"
+                android:visibility="gone"
                 app:vertical_interval="10dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/taggingrecyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
 

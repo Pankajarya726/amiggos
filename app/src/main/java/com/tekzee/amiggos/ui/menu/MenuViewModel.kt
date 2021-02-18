@@ -8,6 +8,7 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.base.repository.MenuRepository
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.util.*
+import java.text.SimpleDateFormat
 
 class MenuViewModel(private val context: Context,
                     private val repository: MenuRepository,
@@ -21,7 +22,7 @@ class MenuViewModel(private val context: Context,
         menuEvent?.onDrawerClicked()
     }
 
-
+    var fmt: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
 
 
     fun callMenuApi(venueid: String?, date: String?, time: String?) {

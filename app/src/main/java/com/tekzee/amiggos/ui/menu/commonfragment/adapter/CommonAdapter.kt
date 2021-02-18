@@ -16,6 +16,7 @@ import com.tekzee.amiggos.room.entity.Menu
 import com.tekzee.amiggos.ui.menu.commonfragment.CommonClickListener
 import com.tekzee.amiggos.util.Coroutines
 import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import kotlinx.android.synthetic.main.single_common_staff_list.view.*
 
 
@@ -43,7 +44,7 @@ class CommonAdapter(
         getItem(position).let { listItem ->
             holder.bind(listItem, context)
 
-            holder.listitembinding.txtAmout.text = "$ "+String.format("%.2f", listItem.price)
+            holder.listitembinding.txtAmout.text = Utility.formatCurrency(listItem.price.toFloat())
 
             Coroutines.main {
                 val dataResponse = repository!!.getItemDetail(listItem!!.id.toString())

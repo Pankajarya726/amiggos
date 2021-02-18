@@ -11,7 +11,7 @@ class Menu(
     @SerializedName("age_restriction")
     val ageRestriction: String = "",
     @SerializedName("cost")
-    val cost: Int = 0,
+    val cost: Double = 0.0,
     @SerializedName("description")
     val description: String = "",
     @PrimaryKey @ColumnInfo(name = "id") val id: Int = 0,

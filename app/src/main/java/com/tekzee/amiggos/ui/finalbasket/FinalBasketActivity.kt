@@ -59,7 +59,7 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware,
     var subtotalamout = 0.0f
     var tax = 0.0f
     var mtip = 0.0f
-    private val df2: DecimalFormat = DecimalFormat("#.##")
+//    private val df2: DecimalFormat = DecimalFormat("#.##")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -191,7 +191,7 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware,
         val input = JsonObject()
         input.addProperty("userid", prefs.getValueInt(ConstantLib.USER_ID))
         input.addProperty("venue_id", intent.getStringExtra(ConstantLib.VENUE_ID))
-        input.addProperty("sub_total", subtotalamout)
+        input.addProperty("sub_total", Utility.roundOffDecimal(subtotalamout.toDouble()))
         input.addProperty("booking_date", intent.getStringExtra(ConstantLib.DATE))
         input.addProperty(
             "booking_method",
@@ -201,9 +201,9 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware,
         input.addProperty("instruction", binding!!.specialInstructions.text.toString())
         input.add("menu_item", createMenuItems())
         input.addProperty("price_category", "$$$")
-        input.addProperty("tax", tax)
-        input.addProperty("tip", mtip)
-        input.addProperty("total_amount", totalamout)
+        input.addProperty("tax", Utility.roundOffDecimal(tax.toDouble()))
+        input.addProperty("tip", Utility.roundOffDecimal(mtip.toDouble()))
+        input.addProperty("total_amount", Utility.roundOffDecimal(totalamout.toDouble()))
         viewModel.callCreateBookingApi(input)
     }
 
@@ -274,13 +274,13 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware,
             mtip = tip
             totalamout = subtotalamout + tax + mtip
 
-            binding!!.txtFee.text = "$ " + df2.format(Utility.roundOffDecimal(tax.toDouble()))
+            binding!!.txtFee.text = Utility.formatCurrency(tax)
             binding!!.txtSubtotal.text =
-                "$ " + df2.format(Utility.roundOffDecimal(subtotalamout.toDouble()))
+                Utility.formatCurrency(subtotalamout)
             binding!!.txtTotal.text =
-                "$ " + df2.format(Utility.roundOffDecimal(totalamout.toDouble()))
-            binding!!.tipamout.text = "$ " + df2.format(Utility.roundOffDecimal(tip.toDouble()))
-            binding!!.txtTip.text = "$ " + df2.format(Utility.roundOffDecimal(tip.toDouble()))
+             Utility.formatCurrency(totalamout)
+            binding!!.tipamout.text =Utility.formatCurrency(tip)
+            binding!!.txtTip.text = Utility.formatCurrency(tip)
 
         }
 

@@ -1,5 +1,6 @@
 package com.tekzee.amiggos.ui.venuedetailsnew
 
+import android.Manifest
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Color
@@ -8,9 +9,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.bumptech.glide.Glide
+import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.gson.JsonObject
 import com.impulsiveweb.galleryview.GalleryView
 import com.like.LikeButton
@@ -34,6 +38,7 @@ import java.util.*
 
 class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresenterMainView,
     SliderClickListener {
+    private lateinit var phoneNumberForCall: String
     private var isBookingAvailable: Int = 0
     private var response: VenueDetails.Data? = null
     private var venueId: String? = null
@@ -89,10 +94,49 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
 
     private fun setupClickListener() {
 
+        binding!!.txtPhone.setOnClickListener {
+            askPermission(Manifest.permission.CALL_PHONE) {
+
+                val pDialog = SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
+                pDialog.titleText = languageData!!.callmessage +phoneNumberForCall+"?"
+                pDialog.setCancelable(false)
+                pDialog.setCancelButton(languageData!!.klCancel) {
+                    pDialog.dismiss()
+                }
+                pDialog.setConfirmButton(languageData!!.klOk) {
+                    pDialog.dismiss()
+                    val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumberForCall))
+                    startActivity(intent)
+                }
+                pDialog.show()
+
+            }.onDeclined { e ->
+                if (e.hasDenied()) {
+                    AlertDialog.Builder(this)
+                        .setMessage(languageData!!.callpermission)
+                        .setPositiveButton(languageData!!.yes) { dialog, which ->
+                            e.askAgain()
+                        } //ask again
+                        .setNegativeButton(languageData!!.no) { dialog, which ->
+                            dialog.dismiss()
+                        }
+                        .show()
+                }
+
+                if (e.hasForeverDenied()) {
+                    e.goToSettings()
+                }
+            }
+
+
+        }
+
         binding!!.navigation.setOnClickListener {
             val uri = java.lang.String.format(
                 Locale.ENGLISH,
-                "http://maps.google.com/maps?saddr="+sharedPreference!!.getValueString(ConstantLib.CURRENTLAT)+","+sharedPreference!!.getValueString(ConstantLib.CURRENTLNG)+"&daddr="+response!!.clubData.latitude+","+response!!.clubData.longitude,
+                "http://maps.google.com/maps?saddr=" + sharedPreference!!.getValueString(ConstantLib.CURRENTLAT) + "," + sharedPreference!!.getValueString(
+                    ConstantLib.CURRENTLNG
+                ) + "&daddr=" + response!!.clubData.latitude + "," + response!!.clubData.longitude,
                 12f,
                 2f,
             )
@@ -114,7 +158,9 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         binding!!.txtAddress.setOnClickListener {
             val uri = java.lang.String.format(
                 Locale.ENGLISH,
-                "http://maps.google.com/maps?saddr="+sharedPreference!!.getValueString(ConstantLib.CURRENTLAT)+","+sharedPreference!!.getValueString(ConstantLib.CURRENTLNG)+"&daddr="+response!!.clubData.latitude+","+response!!.clubData.longitude,
+                "http://maps.google.com/maps?saddr=" + sharedPreference!!.getValueString(ConstantLib.CURRENTLAT) + "," + sharedPreference!!.getValueString(
+                    ConstantLib.CURRENTLNG
+                ) + "&daddr=" + response!!.clubData.latitude + "," + response!!.clubData.longitude,
                 12f,
                 2f,
             )
@@ -218,9 +264,11 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         binding!!.txtAgegroup.text = response.clubData.agelimit
         binding!!.imgHeart.isLiked = response.clubData.isFavorite == 1
         binding!!.txtDescription.text = response.clubData.clubDescription
-        binding!!.txtAddress.paintFlags = binding!!.txtAddress.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        binding!!.txtAddress.paintFlags =
+            binding!!.txtAddress.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         binding!!.txtAddress.text = response.clubData.address
         binding!!.txtPhone.text = response.clubData.phoneNumber
+        phoneNumberForCall = response.clubData.phoneNumber
         isBookingAvailable = response.clubData.isBookingAvailable.toInt()
         if (response.clubData.isBookingAvailable.toInt() == 1) {
             binding!!.bookNow.text = languageData!!.booknow

@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -20,6 +21,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.pedant.SweetAlert.SweetAlertDialog
 import co.lujun.androidtagview.TagView
+import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager
+import com.beloo.widget.chipslayoutmanager.SpacingItemDecoration
 import com.bumptech.glide.Glide
 import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.gson.JsonArray
@@ -27,6 +30,7 @@ import com.google.gson.JsonObject
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.otaliastudios.cameraview.BitmapCallback
 import com.otaliastudios.cameraview.PictureResult
+import com.rw.keyboardlistener.KeyboardUtils
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
@@ -37,9 +41,12 @@ import com.tekzee.amiggos.ui.postmemories.PostMemories
 import com.tekzee.amiggos.util.*
 import com.tekzee.amiggosvenueapp.ui.tagging.TaggingClickListener
 import com.tekzee.amiggosvenueapp.ui.tagging.TaggingEvent
+import com.tekzee.amiggosvenueapp.ui.tagging.TaggingRecyclerviewClickListener
 import com.tekzee.amiggosvenueapp.ui.tagging.TaggingViewModel
 import com.tekzee.amiggosvenueapp.ui.tagging.adapter.TaggingAdapter
+import com.tekzee.amiggosvenueapp.ui.tagging.adapter.TaggingRecyclerAdapter
 import com.tekzee.amiggosvenueapp.ui.tagging.model.TaggingResponse
+import com.vipul.hp_hp.library.Layout_to_Image
 import id.zelory.compressor.Compressor
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -50,7 +57,9 @@ import org.kodein.di.generic.instance
 import java.io.File
 import java.util.concurrent.TimeUnit
 
-class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener, KodeinAware {
+
+class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener, KodeinAware,
+    TaggingRecyclerviewClickListener {
 
 
 
@@ -64,6 +73,7 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
     private var taglist = MutableLiveData<List<String>>()
     private var tagArraylist = ArrayList<String>()
     private var finaltaggedarray = ArrayList<TaggingResponse.Data.Search>()
+    private lateinit var adapterTaggingRecycler:TaggingRecyclerAdapter
 
 
     private lateinit var adapter: TaggingAdapter
@@ -87,6 +97,7 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
         viewModel = ViewModelProvider(this, factory).get(TaggingViewModel::class.java)
         viewModel.taggingEvent = this
         setupLanguage()
+        setupTaggingReyclerViewAdapter()
         setupClickListener()
         callTaggingApi("")
 
@@ -107,6 +118,13 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
             result.toBitmap(
 
                 BitmapCallback { bitmap: Bitmap? ->
+                   /* var layout_to_image = Layout_to_Image(this, binding!!.watermark)
+                    var b:Bitmap=layout_to_image.convert_layout();
+                    val finalbitmap: Bitmap = addWatermark(
+                        b,
+                        bitmap!!,
+                        "@Himanshu Verma \n Amiggos"
+                    )*/
                     binding!!.imgPicture.setImageBitmap(bitmap)
                     mbitmap = bitmap
                     getimageUri(bitmap)
@@ -123,6 +141,39 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
             binding!!.touchText.visibility = View.VISIBLE
         }
 
+        KeyboardUtils.addKeyboardToggleListener(
+            this
+        ) { isVisible ->
+            if (!isVisible) {
+                setvisibilityofViews()
+            }
+        }
+
+//        binding!!.taggingrecyclerview.setOnTouchListener(MoveViewTouchListener(binding!!.taggingrecyclerview))
+
+                binding!!.watermark.setOnTouchListener(MoveViewTouchListener(binding!!.watermark))
+    }
+
+    private fun setupTaggingReyclerViewAdapter() {
+        adapterTaggingRecycler = TaggingRecyclerAdapter(this)
+        val chipsLayoutManager =
+            ChipsLayoutManager.newBuilder(this)
+                .setChildGravity(Gravity.TOP)
+                .setScrollingEnabled(true)
+                .setGravityResolver { Gravity.START }
+                .setOrientation(ChipsLayoutManager.HORIZONTAL)
+                .setRowStrategy(ChipsLayoutManager.STRATEGY_DEFAULT) // whether strategy is applied to last row. FALSE by default
+                .withLastRow(true)
+                .build()
+        binding!!.taggingrecyclerview.addItemDecoration(
+            SpacingItemDecoration(
+                resources.getDimensionPixelOffset(
+                    R.dimen.chipmargin
+                ), resources.getDimensionPixelOffset(R.dimen.chipmargin)
+            )
+        )
+        binding!!.taggingrecyclerview.layoutManager = chipsLayoutManager
+        binding!!.taggingrecyclerview.adapter = adapterTaggingRecycler
     }
 
     private fun getimageUri(bitmap: Bitmap?) {
@@ -146,7 +197,6 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
                     e.askAgain()
                 }
             }
-
             if (e.hasForeverDenied()) {
                 e.goToSettings()
             }
@@ -224,7 +274,7 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
         binding!!.tagSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                   setvisibilityofViews()
+                    setvisibilityofViews()
                     return true
                 }
                 return false
@@ -253,10 +303,24 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
 
                 if(intent.getStringExtra(ConstantLib.FROM_ACTIVITY).equals(ConstantLib.OURSTORYINVITE)){
 //                    val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
-                    val inviteFriendAfterCreateMemoryIntent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
-                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FILEURI, imageUri.toString())
-                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY,  getTaggedArrayJson(finaltaggedarray))
-                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+                    val inviteFriendAfterCreateMemoryIntent = Intent(
+                        applicationContext,
+                        InviteFriendAfterCreateMemory::class.java
+                    )
+                    inviteFriendAfterCreateMemoryIntent.putExtra(
+                        ConstantLib.FILEURI,
+                        imageUri.toString()
+                    )
+                    inviteFriendAfterCreateMemoryIntent.putExtra(
+                        ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(
+                            finaltaggedarray
+                        )
+                    )
+                    inviteFriendAfterCreateMemoryIntent.putExtra(
+                        ConstantLib.OURSTORYID, intent.getStringExtra(
+                            ConstantLib.OURSTORYID
+                        )
+                    )
                     inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM, "IMAGE")
                     startActivity(inviteFriendAfterCreateMemoryIntent)
                 }else {
@@ -434,6 +498,8 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
             tagArraylist.add(listItem.name)
             taglist.postValue(tagArraylist)
             finaltaggedarray.add(listItem)
+            adapterTaggingRecycler.submitList(finaltaggedarray)
+            adapterTaggingRecycler.notifyDataSetChanged()
         }
     }
 
@@ -450,6 +516,19 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
 
     override fun onDestroy() {
         super.onDestroy()
+
+    }
+
+    override fun onItemCloseClicked(position: Int, listItem: TaggingResponse.Data.Search) {
+        if(finaltaggedarray.size>0){
+            finaltaggedarray.removeAt(position)
+            adapterTaggingRecycler.submitList(finaltaggedarray)
+            adapterTaggingRecycler.notifyItemRemoved(position)
+            adapterTaggingRecycler.notifyItemRangeChanged(
+                position,
+                adapterTaggingRecycler.itemCount - position
+            )
+        }
 
     }
 

@@ -233,7 +233,7 @@ class StoryDisplayFragment : Fragment(),
             }
             txt_view.text = stories[counter].storyData.viewCount.toString()
 
-            Glide.with(this).load(stories[counter].storyData.profile).circleCrop()
+            Glide.with(this).load(stories[counter].storyData.profile)
                 .placeholder(R.drawable.user).into(storyDisplayProfilePicture)
             storyDisplayNick.text = stories[counter].storyData.name
 

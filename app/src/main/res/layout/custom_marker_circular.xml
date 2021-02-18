@@ -9,11 +9,12 @@
 
     <com.github.siyamed.shapeimageview.RoundedImageView
         android:id="@+id/marker_image"
-        android:layout_width="@dimen/_45sdp"
-        android:layout_height="@dimen/_40sdp"
+        android:layout_width="@dimen/_35sdp"
+        android:layout_height="@dimen/_20sdp"
         android:layout_gravity="center_horizontal"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

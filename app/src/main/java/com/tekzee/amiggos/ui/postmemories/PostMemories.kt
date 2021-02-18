@@ -68,18 +68,25 @@ class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView 
     }
 
     private fun setupClickListerner() {
+
         binding.layoutmymemories.setOnClickListener {
-            val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-            pDialog.titleText = languageData!!.yourmemorywillbeuploadedinbackgroud
-            pDialog.setCancelable(false)
-            pDialog.setCancelButton(languageData!!.klCancel) {
-                pDialog.dismiss()
-            }
-            pDialog.setConfirmButton(languageData!!.klOk) {
-                pDialog.dismiss()
+            if(sharedPreference!!.getValueBoolean(ConstantLib.UPLOAD_BACKGROUDMEMORY_POPUP,false)){
                 callUploadImageToMyMemories()
+            }else{
+                val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                pDialog.titleText = languageData!!.yourmemorywillbeuploadedinbackgroud
+                pDialog.setCancelable(false)
+                pDialog.setCancelButton(languageData!!.klCancel) {
+                    pDialog.dismiss()
+                }
+                pDialog.setConfirmButton(languageData!!.klOk) {
+                    pDialog.dismiss()
+                    sharedPreference!!.save(ConstantLib.UPLOAD_BACKGROUDMEMORY_POPUP,true)
+                    callUploadImageToMyMemories()
+                }
+                pDialog.show()
             }
-            pDialog.show()
+
 
         }
 

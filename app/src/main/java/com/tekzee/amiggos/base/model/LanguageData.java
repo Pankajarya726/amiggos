@@ -87,6 +87,9 @@ public class LanguageData {
     @SerializedName("please_provide_valid_email")
     @Expose
     private String please_provide_valid_email = "Please provide valid email..";
+    @SerializedName("callmessage")
+    @Expose
+    private String callmessage = "Would you like to call ";
 
     @SerializedName("yourmemorywillbeuploadedinbackgroud")
     @Expose
@@ -1460,6 +1463,9 @@ public class LanguageData {
     @SerializedName("locationpermission")
     @Expose
     private String locationpermission = "Please provide location persmission";
+    @SerializedName("callpermission")
+    @Expose
+    private String callpermission = "Please provide call phone permission";
 
 
     @SerializedName("videosaved")
@@ -1573,6 +1579,38 @@ public class LanguageData {
 
     @SerializedName("memory")
     private String memory = "Memories";
+    @SerializedName("my_purchases")
+    private String my_purchases = "My Purchases";
+
+    @SerializedName("add_items")
+    private String add_items = "Add Items";
+
+    @SerializedName("guest")
+    private String guest = "Guest";
+
+    public String getGuest() {
+        return guest;
+    }
+
+    public void setGuest(String guest) {
+        this.guest = guest;
+    }
+
+    public String getMy_purchases() {
+        return my_purchases;
+    }
+
+    public void setMy_purchases(String my_purchases) {
+        this.my_purchases = my_purchases;
+    }
+
+    public String getAdd_items() {
+        return add_items;
+    }
+
+    public void setAdd_items(String add_items) {
+        this.add_items = add_items;
+    }
 
     public String getMemory() {
         return memory;
@@ -6010,5 +6048,21 @@ public class LanguageData {
 
     public void setTagging_will_not_work(String tagging_will_not_work) {
         this.tagging_will_not_work = tagging_will_not_work;
+    }
+
+    public String getCallpermission() {
+        return callpermission;
+    }
+
+    public void setCallpermission(String callpermission) {
+        this.callpermission = callpermission;
+    }
+
+    public String getCallmessage() {
+        return callmessage;
+    }
+
+    public void setCallmessage(String callmessage) {
+        this.callmessage = callmessage;
     }
 }

@@ -133,7 +133,6 @@
                                     android:drawablePadding="@dimen/_5sdp"
                                     android:fontFamily="@font/opensans_regular"
                                     android:gravity="center|left"
-                                    android:text="Wed - 9:00pm"
                                     android:textColor="@color/Grey_900"
                                     android:textSize="@dimen/_10sdp" />
 
@@ -143,10 +142,12 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:fontFamily="@font/opensans_regular"
-                                    android:gravity="center"
-                                    android:text="Lorem Ipsum"
+                                    android:gravity="center|right"
+                                    android:paddingRight="@dimen/_15sdp"
+                                    android:text="Add Items"
+                                    android:textStyle="bold"
                                     android:textColor="@color/Grey_900"
-                                    android:textSize="@dimen/_10sdp" />
+                                    android:textSize="@dimen/_12sdp" />
 
                             </LinearLayout>
 
@@ -161,7 +162,6 @@
                                 android:drawablePadding="@dimen/_5sdp"
                                 android:fontFamily="@font/opensans_regular"
                                 android:gravity="center|left"
-                                android:text="5-10-2020"
                                 android:textColor="@color/Grey_900"
                                 android:textSize="@dimen/_10sdp" />
 
@@ -175,8 +175,7 @@
                                 android:layout_marginRight="@dimen/_5sdp"
                                 android:fontFamily="@font/opensans_regular"
                                 android:gravity="center|left"
-                                android:text="Guest List : 5"
-                                android:textColor="@color/Grey_500"
+                                android:textColor="@color/Grey_800"
                                 android:textSize="@dimen/_12sdp" />
 
                             <TextView
@@ -188,9 +187,8 @@
                                 android:layout_marginRight="@dimen/_5sdp"
                                 android:fontFamily="@font/opensans_regular"
                                 android:gravity="center|left"
-                                android:text="Purchase Description"
                                 android:textColor="@color/Grey_900"
-                                android:textSize="@dimen/_8sdp" />
+                                android:textSize="@dimen/_10sdp" />
 
                             <TextView
                                 android:id="@+id/txt_purchase_description"
@@ -200,9 +198,8 @@
                                 android:layout_marginRight="@dimen/_5sdp"
                                 android:fontFamily="@font/opensans_regular"
                                 android:gravity="center|left"
-                                android:text="2 champion bottle \nshirm scarpion"
                                 android:textColor="@color/Grey_900"
-                                android:textSize="@dimen/_8sdp" />
+                                android:textSize="@dimen/_10sdp" />
 
 
                             <TextView
@@ -214,7 +211,6 @@
                                 android:layout_marginRight="@dimen/_5sdp"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="center|left"
-                                android:text="$ 50000"
                                 android:textColor="@color/Grey_900"
                                 android:textSize="@dimen/_12sdp" />
 
@@ -239,7 +235,6 @@
                                 android:layout_marginRight="@dimen/_5sdp"
                                 android:fontFamily="@font/opensans_regular"
                                 android:gravity="center|left"
-                                android:text="Reference number: 225425fd1212"
                                 android:textColor="@color/Grey_900"
                                 android:textSize="@dimen/_10sdp" />
 
@@ -251,7 +246,6 @@
                                 android:layout_marginRight="@dimen/_5sdp"
                                 android:fontFamily="@font/opensans_regular"
                                 android:gravity="center|left"
-                                android:text="Purchased by: John Smith"
                                 android:textColor="@color/Grey_900"
                                 android:textSize="@dimen/_10sdp" />
 
@@ -280,7 +274,7 @@
                         android:padding="@dimen/_5sdp"
 
                         android:fontFamily="@font/opensans_regular"
-                        android:text="View Menu"
+                        android:text="My Purchases"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_15sdp" />
                 </RelativeLayout>

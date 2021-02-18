@@ -3,6 +3,8 @@ package com.tekzee.amiggos.ui.signup.steptwo
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.telephony.PhoneNumberFormattingTextWatcher
+import android.telephony.PhoneNumberUtils
 import android.view.MotionEvent
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -17,17 +19,16 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
+import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.StepTwoBinding
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.signup.StepOneModel
-import com.tekzee.amiggos.ui.signup.login_new.ALogin
 import com.tekzee.amiggos.ui.signup.steptwo.model.CityResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.StateResponse
-import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.amiggos.util.Utility
-import com.tekzee.amiggos.constant.ConstantLib
-import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.signup.steptwo.model.UserData
 import com.tekzee.amiggos.util.Errortoast
+import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 
 class StepTwo: BaseActivity(), StepTwoPresenter.StepTwoPresenterMainView {
 
@@ -47,7 +48,7 @@ class StepTwo: BaseActivity(), StepTwoPresenter.StepTwoPresenterMainView {
         binding = DataBindingUtil.setContentView(this, R.layout.step_two)
         sharedPreferences = SharedPreference(this)
         languageData = sharedPreferences!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        stepTwoImplementation = StepTwoImplementation(this,this)
+        stepTwoImplementation = StepTwoImplementation(this, this)
         database = FirebaseDatabase.getInstance().reference
         setupLanguage()
         setupClickListener()
@@ -90,16 +91,20 @@ class StepTwo: BaseActivity(), StepTwoPresenter.StepTwoPresenterMainView {
     private fun callSignUpActivity() {
         val input = JsonObject()
         val dataFromStepOne = intent.getSerializableExtra("steponedata") as StepOneModel
-        input.addProperty("userid",sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
-        input.addProperty("first_name",binding!!.tfirstname.text.toString().trim())
-        input.addProperty("last_name",binding!!.tlastname.text.toString().trim())
-        input.addProperty("date_of_birth",dataFromStepOne.dateofbirth)
-        input.addProperty("state",stateId)
-        input.addProperty("city",cityId)
-        input.addProperty("phone_number",binding!!.tphone.text.toString().trim())
+        input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
+        input.addProperty("first_name", binding!!.tfirstname.text.toString().trim())
+        input.addProperty("last_name", binding!!.tlastname.text.toString().trim())
+        input.addProperty("date_of_birth", dataFromStepOne.dateofbirth)
+        input.addProperty("state", stateId)
+        input.addProperty("city", cityId)
+        input.addProperty("phone_number", binding!!.tphone.text.toString().trim())
         input.addProperty("pronouns", "")
-        input.addProperty("image","")
-        stepTwoImplementation!!.doUpdateUserInformation(input, Utility.createHeaders(sharedPreferences))
+        input.addProperty("image", "")
+        stepTwoImplementation!!.doUpdateUserInformation(
+            input, Utility.createHeaders(
+                sharedPreferences
+            )
+        )
     }
 
     private fun callStateApi() {
@@ -112,13 +117,17 @@ class StepTwo: BaseActivity(), StepTwoPresenter.StepTwoPresenterMainView {
         if(binding!!.tfirstname.text.toString().trim().isEmpty()){
             Errortoast(languageData!!.firstname_can_not_be_blank)
             return false
-        }else if(!Utility.checkFirstName_lastname_phone_CharacterCount(binding!!.tfirstname.text.toString().trim())){
+        }else if(!Utility.checkFirstName_lastname_phone_CharacterCount(
+                binding!!.tfirstname.text.toString().trim()
+            )){
             Errortoast(languageData!!.firstname_should_not_be_15_characters)
             return false
         }else if(binding!!.tlastname.text.toString().trim().isEmpty()){
             Errortoast(languageData!!.last_can_not_be_blank)
             return false
-        }else if(!Utility.checkFirstName_lastname_phone_CharacterCount(binding!!.tlastname.text.toString().trim())){
+        }else if(!Utility.checkFirstName_lastname_phone_CharacterCount(
+                binding!!.tlastname.text.toString().trim()
+            )){
             Errortoast(languageData!!.lastname_should_not_be_15_characters)
             return false
         } else if(stateId!!.isEmpty()){
@@ -130,7 +139,9 @@ class StepTwo: BaseActivity(), StepTwoPresenter.StepTwoPresenterMainView {
         }else if(binding!!.tphone.text.toString().trim().isEmpty()){
             Errortoast(languageData!!.phone_number_can_not_be_blank)
             return false
-        }else if(!Utility.checkFirstName_lastname_phone_CharacterCount(binding!!.tphone.text.toString().trim())){
+        }else if(!Utility.checkFirstName_lastname_phone_CharacterCount(
+                binding!!.tphone.text.toString().trim()
+            )){
             Errortoast(languageData!!.phone_number_should_not_be_15_characters)
             return false
         }
@@ -147,6 +158,7 @@ class StepTwo: BaseActivity(), StepTwoPresenter.StepTwoPresenterMainView {
         binding!!.btnBackStepTwo.text = languageData!!.pback
         binding!!.txtStepTwo.text = languageData!!.psteptwo
         binding!!.btnSkip.text = languageData!!.skip
+
     }
 
 
@@ -172,25 +184,28 @@ class StepTwo: BaseActivity(), StepTwoPresenter.StepTwoPresenterMainView {
 
     private fun UpdateInfoInFirebase() {
         val firebaseUser = auth.currentUser
-        database.child(ConstantLib.USER).child(firebaseUser!!.uid).child("name").setValue(binding!!.tfirstname.text.toString().trim()+" "+binding!!.tlastname.text.toString().trim())
+        database.child(ConstantLib.USER).child(firebaseUser!!.uid).child("name").setValue(
+            binding!!.tfirstname.text.toString().trim() + " " + binding!!.tlastname.text.toString()
+                .trim()
+        )
 
     }
 
     override fun onSignUpFailure(message: String) {
-        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
     private fun createStatePopup(stateData: ArrayList<StateResponse.Data.States>) {
         val searchListItems = ArrayList<SearchListItem>()
         for(items in stateData){
-            searchListItems.add(SearchListItem(items.id,items.name))
+            searchListItems.add(SearchListItem(items.id, items.name))
         }
         val searchableDialogState= SearchableDialog(this, searchListItems, "Select State")
-        searchableDialogState.setOnItemSelected(object: OnSearchItemSelected{
+        searchableDialogState.setOnItemSelected(object : OnSearchItemSelected {
             override fun onClick(position: Int, searchListItem: SearchListItem) {
                 binding!!.tstate.setText(searchListItem.title)
                 stateId = searchListItem.id.toString()
-                cityId =""
+                cityId = ""
                 binding!!.tcity.setText("")
                 searchableDialogState.dismiss()
             }
@@ -208,10 +223,10 @@ class StepTwo: BaseActivity(), StepTwoPresenter.StepTwoPresenterMainView {
     private fun createCityPopup() {
         val searchListItems = ArrayList<SearchListItem>()
         for(items in cityData){
-            searchListItems.add(SearchListItem(items.id,items.name))
+            searchListItems.add(SearchListItem(items.id, items.name))
         }
         val searchableDialogCity = SearchableDialog(this, searchListItems, "Select City")
-        searchableDialogCity.setOnItemSelected(object: OnSearchItemSelected{
+        searchableDialogCity.setOnItemSelected(object : OnSearchItemSelected {
             override fun onClick(position: Int, searchListItem: SearchListItem) {
                 binding!!.tcity.setText(searchListItem.title)
                 cityId = searchListItem.id.toString()
@@ -228,16 +243,16 @@ class StepTwo: BaseActivity(), StepTwoPresenter.StepTwoPresenterMainView {
     }
 
     override fun onStateFailure(message: String) {
-        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
     override fun onCityFailure(message: String) {
-        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
 
     override fun validateError(message: String) {
-        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
     override fun logoutUser() {

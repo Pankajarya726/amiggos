@@ -91,6 +91,23 @@ class ASettings : BaseActivity(), ASettingsPresenter.ASettingsPresenterMainView 
     }
 
     private fun setupClickListener() {
+
+        binding!!.imgUser.setOnClickListener {
+            val intent = Intent(this, AProfileDetails::class.java)
+            intent.putExtra(ConstantLib.FRIEND_ID, sharedPreference!!.getValueInt(ConstantLib.USER_ID).toString())
+            intent.putExtra(ConstantLib.IS_MY_FRIEND, false)
+            intent.putExtra(
+                ConstantLib.IS_MY_FRIEND_BLOCKED,
+                false
+            )
+            intent.putExtra(ConstantLib.PROFILE_IMAGE,"")
+            intent.putExtra(ConstantLib.NAME, "")
+            intent.putExtra(ConstantLib.ADDRESS, "")
+            intent.putExtra(ConstantLib.REAL_FREIND_COUNT, "")
+            intent.putExtra("from", "GroupFriendActivity")
+            startActivityForResult(intent, 100)
+        }
+
         binding!!.imgClose.setOnClickListener {
             onBackPressed()
         }

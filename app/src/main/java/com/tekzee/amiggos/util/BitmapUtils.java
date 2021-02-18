@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -13,6 +17,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
 
+import androidx.annotation.ColorInt;
 import androidx.core.content.FileProvider;
 
 import java.io.File;
@@ -259,18 +264,33 @@ public class BitmapUtils {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             // Add the image to the system gallery
             galleryAddPic(context, savedImagePath);
-
             // Show a Toast with the save location
             // String savedMessage = context.getString(R.string.saved_message, savedImagePath);
-
         }
 
         return imageFile;
     }
 
+    public static Bitmap mark(Bitmap src, String watermark, float x,float y, Color color, int alpha, int size, boolean underline) {
+        int w = src.getWidth();
+        int h = src.getHeight();
+        Bitmap result = Bitmap.createBitmap(w, h, src.getConfig());
+
+        Canvas canvas = new Canvas(result);
+        canvas.drawBitmap(src, 0, 0, null);
+
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setAlpha(1);
+        paint.setTextSize(size);
+        paint.setAntiAlias(true);
+        paint.setUnderlineText(underline);
+        canvas.drawText(watermark, 1005.0f, 1765.5f, paint);
+
+        return result;
+    }
     public static Uri saveImageAndReturnUri(Context context, Bitmap image) {
 
         String savedImagePath = null;

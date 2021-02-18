@@ -6,9 +6,11 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.telephony.PhoneNumberFormattingTextWatcher
+import android.telephony.PhoneNumberUtils
 import android.view.MotionEvent
 import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
@@ -46,8 +48,10 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
+import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPresenterMainView,
     DatePickerDialog.OnDateSetListener, PhotoDeleteClickListener {
@@ -284,7 +288,7 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
         } else if (cityId!!.isEmpty()) {
             Errortoast(languageData!!.please_select_city)
             return false
-        } else if (binding!!.ePhone.text.toString().trim().isEmpty()) {
+        } /*else if (binding!!.ePhone.text.toString().trim().isEmpty()) {
             Errortoast(languageData!!.phone_number_can_not_be_blank)
             return false
         } else if (!Utility.checkFirstName_lastname_phone_CharacterCount(
@@ -293,7 +297,7 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
         ) {
             Errortoast(languageData!!.phone_number_should_not_be_15_characters)
             return false
-        }
+        }*/
         return true
     }
 
@@ -438,6 +442,13 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
 //            setupViewProfile()
 //        }
         setupEditProfile()
+
+
+
+        val addLineNumberFormatter = UsPhoneNumberFormatter(
+            WeakReference(binding!!.ePhone)
+        )
+        binding!!.ePhone.addTextChangedListener(addLineNumberFormatter)
     }
 
     private fun setupViewProfile() {

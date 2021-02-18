@@ -40,7 +40,7 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
     private var meventDay: EventDay?=null
     private lateinit var dataVenue: VenueDetails.Data
     private lateinit var adapter: TimeAdapter
-
+    var fmt: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
     //    private lateinit var data: ChooseWeekResponse
     private lateinit var binding: ActivityCalendarBinding
     private var sharedPreferences: SharedPreference? = null
@@ -139,8 +139,8 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
         val year = calTodayDate.get(Calendar.YEAR).toString()
 
         meventDay = EventDay(Calendar.getInstance())
-        Log.e("meventdat",""+meventDay!!.calendar.get(Calendar.DAY_OF_WEEK))
         selectedDate = "$year-$month-$day"
+        selectedDate = fmt.format(meventDay!!.calendar.time).toString()
     }
 
     private fun setupLangauge() {
@@ -224,8 +224,16 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
                         intent.getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
                     )
                     menuIntent.putExtra(ConstantLib.DATE, selectedDate)
+
+                    var sminute: Int = binding.timepicker.minute
+                    var selectedMinute =""
+                    if(sminute.toString().length==1){
+                        selectedMinute = "0"+sminute.toString()
+                    }   else{
+                        selectedMinute = sminute.toString()
+                    }
                     seletctedTime =
-                        "" + binding.timepicker.hour + ":" + binding.timepicker.minute + ":00"
+                        "" + binding.timepicker.hour + ":" + selectedMinute + ":00"
                     menuIntent.putExtra(
                         ConstantLib.TIME,
                         seletctedTime
@@ -293,7 +301,8 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
                 return@setOnDayClickListener
             }
             meventDay = eventDay
-            selectedDate = "$year-$month-$day"
+//            selectedDate = "$year-$month-$day"
+            selectedDate = fmt.format(eventDay!!.calendar.time).toString()
             val cal: Calendar = Calendar.getInstance()
             cal.set(Calendar.YEAR, eventDay.calendar.get(Calendar.YEAR))
             cal.set(Calendar.MONTH, eventDay.calendar.get(Calendar.MONTH))

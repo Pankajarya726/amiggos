@@ -88,7 +88,7 @@ class InviteFriendNewActivity : BaseActivity(),
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("page_no", onlineFriendPageNo)
-        input.addProperty("search", searchvalue)
+        input.addProperty("name", searchvalue)
         input.addProperty("booking_id", intent.getStringExtra(ConstantLib.BOOKING_ID))
         inviteFriendImplementation!!.doCallGetFriends(
             input,

@@ -23,6 +23,7 @@ import com.tekzee.amiggos.ui.menu.model.MenuResponse
 import com.tekzee.amiggos.util.Coroutines
 import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
@@ -36,7 +37,7 @@ class MenuActivity : AppCompatActivity(), MenuEvent, KodeinAware {
     val languageConstant: LanguageData by instance<LanguageData>()
     val prefs: SharedPreference by instance<SharedPreference>()
     val factory: MenuModelFactory by instance<MenuModelFactory>()
-    private val df2: DecimalFormat = DecimalFormat("#.##")
+//    private val df2: DecimalFormat = DecimalFormat("#.##")
 
     companion object {
         fun newInstance() = MenuActivity()
@@ -78,7 +79,7 @@ class MenuActivity : AppCompatActivity(), MenuEvent, KodeinAware {
                     for (item in it) {
                         totalAmout += (item.quantity * item.price)
                     }
-                    binding!!.headerAmount.text = "Total $"+String.format("%.2f", totalAmout)
+                    binding!!.headerAmount.text = "Total "+Utility.formatCurrency(totalAmout.toFloat())
                 })
         }
 
