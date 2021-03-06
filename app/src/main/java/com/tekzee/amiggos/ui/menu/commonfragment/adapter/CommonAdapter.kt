@@ -43,8 +43,14 @@ class CommonAdapter(
     override fun onBindViewHolder(holder: CommonStaffViewHolder, position: Int) {
         getItem(position).let { listItem ->
             holder.bind(listItem, context)
+            if(listItem.price.toFloat()>0.0){
+                holder.listitembinding.txtAmout.text = Utility.formatCurrency(listItem.price.toFloat())
+                holder.listitembinding.txtAmout.setTextColor(context!!.resources.getColor(R.color.black))
+            }else{
+                holder.listitembinding.txtAmout.text = "Free"
+                holder.listitembinding.txtAmout.setTextColor(context!!.resources.getColor(R.color.green))
+            }
 
-            holder.listitembinding.txtAmout.text = Utility.formatCurrency(listItem.price.toFloat())
 
             Coroutines.main {
                 val dataResponse = repository!!.getItemDetail(listItem!!.id.toString())

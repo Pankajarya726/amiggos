@@ -105,4 +105,24 @@ class StorieViewModel(private val context: Context,
     }
 
 
+    fun callRejectPartyInviteApi(jsoninput: JsonObject) {
+        Coroutines.main {
+            storieEvent?.onAcceptDeclineCalled()
+            try {
+                val response =  repository.doRejectCreateMemoryInvitationApi(jsoninput, Utility.createHeaders(prefs))
+                if(response.status){
+                    storieEvent?.onJoinMemoryRejectedSuccess(response.message)
+                }else{
+                    storieEvent?.onFailure(response.message)
+                }
+            }catch (e: ApiException) {
+                storieEvent?.onFailure(e.message!!)
+            } catch (e: NoInternetException) {
+                storieEvent?.onFailure(e.message!!)
+            }catch (e: Exception) {
+                storieEvent?.sessionExpired(e.message!!)
+            }
+        }
+    }
+
 }

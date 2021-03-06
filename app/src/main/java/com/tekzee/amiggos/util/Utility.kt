@@ -5,15 +5,14 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.util.Base64
 import android.widget.Toast
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
 import org.json.JSONArray
-import java.math.RoundingMode
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -188,6 +187,14 @@ class Utility {
 
         }
 
+        fun showErrorDialog(context: Context, message: String) {
+            val pDialog = SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+            pDialog.titleText = message
+            pDialog.setCancelable(false)
+            pDialog.show()
+
+        }
+
         fun showLogoutPopup(context: Context, message: String) {
             val sharedPreference = SharedPreference(context)
             Toast.makeText(context, message, Toast.LENGTH_LONG).show()
@@ -278,7 +285,9 @@ class Utility {
                     currency = Currency.getInstance(currencyCode)
                 }
             }
+
     }
+
 
 
 

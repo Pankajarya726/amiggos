@@ -204,6 +204,13 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware,
         input.addProperty("tax", Utility.roundOffDecimal(tax.toDouble()))
         input.addProperty("tip", Utility.roundOffDecimal(mtip.toDouble()))
         input.addProperty("total_amount", Utility.roundOffDecimal(totalamout.toDouble()))
+
+        if(intent.getStringExtra(ConstantLib.FROM).equals(ConstantLib.ADDITEMS)){
+            input.addProperty("bookingid", intent.getStringExtra(ConstantLib.BOOKING_ID))
+        }else{
+            input.addProperty("bookingid", "")
+        }
+
         viewModel.callCreateBookingApi(input)
     }
 
@@ -319,7 +326,7 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware,
         val intent = Intent(this, PaymentActivity::class.java)
         intent.putExtra(ConstantLib.FROM, ConstantLib.FINALBASKET)
         intent.putExtra(ConstantLib.PURCHASE_AMOUNT, response.data.booking.amount.toString())
-        intent.putExtra(ConstantLib.BOOKING_ID, response.data.booking.bookingId.toString())
+        intent.putExtra(ConstantLib.BOOKING_ID, response.data.booking.bookingId)
         startActivity(intent)
         Animatoo.animateSlideLeft(this)
     }

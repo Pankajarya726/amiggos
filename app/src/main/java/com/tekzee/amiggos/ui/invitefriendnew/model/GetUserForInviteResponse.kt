@@ -13,7 +13,7 @@ data class GetUserForInviteResponse(
 ) {
     data class Data(
         @SerializedName("user")
-        val user: List<User> = listOf()
+        val user: List<User> = ArrayList<User>()
     ) {
         data class User(
             @SerializedName("age")

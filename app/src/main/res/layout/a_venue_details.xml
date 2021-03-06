@@ -310,8 +310,7 @@
             android:layout_gravity="bottom"
             android:background="@android:color/black"
             android:gravity="center"
-            android:text="Book Now"
-            android:textAllCaps="true"
+            android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="@dimen/_15sdp" />
 

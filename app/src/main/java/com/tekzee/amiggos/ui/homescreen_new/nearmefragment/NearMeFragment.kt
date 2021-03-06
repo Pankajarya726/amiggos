@@ -151,7 +151,7 @@ class NearMeFragment : BaseFragment() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 setUpHeading(position)
-                AHomeScreen.setupNearByCountBadge(HomeFragment.staticRequestBadgeCount + HomeFragment.staticReaFriendBadgeCount  + HomeFragment.staticNearMeBadgeCount)
+                AHomeScreen.setupNearByCountBadge(/*HomeFragment.staticRequestBadgeCount + HomeFragment.staticReaFriendBadgeCount  + */HomeFragment.staticNearMeBadgeCount)
                 if(position ==1 || position ==2){
                     firsttime++
                 }

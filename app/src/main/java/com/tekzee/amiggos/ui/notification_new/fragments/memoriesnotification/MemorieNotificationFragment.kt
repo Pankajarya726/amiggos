@@ -21,7 +21,9 @@ import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialog
 import com.tekzee.amiggos.ui.cameranew.CameraActivity
+import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 import com.tekzee.amiggos.ui.notification_new.adapter.ANotificationAdapterFriend
+import com.tekzee.amiggos.ui.storieviewnew.StorieViewNew
 import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.Successtoast
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
@@ -184,42 +186,70 @@ class MemorieNotificationFragment : BaseFragment(),
     }
 
     override fun itemClickCallback(position: Int) {
+        /*if (data[position].notificationKey == 4) {
+             val dialog: BottomDialog =
+                 BottomDialog.newInstance("", arrayOf(ConstantLib.JOIN, ConstantLib.REJECT))
+             dialog.show(childFragmentManager, "dialog")
+             dialog.setListener {
+                 if (it == 0) {
+                     dialog.dismiss()
+                     val intent = Intent(requireContext(), CameraActivity::class.java)
+                     intent.putExtra(ConstantLib.FROM_ACTIVITY, ConstantLib.OURSTORYINVITE)
+                     intent.putExtra(ConstantLib.SENDER_ID, data[position].data.sender_id.toString())
+                     intent.putExtra(
+                         ConstantLib.OURSTORYID,
+                         data[position].data.our_story_id.toString()
+                     )
+                     requireContext().startActivity(intent)
+                 } else
+                     if (it == 1) {
+                         dialog.dismiss()
+                         val input = JsonObject()
+                         input.addProperty(
+                             "userid",
+                             sharedPreference!!.getValueInt(ConstantLib.USER_ID)
+                         )
+                         input.addProperty("sender_id", data[position].data.sender_id.toString())
+                         input.addProperty(
+                             "our_story_id",
+                             data[position].data.our_story_id.toString()
+                         )
+                         memorieNotificationFragmentImplementation.doCallRejectMemoryInvite(
+                             input,
+                             Utility.createHeaders(sharedPreference)
+                         )
+                     }
+             }
+         }*/if (data[position].notificationKey == 4) {
+            sharedPreference!!.save(ConstantLib.FROM, ConstantLib.JOIN)
+            sharedPreference!!.save(
+                ConstantLib.OUR_STORY_ID,
+                data[position].data.our_story_id
+            )
+            sharedPreference!!.save(
+                ConstantLib.SENDER_ID_MEMORY_NOTIFICATION,
+                data[position].data.sender_id.toString()
+            )
 
-        if (data[position].notificationKey == 4) {
-            val dialog: BottomDialog =
-                BottomDialog.newInstance("", arrayOf(ConstantLib.JOIN, ConstantLib.REJECT))
-            dialog.show(childFragmentManager, "dialog")
-            dialog.setListener {
-                if (it == 0) {
-                    dialog.dismiss()
-                    val intent = Intent(requireContext(), CameraActivity::class.java)
-                    intent.putExtra(ConstantLib.FROM_ACTIVITY, ConstantLib.OURSTORYINVITE)
-                    intent.putExtra(ConstantLib.SENDER_ID, data[position].data.sender_id.toString())
-                    intent.putExtra(
-                        ConstantLib.OURSTORYID,
-                        data[position].data.our_story_id.toString()
-                    )
-                    requireContext().startActivity(intent)
-                } else
-                    if (it == 1) {
-                        dialog.dismiss()
-                        val input = JsonObject()
-                        input.addProperty(
-                            "userid",
-                            sharedPreference!!.getValueInt(ConstantLib.USER_ID)
-                        )
-                        input.addProperty("sender_id", data[position].data.sender_id.toString())
-                        input.addProperty(
-                            "our_story_id",
-                            data[position].data.our_story_id.toString()
-                        )
-                        memorieNotificationFragmentImplementation.doCallRejectMemoryInvite(
-                            input,
-                            Utility.createHeaders(sharedPreference)
-                        )
-                    }
+            if (data[position].memoriesList.isNotEmpty()) {
+                sharedPreference!!.save(ConstantLib.FROM, ConstantLib.JOIN)
+                if (data[position].memoriesList[0].memory.isNotEmpty()) {
+                    val showMemoryList: ArrayList<MemorieResponse.Data.Memories> = ArrayList()
+                    showMemoryList.addAll(data[position].memoriesList)
+
+                    val intent = Intent(activity, StorieViewNew::class.java)
+                    intent.putExtra(ConstantLib.MEMORIE_DATA, data[position].memoriesList[0])
+                    intent.putExtra(ConstantLib.FROM, ConstantLib.JOIN)
+                    intent.putExtra(ConstantLib.COMPLETE_MEMORY, showMemoryList)
+                    sharedPreference!!.save(ConstantLib.TYPEFROM, ConstantLib.OURMEMORIES)
+                    intent.putExtra(ConstantLib.BACKFROM, "")
+                    intent.putExtra(ConstantLib.DELETED_POSITION, 0)
+                    startActivity(intent)
+                }
             }
         }
+
+
     }
 
     override fun onItemLongClickListener(position: Int) {

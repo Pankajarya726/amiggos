@@ -25,12 +25,14 @@ import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import com.google.gson.JsonObject
 import com.nicolettilu.scrolldowntosearchrecyclerview.utils.hide
 import com.tekzee.amiggos.ApplicationController
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.enums.FriendsAction
+import com.tekzee.amiggos.ui.cameranew.CameraActivity
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 import com.tekzee.amiggos.ui.storieview.StorieEvent
@@ -77,7 +79,7 @@ class StoryDisplayFragment : Fragment(),
     private var onResumeCalled = false
     private var onVideoPrepared = false
     private var adapter: BannerAdapter? = null
-    val languageConstant: LanguageData by instance<LanguageData>()
+    private var languageConstant: LanguageData? = null
     private lateinit var viewModel: StorieViewModel
     val factory: StorieViewModelFactory by instance<StorieViewModelFactory>()
 
@@ -95,12 +97,13 @@ class StoryDisplayFragment : Fragment(),
 
         viewModel = ViewModelProvider(this, factory).get(StorieViewModel::class.java)
         viewModel.storieEvent = this
-
+        languageConstant = prefs.getLanguageData(ConstantLib.LANGUAGE_DATA)
         storyDisplayVideo.useController = false
         updateStory()
         setUpUi()
         setupAdapter()
         setupLanguge()
+        setupClickListener()
         img_cancel.setOnClickListener {
             requireActivity().onBackPressed()
         }
@@ -114,6 +117,39 @@ class StoryDisplayFragment : Fragment(),
 
     }
 
+    private fun setupClickListener() {
+        txt_join.setOnClickListener {
+            val intent = Intent(requireContext(), CameraActivity::class.java)
+            intent.putExtra(ConstantLib.FROM_ACTIVITY, ConstantLib.OURSTORYINVITE)
+            intent.putExtra(ConstantLib.SENDER_ID, prefs.getValueString(ConstantLib.SENDER_ID_MEMORY_NOTIFICATION))
+            intent.putExtra(
+                ConstantLib.OURSTORYID,
+                prefs.getValueString(ConstantLib.OUR_STORY_ID)
+            )
+            requireContext().startActivity(intent)
+            requireActivity().finish()
+        }
+
+        txt_memory_decline.setOnClickListener {
+
+            val input = JsonObject()
+            input.addProperty(
+                "userid",
+                prefs!!.getValueInt(ConstantLib.USER_ID)
+            )
+            input.addProperty("sender_id", prefs.getValueString(ConstantLib.SENDER_ID_MEMORY_NOTIFICATION))
+            input.addProperty(
+                "our_story_id",
+                prefs.getValueString(ConstantLib.OUR_STORY_ID)
+            )
+            viewModel.callRejectPartyInviteApi(
+                input,
+            )
+
+        }
+
+    }
+
 
     private fun setupLanguge() {
         if (prefs.getValueString(ConstantLib.FROM).equals(ConstantLib.APPROVAL, true)) {
@@ -121,8 +157,16 @@ class StoryDisplayFragment : Fragment(),
         } else {
             layout_approve_decline.visibility = View.GONE
         }
-        txt_accept.text = languageConstant.approve
-        txt_decline.text = languageConstant.decline
+        txt_accept.text = languageConstant!!.approve
+        txt_decline.text = languageConstant!!.decline
+
+        if (prefs.getValueString(ConstantLib.FROM).equals(ConstantLib.JOIN, true)) {
+            layout_join_memory.visibility = View.VISIBLE
+        } else {
+            layout_join_memory.visibility = View.GONE
+        }
+        txt_join.text = languageConstant!!.klJoin
+        txt_memory_decline.text = languageConstant!!.decline
     }
 
     private fun setupAdapter() {
@@ -226,11 +270,11 @@ class StoryDisplayFragment : Fragment(),
             }
 
 
-            if (stories[counter].storyData.user_id == prefs.getValueInt(ConstantLib.USER_ID)) {
-                txt_view.visibility = View.VISIBLE
-            } else {
-                txt_view.visibility = View.GONE
-            }
+//            if (stories[counter].storyData.user_id == prefs.getValueInt(ConstantLib.USER_ID)) {
+//                txt_view.visibility = View.VISIBLE
+//            } else {
+//                txt_view.visibility = View.GONE
+//            }
             txt_view.text = stories[counter].storyData.viewCount.toString()
 
             Glide.with(this).load(stories[counter].storyData.profile)
@@ -518,6 +562,11 @@ class StoryDisplayFragment : Fragment(),
             action = FriendsAction.SHOW_MY_MEMORY.action
         }
         requireActivity().startActivity(intent)
+    }
+
+    override fun onJoinMemoryRejectedSuccess(message: String) {
+        requireActivity().hideProgressBar()
+        requireActivity().finish()
     }
 
     override fun onFailure(message: String) {

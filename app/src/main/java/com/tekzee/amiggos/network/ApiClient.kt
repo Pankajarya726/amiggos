@@ -720,6 +720,13 @@ class ApiClient {
         return apiService.dogetBookingDetails(input, createHeaders)
     }
 
+    fun doUpdateAppTimeApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.user_apptime(input, createHeaders)
+    }
+
     fun doInviteFriend(
         input: JsonObject,
         createHeaders: HashMap<String, String?>

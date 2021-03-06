@@ -1,5 +1,6 @@
 package com.tekzee.amiggos.ui.notification_new.fragments.friendrequestnotification
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,8 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialog
 import com.tekzee.amiggos.databinding.APartyInvitesFragmentBinding
+import com.tekzee.amiggos.enums.FriendsAction
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.notification_new.adapter.ANotificationAdapterFriend
 import com.tekzee.amiggos.ui.notification_new.model.ANotificationResponse
 import com.tekzee.amiggos.util.Errortoast
@@ -184,6 +187,14 @@ class FriendRequestNotificationFragment : BaseFragment(),
     override fun itemClickCallback(position: Int) {
 
         if (data[position].data.notificationKey == 2) {
+            val intent = Intent(requireContext(), AHomeScreen::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                action = FriendsAction.SHOW_FRIEND_REQUEST.action
+            }
+            startActivity(intent)
+        }
+
+        /*if (data[position].data.notificationKey == 2) {
             val dialog: BottomDialog =
                 BottomDialog.newInstance("", arrayOf(ConstantLib.ACCEPT, ConstantLib.REJECT))
             dialog.show(childFragmentManager, "dialog")
@@ -212,13 +223,9 @@ class FriendRequestNotificationFragment : BaseFragment(),
                         )
                     }
             }
-        }
+        }*/
 
-//        val intent = Intent(requireContext(), AHomeScreen::class.java).apply {
-//            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//            action = FriendsAction.SHOW_FRIEND_REQUEST.action
-//        }
-//        startActivity(intent)
+
     }
 
     override fun onItemLongClickListener(position: Int) {

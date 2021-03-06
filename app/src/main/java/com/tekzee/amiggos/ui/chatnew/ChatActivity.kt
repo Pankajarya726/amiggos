@@ -144,6 +144,7 @@ class ChatActivity : AppCompatActivity(), ChatEvent, KodeinAware, ChatActivityLi
         val input = JsonObject()
         input.addProperty("userid", prefs.getValueInt(ConstantLib.USER_ID).toString())
         input.addProperty("freind_id", receiverId)
+//        input.addProperty("type", "1")
         viewModel.checkUserisBlocked(input)
     }
 

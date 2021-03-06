@@ -68,6 +68,8 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
         setupRepository()
         dataVenue = intent.getSerializableExtra(ConstantLib.CALENDAR_DATA) as VenueDetails.Data
         binding.timepicker.setIs24HourView(false)
+
+
         checkTimeSlot()
         val day: Calendar = Calendar.getInstance()
         for (i in 1..365) {
@@ -204,6 +206,10 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
                         ConstantLib.SELECTED_VENUE_DIN_TOGO,
                         intent.getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
                     )
+                    menuIntent.putExtra(
+                        ConstantLib.FROM,
+                        ConstantLib.MENUACTIVITY
+                    )
                     menuIntent.putExtra(ConstantLib.DATE, selectedDate)
                     menuIntent.putExtra(
                         ConstantLib.TIME,
@@ -215,6 +221,10 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
                         repository!!.clearCart()
                     }
                     val menuIntent = Intent(applicationContext, MenuActivity::class.java)
+                    menuIntent.putExtra(
+                        ConstantLib.FROM,
+                        ConstantLib.MENUACTIVITY
+                    )
                     menuIntent.putExtra(
                         ConstantLib.VENUE_ID,
                         intent.getStringExtra(ConstantLib.VENUE_ID)
@@ -246,6 +256,10 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
                     if (adapter.selected != null) {
                         val menuIntent = Intent(applicationContext, MenuActivity::class.java)
                         menuIntent.putExtra(
+                            ConstantLib.FROM,
+                            ConstantLib.MENUACTIVITY
+                        )
+                        menuIntent.putExtra(
                             ConstantLib.VENUE_ID,
                             intent.getStringExtra(ConstantLib.VENUE_ID)
                         )
@@ -262,7 +276,7 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
                         startActivity(menuIntent)
                     } else {
                         binding.timeRecycler.requestFocus()
-                        Errortoast("Please select any slot or select different date")
+                        Utility.showErrorDialog(this,languageData!!.bookingunavailable)
                     }
 
                 }
@@ -358,8 +372,9 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
         }
         timedata.clear()
         adapter.notifyDataSetChanged()
-        Errortoast(message)
         binding.timeslotlayout.visibility = View.GONE
+
+        Utility.showErrorDialog(this,message)
     }
 
 

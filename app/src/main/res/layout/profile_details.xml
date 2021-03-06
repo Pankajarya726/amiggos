@@ -186,7 +186,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/_8sdp"
                         android:padding="@dimen/_5sdp"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         app:layout_constraintBottom_toBottomOf="@+id/txt_name"
                         app:layout_constraintEnd_toStartOf="@+id/img_like"
                         app:layout_constraintTop_toTopOf="@+id/txt_name"

@@ -358,8 +358,6 @@
                     android:layout_marginRight="@dimen/_10sdp"
                     android:fontFamily="@font/opensans_regular"
                     android:gravity="center|left"
-
-
                     android:text="My Id"
                     android:textAllCaps="false"
                     android:textSize="@dimen/_12sdp"

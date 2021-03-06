@@ -4,6 +4,8 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.network.ApiService
 import com.tekzee.amiggos.network.SafeApiRequest
+import io.reactivex.Observable
+import retrofit2.Response
 
 
 class StorieRepository(private val apiService: ApiService): SafeApiRequest() {
@@ -30,5 +32,10 @@ class StorieRepository(private val apiService: ApiService): SafeApiRequest() {
     }
 
 
-
+    suspend fun doRejectCreateMemoryInvitationApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): CommonResponse {
+        return apiRequest { apiService.doRejectCreateMemoryInvitationApiNew(input, createHeaders) }
+    }
 }

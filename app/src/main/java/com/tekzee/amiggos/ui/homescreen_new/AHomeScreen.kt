@@ -47,6 +47,10 @@ import com.tekzee.amiggos.ui.settings_new.ASettings
 import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.closestKodein
+import org.kodein.di.android.x.closestKodein
 
 
 class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
@@ -244,14 +248,14 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
         }
 
         binding!!.addMemorie.setOnClickListener {
-            val intent = Intent(applicationContext, CameraActivity::class.java)
-            intent.putExtra(ConstantLib.FROM_ACTIVITY, ConstantLib.HOMEACTIVITY)
-            intent.putExtra(ConstantLib.OURSTORYID, "")
-            intent.putExtra(
-                ConstantLib.PROFILE_IMAGE,
-                sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE)
-            )
-            startActivity(intent)
+//            val intent = Intent(applicationContext, CameraActivity::class.java)
+//            intent.putExtra(ConstantLib.FROM_ACTIVITY, ConstantLib.HOMEACTIVITY)
+//            intent.putExtra(ConstantLib.OURSTORYID, "")
+//            intent.putExtra(
+//                ConstantLib.PROFILE_IMAGE,
+//                sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE)
+//            )
+//            startActivity(intent)
         }
 
         binding!!.notification.setOnClickListener {
@@ -328,7 +332,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             binding!!.headerLogo.visibility = View.VISIBLE
             binding!!.notification.visibility = View.GONE
             binding!!.badge.visibility = View.GONE
-            binding!!.addMemorie.visibility = View.VISIBLE
+            binding!!.addMemorie.visibility = View.GONE
             binding!!.chaticon.visibility = View.GONE
             badgeViewChat!!.unbind()
             binding!!.checkincode.visibility = View.GONE
@@ -432,4 +436,9 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
 
         return unreadMessageList
     }
+
+    fun callAppforegroundApi(){
+
+    }
+
 }

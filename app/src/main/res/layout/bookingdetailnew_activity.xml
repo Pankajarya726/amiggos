@@ -249,6 +249,17 @@
                                 android:textColor="@color/Grey_900"
                                 android:textSize="@dimen/_10sdp" />
 
+                            <TextView
+                                android:id="@+id/booking_qr_code"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:fontFamily="@font/opensans_regular"
+                                android:gravity="center|left"
+                                android:textColor="@color/Grey_900"
+                                android:textSize="@dimen/_10sdp" />
+
                             <ImageView
                                 android:id="@+id/img_barcode"
                                 android:layout_width="wrap_content"

@@ -2,6 +2,8 @@ package com.tekzee.amiggos.ui.notification_new.model
 
 
 import com.google.gson.annotations.SerializedName
+import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
+import java.io.Serializable
 
 data class ANotificationResponse(
     @SerializedName("data")
@@ -10,11 +12,11 @@ data class ANotificationResponse(
     val message: String = "",
     @SerializedName("status")
     val status: Boolean = false
-) {
+):Serializable {
     data class Data(
         @SerializedName("user_notification")
         val userNotification: List<UserNotification> = listOf()
-    ) {
+    ):Serializable {
         data class UserNotification(
             @SerializedName("data")
             val `data`: Data = Data(),
@@ -22,6 +24,8 @@ data class ANotificationResponse(
             val deviceType: String = "",
             @SerializedName("id")
             val id: Int = 0,
+            @SerializedName("memories_list")
+            val memoriesList: List<MemorieResponse.Data.Memories> = listOf(),
             @SerializedName("is_read")
             val isRead: Int = 0,
             @SerializedName("message")
@@ -31,7 +35,7 @@ data class ANotificationResponse(
             @SerializedName("subject")
             val subject: String = "",
             var loadingStatus: Boolean = false
-        ) {
+        ):Serializable {
             data class Data(
                 @SerializedName("booking_id")
                 val bookingId: String = "",
@@ -48,10 +52,10 @@ data class ANotificationResponse(
                 @SerializedName("user_type")
                 val user_type: Int = 0,
                 @SerializedName("our_story_id")
-                val our_story_id: Int = 0,
+                val our_story_id: String = "0",
                 @SerializedName("friend_id")
                 val friendId: String = ""
-            )
+            ):Serializable
         }
     }
 }

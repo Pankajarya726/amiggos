@@ -7,6 +7,7 @@ interface StorieEvent {
     fun onAcceptDeclineCalled()
     fun onAcceptDeclineResponse(message: String)
     fun onDeleteResponse(message: String, counter: Int)
+    fun onJoinMemoryRejectedSuccess(message: String)
     fun onFailure(message: String)
     fun sessionExpired(message: String)
     fun onBannerCountSuccess(message: String, listItem: MemorieResponse.Data.Memories.Memory.Tagged)

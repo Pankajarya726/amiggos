@@ -52,7 +52,9 @@ class StorieViewNew : AppCompatActivity(),
         setUpPager()
         if (intent.getStringExtra(ConstantLib.FROM)!!.equals("OURMEMORIES")) {
             sharedPreference.save(ConstantLib.FROM, ConstantLib.APPROVAL)
-        } else {
+        } else if (intent.getStringExtra(ConstantLib.FROM)!!.equals(ConstantLib.JOIN)) {
+            sharedPreference.save(ConstantLib.FROM, ConstantLib.JOIN)
+        }else {
             sharedPreference.save(ConstantLib.FROM, "")
         }
     }

@@ -135,6 +135,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
+                        android:padding="@dimen/_5sdp"
                         android:id="@+id/img_camera_front"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
@@ -144,6 +145,7 @@
                         android:src="@drawable/ic_camera_front" />
 
                     <ImageView
+                        android:padding="@dimen/_5sdp"
                         android:id="@+id/img_camera_back"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
@@ -166,6 +168,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
+                        android:padding="@dimen/_5sdp"
                         android:id="@+id/flash_on"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
@@ -175,6 +178,7 @@
                         android:src="@drawable/ic_flash_off" />
 
                     <ImageView
+                        android:padding="@dimen/_5sdp"
                         android:id="@+id/flash_off"
                         android:layout_width="45dp"
                         android:layout_height="45dp"

@@ -274,11 +274,11 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
             binding!!.imageoptions.visibility = View.GONE
             binding!!.imgLike.visibility = View.GONE
         }else{
-            if(isMyFriend && !isMyFriendBlocked){
+           /* if(isMyFriend && !isMyFriendBlocked){
                 binding!!.imgChat.visibility = View.VISIBLE
             }else{
                 binding!!.imgChat.visibility = View.GONE
-            }
+            }*/
 
             binding!!.imageoptions.visibility = View.VISIBLE
             binding!!.imgLike.visibility = View.VISIBLE

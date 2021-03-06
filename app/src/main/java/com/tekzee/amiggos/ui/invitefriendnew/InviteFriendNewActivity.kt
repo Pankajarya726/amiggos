@@ -80,7 +80,7 @@ class InviteFriendNewActivity : BaseActivity(),
             languageData
         )
         onlineFriendRecyclerview.adapter = adapter
-        adapter.setLoadingStatus(true)
+//        adapter.setLoadingStatus(true)
     }
 
     private fun doCallGetFriends(requestDatFromServer: Boolean, searchvalue: String) {
@@ -186,19 +186,6 @@ class InviteFriendNewActivity : BaseActivity(),
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onOurMemoriesSuccess(responseData: GetUserForInviteResponse?) {
-        onlineFriendPageNo++
-        mydataList =
-            responseData!!.data.user as ArrayList<GetUserForInviteResponse.Data.User>
-        setupRecyclerView()
-//        for (item in mydataList){
-//            if(item.isInvited ==1){
-//                addToSelectedUserid(item.userid)
-//            }
-//        }
-        Log.e("Selected userids--->","---"+toCommaSeparated())
-        Log.e("undo userids","---"+toUndoCommaSeparated())
-    }
 
 
     override fun onBackPressed() {
@@ -216,23 +203,23 @@ class InviteFriendNewActivity : BaseActivity(),
     }
 
 
-    override fun onOurMemoriesSuccessInfinite(responseData: GetUserForInviteResponse?) {
+    override fun onOurMemoriesSuccess(responseData: GetUserForInviteResponse?) {
+        onlineFriendPageNo++
+        mydataList.addAll(responseData!!.data.user)
+        adapter.setLoadingStatus(true)
+        adapter.notifyDataSetChanged()
+    }
 
+    override fun onOurMemoriesSuccessInfinite(responseData: GetUserForInviteResponse?) {
         onlineFriendPageNo++
         adapter.setLoadingStatus(true)
         mydataList.removeAt(mydataList.size - 1)
         mydataList.addAll(responseData!!.data.user)
         adapter.notifyDataSetChanged()
-//        for (item in responseData.data.user){
-//            if(item.isInvited ==1){
-//                addToSelectedUserid(item.userid)
-//            }
-//        }
     }
 
 
     override fun onOurMemoriesFailure(message: String) {
-
         if (mydataList.size > 0) {
             adapter.setLoadingStatus(false)
             mydataList.removeAt(mydataList.size - 1)

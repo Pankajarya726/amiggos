@@ -1,5 +1,6 @@
 package com.tekzee.amiggos.ui.notification_new.fragments.partyinvites
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +18,8 @@ import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialog
+import com.tekzee.amiggos.enums.FriendsAction
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.notification_new.model.PartyInvitesNotificationResponse
 import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.toast
@@ -26,8 +29,10 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
 
-class PartyInvitesFragment: BaseFragment(), PartyInvitesFragmentPresenter.PartyInvitesFragmentPresenterMainView,
-    APartyInvitesNotificationAdapter.HomeItemClick, InfiniteScrollRecyclerView.RecyclerViewAdapterCallback,
+class PartyInvitesFragment : BaseFragment(),
+    PartyInvitesFragmentPresenter.PartyInvitesFragmentPresenterMainView,
+    APartyInvitesNotificationAdapter.HomeItemClick,
+    InfiniteScrollRecyclerView.RecyclerViewAdapterCallback,
     KodeinAware {
 
     override val kodein: Kodein by closestKodein()
@@ -36,10 +41,11 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesFragmentPresenter.PartyI
     private var myView: View? = null
     private var binding: APartyInvitesFragmentBinding? = null
     private var sharedPreference: SharedPreference? = null
-    private var adapter: APartyInvitesNotificationAdapter? =null
+    private var adapter: APartyInvitesNotificationAdapter? = null
     private var data = ArrayList<PartyInvitesNotificationResponse.Data.UserNotification>()
     private var pageNo = 0
-    private val mLoadingData = PartyInvitesNotificationResponse.Data.UserNotification(loadingStatus = true)
+    private val mLoadingData =
+        PartyInvitesNotificationResponse.Data.UserNotification(loadingStatus = true)
 
 
     companion object {
@@ -47,7 +53,7 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesFragmentPresenter.PartyI
 
 
         fun newInstance(): PartyInvitesFragment {
-            if(partyInvitesFragment == null){
+            if (partyInvitesFragment == null) {
                 return PartyInvitesFragment()
             }
             return partyInvitesFragment
@@ -60,8 +66,10 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesFragmentPresenter.PartyI
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.a_party_invites_fragment,container,false)
-        partyInvitesFragmentImplementation=PartyInvitesFragmentImplementation(this,requireContext())
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.a_party_invites_fragment, container, false)
+        partyInvitesFragmentImplementation =
+            PartyInvitesFragmentImplementation(this, requireContext())
         sharedPreference = SharedPreference(requireContext())
         myView = binding!!.root
         setupReyclerview()
@@ -97,11 +105,10 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesFragmentPresenter.PartyI
     }
 
 
-
-
     private fun setupReyclerview() {
 
-        val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        val layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding!!.fragmentOneRecyclerview.layoutManager = layoutManager
         adapter = APartyInvitesNotificationAdapter(
             mContext = requireContext(),
@@ -117,11 +124,10 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesFragmentPresenter.PartyI
     }
 
 
-
     override fun onNotificationSuccess(responseData: List<PartyInvitesNotificationResponse.Data.UserNotification>) {
         pageNo++
-        data= responseData as ArrayList<PartyInvitesNotificationResponse.Data.UserNotification>
-        Log.e("data size------>",data.size.toString())
+        data = responseData as ArrayList<PartyInvitesNotificationResponse.Data.UserNotification>
+        Log.e("data size------>", data.size.toString())
         setupReyclerview()
     }
 
@@ -142,7 +148,7 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesFragmentPresenter.PartyI
     }
 
     override fun onAcceptPartyRequestSuccess(message: String) {
-       requireContext().toast(message)
+        requireContext().toast(message)
         pageNo = 0
         data.clear()
         adapter!!.notifyDataSetChanged()
@@ -179,7 +185,7 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesFragmentPresenter.PartyI
     override fun itemClickCallback(position: Int) {
 
 
-        if(data[position].data.notificationKey == 5){
+/*        if (data[position].data.notificationKey == 5) {
             val dialog: BottomDialog =
                 BottomDialog.newInstance("", arrayOf(ConstantLib.ACCEPT, ConstantLib.REJECT))
             dialog.show(childFragmentManager, "dialog")
@@ -197,7 +203,10 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesFragmentPresenter.PartyI
                     if (it == 1) {
                         dialog.dismiss()
                         val input = JsonObject()
-                        input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
+                        input.addProperty(
+                            "userid",
+                            sharedPreference!!.getValueInt(ConstantLib.USER_ID)
+                        )
                         input.addProperty("booking_id", data[position].data.bookingId)
                         partyInvitesFragmentImplementation.callRejectPartyInviteApi(
                             input,
@@ -205,13 +214,18 @@ class PartyInvitesFragment: BaseFragment(), PartyInvitesFragmentPresenter.PartyI
                         )
                     }
             }
+        }*/
+        if (data[position].data.notificationKey == 5) {
+            val intent = Intent(activity, AHomeScreen::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                action = FriendsAction.PARTY_INVITATIONS.action
+            }
+            startActivity(intent)
         }
-
-
     }
 
     override fun onItemLongClickListener(position: Int) {
-         Log.e("message-->",""+position)
+        Log.e("message-->", "" + position)
     }
 
     override fun onLoadMoreData() {

@@ -273,7 +273,7 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         if (response.clubData.isBookingAvailable.toInt() == 1) {
             binding!!.bookNow.text = languageData!!.booknow
         } else {
-            binding!!.bookNow.text = languageData!!.closed
+            binding!!.bookNow.text = languageData!!.not_currenty_booking
         }
 
 

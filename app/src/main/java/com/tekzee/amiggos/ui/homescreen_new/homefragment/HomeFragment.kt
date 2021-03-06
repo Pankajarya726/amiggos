@@ -16,14 +16,11 @@ import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.databinding.DataBindingUtil
-import com.allenliu.badgeview.BadgeFactory
-import com.allenliu.badgeview.BadgeView
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
@@ -58,7 +55,6 @@ import com.tekzee.amiggos.util.OnSwipeTouchListener
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.mallortaxi.base.BaseFragment
-import io.nlopez.smartlocation.SmartLocation
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -87,6 +83,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     private var searchkeyword: String = ""
     private var languageData: LanguageData? = null
     private var easyWayLocation: EasyWayLocation? = null
+    private var defaultZoomValue =17.0f
 
 
     companion object {
@@ -213,37 +210,37 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     private fun setupClickListener(view: View) {
 
         view.findViewById<RadioButton>(R.id.img_icon_four).setOnClickListener {
-            categoryId = "180"
+            categoryId = "186"
             callHomeApi(0)
         }
 
 
 
         view.findViewById<RadioButton>(R.id.img_icon_five).setOnClickListener {
-            categoryId = "102"
+            categoryId = "194"
             callHomeApi(0)
         }
 
 
         view.findViewById<RadioButton>(R.id.img_icon_three).setOnClickListener {
-            categoryId = "104"
+            categoryId = "195"
             callHomeApi(0)
         }
 
         view.findViewById<RadioButton>(R.id.img_icon_two).setOnClickListener {
-            categoryId = "105"
+            categoryId = "196"
             callHomeApi(0)
             setupRadioButton(R.id.img_icon_two)
         }
 
 
         view.findViewById<RadioButton>(R.id.img_icon_one).setOnClickListener {
-            categoryId = "103"
+            categoryId = "193"
             callHomeApi(0)
         }
 
         view.findViewById<RadioButton>(R.id.img_icon_six).setOnClickListener {
-            categoryId = "106"
+            categoryId = "197"
             callHomeApi(0)
         }
     }
@@ -299,7 +296,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                             )
                         )
                     )
-                    mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
+                    mMap!!.animateCamera(CameraUpdateFactory.zoomTo(defaultZoomValue));
                     callHomeApi(0)
                 })
 
@@ -354,6 +351,17 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     }
 
     override fun onHomeApiSuccess(responseData: HomeResponse) {
+        /*val cameraPosition =
+            CameraPosition.Builder().target(LatLng(
+                latitude!!.toDouble(),
+                longitude!!.toDouble()
+            )).tilt(30f).zoom(defaultZoomValue)
+                .build()
+
+        val cu: CameraUpdate = CameraUpdateFactory.newCameraPosition(
+            cameraPosition
+        )
+        mMap!!.animateCamera(cu)*/
 
         if (dataResponse.isNotEmpty()) {
             mMap!!.clear()
@@ -361,9 +369,9 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         }
 
         dataResponse.addAll(responseData.data.venue)
+
         if (dataResponse.isNotEmpty()) {
             setMarkersOnMap(dataResponse)
-
             val latLngBounds = LatLngBounds.Builder()
                 .include(
                     LatLng(
@@ -380,9 +388,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                 .build()
             val padding = 200 // offset from edges of the map in pixels
             val cu: CameraUpdate = CameraUpdateFactory.newLatLngBounds(latLngBounds, padding)
-            mMap!!.moveCamera(cu)
-
-
+            mMap!!.animateCamera(cu)
         }
 
     }
@@ -396,17 +402,13 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                 marker = layoutInflater.inflate(R.layout.custom_marker_circular, null)
                 imageview = marker.findViewById(R.id.marker_image) as ImageView
 
+                val countnearby = marker.findViewById(R.id.countnearby) as TextView
+
                 if (items.nearByCount.toInt() > 0) {
-                    BadgeFactory.create(requireContext())
-                        .setTextColor(resources.getColor(R.color.white))
-                        .setWidthAndHeight(20, 20)
-                        .setBadgeBackground(resources.getColor(R.color.red))
-                        .setTextSize(8)
-                        .setBadgeGravity(Gravity.RIGHT)
-                        .setBadgeCount(items.nearByCount)
-                        .setShape(BadgeView.SHAPE_CIRCLE)
-                        .setSpace(10, 10)
-                        .bind(imageview)
+                    countnearby.text = items.nearByCount
+                    countnearby.visibility = View.VISIBLE
+                } else {
+                    countnearby.visibility = View.GONE
                 }
 
 
@@ -428,8 +430,6 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                         resource: Bitmap,
                         transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
                     ) {
-
-
                         mMap!!.addMarker(
                             MarkerOptions().position(
                                 LatLng(
@@ -619,6 +619,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
     override fun onMapReady(map: GoogleMap?) {
         mMap = map
+
 //        mMap!!.isMyLocationEnabled = true
         mMap!!.setMapStyle(
             MapStyleOptions.loadRawResourceStyle(
@@ -710,8 +711,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
     override fun currentLocation(location: Location?) {
         try {
-            if(location!=null)
-            {
+            if (location != null) {
                 easyWayLocation!!.endUpdates()
                 latitude = location.latitude.toString()
                 longitude = location.longitude.toString()
@@ -726,15 +726,15 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                             )
                         )
                     )
-                    mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15.0f))
+                    mMap!!.animateCamera(CameraUpdateFactory.zoomTo(defaultZoomValue))
                     callHomeApi(0)
                 })
                 callBadgeApi()
-            }else{
+            } else {
                 easyWayLocation!!.startLocation()
             }
 
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             hideProgressbarNew()
         }

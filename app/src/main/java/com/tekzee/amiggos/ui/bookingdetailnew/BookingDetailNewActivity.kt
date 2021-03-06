@@ -49,13 +49,6 @@ class BookingDetailNewActivity : BaseActivity(),
         getBookingDetailsApi()
         setupClickListener()
         setupLanguageData()
-        if (intent.getStringExtra(ConstantLib.FROM).equals(ConstantLib.BOOKING_INVITATION)) {
-            binding.viewmenu.visibility = View.GONE
-            binding.inviteFriend.visibility = View.GONE
-        } else {
-            binding.viewmenu.visibility = View.VISIBLE
-            binding.inviteFriend.visibility = View.VISIBLE
-        }
 
         binding.txtLink.paintFlags = binding.txtLink.paintFlags or Paint.UNDERLINE_TEXT_FLAG
     }
@@ -85,6 +78,14 @@ class BookingDetailNewActivity : BaseActivity(),
             menuIntent.putExtra(
                 ConstantLib.TIME,
                 bookingTime
+            )
+            menuIntent.putExtra(
+                ConstantLib.FROM,
+                ConstantLib.ADDITEMS
+            )
+            menuIntent.putExtra(
+                ConstantLib.BOOKING_ID,
+                bookingData!!.data.booking.bookingId
             )
             startActivity(menuIntent)
         }
@@ -143,6 +144,8 @@ class BookingDetailNewActivity : BaseActivity(),
         bookingDate = responseData.data.booking.booking_date_txt
         bookingTime = responseData.data.booking.booking_time_txt
         bookingmethod = responseData.data.booking.bookingMethod
+        booking_qr_code.text =
+            languageData!!.booking_qr_code + responseData.data.booking.bookingCode
         if (responseData.data.booking.bookingMethod.equals("To-Go")) {
             sharedPreferences!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO, ConstantLib.TOGO)
         } else if (responseData.data.booking.bookingMethod.equals("Dine-in")) {
@@ -162,9 +165,10 @@ class BookingDetailNewActivity : BaseActivity(),
         binding.txtGuestList.text =
             languageData!!.klGuestList + ": " + responseData.data.booking.totalInvitedGuest
         binding.txtPurchaseDescriptionTitle.text = languageData!!.purchasedescription
-        binding.txtPurchaseDescription.text = Html.fromHtml(responseData.data.booking.description)
+        binding.txtPurchaseDescription.text = Html.fromHtml(responseData.data.booking.instructions)
 
-        binding.txtPurchaseAmount.text = Utility.formatCurrency(responseData.data.booking.totalAmount.toFloat())
+//        binding.txtPurchaseAmount.text = Utility.formatCurrency(responseData.data.booking.totalAmount.toFloat())
+        binding.txtPurchaseAmount.text = "$" + responseData.data.booking.totalAmount.toString()
 
         binding.txtTicketinfo.text = responseData.data.booking.totalAmount
         binding.txtReferenceNo.text =
@@ -180,10 +184,18 @@ class BookingDetailNewActivity : BaseActivity(),
         } else {
             binding.viewmenu.visibility = View.GONE
         }
+
+
+        if (responseData.data.booking.allow_invite.equals("0",true)) {
+            binding.inviteFriend.visibility = View.GONE
+        } else {
+            binding.inviteFriend.visibility = View.VISIBLE
+        }
+
     }
 
     override fun onFriendInviteSuccess(responseData: CommonResponse?) {
-        Log.e("on ","friend invite success");
+        Log.e("on ", "friend invite success");
     }
 
     override fun validateError(message: String) {

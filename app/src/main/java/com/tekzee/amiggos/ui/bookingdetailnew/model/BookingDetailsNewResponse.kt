@@ -55,6 +55,8 @@ data class BookingDetailsNewResponse(
             val totalInvitedGuest: String = "0",
             @SerializedName("userid")
             val userid: String = "0",
+            @SerializedName("allow_invite")
+            val allow_invite: String = "0",
             @SerializedName("venue_home_image")
             val venueHomeImage: String = "",
             @SerializedName("venue_id")

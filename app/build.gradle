@@ -312,4 +312,8 @@ dependencies {
     implementation 'com.beloo.widget:ChipsLayoutManager:0.3.7@aar'
     implementation 'com.github.ravindu1024:android-keyboardlistener:1.0.0'
     implementation 'com.github.vipulasri.layouttoimage:library:1.0.0'
+
+
+
+    implementation 'com.takwolf.android:foreback:0.1.1'
 }

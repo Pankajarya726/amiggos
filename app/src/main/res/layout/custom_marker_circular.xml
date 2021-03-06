@@ -33,4 +33,16 @@
         app:layout_constraintStart_toStartOf="@+id/marker_image"
         app:layout_constraintTop_toBottomOf="@+id/marker_image" />
 
+    <TextView
+        android:id="@+id/countnearby"
+        android:layout_width="@dimen/_12sdp"
+        android:layout_height="@dimen/_12sdp"
+        android:background="@drawable/circle_red"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_8sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

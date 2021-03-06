@@ -874,6 +874,9 @@ public class LanguageData {
     @SerializedName("Qr_code_screen_title")
     @Expose
     private String qrCodeScreenTitle;
+    @SerializedName("booking_qr_code")
+    @Expose
+    private String booking_qr_code ="Qr Code Id: ";
     @SerializedName("Qr_code_screen_sub_title")
     @Expose
     private String qrCodeScreenSubTitle;
@@ -1567,6 +1570,9 @@ public class LanguageData {
 
     @SerializedName("closed")
     private String closed = "Closed";
+
+    @SerializedName("not_currenty_booking")
+    private String not_currenty_booking = "Not Currently Booking";
 
     @SerializedName("booknow")
     private String booknow = "Book Now";
@@ -6064,5 +6070,21 @@ public class LanguageData {
 
     public void setCallmessage(String callmessage) {
         this.callmessage = callmessage;
+    }
+
+    public String getBooking_qr_code() {
+        return booking_qr_code;
+    }
+
+    public void setBooking_qr_code(String booking_qr_code) {
+        this.booking_qr_code = booking_qr_code;
+    }
+
+    public String getNot_currenty_booking() {
+        return not_currenty_booking;
+    }
+
+    public void setNot_currenty_booking(String not_currenty_booking) {
+        this.not_currenty_booking = not_currenty_booking;
     }
 }

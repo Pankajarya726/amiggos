@@ -166,6 +166,7 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
         database.child(ConstantLib.USER).child(firebaseUser.uid).child("amiggosID").setValue(responseData.unique_timestamp.toString())
         database.child(ConstantLib.USER).child(firebaseUser.uid).child("email").setValue(responseData.email)
         database.child(ConstantLib.USER).child(firebaseUser.uid).child("fcmToken").setValue(sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN))
+        database.child(ConstantLib.USER).child(firebaseUser.uid).child("timestamp").setValue(System.currentTimeMillis())
 
     }
 

@@ -126,9 +126,17 @@ interface ApiService {
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Response<CommonMenuResponse>
+/*
 
 
     @POST("guest/save_booking")
+    suspend fun createBooking(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Response<CreateBookingResponse>
+*/
+
+    @POST("guest/save_booking_v1")
     suspend fun createBooking(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>
@@ -748,6 +756,12 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>>
 
+    @POST("guest/user_apptime")
+    fun user_apptime(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>>
+
 
 
 
@@ -835,6 +849,12 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>>
 
+
+    @POST("guest/rejectOurStoryInvite")
+    suspend fun doRejectCreateMemoryInvitationApiNew(
+        @Body input: JsonObject,
+        @HeaderMap createHeaders: HashMap<String, String?>
+    ): Response<CommonResponse>
 
     @POST("guest/sendFriendRequest")
     fun doSendFriendRequest(

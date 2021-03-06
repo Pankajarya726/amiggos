@@ -239,7 +239,7 @@ class StepOne : BaseActivity(), StepOnePresenter.StepOnePresenterMainView,
         user.deviceToken = data.apiToken
         user.email = data.email
         user.fcmToken = fcmToken
-        user.image = ""
+        user.image = data.profile
         user.name = ""
         user.timestamp = System.currentTimeMillis()
         database.child(ConstantLib.USER).child(firebaseUser!!.uid).setValue(user)
