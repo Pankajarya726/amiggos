@@ -106,6 +106,7 @@ class MenuActivity : AppCompatActivity(), MenuEvent, KodeinAware {
                     val intentFinalBasket =
                         Intent(applicationContext, FinalBasketActivity::class.java)
                     intentFinalBasket.putExtra(ConstantLib.TAX, responseData.data.tax)
+                    intentFinalBasket.putExtra(ConstantLib.ALLOW_INVITE, intent.getStringExtra(ConstantLib.ALLOW_INVITE))
                     intentFinalBasket.putExtra(
                         ConstantLib.TIME,
                         intent.getStringExtra(ConstantLib.TIME)

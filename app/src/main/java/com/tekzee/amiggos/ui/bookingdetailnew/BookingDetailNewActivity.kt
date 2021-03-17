@@ -29,6 +29,7 @@ import kotlinx.android.synthetic.main.bookingdetailnew_activity.*
 class BookingDetailNewActivity : BaseActivity(),
     BookingDetailsNewPresenter.ABookingDetailsPresenterMainView {
 
+    private var allowinvite: String ="1"
     private var bookingmethod: String = ""
     private var bookingTime: String = ""
     private var bookingDate: String = ""
@@ -65,6 +66,11 @@ class BookingDetailNewActivity : BaseActivity(),
 
         binding.txtLink.setOnClickListener {
             val menuIntent = Intent(applicationContext, MenuActivity::class.java)
+
+            menuIntent.putExtra(
+                ConstantLib.ALLOW_INVITE,
+                allowinvite
+            )
             menuIntent.putExtra(
                 ConstantLib.VENUE_ID,
                 selectedVenueid.toString()
@@ -140,6 +146,7 @@ class BookingDetailNewActivity : BaseActivity(),
 
     private fun setupViewData(responseData: BookingDetailsNewResponse?) {
         bookingData = responseData
+        allowinvite =responseData!!.data.booking.allow_invite
         selectedVenueid = responseData!!.data.booking.venueId.toInt()
         bookingDate = responseData.data.booking.booking_date_txt
         bookingTime = responseData.data.booking.booking_time_txt
@@ -186,10 +193,16 @@ class BookingDetailNewActivity : BaseActivity(),
         }
 
 
-        if (responseData.data.booking.allow_invite.equals("0",true)) {
+        if (responseData.data.booking.allow_invite.equals("0", true)) {
             binding.inviteFriend.visibility = View.GONE
         } else {
             binding.inviteFriend.visibility = View.VISIBLE
+        }
+
+        if (responseData.data.booking.allow_add_on.equals("0", true)) {
+            binding.txtLink.visibility = View.GONE
+        } else {
+            binding.txtLink.visibility = View.VISIBLE
         }
 
     }

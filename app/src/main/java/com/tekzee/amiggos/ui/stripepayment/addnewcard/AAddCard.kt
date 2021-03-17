@@ -2,6 +2,7 @@ package com.tekzee.amiggos.ui.stripepayment.addnewcard
 
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
@@ -136,7 +137,7 @@ class AAddCard : BaseActivity(), AAddCardPresenter.AAddCardPresenterMainView {
     }
 
     override fun onChooseWeekSuccess(responseData: ChooseWeekResponse?) {
-        TODO("Not yet implemented")
+        Log.e("data",responseData!!.message)
     }
 
     override fun onSaveCardSuccess(responseData: CommonResponse?) {

@@ -112,6 +112,9 @@ public class LanguageData {
     @SerializedName("quantity")
     @Expose
     private String quantity = "Quantity: ";
+    @SerializedName("price")
+    @Expose
+    private String price = "Price: ";
     @SerializedName("referencenumber")
     @Expose
     private String referencenumber = "Referenced Number : ";
@@ -6086,5 +6089,13 @@ public class LanguageData {
 
     public void setNot_currenty_booking(String not_currenty_booking) {
         this.not_currenty_booking = not_currenty_booking;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 }

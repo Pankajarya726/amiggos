@@ -20,6 +20,7 @@ import com.tekzee.amiggos.ui.stripepayment.model.CardListResponse
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.PaymentActivityBinding
 import com.tekzee.amiggos.room.database.AmiggoRoomDatabase
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.invitefriendnew.InviteFriendNewActivity
 import com.tekzee.amiggos.ui.stripepayment.APaymentMethod
 import com.tekzee.amiggos.ui.stripepayment.addnewcard.AAddCard
@@ -219,11 +220,20 @@ class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodP
         Coroutines.main {
             repository!!.clearCart()
         }
-        val intent = Intent(applicationContext, InviteFriendNewActivity::class.java)
-        intent.putExtra(ConstantLib.MESSAGE,response.message)
-        intent.putExtra(ConstantLib.FROM,ConstantLib.FINALBASKET)
-        intent.putExtra(ConstantLib.BOOKING_ID,getIntent().getStringExtra(ConstantLib.BOOKING_ID))
-        startActivity(intent)
+        if(intent.getStringExtra(ConstantLib.ALLOW_INVITE).equals("1")){
+            val intentInviteFriendNewActivity = Intent(applicationContext, InviteFriendNewActivity::class.java)
+            intentInviteFriendNewActivity.putExtra(ConstantLib.MESSAGE,response.message)
+            intentInviteFriendNewActivity.putExtra(ConstantLib.FROM,ConstantLib.FINALBASKET)
+            intentInviteFriendNewActivity.putExtra(ConstantLib.BOOKING_ID, intent.getStringExtra(ConstantLib.BOOKING_ID))
+            startActivity(intentInviteFriendNewActivity)
+        }else{
+            val intent = Intent(applicationContext, AHomeScreen::class.java)
+            startActivity(intent)
+            InviteFriendNewActivity.selectUserIds.clear()
+            InviteFriendNewActivity.undoUserIds.clear()
+            finishAffinity()
+        }
+
     }
 
     override fun onBookingFailure(message: String) {

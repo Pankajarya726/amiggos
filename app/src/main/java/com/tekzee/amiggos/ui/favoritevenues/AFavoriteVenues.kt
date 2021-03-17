@@ -166,9 +166,9 @@ class AFavoriteVenues(var friendId: String?, var aProfileDetails: AProfileDetail
 
 
     override fun onLoadMoreData() {
-        mydataList.add(mLoadingData)
-        adapter?.notifyDataSetChanged()
-        callFavoriteVenue(true, "")
+//        mydataList.add(mLoadingData)
+//        adapter?.notifyDataSetChanged()
+//        callFavoriteVenue(true, "")
     }
 
 

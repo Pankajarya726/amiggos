@@ -102,12 +102,10 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
         val email = responseData.userid.toString().toLowerCase()+"_1" + "@amiggos.com"
         auth.signInWithEmailAndPassword(email, "amiggos@123")
             .addOnCompleteListener(this) { task: Task<AuthResult> ->
-
                 if(task.isSuccessful){
                     val firebaseUser = FirebaseAuth.getInstance().currentUser
                     if (firebaseUser != null) {
                         updateFirebaseUser(responseData)
-
                         callHomePage(responseData)
                         callUpdateFirebaseApi(responseData.userid)
                     }else{

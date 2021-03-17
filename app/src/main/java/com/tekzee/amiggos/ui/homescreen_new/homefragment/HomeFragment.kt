@@ -1,5 +1,3 @@
-package com.tekzee.amiggos.ui.homescreen_new.homefragment
-
 import `in`.madapps.placesautocomplete.PlaceAPI
 import `in`.madapps.placesautocomplete.adapter.PlacesAutoCompleteAdapter
 import `in`.madapps.placesautocomplete.listener.OnPlacesDetailsListener
@@ -44,6 +42,8 @@ import com.tekzee.amiggos.ui.cameranew.CameraActivity
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.homescreen_new.CustomInfoWindowAdapter
 import com.tekzee.amiggos.ui.homescreen_new.NotifyNotification
+import com.tekzee.amiggos.ui.homescreen_new.homefragment.HomePresenter
+import com.tekzee.amiggos.ui.homescreen_new.homefragment.HomePresenterImplementation
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.adapter.AutoSuggestAdapter
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse.Data.Venue

@@ -5,6 +5,8 @@ object ConstantLib {
 
 //    chat
     const val CONVERSATION = "conversation"
+    const val CALLBATCHCOUNT = "CALLBATCHCOUNT"
+    const val ALLOW_INVITE = "ALLOW_INVITE"
     const val UNIQUEFRIENDID = "UNIQUEFRIENDID"
     const val BACKFROM = "BACKFROM"
     const val OUR_STORY_ID = "OUR_STORY_ID"

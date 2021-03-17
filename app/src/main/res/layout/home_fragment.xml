@@ -160,6 +160,17 @@
                         android:button="@null"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <RadioButton
+                        android:visibility="gone"
+                        android:id="@+id/img_icon_seven"
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:background="@drawable/shopping_drawable"
+                        android:button="@null"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
                 </RadioGroup>
 
 

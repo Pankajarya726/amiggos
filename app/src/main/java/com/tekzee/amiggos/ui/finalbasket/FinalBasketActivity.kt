@@ -323,11 +323,12 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware,
     override fun onCreateBookingSuccess(response: CreateBookingResponse) {
         hideProgressBar()
 //        Successtoast(response.message)
-        val intent = Intent(this, PaymentActivity::class.java)
-        intent.putExtra(ConstantLib.FROM, ConstantLib.FINALBASKET)
-        intent.putExtra(ConstantLib.PURCHASE_AMOUNT, response.data.booking.amount.toString())
-        intent.putExtra(ConstantLib.BOOKING_ID, response.data.booking.bookingId)
-        startActivity(intent)
+        val intentPaymentActivity = Intent(this, PaymentActivity::class.java)
+        intentPaymentActivity.putExtra(ConstantLib.ALLOW_INVITE, intent.getStringExtra(ConstantLib.ALLOW_INVITE))
+        intentPaymentActivity.putExtra(ConstantLib.FROM, ConstantLib.FINALBASKET)
+        intentPaymentActivity.putExtra(ConstantLib.PURCHASE_AMOUNT, response.data.booking.amount.toString())
+        intentPaymentActivity.putExtra(ConstantLib.BOOKING_ID, response.data.booking.bookingId)
+        startActivity(intentPaymentActivity)
         Animatoo.animateSlideLeft(this)
     }
 

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.TimePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
@@ -68,6 +69,30 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
         setupRepository()
         dataVenue = intent.getSerializableExtra(ConstantLib.CALENDAR_DATA) as VenueDetails.Data
         binding.timepicker.setIs24HourView(false)
+
+
+
+        binding.timepicker.setOnTimeChangedListener{ view, hourOfDay, minute ->
+            val currenthour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+            val currentminute = Calendar.getInstance().get(Calendar.MINUTE)
+            Log.e("currenthour----->","currenthour----"+currenthour)
+            Log.e("currentminute----->","currentminute---"+currentminute)
+
+            Log.e("CurrentHOur----->","----"+hourOfDay)
+            Log.e("CurrentMinute----->","---"+minute)
+            if(meventDay!!.calendar.timeInMillis<Calendar.getInstance().timeInMillis){
+                if (hourOfDay < currenthour) {
+                    binding.timepicker.currentMinute = currentminute
+                    binding.timepicker.currentHour = currenthour
+                }else if(hourOfDay == currenthour){
+                    if(minute<currentminute){
+                        binding.timepicker.currentMinute = currentminute
+                        binding.timepicker.currentHour = hourOfDay
+                    }
+                }
+            }
+
+        }
 
 
         checkTimeSlot()
@@ -198,6 +223,7 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
                         repository!!.clearCart()
                     }
                     val menuIntent = Intent(applicationContext, MenuActivity::class.java)
+                    menuIntent.putExtra(ConstantLib.ALLOW_INVITE,"1")
                     menuIntent.putExtra(
                         ConstantLib.VENUE_ID,
                         intent.getStringExtra(ConstantLib.VENUE_ID)
@@ -221,6 +247,7 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
                         repository!!.clearCart()
                     }
                     val menuIntent = Intent(applicationContext, MenuActivity::class.java)
+                    menuIntent.putExtra(ConstantLib.ALLOW_INVITE,"1")
                     menuIntent.putExtra(
                         ConstantLib.FROM,
                         ConstantLib.MENUACTIVITY
@@ -255,6 +282,7 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
                     }
                     if (adapter.selected != null) {
                         val menuIntent = Intent(applicationContext, MenuActivity::class.java)
+                        menuIntent.putExtra(ConstantLib.ALLOW_INVITE,"1")
                         menuIntent.putExtra(
                             ConstantLib.FROM,
                             ConstantLib.MENUACTIVITY
@@ -297,10 +325,14 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
         binding.calendarView.setOnDayClickListener { eventDay: EventDay ->
 
             Log.e("meventdat---",""+eventDay!!.calendar.get(Calendar.DAY_OF_WEEK))
+            val currenthour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+            val currentminute = Calendar.getInstance().get(Calendar.MINUTE)
+            binding.timepicker.currentMinute = currentminute
+            binding.timepicker.currentHour = currenthour
 
-            val day = eventDay.calendar.get(Calendar.DAY_OF_MONTH).toString()
-            val month = (eventDay.calendar.get(Calendar.MONTH) + 1).toString()
-            val year = eventDay.calendar.get(Calendar.YEAR).toString()
+//            val day = eventDay.calendar.get(Calendar.DAY_OF_MONTH).toString()
+//            val month = (eventDay.calendar.get(Calendar.MONTH) + 1).toString()
+//            val year = eventDay.calendar.get(Calendar.YEAR).toString()
             val checkDate = Calendar.getInstance()
             checkDate.add(Calendar.DAY_OF_MONTH,-1)
             if(!eventDay.calendar.after(checkDate)){
@@ -388,7 +420,7 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
 
 
     private fun checkDisabledDate(eventDay: Calendar): Boolean {
-        var flag: Boolean = false
+        var flag = false
         for (items in disabledDates) {
             val itemeventdate =
                 items.get(Calendar.DAY_OF_MONTH).toString()+ items.get(Calendar.MONTH).toString() + items.get(Calendar.YEAR).toString()

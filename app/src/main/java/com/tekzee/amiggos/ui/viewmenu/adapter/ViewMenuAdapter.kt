@@ -37,6 +37,7 @@ class ViewMenuAdapter(
         holder.bindingdata.txt_name.text = items[position].name
         holder.bindingdata.txt_description.text = items[position].description
         holder.bindingdata.txt_amout.text = languageData!!.quantity+items[position].qty
+        holder.bindingdata.price.text = languageData!!.price+"$"+items[position].price
         Glide.with(context!!).load(items[position].menuImage).placeholder(R.drawable.user).placeholder(R.drawable.noimage).into(holder.bindingdata.menuimage)
         holder.bindingdata.menuimage.setOnClickListener {
             if(items[position].menuImage.isNotEmpty()){

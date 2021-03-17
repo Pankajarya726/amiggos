@@ -35,8 +35,6 @@ import com.tekzee.amiggos.enums.Actions
 import com.tekzee.amiggos.enums.FriendsAction
 import com.tekzee.amiggos.services.UpdateUserLocationToServer
 import com.tekzee.amiggos.ui.bookings_new.BookingFragment
-import com.tekzee.amiggos.ui.cameranew.CameraActivity
-import com.tekzee.amiggos.ui.homescreen_new.homefragment.HomeFragment
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
 import com.tekzee.amiggos.ui.memories.AMemoriesFragment
 import com.tekzee.amiggos.ui.message.MessageActivity

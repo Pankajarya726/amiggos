@@ -261,13 +261,12 @@ class ApplicationController : Application(), KodeinAware, Foreback.Listener {
     }
 
     override fun onApplicationEnterForeground(activity: Activity?) {
-        Log.e("TAG---->", "onApplicationEnterForeground")
         callUpdateTimeApi("1")
     }
 
     override fun onApplicationEnterBackground(activity: Activity?) {
-        Log.e("TAG---->", "onApplicationEnterBackground")
         callUpdateTimeApi("2")
+        sharedPreferences!!.save(ConstantLib.CALLBATCHCOUNT,true)
     }
 
     @SuppressLint("CheckResult")

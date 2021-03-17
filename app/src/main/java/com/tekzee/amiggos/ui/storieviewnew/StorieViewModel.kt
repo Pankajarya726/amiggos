@@ -55,7 +55,7 @@ class StorieViewModel(private val context: Context,
             try {
                 val jsoninput = JsonObject()
                 jsoninput.addProperty("userid",prefs.getValueInt(ConstantLib.USER_ID))
-                jsoninput.addProperty("brand_id",featured_brand_id)
+                jsoninput.addProperty("brand_id",listItem.id.toString())
                 jsoninput.addProperty("usertype",prefs.getValueString(ConstantLib.USER_TYPE))
                 jsoninput.addProperty("memory_id",memorieId)
                 val response =  repository.doBannerCountApi(jsoninput, Utility.createHeaders(prefs))
