@@ -66,6 +66,7 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
 
         binding!!.btnSignin.setOnClickListener{
             if(validateFields()){
+                binding!!.btnSignin.isEnabled = false
                 callLoginApi()
             }
         }
@@ -94,7 +95,6 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
     override fun OnLoginSuccess(responseData: ALoginResponse.Data) {
 
         checkIfFirebaseUserExist(responseData)
-
     }
 
     private fun checkIfFirebaseUserExist(responseData: ALoginResponse.Data) {
@@ -116,6 +116,7 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
                                     callHomePage(responseData)
                                     callUpdateFirebaseApi(responseData.userid)
                                 }else{
+                                    binding!!.btnSignin.isEnabled = true
                                     SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                                         .setTitleText("Error login for chat module")
                                         .setConfirmText(languageData!!.klOk)
@@ -134,6 +135,7 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
                                 callHomePage(responseData)
                                 callUpdateFirebaseApi(responseData.userid)
                             }else{
+                                binding!!.btnSignin.isEnabled = true
                                 SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                                     .setTitleText("Error login for chat module")
                                     .setConfirmText(languageData!!.klOk)
@@ -169,6 +171,7 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
     }
 
     private fun callHomePage(responseData: ALoginResponse.Data) {
+        binding!!.btnSignin.isEnabled = true
         sharedPreferences!!.save(ConstantLib.USER_ID, responseData.userid.toInt())
         sharedPreferences!!.save(ConstantLib.UNIQUE_TIMESTAMP, responseData.unique_timestamp.toString())
         sharedPreferences!!.save(ConstantLib.USER_NAME, responseData.username)
@@ -215,15 +218,18 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
 
 
     override fun validateError(message: String) {
+        binding!!.btnSignin.isEnabled = true
         Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
     }
 
     override fun logoutUser() {
+        binding!!.btnSignin.isEnabled = true
         Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
     override fun onDestroy() {
-        super.onDestroy()
+        binding!!.btnSignin.isEnabled = true
         aLoginImplementation!!.onStop()
+        super.onDestroy()
     }
 }
