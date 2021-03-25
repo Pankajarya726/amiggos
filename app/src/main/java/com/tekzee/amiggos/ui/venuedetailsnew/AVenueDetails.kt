@@ -33,6 +33,7 @@ import com.tekzee.amiggos.ui.venuedetailsnew.model.VenueDetails
 import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
+import java.lang.StringBuilder
 import java.util.*
 
 
@@ -286,6 +287,20 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         } else {
             binding!!.maskimage.visibility = View.GONE
         }
+
+        val hoursOpen:StringBuilder = StringBuilder()
+        for(item in response.clubData.workingDays){
+            if(item.isOpen==1){
+                 hoursOpen.append(item.name)
+                 hoursOpen.append(" : ")
+                 hoursOpen.append(item.timing)
+                 hoursOpen.append(System.getProperty("line.separator"))
+            }
+        }
+
+        binding!!.txtHours.text = hoursOpen
+        binding!!.hours.text = languageData!!.operationHours
+
 
     }
 

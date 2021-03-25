@@ -15,14 +15,13 @@ import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.adapter.BookingInvitationAdapter
 import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.interfaces.BookingInvitationInterfaces
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.BookingInvitationsFragmentBinding
 import com.tekzee.amiggos.ui.bookingdetailnew.BookingDetailNewActivity
 import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
-import com.tekzee.amiggos.ui.bookings_new.bookings.ABooking
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 
 class BookingInvitations : BaseFragment(), BookingInvitationPresenter.BookingInvitationMainView {

@@ -21,6 +21,7 @@ import com.tekzee.amiggos.ui.chatnew.model.ChatMessage
 import com.tekzee.amiggos.ui.message.model.MyFriendChatModel
 import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.util.hideKeyboard
 import com.tekzee.amiggosvenueapp.ui.chat.ChatActivityListener
 import org.kodein.di.Kodein
@@ -215,6 +216,14 @@ class ChatActivity : AppCompatActivity(), ChatEvent, KodeinAware, ChatActivityLi
 
     override fun isBlockedUserFailure(message: String) {
         Errortoast(message)
+    }
+
+    override fun onFailure(message: String) {
+        Errortoast(message)
+    }
+
+    override fun sessionExpired(message: String) {
+        Utility.logOut(applicationContext, message)
     }
 
 

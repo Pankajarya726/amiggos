@@ -12,7 +12,6 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
-import com.tekzee.amiggos.custom.BottomDialog
 import com.tekzee.amiggos.databinding.APartyInvitesFragmentBinding
 import com.tekzee.amiggos.enums.FriendsAction
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
@@ -22,7 +21,7 @@ import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.util.toast
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware

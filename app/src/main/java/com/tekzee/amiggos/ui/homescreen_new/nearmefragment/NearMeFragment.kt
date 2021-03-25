@@ -22,7 +22,7 @@ import com.tekzee.amiggos.ui.realfriends.invitations.Invitations
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.RealFriend
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 
 
 class NearMeFragment : BaseFragment() {

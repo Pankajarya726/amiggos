@@ -14,13 +14,12 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.memories.mymemoriesold.OurMemorieFragment
 import com.tekzee.amiggos.ui.memories.venuefragment.VenueFragment
 import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.AmemoriesFragmentBinding
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.adapter.ViewPagerTwoAdapter
 import com.tekzee.amiggos.ui.memories.mymemories.MyMemoriesFragment
 import com.tekzee.amiggos.util.Utility
-import kotlinx.android.synthetic.main.menu_fragment.*
 
 
 class AMemoriesFragment : BaseFragment() {

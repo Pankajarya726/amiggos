@@ -121,7 +121,10 @@ class StoryDisplayFragment : Fragment(),
         txt_join.setOnClickListener {
             val intent = Intent(requireContext(), CameraActivity::class.java)
             intent.putExtra(ConstantLib.FROM_ACTIVITY, ConstantLib.OURSTORYINVITE)
-            intent.putExtra(ConstantLib.SENDER_ID, prefs.getValueString(ConstantLib.SENDER_ID_MEMORY_NOTIFICATION))
+            intent.putExtra(
+                ConstantLib.SENDER_ID,
+                prefs.getValueString(ConstantLib.SENDER_ID_MEMORY_NOTIFICATION)
+            )
             intent.putExtra(
                 ConstantLib.OURSTORYID,
                 prefs.getValueString(ConstantLib.OUR_STORY_ID)
@@ -137,7 +140,10 @@ class StoryDisplayFragment : Fragment(),
                 "userid",
                 prefs!!.getValueInt(ConstantLib.USER_ID)
             )
-            input.addProperty("sender_id", prefs.getValueString(ConstantLib.SENDER_ID_MEMORY_NOTIFICATION))
+            input.addProperty(
+                "sender_id",
+                prefs.getValueString(ConstantLib.SENDER_ID_MEMORY_NOTIFICATION)
+            )
             input.addProperty(
                 "our_story_id",
                 prefs.getValueString(ConstantLib.OUR_STORY_ID)
@@ -177,7 +183,7 @@ class StoryDisplayFragment : Fragment(),
             false
         )
         banner_recyclerview.adapter = adapter
-        if(stories.size>0){
+        if (stories.size > 0) {
             stories[0].banners
             observeList(stories[0].banners)
         }
@@ -205,7 +211,7 @@ class StoryDisplayFragment : Fragment(),
 
     override fun onResume() {
         super.onResume()
-        if(stories.size>0){
+        if (stories.size > 0) {
             onResumeCalled = true
             if (stories[counter].isVideo() && !onVideoPrepared) {
                 simpleExoPlayer?.playWhenReady = false
@@ -258,7 +264,7 @@ class StoryDisplayFragment : Fragment(),
     }
 
     private fun updateStory() {
-        if(stories.size>0){
+        if (stories.size > 0) {
             observeList(stories[counter].banners)
             Log.e("Url---->", stories[counter].toString())
             if (stories[counter].from.equals(ConstantLib.OURMEMORIES)) {
@@ -276,6 +282,13 @@ class StoryDisplayFragment : Fragment(),
 //                txt_view.visibility = View.GONE
 //            }
             txt_view.text = stories[counter].storyData.viewCount.toString()
+            /*if (stories[counter].storyData.type.equals("4") || stories[counter].storyData.type.equals("4"))
+            {
+                txt_view.visibility = View.VISIBLE
+            } else {
+                txt_view.visibility = View.GONE
+            }
+            txt_view.text = stories[counter].storyData.type.toString()*/
 
             Glide.with(this).load(stories[counter].storyData.profile)
                 .placeholder(R.drawable.user).into(storyDisplayProfilePicture)
@@ -304,7 +317,10 @@ class StoryDisplayFragment : Fragment(),
             }
             storyDisplayTime.text = DateFormat.format("MM-dd-yyyy HH:mm:ss", cal).toString()
 
-            if (prefs.getValueInt(ConstantLib.USER_ID) == stories[counter].storyData.user_id && prefs.getValueString(ConstantLib.USER_TYPE) == stories[counter].storyData.story_user_type.toString()) {
+            if (prefs.getValueInt(ConstantLib.USER_ID) == stories[counter].storyData.user_id && prefs.getValueString(
+                    ConstantLib.USER_TYPE
+                ) == stories[counter].storyData.story_user_type.toString()
+            ) {
                 img_delete.visibility = View.VISIBLE
             } else {
                 img_delete.visibility = View.GONE
@@ -507,7 +523,7 @@ class StoryDisplayFragment : Fragment(),
     ) {
 
 
-        callBannercountApi(listItem,stories[counter].storyData.featured_brand_id.toString())
+        callBannercountApi(listItem, stories[counter].storyData.featured_brand_id.toString())
 
 
     }
@@ -517,7 +533,11 @@ class StoryDisplayFragment : Fragment(),
         featured_brand_id: String
     ) {
         pauseCurrentStory()
-        viewModel.callBannerCountApi(stories[counter].storyData.id.toString(),listItem,featured_brand_id)
+        viewModel.callBannerCountApi(
+            stories[counter].storyData.id.toString(),
+            listItem,
+            featured_brand_id
+        )
     }
 
     override fun onAcceptDeclineCalled() {

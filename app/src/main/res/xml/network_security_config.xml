@@ -3,6 +3,7 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">tekdev.tekzee.in</domain>
         <domain includeSubdomains="true">amiggos.com</domain>
+        <domain includeSubdomains="true">54.82.207.132</domain>
         <domain includeSubdomains="true">graph.facebook.com</domain>
     </domain-config>
 </network-security-config>

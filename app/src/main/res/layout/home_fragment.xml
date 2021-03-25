@@ -89,89 +89,100 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     mapbox:srcCompat="@drawable/my_location" />
 
-                <RadioGroup
-                    android:id="@+id/radiogroup"
+                <ScrollView
+                    android:scrollbars="none"
+                    android:paddingBottom="@dimen/_20sdp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="18dp"
                     android:layout_marginRight="@dimen/_20sdp"
+                    android:layout_marginBottom="18dp"
                     android:gravity="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.100000024">
 
-                    <RadioButton
-                        android:id="@+id/img_icon_four"
-                        android:layout_width="@dimen/_35sdp"
-                        android:layout_height="@dimen/_35sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:background="@drawable/img_icon_two_bg"
-                        android:button="@null"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/img_icon_three" />
+                    <RadioGroup
+                        android:id="@+id/radiogroup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
-                    <RadioButton
-                        android:id="@+id/img_icon_five"
-                        android:layout_width="@dimen/_35sdp"
-                        android:layout_height="@dimen/_35sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:background="@drawable/img_icon_one_bg"
-                        android:button="@null"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/img_icon_four"
-                        app:srcCompat="@drawable/img_icon_one_bg" />
+                        <RadioButton
+                            android:id="@+id/img_icon_four"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
+
+                            android:background="@drawable/img_icon_two_bg"
+                            android:button="@null"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/img_icon_three" />
+
+                        <RadioButton
+                            android:id="@+id/img_icon_five"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:background="@drawable/img_icon_one_bg"
+                            android:button="@null"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/img_icon_four"
+                            app:srcCompat="@drawable/img_icon_one_bg" />
 
 
-                    <RadioButton
-                        android:id="@+id/img_icon_three"
-                        android:layout_width="@dimen/_35sdp"
-                        android:layout_height="@dimen/_35sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:background="@drawable/img_icon_three_bg"
-                        android:button="@null"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/img_icon_one" />
+                        <RadioButton
+                            android:id="@+id/img_icon_three"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:background="@drawable/img_icon_three_bg"
+                            android:button="@null"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/img_icon_one" />
 
-                    <RadioButton
-                        android:id="@+id/img_icon_one"
-                        android:layout_width="@dimen/_35sdp"
-                        android:layout_height="@dimen/_35sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:background="@drawable/img_icon_five_bg"
-                        android:button="@null"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/img_icon_two" />
+                        <RadioButton
+                            android:id="@+id/img_icon_one"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:background="@drawable/img_icon_five_bg"
+                            android:button="@null"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/img_icon_two" />
 
-                    <RadioButton
-                        android:id="@+id/img_icon_two"
-                        android:layout_width="@dimen/_35sdp"
-                        android:layout_height="@dimen/_35sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:background="@drawable/gym_drawable"
-                        android:button="@null"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        <RadioButton
+                            android:id="@+id/img_icon_two"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:background="@drawable/gym_drawable"
+                            android:button="@null"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                    <RadioButton
-                        android:id="@+id/img_icon_six"
-                        android:layout_width="@dimen/_35sdp"
-                        android:layout_height="@dimen/_35sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:background="@drawable/scissors_drawable"
-                        android:button="@null"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        <RadioButton
+                            android:id="@+id/img_icon_six"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:background="@drawable/scissors_drawable"
+                            android:button="@null"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                    <RadioButton
-                        android:visibility="gone"
-                        android:id="@+id/img_icon_seven"
-                        android:layout_width="@dimen/_35sdp"
-                        android:layout_height="@dimen/_35sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:background="@drawable/shopping_drawable"
-                        android:button="@null"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </RadioGroup>
+                        <RadioButton
+                            android:id="@+id/img_icon_seven"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:background="@drawable/shopping_drawable"
+                            android:button="@null"
+                            android:visibility="visible"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </RadioGroup>
+                </ScrollView>
+
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

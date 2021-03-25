@@ -21,7 +21,7 @@
 //import com.tekzee.amiggos.ui.memories.ourmemories.model.FeaturedBrandProductResponse
 //import com.tekzee.amiggos.util.SharedPreference
 //import com.tekzee.amiggos.util.Utility
-//import com.tekzee.mallortaxi.base.BaseFragment
+//import com.tekzee.amiggos.base.BaseFragment
 //import com.tekzee.amiggos.constant.ConstantLib
 //import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 //import com.tekzee.amiggos.ui.storieviewnew.StorieViewNew

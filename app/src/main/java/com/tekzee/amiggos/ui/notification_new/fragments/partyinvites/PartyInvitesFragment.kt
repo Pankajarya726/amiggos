@@ -15,9 +15,8 @@ import com.tekzee.amiggos.databinding.APartyInvitesFragmentBinding
 import com.tekzee.amiggos.ui.notification_new.adapter.APartyInvitesNotificationAdapter
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
-import com.tekzee.amiggos.custom.BottomDialog
 import com.tekzee.amiggos.enums.FriendsAction
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.notification_new.model.PartyInvitesNotificationResponse

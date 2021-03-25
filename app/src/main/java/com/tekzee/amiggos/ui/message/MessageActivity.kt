@@ -18,6 +18,7 @@ import com.tekzee.amiggos.ui.message.adapter.MessageAdapter
 import com.tekzee.amiggos.ui.message.model.MyConversation
 import com.tekzee.amiggos.ui.message.model.MyFriendChatModel
 import com.tekzee.amiggos.ui.addusers.AddUserFragment
+import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.Utility
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -132,7 +133,7 @@ class MessageActivity : BaseActivity(), MessageEvent, KodeinAware,
     }
 
     override fun validateError(message: String) {
-
+        Errortoast(message)
     }
 
     override fun logoutUser() {

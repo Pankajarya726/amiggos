@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager2.widget.ViewPager2
@@ -15,15 +14,12 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.BookingFragmentBinding
-import com.tekzee.amiggos.databinding.NearMeFragmentBinding
 import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.BookingInvitations
 import com.tekzee.amiggos.ui.bookings_new.bookings.ABooking
-import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.adapter.ViewPagerTwoAdapter
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxi.base.BaseFragment
-import kotlinx.android.synthetic.main.menu_fragment.*
+import com.tekzee.amiggos.base.BaseFragment
 
 
 class BookingFragment : BaseFragment() {

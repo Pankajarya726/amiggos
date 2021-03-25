@@ -13,7 +13,7 @@ abstract class SafeApiRequest {
 
         if (response.code() == 200 && response.isSuccessful) {
             return response.body()!!
-        } else if (response.code() == 400) {
+        } else if (response.code() == 404) {
             throw LogoutException("Your session is expired ,Please re-login")
         } else {
             val error = response.errorBody()?.string()

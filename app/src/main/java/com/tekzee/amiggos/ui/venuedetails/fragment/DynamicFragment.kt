@@ -21,7 +21,7 @@
 //import com.tekzee.amiggos.ui.venuedetails.imageslider.ImageSliderActivity
 //import com.tekzee.amiggos.ui.venuedetailsnew.model.ClubDetailResponse
 //import com.tekzee.amiggos.ui.videoplayer.MyPlayerActivity
-//import com.tekzee.mallortaxi.base.BaseFragment
+//import com.tekzee.amiggos.base.BaseFragment
 //import com.tekzee.amiggos.util.SharedPreference
 //import com.tekzee.amiggos.constant.ConstantLib
 //

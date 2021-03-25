@@ -20,7 +20,7 @@
 //import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.adapter.OurMemoriesAdapter
 //import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
 //import com.tekzee.amiggos.ui.onlinefriends.adapter.OnlineFriendAdapter
-//import com.tekzee.mallortaxi.base.BaseFragment
+//import com.tekzee.amiggos.base.BaseFragment
 //import com.tekzee.amiggos.util.SharedPreference
 //import com.tekzee.amiggos.util.Utility
 //import com.tekzee.amiggos.constant.ConstantLib

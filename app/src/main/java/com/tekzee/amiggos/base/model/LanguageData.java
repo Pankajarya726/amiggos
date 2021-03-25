@@ -889,6 +889,9 @@ public class LanguageData {
     @SerializedName("You_already_send_party_invitaion_to_user")
     @Expose
     private String youAlreadySendPartyInvitaionToUser;
+    @SerializedName("operating_hours")
+    @Expose
+    private String OperationHours;
     @SerializedName("User_accepted_your_party_invitation")
     @Expose
     private String userAcceptedYourPartyInvitation;
@@ -6097,5 +6100,13 @@ public class LanguageData {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getOperationHours() {
+        return OperationHours;
+    }
+
+    public void setOperationHours(String operationHours) {
+        OperationHours = operationHours;
     }
 }

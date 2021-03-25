@@ -17,7 +17,7 @@ import com.tekzee.amiggos.ui.bookings_new.bookings.adapter.BookingAdapter
 import com.tekzee.amiggos.ui.bookings_new.bookings.model.ABookingResponse
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.ui.bookingdetailnew.BookingDetailNewActivity
 import com.tekzee.amiggos.ui.homescreen_new.NotifyNotification

@@ -19,7 +19,7 @@
 //import com.tekzee.amiggos.ui.ourmemories.fragment.nearby.adapter.NearByAdapter
 //import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListData
 //import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
-//import com.tekzee.mallortaxi.base.BaseFragment
+//import com.tekzee.amiggos.base.BaseFragment
 //import com.tekzee.amiggos.util.SharedPreference
 //import com.tekzee.amiggos.util.SimpleCallback
 //import com.tekzee.amiggos.util.Utility

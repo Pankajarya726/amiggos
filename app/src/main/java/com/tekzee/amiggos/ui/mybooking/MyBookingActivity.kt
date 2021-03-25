@@ -20,7 +20,7 @@ import com.tekzee.amiggos.constant.ConstantLib
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.bookingqrcode.GetBookingQrCodeActivity
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 
 
 class MyBookingActivity : BaseFragment(), MyBookingPresenter.MyBookingMainView {

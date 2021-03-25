@@ -15,13 +15,13 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.memories.mymemoriesold.adapter.OurMemorieWithoutProductAdapter
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.MyMemoriesFragmentBinding
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 import com.tekzee.amiggos.ui.storieviewnew.StorieViewNew
 
-class OurMemorieFragment:BaseFragment() ,OurMemorieFragmentPresenter.MyMemoriePresenterMainView{
+class OurMemorieFragment: BaseFragment() ,OurMemorieFragmentPresenter.MyMemoriePresenterMainView{
 
 
     private var binding: MyMemoriesFragmentBinding? =null

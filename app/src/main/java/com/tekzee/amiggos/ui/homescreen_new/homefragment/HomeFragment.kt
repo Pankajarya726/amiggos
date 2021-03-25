@@ -54,7 +54,7 @@ import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
 import com.tekzee.amiggos.util.OnSwipeTouchListener
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -112,8 +112,13 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.home_fragment, container, false)
         homepresenterImplementation = HomePresenterImplementation(this, requireContext())
-        sharedPreference = SharedPreference(requireContext())
-        languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
+        try{
+            sharedPreference = SharedPreference(requireContext())
+            languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+
         setupProgressBar()
         showProgressbarNew()
         val mapFragment: SupportMapFragment =
@@ -241,6 +246,10 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
         view.findViewById<RadioButton>(R.id.img_icon_six).setOnClickListener {
             categoryId = "197"
+            callHomeApi(0)
+        }
+        view.findViewById<RadioButton>(R.id.img_icon_seven).setOnClickListener {
+            categoryId = "198"
             callHomeApi(0)
         }
     }
@@ -499,11 +508,11 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
     override fun onBadgeApiSuccess(responseData: BadgeCountResponse) {
         val bottomNearMeBatchCount =
-            responseData.data.nearByCountBatch.toInt() + responseData.data.realFreind.toInt() + responseData.data.request.toInt()
+            responseData.data.nearByCountBatch.toInt()/* + responseData.data.realFreind.toInt() + responseData.data.request.toInt()*/
         AHomeScreen.setupNearByCountBadge(bottomNearMeBatchCount)
         AHomeScreen.setupMemoryCountBadge(responseData.data.memoryCountBatch.toInt())
         AHomeScreen.setupBookingCountBadge(responseData.data.bookingCountBatch.toInt())
-        AHomeScreen.setupBookingCountBadge(responseData.data.bookingCountBatch.toInt())
+       
         staticRequestBadgeCount = responseData.data.request.toInt()
         staticReaFriendBadgeCount = responseData.data.realFreind.toInt()
         staticNearMeBadgeCount = responseData.data.nearByCountBatch.toInt()
@@ -729,7 +738,10 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                     mMap!!.animateCamera(CameraUpdateFactory.zoomTo(defaultZoomValue))
                     callHomeApi(0)
                 })
-                callBadgeApi()
+                if (sharedPreference!!.getValueBoolean(ConstantLib.CALLBATCHCOUNT, false)) {
+                    sharedPreference!!.save(ConstantLib.CALLBATCHCOUNT, false)
+                    callBadgeApi()
+                }
             } else {
                 easyWayLocation!!.startLocation()
             }

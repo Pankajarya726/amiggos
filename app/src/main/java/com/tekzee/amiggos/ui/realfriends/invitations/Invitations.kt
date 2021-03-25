@@ -17,12 +17,11 @@ import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.ui.realfriends.invitations.adapter.InvitationAdapter
 import com.tekzee.amiggos.ui.realfriends.invitations.interfaces.InvitationInterfaces
 import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponseV2
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
-import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
 import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
 import com.tekzee.amiggos.util.RxSearchObservable
 import io.reactivex.android.schedulers.AndroidSchedulers

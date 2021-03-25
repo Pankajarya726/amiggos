@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.JsonObject
@@ -17,12 +16,9 @@ import com.tekzee.amiggos.ui.notification_new.adapter.ANotificationAdapter
 import com.tekzee.amiggos.ui.notification_new.model.ANotificationResponse
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
-import com.tekzee.amiggos.custom.BottomDialog
-import com.tekzee.amiggos.ui.cameranew.CameraActivity
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
-import com.tekzee.amiggos.ui.notification_new.adapter.ANotificationAdapterFriend
 import com.tekzee.amiggos.ui.storieviewnew.StorieViewNew
 import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.Successtoast

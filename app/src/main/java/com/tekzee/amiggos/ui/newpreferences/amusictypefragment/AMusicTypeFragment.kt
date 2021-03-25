@@ -16,10 +16,10 @@ import com.tekzee.amiggos.ui.newpreferences.amusictypefragment.model.AMusicTypeR
 
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
 
-class AMusicTypeFragment:BaseFragment(), AMusicTypePresenter.AMusicTypePresenterMainView {
+class AMusicTypeFragment: BaseFragment(), AMusicTypePresenter.AMusicTypePresenterMainView {
 
     private var binding: MusicTypeFragmentBinding? =null
     private var sharedPreference: SharedPreference? = null

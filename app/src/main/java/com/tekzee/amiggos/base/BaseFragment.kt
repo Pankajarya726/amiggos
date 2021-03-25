@@ -1,4 +1,4 @@
-package com.tekzee.mallortaxi.base
+package com.tekzee.amiggos.base
 
 import android.content.Context
 import android.os.Bundle
@@ -6,7 +6,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import com.kaopiz.kprogresshud.KProgressHUD
-import com.tekzee.amiggos.base.BaseMainView
 import com.tekzee.amiggos.util.NetWorkConection
 
 abstract class BaseFragment : Fragment(), BaseMainView {

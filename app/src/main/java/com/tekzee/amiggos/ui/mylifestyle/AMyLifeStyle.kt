@@ -13,7 +13,7 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.MyLifestyleFragmentBinding
 import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.ui.mylifestyle.adapter.MyLifestyleAdapter
 import com.tekzee.amiggos.ui.mylifestyle.model.MyLifestyleResponse

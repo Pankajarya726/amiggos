@@ -17,7 +17,7 @@ import com.tekzee.amiggos.ui.newpreferences.avenuetypefragment.adapter.VenueType
 import com.tekzee.amiggos.ui.newpreferences.avenuetypefragment.model.AVenueTypeResponse
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
 
 class AVenueTypeFragment : BaseFragment(), AVenueTypePresenter.AVenueTypePresenterMainView {
