@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.bumptech.glide.Glide
@@ -29,12 +30,17 @@ import com.tekzee.amiggos.databinding.AVenueDetailsBinding
 import com.tekzee.amiggos.ui.calendarview.CalendarViewActivity
 import com.tekzee.amiggos.ui.profiledetails.SliderClickListener
 import com.tekzee.amiggos.ui.profiledetails.model.SliderAdapterExample
+import com.tekzee.amiggos.ui.venuedetails.adapter.WeekAdapter
 import com.tekzee.amiggos.ui.venuedetailsnew.model.VenueDetails
 import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
+import okhttp3.internal.wait
 import java.lang.StringBuilder
 import java.util.*
+import java.util.stream.Collector
+import java.util.stream.Collectors
+import kotlin.collections.ArrayList
 
 
 class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresenterMainView,
@@ -48,6 +54,7 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
     private var aVenueDetailsPresenterImplementation: AVenueDetailsPresenterImplementation? = null
     private var binding: AVenueDetailsBinding? = null
     private lateinit var adapter: SliderAdapterExample
+    private lateinit var weekAdapter: WeekAdapter
     private lateinit var list: java.util.ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -287,21 +294,30 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         } else {
             binding!!.maskimage.visibility = View.GONE
         }
-
-        val hoursOpen:StringBuilder = StringBuilder()
+        val workingDays= ArrayList<VenueDetails.Data.ClubData.WorkingDay>()
+//        val hoursOpen:StringBuilder = StringBuilder()
         for(item in response.clubData.workingDays){
             if(item.isOpen==1){
-                 hoursOpen.append(item.name)
-                 hoursOpen.append(" : ")
-                 hoursOpen.append(item.timing)
-                 hoursOpen.append(System.getProperty("line.separator"))
+                val workingDay = VenueDetails.Data.ClubData.WorkingDay()
+                workingDay.name = item.name
+                workingDay.timing = item.timing
+                workingDays.add(workingDay)
             }
         }
 
-        binding!!.txtHours.text = hoursOpen
+
+
+//        binding!!.txtHours.text = hoursOpen
         binding!!.hours.text = languageData!!.operationHours
+        setupRecyclerView(workingDays)
 
+    }
 
+    private fun setupRecyclerView(workingDays: List<VenueDetails.Data.ClubData.WorkingDay>) {
+        binding!!.recyclerviewWeek.setHasFixedSize(true)
+        binding!!.recyclerviewWeek.layoutManager = LinearLayoutManager(this)
+        weekAdapter = WeekAdapter(workingDays)
+        binding!!.recyclerviewWeek.adapter = weekAdapter
     }
 
     override fun onVenueDetailsSuccess(responseData: VenueDetails.Data) {

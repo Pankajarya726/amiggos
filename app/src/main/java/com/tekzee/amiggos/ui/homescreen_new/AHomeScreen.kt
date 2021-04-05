@@ -169,10 +169,15 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             }
         }
 
-        Intent(this, UpdateUserLocationToServer::class.java).also { intent ->
-            intent.action = Actions.START.name
-            startService(intent)
+        try{
+            Intent(this, UpdateUserLocationToServer::class.java).also { intent ->
+                intent.action = Actions.START.name
+                startService(intent)
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
         }
+
 
 //        try {
 //            if(intent.getStringExtra(ConstantLib.FROM).equals("FRIENDNOTIFICATION")){

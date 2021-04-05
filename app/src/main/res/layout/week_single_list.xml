@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginLeft="@dimen/_5sdp"
+    android:layout_marginRight="@dimen/_5sdp"
+    android:layout_marginBottom="@dimen/_1sdp"
+    android:orientation="horizontal"
+    android:weightSum="3"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:padding="@dimen/_2sdp"
+        android:drawableLeft="@drawable/clock_booking"
+        android:drawablePadding="@dimen/_5sdp"
+        android:layout_weight="2"
+        android:fontFamily="@font/opensans_bold"
+        android:id="@+id/txt_week_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Testing"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/s_switch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </TextView>
+
+    <TextView
+        android:padding="@dimen/_2sdp"
+        android:layout_weight="1"
+        android:gravity="center|left"
+        android:fontFamily="@font/opensans_regular"
+        android:id="@+id/txt_timinings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="Testing"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/s_switch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </TextView>
+
+
+
+</LinearLayout>

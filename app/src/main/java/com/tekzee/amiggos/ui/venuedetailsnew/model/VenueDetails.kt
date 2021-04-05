@@ -102,10 +102,11 @@ data class VenueDetails(
                 @SerializedName("is_open")
                 val isOpen: Int = 0,
                 @SerializedName("name")
-                val name: String = "",
+                var name: String = "",
                 @SerializedName("timing")
-                val timing: String = ""
+                var timing: String = ""
             ) : Serializable
+
         }
     }
 }

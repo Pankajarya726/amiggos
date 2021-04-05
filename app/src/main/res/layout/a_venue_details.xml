@@ -292,6 +292,12 @@
                             android:textColor="@android:color/black"
                             android:textSize="@dimen/_12sdp" />
 
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:layout_marginTop="@dimen/_3sdp"
+                            android:id="@+id/recyclerview_week"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
                         <TextView
                             android:id="@+id/txt_hours"
                             android:layout_width="match_parent"
