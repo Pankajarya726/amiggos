@@ -10,6 +10,6 @@ data class StorieViewData(
     val name: String = "",
     @SerializedName("profile")
     val profile: String = "",
-    @SerializedName("userid")
+    @SerializedName("user_id")
     val userid: Int = 0
 )

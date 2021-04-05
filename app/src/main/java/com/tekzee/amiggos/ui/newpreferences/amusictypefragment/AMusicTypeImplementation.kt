@@ -44,7 +44,9 @@ class AMusicTypeImplementation(
                             } else {
                                 mainView.onMusicTypeFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

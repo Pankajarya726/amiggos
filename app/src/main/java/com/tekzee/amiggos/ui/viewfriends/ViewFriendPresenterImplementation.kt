@@ -33,7 +33,9 @@ class ViewFriendPresenterImplementation(private var mainView: ViewFriendPresente
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

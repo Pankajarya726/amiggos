@@ -18,7 +18,7 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.realamiggos.adapter.RealAmiggosAdapter
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendV2Response
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
@@ -118,6 +118,10 @@ class RealAmiggos(var friendId: String?, var aProfileDetails: AProfileDetails) :
     override fun validateError(message: String) {
 
         Toast.makeText(activity,message,Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
     }
 
 

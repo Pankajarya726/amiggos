@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,7 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
 import com.tekzee.amiggos.custom.ProfileRestrictionFragment
+import com.tekzee.amiggos.databinding.FirstFragmentBinding
 import com.tekzee.amiggos.hiddensearchrecyclerview.utils.HiddenSearchWithRecyclerView
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.adapter.FirstFragmentAdapter
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
@@ -34,12 +36,13 @@ import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
 import com.tekzee.amiggos.util.RxSearchObservable
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import io.reactivex.functions.Predicate
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.first_fragment.*
 import java.util.concurrent.TimeUnit
 
 
@@ -47,6 +50,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
     InfiniteScrollRecyclerView.RecyclerViewAdapterCallback, FirstFragmentAdapter.HomeItemClick,
     Listener {
 
+    private var binding: FirstFragmentBinding? = null
     private var errorLayout: LinearLayout? = null
     private var searchView: HiddenSearchWithRecyclerView? = null
     private val mLoadingData = NearByV2Response.Data.NearestFreind(loadingStatus = true)
@@ -66,6 +70,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
 
 
         fun newInstance(): FirstFragment{
+
             if(firstFragment == null){
              return FirstFragment()
             }
@@ -88,7 +93,6 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
 
     override fun onResume() {
         super.onResume()
-        Logger.d("Onresume---> nearme")
     }
 
     override fun onCreateView(
@@ -96,12 +100,14 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.first_fragment, container, false)
+//        val view = inflater.inflate(R.layout.first_fragment, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.first_fragment, container, false)
         sharedPreference = SharedPreference(requireActivity())
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         firstFragmentPresenterImplementation =
             FirstFragmentPresenterImplementation(this, requireActivity())
-        return view
+
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -113,7 +119,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
 
         //check permissions
         askPermission(Manifest.permission.ACCESS_FINE_LOCATION) {
-            showProgressbar()
+            showProgressbarNew()
             easyWayLocation!!.startLocation()
         }.onDeclined { e ->
             if (e.hasDenied()) {
@@ -133,6 +139,11 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
             }
         }
         setupClickListener()
+    }
+
+    private fun showProgressbarNew() {
+        binding!!.firstfragmentprogressbar.visibility = View.VISIBLE
+        binding!!.hiddenSearchWithRecycler.visibility = View.GONE
     }
 
     private fun setupClickListener() {
@@ -190,52 +201,71 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
 
     }
 
-    override fun onOnlineFriendSuccess(responseData: List<NearByV2Response.Data.NearestFreind>) {
+    override fun onOnlineFriendSuccess(
+        responseData: List<NearByV2Response.Data.NearestFreind>,
+        totalCount: Int,
+        responseData1: NearByV2Response
+    ) {
+//        NearMeFragment.setNearmeBadge(totalCount)
+        hideProgressbarNew()
         onlineFriendPageNo++
         mydataList.addAll(responseData)
         adapter!!.notifyDataSetChanged()
-        setupErrorVisibility()
+        setupErrorVisibility(responseData1.message)
     }
 
-    override fun onOnlineFriendInfiniteSuccess(responseData: List<NearByV2Response.Data.NearestFreind>) {
+    override fun onOnlineFriendInfiniteSuccess(
+        responseData: List<NearByV2Response.Data.NearestFreind>,
+        responseData1: NearByV2Response
+    ) {
+        hideProgressbarNew()
         onlineFriendPageNo++
         adapter?.setLoadingStatus(true)
         mydataList.removeAt(mydataList.size - 1)
         mydataList.addAll(responseData)
         adapter?.notifyDataSetChanged()
-        setupErrorVisibility()
+        setupErrorVisibility(responseData1.message)
     }
 
-    override fun onOnlineFriendFailure(responseData: String) {
+    override fun onOnlineFriendFailure(message: String) {
+        hideProgressbarNew()
         if (mydataList.size > 0) {
             adapter?.setLoadingStatus(false)
             mydataList.removeAt(mydataList.size - 1)
             adapter?.notifyDataSetChanged()
         }
 
-        setupErrorVisibility()
+        setupErrorVisibility(message)
     }
 
-    fun setupErrorVisibility(){
-        if(mydataList.size == 0){
-            errorLayout!!.visibility = View.GONE
-            searchView!!.visibility = View.VISIBLE
-        }else{
-            searchView!!.visibility = View.VISIBLE
+    fun setupErrorVisibility(message: String) {
+
+        if (mydataList.size == 0) {
+            errorLayout!!.visibility = View.VISIBLE
+            errortext.text = message
+            first_fragment_recyclierview.visibility = View.VISIBLE
+        } else {
+            first_fragment_recyclierview.visibility = View.VISIBLE
+            errortext.text  = ""
             errorLayout!!.visibility = View.GONE
         }
     }
 
 
     override fun validateError(message: String) {
+        hideProgressbarNew()
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireActivity(), languageData!!.session_error)
     }
 
     @SuppressLint("CheckResult")
     private fun setupViews(view: View?) {
         searchView = requireView().findViewById<HiddenSearchWithRecyclerView>(R.id.hidden_search_with_recycler)
         searchView!!.searchBarSearchView.queryHint = languageData!!.klSearchTitle
-        errorLayout = requireView().findViewById(R.id.error)
+        errorLayout = requireView().findViewById(R.id.error_layout)
 
         RxSearchObservable.fromView(searchView!!.searchBarSearchView)
             .debounce(500, TimeUnit.MILLISECONDS)
@@ -323,6 +353,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        showProgressbarNew()
         if(requestCode == 100 && resultCode ==2 ){
             mydataList.clear()
             adapter!!.notifyDataSetChanged()
@@ -354,7 +385,15 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         onlineFriendPageNo = 0
         mydataList.clear()
         adapter!!.notifyDataSetChanged()
+        hideProgressbarNew()
         callOnlineFriendApi(false, "", isFragmentVisible)
 
     }
+
+    private fun hideProgressbarNew() {
+        binding!!.firstfragmentprogressbar.visibility = View.GONE
+        binding!!.hiddenSearchWithRecycler.visibility = View.VISIBLE
+    }
+
+
 }

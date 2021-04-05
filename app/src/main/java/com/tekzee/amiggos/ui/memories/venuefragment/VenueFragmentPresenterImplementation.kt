@@ -4,7 +4,7 @@ import android.content.Context
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.network.ApiClient
-import com.tekzee.amiggos.ui.memories.venuefragment.model.VenueTaggedResponse
+import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -35,13 +35,15 @@ class VenueFragmentPresenterImplementation (private var mainView: VenueFragmentP
                         // mainView.hideProgressbar()
                         when (response.code()) {
                             200 -> {
-                                val responseData: VenueTaggedResponse? = response.body()
+                                val responseData: MemorieResponse? = response.body()
                                 if (responseData!!.status) {
-                                    mainView.onVenueResponse(responseData.data.taggedVenue)
+                                    mainView.onVenueResponse(responseData.data.memoriesList,responseData)
                                 } else {
                                     mainView.onVenueFailure(responseData.message)
                                 }
-                            }
+                            } 404 -> {
+                            mainView.logoutUser()
+                        }
                         }
                     }, { error ->
                         //                    mainView.hideProgressbar()

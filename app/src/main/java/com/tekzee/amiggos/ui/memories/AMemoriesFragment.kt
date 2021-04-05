@@ -11,14 +11,15 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
-import com.tekzee.amiggos.ui.memories.mymemoriesold.MyMemorieFragment
+import com.tekzee.amiggos.ui.memories.mymemoriesold.OurMemorieFragment
 import com.tekzee.amiggos.ui.memories.venuefragment.VenueFragment
 import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.AmemoriesFragmentBinding
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.adapter.ViewPagerTwoAdapter
 import com.tekzee.amiggos.ui.memories.mymemories.MyMemoriesFragment
+import com.tekzee.amiggos.util.Utility
 
 
 class AMemoriesFragment : BaseFragment() {
@@ -46,20 +47,21 @@ class AMemoriesFragment : BaseFragment() {
 
 
 //        val view = inflater.inflate(R.layout.amemories_fragment, container, false)
-        binding = DataBindingUtil.inflate(inflater,R.layout.amemories_fragment,container,false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.amemories_fragment, container, false)
+        sharedPreference = SharedPreference(requireContext())
+        languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
+        setupViews(view)
+        setupLanguage(view)
         return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedPreference = SharedPreference(requireContext())
-        languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        setupViews(view)
-        setupLanguage(view)
+
     }
 
     private fun setupLanguage(view: View?) {
-        binding!!.memoriesHeading.text= languageData!!.pMemories
+        binding!!.memoriesHeading.text = languageData!!.pMemories
     }
 
     private fun setupAdapter(
@@ -69,32 +71,70 @@ class AMemoriesFragment : BaseFragment() {
         val fragmentManager = childFragmentManager
         val adapter = ViewPagerTwoAdapter(this)
         viewPager.isUserInputEnabled = false
-        adapter.addFragment(MyMemoriesFragment(), languageData!!.klMemories)
-        adapter.addFragment(MyMemorieFragment(), languageData!!.pourmemories)
-        adapter.addFragment(VenueFragment(),languageData!!.venues)
+        adapter.addFragment(MyMemoriesFragment.newInstance(), languageData!!.klMemories)
+        adapter.addFragment(OurMemorieFragment.newInstance(), languageData!!.pourmemories)
+        adapter.addFragment(VenueFragment.newInstance(), languageData!!.venues)
         viewPager.adapter = adapter
         viewPager.offscreenPageLimit = 1
+
+
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+            }
+
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                setUpHeading(position)
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
+            }
+        })
+
+
 
         TabLayoutMediator(tabs, viewPager) { tab, position ->
             when (position) {
                 0 -> {
-                    MyMemoriesFragment()
+                    MyMemoriesFragment.newInstance()
                     tab.text = languageData!!.klMemories
                 }
                 1 -> {
-                    MyMemorieFragment()
+                    OurMemorieFragment.newInstance()
                     tab.text = languageData!!.pourmemories
                 }
-                1 -> {
-                    VenueFragment()
+                2 -> {
+                    VenueFragment.newInstance()
                     tab.text = languageData!!.venues
                 }
             }
         }.attach()
+
+
+    }
+
+    private fun setUpHeading(selectedTabPosition: Int) {
+        if(selectedTabPosition ==0){
+            binding!!.memoriesHeading.text = languageData!!.klMemories
+        }else  if(selectedTabPosition ==1){
+            binding!!.memoriesHeading.text = languageData!!.pourmemories
+        }else if(selectedTabPosition ==2){
+            binding!!.memoriesHeading.text = languageData!!.venues
+        }
     }
 
     override fun validateError(message: String) {
-        Toast.makeText(activity,message,Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
     }
 
     private fun setupViews(view: View?) {

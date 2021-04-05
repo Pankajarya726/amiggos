@@ -17,7 +17,7 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.favoritevenues.adapter.AFavoriteVenueAdapter
 import com.tekzee.amiggos.ui.favoritevenues.model.FavoriteVenueResponse
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
@@ -115,6 +115,10 @@ class AFavoriteVenues(var friendId: String?, var aProfileDetails: AProfileDetail
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
+    }
+
 
     private fun setupRecyclerRealFriend() {
 
@@ -162,9 +166,9 @@ class AFavoriteVenues(var friendId: String?, var aProfileDetails: AProfileDetail
 
 
     override fun onLoadMoreData() {
-        mydataList.add(mLoadingData)
-        adapter?.notifyDataSetChanged()
-        callFavoriteVenue(true, "")
+//        mydataList.add(mLoadingData)
+//        adapter?.notifyDataSetChanged()
+//        callFavoriteVenue(true, "")
     }
 
 

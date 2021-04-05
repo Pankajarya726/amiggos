@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.allenliu.badgeview.BadgeFactory
 import com.allenliu.badgeview.BadgeView
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
@@ -34,8 +35,6 @@ import com.tekzee.amiggos.enums.Actions
 import com.tekzee.amiggos.enums.FriendsAction
 import com.tekzee.amiggos.services.UpdateUserLocationToServer
 import com.tekzee.amiggos.ui.bookings_new.BookingFragment
-import com.tekzee.amiggos.ui.cameranew.CameraActivity
-import com.tekzee.amiggos.ui.homescreen_new.homefragment.HomeFragment
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.NearMeFragment
 import com.tekzee.amiggos.ui.memories.AMemoriesFragment
 import com.tekzee.amiggos.ui.message.MessageActivity
@@ -43,7 +42,13 @@ import com.tekzee.amiggos.ui.message.model.Message
 import com.tekzee.amiggos.ui.mylifestyle.AMyLifeStyle
 import com.tekzee.amiggos.ui.notification_new.ANotification
 import com.tekzee.amiggos.ui.settings_new.ASettings
+import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
 import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.closestKodein
+import org.kodein.di.android.x.closestKodein
 
 
 class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
@@ -60,7 +65,40 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
     companion object {
         var bottomNavigation: BottomNavigationView? = null
 
+        fun setupNearByCountBadge(badgeCount: Int) {
+            val badge = bottomNavigation!!.getOrCreateBadge(R.id.navigation_near_me)
+            if (badgeCount > 0) {
+                badge.isVisible = true
+                badge.number = badgeCount
+            }else{
+                badge.isVisible = false
+                badge.number = badgeCount
+            }
+
+        }
+
+
+        fun setupMemoryCountBadge(badgeCount: Int) {
+            if (badgeCount > 0) {
+                val badge = bottomNavigation!!.getOrCreateBadge(R.id.navigation_memories)
+                badge.isVisible = true
+                badge.number = badgeCount
+            }
+
+        }
+
+        fun setupBookingCountBadge(badgeCount: Int) {
+            if (badgeCount > 0) {
+                val badge = bottomNavigation!!.getOrCreateBadge(R.id.navigation_bookings)
+                badge.isVisible = true
+                badge.number = badgeCount
+            }
+
+        }
+
     }
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,8 +110,6 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
         bottomNavigation = binding!!.bottomNavigation
         bottomNavigation!!.setOnNavigationItemSelectedListener(this)
 
-
-
         setupLanguage()
         setupClickListener()
 
@@ -83,23 +119,30 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             if (intent.action == FriendsAction.CLICK.action) {
                 bottomNavigation!!.menu.getItem(1).isChecked = true
                 setHeaders(R.id.navigation_bookings)
-                openFragment(BookingFragment.newInstance(intent,2), "5")
+                openFragment(BookingFragment.newInstance(intent, 1), "5")
             } else if (intent.action == FriendsAction.SHOW_FRIENDS.action) {
                 bottomNavigation!!.menu.getItem(4).isChecked = true
                 setHeaders(R.id.navigation_near_me)
-                openFragment(NearMeFragment.newInstance(intent,1), "2")
+                openFragment(NearMeFragment.newInstance(intent, 1), "2")
             } else if (intent.action == FriendsAction.SHOW_FRIEND_REQUEST.action) {
-                bottomNavigation!!.menu.getItem(4).isChecked = true
+                bottomNavigation!!.menu.getItem(1).isChecked = true
                 setHeaders(R.id.navigation_near_me)
                 openFragment(NearMeFragment.newInstance(intent, 2), "2")
-            }  else if (intent.action == FriendsAction.PARTY_INVITATIONS.action) {
+            } else if (intent.action == FriendsAction.PARTY_INVITATIONS.action) {
                 bottomNavigation!!.menu.getItem(4).isChecked = true
                 setHeaders(R.id.navigation_bookings)
                 openFragment(BookingFragment.newInstance(intent, 1), "5")
-            }else if (intent.action == FriendsAction.SHOW_MY_MEMORY.action) {
+            } else if (intent.action == FriendsAction.SHOW_MY_MEMORY.action) {
                 bottomNavigation!!.menu.getItem(3).isChecked = true
                 setHeaders(R.id.navigation_memories)
                 openFragment(AMemoriesFragment.newInstance(), "4")
+            }  else if (intent.action == FriendsAction.CREATE_MEMORY_INVITATIONS.action) {
+                setHeaders(R.id.navigation_home)
+                openFragment(HomeFragment.newInstance(), "1")
+                val intent = Intent(applicationContext,ANotification::class.java)
+                intent.putExtra(ConstantLib.SUB_TAB,2)
+                startActivity(intent)
+                return@askPermission
             } else {
                 setHeaders(R.id.navigation_home)
                 openFragment(HomeFragment.newInstance(), "1")
@@ -146,6 +189,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
     }
 
     private fun setupBadge() {
+
         badgeViewChat = BadgeFactory.create(this)
             .setTextColor(resources.getColor(R.color.white))
             .setWidthAndHeight(20, 20)
@@ -175,7 +219,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
         bottomNavigation!!.menu.getItem(0).title = languageData!!.pHome
         bottomNavigation!!.menu.getItem(1).title = languageData!!.pNearme
         bottomNavigation!!.menu.getItem(2).title = languageData!!.pMylifestyle
-        bottomNavigation!!.menu.getItem(3).title = languageData!!.pMemories
+        bottomNavigation!!.menu.getItem(3).title = languageData!!.memory
         bottomNavigation!!.menu.getItem(4).title = languageData!!.pBooking
 
     }
@@ -183,23 +227,39 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
 
     private fun setupClickListener() {
         binding!!.menuDrawer.setOnClickListener {
-            val intent = Intent(this@AHomeScreen, ASettings::class.java)
-            startActivity(intent)
-            Animatoo.animateSlideRight(this)
+            if (sharedPreference!!.getValueInt(ConstantLib.ISPROFILECOMPLETE) == 1) {
+                val intent = Intent(this@AHomeScreen, ASettings::class.java)
+                startActivity(intent)
+                Animatoo.animateSlideRight(this)
+            } else {
+                val intent = Intent(this, AViewAndEditProfile::class.java)
+                intent.putExtra(ConstantLib.FROM, "EDIT")
+                intent.putExtra(
+                    ConstantLib.NAME,
+                    sharedPreference!!.getValueString(ConstantLib.NAME)
+                )
+                startActivity(intent)
+                Animatoo.animateSlideRight(this)
+            }
+
+
         }
 
         binding!!.addMemorie.setOnClickListener {
-            val intent = Intent(applicationContext, CameraActivity::class.java)
-            intent.putExtra(ConstantLib.FROM_ACTIVITY, "HOMEACTIVITY")
-            intent.putExtra(
-                ConstantLib.PROFILE_IMAGE,
-                sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE)
-            )
-            startActivity(intent)
+//            val intent = Intent(applicationContext, CameraActivity::class.java)
+//            intent.putExtra(ConstantLib.FROM_ACTIVITY, ConstantLib.HOMEACTIVITY)
+//            intent.putExtra(ConstantLib.OURSTORYID, "")
+//            intent.putExtra(
+//                ConstantLib.PROFILE_IMAGE,
+//                sharedPreference!!.getValueString(ConstantLib.PROFILE_IMAGE)
+//            )
+//            startActivity(intent)
         }
 
         binding!!.notification.setOnClickListener {
+            binding!!.badge.setNumber(0)
             val intent = Intent(this, ANotification::class.java)
+            intent.putExtra(ConstantLib.SUB_TAB,0)
             startActivity(intent)
         }
 
@@ -226,6 +286,10 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
 
     override fun validateError(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
@@ -266,7 +330,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             binding!!.headerLogo.visibility = View.VISIBLE
             binding!!.notification.visibility = View.GONE
             binding!!.badge.visibility = View.GONE
-            binding!!.addMemorie.visibility = View.VISIBLE
+            binding!!.addMemorie.visibility = View.GONE
             binding!!.chaticon.visibility = View.GONE
             badgeViewChat!!.unbind()
             binding!!.checkincode.visibility = View.GONE
@@ -283,7 +347,6 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             binding!!.badge.visibility = View.VISIBLE
             binding!!.badge.setNumber(Integer.parseInt(ConstantLib.NOTIFICATIONCOUNT))
             binding!!.headerLogo.visibility = View.VISIBLE
-            binding!!.badge.visibility = View.GONE
             binding!!.notification.visibility = View.VISIBLE
             binding!!.checkincode.visibility = View.GONE
             binding!!.addMemorie.visibility = View.GONE
@@ -299,7 +362,8 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             badgeViewChat!!.bind(binding!!.chaticon)
         } else if (navigationMemories == R.id.navigation_my_lifestyle) {
             binding!!.headerLogo.visibility = View.VISIBLE
-            binding!!.badge.visibility = View.GONE
+            binding!!.badge.visibility = View.VISIBLE
+            binding!!.badge.setNumber(Integer.parseInt(ConstantLib.NOTIFICATIONCOUNT))
             binding!!.notification.visibility = View.VISIBLE
             binding!!.checkincode.visibility = View.GONE
             binding!!.addMemorie.visibility = View.GONE
@@ -311,7 +375,18 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
 
     override fun onBackPressed() {
         if (bottomNavigation!!.menu.getItem(0).isChecked) {
-            onBackPressed()
+
+            val pDialog = SweetAlertDialog(this)
+            pDialog.titleText = languageData!!.exitwarning
+            pDialog.setCancelable(false)
+            pDialog.setCancelButton(languageData!!.klCancel) {
+                pDialog.dismiss()
+            }
+            pDialog.setConfirmButton(languageData!!.klOk) {
+                pDialog.dismiss()
+                System.exit(0)
+            }
+            pDialog.show()
         } else {
             bottomNavigation!!.menu.getItem(0).isChecked = true
             openFragment(HomeFragment.newInstance(), "1")
@@ -322,7 +397,6 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
 
     override fun onResume() {
         super.onResume()
-
     }
 
     override fun onNotify() {
@@ -360,4 +434,9 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
 
         return unreadMessageList
     }
+
+    fun callAppforegroundApi(){
+
+    }
+
 }

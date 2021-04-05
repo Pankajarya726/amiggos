@@ -57,7 +57,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/img_mail"
                     app:layout_constraintStart_toEndOf="@+id/img_close"
                     app:layout_constraintTop_toTopOf="@+id/img_close"
-                    app:srcCompat="@drawable/header_logo" />
+                    app:srcCompat="@drawable/logo_header" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -91,6 +91,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_user" />
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -356,8 +358,6 @@
                     android:layout_marginRight="@dimen/_10sdp"
                     android:fontFamily="@font/opensans_regular"
                     android:gravity="center|left"
-
-
                     android:text="My Id"
                     android:textAllCaps="false"
                     android:textSize="@dimen/_12sdp"

@@ -1,5 +1,9 @@
 package com.tekzee.amiggos.network
 
+//import com.tekzee.amiggos.ui.mymemories.fragment.memories.model.MyMemoriesResponse
+//import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
+//import com.tekzee.amiggos.ui.myprofile.model.MyProfileResponse
+//import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.orhanobut.logger.AndroidLogAdapter
@@ -16,6 +20,7 @@ import com.tekzee.amiggos.ui.blockedusers.model.BlockedUserResponse
 import com.tekzee.amiggos.ui.blockedusers.model.UnBlockFriendResponse
 import com.tekzee.amiggos.ui.bookingdetailnew.model.BookingDetailsNewResponse
 import com.tekzee.amiggos.ui.bookingqrcode.model.BookinQrCodeResponse
+import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
 import com.tekzee.amiggos.ui.bookings_new.bookings.model.ABookingResponse
 import com.tekzee.amiggos.ui.calendarview.model.TimeSlotResponse
 import com.tekzee.amiggos.ui.chooselanguage.model.LanguageResponse
@@ -24,45 +29,36 @@ import com.tekzee.amiggos.ui.choosepackage.model.PackageResponse
 import com.tekzee.amiggos.ui.chooseweek.model.ChooseWeekResponse
 import com.tekzee.amiggos.ui.favoritevenues.model.FavoriteVenueResponse
 import com.tekzee.amiggos.ui.friendlist.model.FriendListResponse
-import com.tekzee.amiggos.ui.friendprofile.model.FriendProfileResponse
 import com.tekzee.amiggos.ui.guestlist.model.GuestListResponse
 import com.tekzee.amiggos.ui.helpcenter.model.HelpCenterResponse
 import com.tekzee.amiggos.ui.home.model.DashboardReponse
 import com.tekzee.amiggos.ui.home.model.NearbyMeCountResponse
 import com.tekzee.amiggos.ui.home.model.UpdateFriendCountResponse
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse
+import com.tekzee.amiggos.ui.homescreen_new.model.BadgeCountResponse
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment.model.NearByV2Response
 import com.tekzee.amiggos.ui.imagepanaroma.model.VenueDetailResponse
+import com.tekzee.amiggos.ui.invitefriendnew.model.GetUserForInviteResponse
 import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.mainsplash.model.ValidateAppVersionResponse
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
-import com.tekzee.amiggos.ui.memories.venuefragment.model.VenueTaggedResponse
 import com.tekzee.amiggos.ui.mybooking.model.MyBookingResponse
 import com.tekzee.amiggos.ui.mylifestyle.model.MyLifestyleResponse
 import com.tekzee.amiggos.ui.mylifestylesubcategory.model.MyLifestyleSubcategoryResponse
-import com.tekzee.amiggos.ui.mymemories.fragment.memories.model.MyMemoriesResponse
-import com.tekzee.amiggos.ui.mymemories.fragment.ourmemories.model.OurMemoriesResponse
 import com.tekzee.amiggos.ui.mypreferences.model.MyPreferenceResponse
 import com.tekzee.amiggos.ui.mypreferences.model.PreferenceSavedResponse
-import com.tekzee.amiggos.ui.myprofile.model.MyProfileResponse
 import com.tekzee.amiggos.ui.newpreferences.amusictypefragment.model.AMusicTypeResponse
 import com.tekzee.amiggos.ui.newpreferences.avenuetypefragment.model.AVenueTypeResponse
-import com.tekzee.amiggos.ui.notification.model.NotificationResponse
-import com.tekzee.amiggos.ui.notification.model.StorieResponse
 import com.tekzee.amiggos.ui.notification_new.model.ANotificationResponse
-import com.tekzee.amiggos.ui.onlinefriends.model.OnlineFriendResponse
-import com.tekzee.amiggos.ui.ourmemories.fragment.ourmemroiesupload.model.OurFriendListResponse
-import com.tekzee.amiggos.ui.ourmemories.model.InviteFriendResponse
-import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.model.BookingInvitationResponse
+import com.tekzee.amiggos.ui.notification_new.model.PartyInvitesNotificationResponse
+import com.tekzee.amiggos.ui.ourmemories.model.GetFriendForInviteAfterCreateMemoryResponse
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
 import com.tekzee.amiggos.ui.profiledetails.model.GetFriendProfileDetailsResponse
+import com.tekzee.amiggos.ui.profiledetails.model.StorieResponse
 import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponse
 import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponseV2
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendResponse
 import com.tekzee.amiggos.ui.realfriends.realfriendfragment.model.RealFriendV2Response
-import com.tekzee.amiggos.ui.referalcode.model.ReferalCodeResponse
-import com.tekzee.amiggos.ui.referalcode.model.VenueResponse
-import com.tekzee.amiggos.ui.searchamiggos.model.SearchFriendResponse
 import com.tekzee.amiggos.ui.settings.model.SettingsResponse
 import com.tekzee.amiggos.ui.settings.model.UpdateSettingsResponse
 import com.tekzee.amiggos.ui.signup.login_new.model.ALoginResponse
@@ -75,11 +71,13 @@ import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.BookingPaymentR
 import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.SetDefaultCardResponse
 import com.tekzee.amiggos.ui.turningup.model.TurningUpResponse
 import com.tekzee.amiggos.ui.venuedetailsnew.model.VenueDetails
+import com.tekzee.amiggos.ui.viewandeditprofile.model.AddImageResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewResponse
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
+import okhttp3.ConnectionPool
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -100,6 +98,9 @@ class ApiClient {
     init {
         val gson = GsonBuilder().setLenient().create()
         val clientBuilder = OkHttpClient.Builder()
+
+        val pool = ConnectionPool(5, 10000, TimeUnit.MILLISECONDS)
+
         if (BuildConfig.DEBUG) {
             val loggingInterceptor = HttpLoggingInterceptor()
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
@@ -109,6 +110,7 @@ class ApiClient {
 
         val okHttpClient: OkHttpClient = clientBuilder
             .readTimeout(2, TimeUnit.MINUTES)
+            .connectionPool(pool)
             .connectTimeout(2, TimeUnit.MINUTES)
             .writeTimeout(2, TimeUnit.MINUTES)
             .build();
@@ -118,7 +120,7 @@ class ApiClient {
             .client(okHttpClient)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .build();
+            .build()
 
         apiService = retrofit.create(ApiService::class.java)
 
@@ -153,9 +155,10 @@ class ApiClient {
 
 
     fun doLanguageConstantApi(
-        headers: HashMap<String, String?>
+        headers: HashMap<String, String?>,
+        json: JsonObject
     ): Observable<Response<JsonObject>> {
-        return apiService.doLanguageConstantApi(headers)
+        return apiService.doLanguageConstantApi(headers, json)
     }
 
     fun doCallLanguageApi(
@@ -252,13 +255,24 @@ class ApiClient {
             createHeaders
         )
     }
+    fun doUploadeProfileApi(
+        fileMultipartBody: MultipartBody.Part?,
+        useridRequestBody: RequestBody,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.douploadprofileimage(
+            fileMultipartBody,
+            useridRequestBody,
+            createHeaders
+        )
+    }
 
 
     fun doUpdateImage(
         fileMultipartBody: Array<MultipartBody.Part?>,
         useridRequestBody: RequestBody,
         createHeaders: HashMap<String, String?>
-    ): Observable<Response<CommonResponse>> {
+    ): Observable<Response<AddImageResponse>> {
         return apiService.doUpdateImage(
             fileMultipartBody,
             useridRequestBody,
@@ -321,7 +335,7 @@ class ApiClient {
     fun doUpdateFirebaseApi(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
-    ): Observable<Response<LoginResponse>> {
+    ): Observable<Response<CommonResponse>> {
         return apiService.doUpdateFirebaseApi(input, createHeaders)
     }
 
@@ -352,10 +366,16 @@ class ApiClient {
     ): Observable<Response<GetUserProfileResponse>> {
         return apiService.callGetProfile(input, createHeaders)
     }
-    fun deletePhotoApi(
+    fun callLogoutUser(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>> {
+        return apiService.callLogoutUser(input, createHeaders)
+    }
+    fun deletePhotoApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<AddImageResponse>> {
         return apiService.deletePhotoApi(input, createHeaders)
     }
 
@@ -387,19 +407,19 @@ class ApiClient {
         return apiService.callVenueDetailsApi(input, createHeaders)
     }
 
-    fun doCallReferalApi(
-        input: JsonObject,
-        createHeaders: HashMap<String, String?>
-    ): Observable<Response<ReferalCodeResponse>> {
-        return apiService.doCallReferalApi(input, createHeaders)
-    }
+//    fun doCallReferalApi(
+//        input: JsonObject,
+//        createHeaders: HashMap<String, String?>
+//    ): Observable<Response<ReferalCodeResponse>> {
+//        return apiService.doCallReferalApi(input, createHeaders)
+//    }
 
-    fun doCallCheckVenueApi(
-        input: JsonObject,
-        createHeaders: HashMap<String, String?>
-    ): Observable<Response<VenueResponse>> {
-        return apiService.doCallCheckVenueApi(input, createHeaders)
-    }
+//    fun doCallCheckVenueApi(
+//        input: JsonObject,
+//        createHeaders: HashMap<String, String?>
+//    ): Observable<Response<VenueResponse>> {
+//        return apiService.doCallCheckVenueApi(input, createHeaders)
+//    }
 
     fun doCallAgeGroupApi(
         input: JsonObject,
@@ -408,26 +428,40 @@ class ApiClient {
         return apiService.doCallAgeGroupApi(input, createHeaders)
     }
 
-
-    fun doCallOnlineFriendApi(
-        input: JsonObject,
-        createHeaders: HashMap<String, String?>
-    ): Observable<Response<OnlineFriendResponse>> {
-        return apiService.doCallOnlineFriendApi(input, createHeaders)
-    }
+//
+//    fun doCallOnlineFriendApi(
+//        input: JsonObject,
+//        createHeaders: HashMap<String, String?>
+//    ): Observable<Response<OnlineFriendResponse>> {
+//        return apiService.doCallOnlineFriendApi(input, createHeaders)
+//    }
     fun doCallNotification(
-        input: JsonObject,
-        createHeaders: HashMap<String, String?>
-    ): Observable<Response<ANotificationResponse>> {
+    input: JsonObject,
+    createHeaders: HashMap<String, String?>
+): Observable<Response<ANotificationResponse>> {
         return apiService.doCallNotification(input, createHeaders)
     }
 
-    fun getNearByUser(
+    fun doCallPartyInvitesNotification(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
-    ): Observable<Response<SearchFriendResponse>> {
-        return apiService.getNearByUser(input, createHeaders)
+    ): Observable<Response<PartyInvitesNotificationResponse>> {
+        return apiService.doCallPartyInvitesNotification(input, createHeaders)
     }
+
+    fun doCallNotificationnew(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<String>> {
+        return apiService.doCallNotificationnew(input, createHeaders)
+    }
+
+//    fun getNearByUser(
+//        input: JsonObject,
+//        createHeaders: HashMap<String, String?>
+//    ): Observable<Response<SearchFriendResponse>> {
+//        return apiService.getNearByUser(input, createHeaders)
+//    }
 
     fun getNearByUserv2(
         input: JsonObject,
@@ -480,6 +514,12 @@ class ApiClient {
     ): Observable<Response<HomeResponse>> {
         return apiService.docallHomeApi(input, createHeaders)
     }
+    fun doCallBadgeApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<BadgeCountResponse>> {
+        return apiService.doCallBadgeApi(input, createHeaders)
+    }
 
     fun docallMyLifestyleApi(
         input: JsonObject,
@@ -503,23 +543,23 @@ class ApiClient {
     }
 
 
-    fun doCallOurMemoriesApi(
-        input: JsonObject,
-        createHeaders: HashMap<String, String?>
-    ): Observable<Response<OurMemoriesResponse>> {
-        return apiService.doCallOurMemoriesApi(input, createHeaders)
-    }
+//    fun doCallOurMemoriesApi(
+//        input: JsonObject,
+//        createHeaders: HashMap<String, String?>
+//    ): Observable<Response<OurMemoriesResponse>> {
+//        return apiService.doCallOurMemoriesApi(input, createHeaders)
+//    }
 
-    fun doCallOurMemoriesUploadApi(
-        input: JsonObject,
-        createHeaders: HashMap<String, String?>
-    ): Observable<Response<OurFriendListResponse>> {
-        return apiService.doCallOurMemoriesUploadApi(input, createHeaders)
-    }
+//    fun doCallOurMemoriesUploadApi(
+//        input: JsonObject,
+//        createHeaders: HashMap<String, String?>
+//    ): Observable<Response<OurFriendListResponse>> {
+//        return apiService.doCallOurMemoriesUploadApi(input, createHeaders)
+//    }
     fun doCallVenueTypeApi(
-        input: JsonObject,
-        createHeaders: HashMap<String, String?>
-    ): Observable<Response<AVenueTypeResponse>> {
+    input: JsonObject,
+    createHeaders: HashMap<String, String?>
+): Observable<Response<AVenueTypeResponse>> {
         return apiService.doCallVenueTypeApi(input, createHeaders)
     }
 
@@ -530,19 +570,19 @@ class ApiClient {
         return apiService.doCallMusicTypeApi(input, createHeaders)
     }
 
-    fun doCallNearBy(
-        input: JsonObject,
-        createHeaders: HashMap<String, String?>
-    ): Observable<Response<OurFriendListResponse>> {
-        return apiService.doCallNearBy(input, createHeaders)
-    }
+//    fun doCallNearBy(
+//        input: JsonObject,
+//        createHeaders: HashMap<String, String?>
+//    ): Observable<Response<OurFriendListResponse>> {
+//        return apiService.doCallNearBy(input, createHeaders)
+//    }
 
-    fun docallMemoriesApi(
-        input: JsonObject,
-        createHeaders: HashMap<String, String?>
-    ): Observable<Response<MyMemoriesResponse>> {
-        return apiService.docallMemoriesApi(input, createHeaders)
-    }
+//    fun docallMemoriesApi(
+//        input: JsonObject,
+//        createHeaders: HashMap<String, String?>
+//    ): Observable<Response<MyMemoriesResponse>> {
+//        return apiService.docallMemoriesApi(input, createHeaders)
+//    }
 //
 //    fun doGetMyStories(
 //        input: JsonObject,
@@ -562,7 +602,7 @@ class ApiClient {
     fun callTaggedVenueApi(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
-    ): Observable<Response<VenueTaggedResponse>> {
+    ): Observable<Response<MemorieResponse>> {
         return apiService.callTaggedVenueApi(input, createHeaders)
     }
 
@@ -680,6 +720,13 @@ class ApiClient {
         return apiService.dogetBookingDetails(input, createHeaders)
     }
 
+    fun doUpdateAppTimeApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.user_apptime(input, createHeaders)
+    }
+
     fun doInviteFriend(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
@@ -690,8 +737,15 @@ class ApiClient {
     fun doCallGetFriends(
         input: JsonObject,
         createHeaders: HashMap<String, String?>
-    ): Observable<Response<InviteFriendResponse>> {
+    ): Observable<Response<GetUserForInviteResponse>> {
         return apiService.doCallGetFriends(input, createHeaders)
+    }
+
+    fun doCallGetFriendsAfterCreateMemory(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<GetFriendForInviteAfterCreateMemoryResponse>> {
+        return apiService.doCallGetFriendsAfterCreateMemory(input, createHeaders)
     }
 
     fun doCallGetSettings(
@@ -770,12 +824,12 @@ class ApiClient {
     }
 
 
-    fun doCallClearNotification(
-        input: JsonObject,
-        createHeaders: HashMap<String, String?>
-    ): Observable<Response<CommonResponse>> {
-        return apiService.doCallClearNotification(input, createHeaders)
-    }
+//    fun doCallClearNotification(
+//        input: JsonObject,
+//        createHeaders: HashMap<String, String?>
+//    ): Observable<Response<CommonResponse>> {
+//        return apiService.doCallClearNotification(input, createHeaders)
+//    }
 
 
     fun doMyBookingApi(
@@ -786,20 +840,20 @@ class ApiClient {
     }
 
 
-    fun doMyProfile(
-        input: JsonObject,
-        createHeaders: HashMap<String, String?>
-    ): Observable<Response<MyProfileResponse>> {
-        return apiService.doMyProfile(input, createHeaders)
-    }
+//    fun doMyProfile(
+//        input: JsonObject,
+//        createHeaders: HashMap<String, String?>
+//    ): Observable<Response<MyProfileResponse>> {
+//        return apiService.doMyProfile(input, createHeaders)
+//    }
 
-    fun doGetMyStoryByUserId(
-        input: JsonObject,
-        createHeaders: HashMap<String, String?>
-    ): Observable<Response<OurMemoriesResponse>> {
-        return apiService.doGetMyStoryByUserId(input, createHeaders)
-    }
-
+//    fun doGetMyStoryByUserId(
+//        input: JsonObject,
+//        createHeaders: HashMap<String, String?>
+//    ): Observable<Response<OurMemoriesResponse>> {
+//        return apiService.doGetMyStoryByUserId(input, createHeaders)
+//    }
+//
 
     fun callBlock(
         input: JsonObject,
@@ -824,6 +878,13 @@ class ApiClient {
         return apiService.doRejectBookingInvitationApi(input, createHeaders)
     }
 
+    fun doRejectCreateMemoryInvitationApi(
+        input: JsonObject,
+        createHeaders: HashMap<String, String?>
+    ): Observable<Response<CommonResponse>> {
+        return apiService.doRejectCreateMemoryInvitationApi(input, createHeaders)
+    }
+
 
     fun doCallGuestListApi(
         input: JsonObject,
@@ -840,12 +901,12 @@ class ApiClient {
         return apiService.getTimeSlot(input, createHeaders)
     }
 
-    fun doCallGetFriendProfileApi(
-        input: JsonObject,
-        createHeaders: HashMap<String, String?>
-    ): Observable<Response<FriendProfileResponse>> {
-        return apiService.doCallGetFriendProfileApi(input, createHeaders)
-    }
+//    fun doCallGetFriendProfileApi(
+//        input: JsonObject,
+//        createHeaders: HashMap<String, String?>
+//    ): Observable<Response<FriendProfileResponse>> {
+//        return apiService.doCallGetFriendProfileApi(input, createHeaders)
+//    }
 
     fun doCallGetFriendProfileApiV2(
         input: JsonObject,
@@ -854,12 +915,12 @@ class ApiClient {
         return apiService.doCallGetFriendProfileApiV2(input, createHeaders)
     }
 
-    fun doCallGetNotification(
-        input: JsonObject,
-        createHeaders: HashMap<String, String?>
-    ): Observable<Response<NotificationResponse>> {
-        return apiService.doCallGetNotification(input, createHeaders)
-    }
+//    fun doCallGetNotification(
+//        input: JsonObject,
+//        createHeaders: HashMap<String, String?>
+//    ): Observable<Response<NotificationResponse>> {
+//        return apiService.doCallGetNotification(input, createHeaders)
+//    }
 
 
     fun doCallStorieViewApi(
@@ -973,20 +1034,20 @@ class ApiClient {
         apiParamMap: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<ClientSecretResponse>> {
-        return apiService.getPaymentIntentClientSecret(apiParamMap,createHeaders)
+        return apiService.getPaymentIntentClientSecret(apiParamMap, createHeaders)
     }
     fun chargeUserApi(
         apiParamMap: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<APaymentSuccessResponse>> {
-        return apiService.chargeUserApi(apiParamMap,createHeaders)
+        return apiService.chargeUserApi(apiParamMap, createHeaders)
     }
 
     fun callPaymentByCardId(
         apiParamMap: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<APaymentSuccessResponse>> {
-        return apiService.callPaymentByCardId(apiParamMap,createHeaders)
+        return apiService.callPaymentByCardId(apiParamMap, createHeaders)
     }
 
 
@@ -994,7 +1055,7 @@ class ApiClient {
         apiParamMap: JsonObject,
         createHeaders: HashMap<String, String?>
     ): Observable<Response<CommonResponse>> {
-        return apiService.updatePaymentStatus(apiParamMap,createHeaders)
+        return apiService.updatePaymentStatus(apiParamMap, createHeaders)
     }
 
 

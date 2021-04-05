@@ -9,10 +9,6 @@ import android.util.SparseIntArray
 import androidx.appcompat.app.AppCompatActivity
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.bumptech.glide.Glide
-import com.tekzee.amiggos.ui.storieviewnew.customview.StoryPagerAdapter
-import com.tekzee.amiggos.ui.storieviewnew.data.Story
-import com.tekzee.amiggosvenueapp.ui.storieviewnew.data.StoryUser
-import com.tekzee.amiggos.ui.storieviewnew.utils.CubeOutTransformer
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DataSpec
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
@@ -22,17 +18,24 @@ import com.tekzee.amiggos.ApplicationController
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
+import com.tekzee.amiggos.ui.storieviewnew.customview.StoryPagerAdapter
+import com.tekzee.amiggos.ui.storieviewnew.data.Story
+import com.tekzee.amiggos.ui.storieviewnew.data.StoryUser
 import com.tekzee.amiggos.ui.storieviewnew.screen.PageChangeListener
 import com.tekzee.amiggos.ui.storieviewnew.screen.PageViewOperator
 import com.tekzee.amiggos.ui.storieviewnew.screen.StoryDisplayFragment
+import com.tekzee.amiggos.ui.storieviewnew.utils.CubeOutTransformer
+import com.tekzee.amiggos.util.SharedPreference
 import kotlinx.android.synthetic.main.storie_view_new_activity.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 
-class StorieViewNew: AppCompatActivity(),
+class StorieViewNew : AppCompatActivity(),
     PageViewOperator {
 
-    private lateinit var memorieData: MemorieResponse.Data.Memories
+    private var positionForCurrentMemory: Int = 0
+    private lateinit var memoryList: java.util.ArrayList<MemorieResponse.Data.Memories>
+    private lateinit var sharedPreference: SharedPreference
     private lateinit var pagerAdapter: StoryPagerAdapter
     private var currentPage: Int = 0
 
@@ -40,33 +43,52 @@ class StorieViewNew: AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.storie_view_new_activity)
-        memorieData =
-            intent.getSerializableExtra(ConstantLib.MEMORIE_DATA) as MemorieResponse.Data.Memories
+        sharedPreference = SharedPreference(this)
+        memoryList =
+            intent.getSerializableExtra(ConstantLib.COMPLETE_MEMORY) as ArrayList<MemorieResponse.Data.Memories>
+        positionForCurrentMemory = intent.getIntExtra(ConstantLib.POSITION, 0)
+
         setupStorieData()
         setUpPager()
+        if (intent.getStringExtra(ConstantLib.FROM)!!.equals("OURMEMORIES")) {
+            sharedPreference.save(ConstantLib.FROM, ConstantLib.APPROVAL)
+        } else if (intent.getStringExtra(ConstantLib.FROM)!!.equals(ConstantLib.JOIN)) {
+            sharedPreference.save(ConstantLib.FROM, ConstantLib.JOIN)
+        }else {
+            sharedPreference.save(ConstantLib.FROM, "")
+        }
     }
-
-
-
-
 
     private fun setupStorieData(): ArrayList<StoryUser> {
         val storieUser = ArrayList<StoryUser>()
-        val stories = ArrayList<Story>()
-        var banners = ArrayList<MemorieResponse.Data.Memories.Memory.Tagged>()
-        for (i in memorieData.memory.indices) {
-            if(memorieData.memory[i].storyFile!=null){
-                banners = memorieData.memory[i].tagged as ArrayList<MemorieResponse.Data.Memories.Memory.Tagged>
-                stories.add(Story(memorieData.memory[i].id.toString(),memorieData.memory[i].storyFile,1600148193438,banners,memorieData.venueId))
+        for (position in memoryList.indices) {
+            val stories = ArrayList<Story>()
+            var banners: java.util.ArrayList<MemorieResponse.Data.Memories.Memory.Tagged>
+            for (i in memoryList[position].memory.indices) {
+                if (memoryList[position].memory[i].storyFile != null) {
+                    banners =
+                        memoryList[position].memory[i].tagged as ArrayList<MemorieResponse.Data.Memories.Memory.Tagged>
+                    stories.add(
+                        Story(
+                            memoryList[position].memory[i],
+                            memoryList[position].memory[i].storyFile,
+                            banners,
+                            memoryList[position].our_story_id,
+                            intent.getStringExtra(ConstantLib.FROM)
+                        )
+                    )
+                }
             }
-
+            storieUser.add(
+                StoryUser(
+                    memoryList[position].name,
+                    memoryList[position].profile,
+                    stories
+                )
+            )
         }
-        storieUser.add(StoryUser(memorieData.name,memorieData.profile,stories))
         return storieUser
     }
-
-
-
 
 
     override fun backPageView() {
@@ -87,7 +109,7 @@ class StorieViewNew: AppCompatActivity(),
                 //NO OP
             }
         } else {
-           finish()
+            finish()
         }
     }
 

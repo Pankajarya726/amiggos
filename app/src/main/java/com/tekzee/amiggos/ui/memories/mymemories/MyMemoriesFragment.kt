@@ -2,6 +2,7 @@ package com.tekzee.amiggos.ui.memories.mymemories
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +16,6 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.MyMemoriesFragmentNewBinding
 import com.tekzee.amiggos.ui.cameranew.CameraActivity
-
 import com.tekzee.amiggos.ui.memories.mymemories.pagingfeaturedbrand.NewFeaturedBrandAdapter
 import com.tekzee.amiggos.ui.memories.mymemories.pagingfeaturedbrand.NewMemorieAdapter
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
@@ -29,13 +29,26 @@ import org.kodein.di.generic.instance
 class MyMemoriesFragment : Fragment(), KodeinAware, MemorieClickListener,
     FeaturedBrandClickListener {
 
+    private var featuredbrandAdapter: NewFeaturedBrandAdapter? =null
+    private lateinit var memoryList:ArrayList<MemorieResponse.Data.Memories>
+    private var memorieAdapter: NewMemorieAdapter?=null
     override val kodein: Kodein by closestKodein()
     val factory: MyMemorieViewModelFactory by instance<MyMemorieViewModelFactory>()
 
     val prefs: SharedPreference by instance<SharedPreference>()
+
     companion object {
-        fun newInstance() =
-            MyMemoriesFragment()
+        private val myMemoriesFragment: MyMemoriesFragment? = null
+
+
+        fun newInstance(): MyMemoriesFragment {
+
+            if(myMemoriesFragment == null){
+                return MyMemoriesFragment()
+            }
+            return myMemoriesFragment
+
+        }
     }
 
     private var binding: MyMemoriesFragmentNewBinding? = null
@@ -53,9 +66,6 @@ class MyMemoriesFragment : Fragment(), KodeinAware, MemorieClickListener,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this, factory).get(MyMemoriesViewModel::class.java)
-
-        setupMemorieAdapter()
-        setupFeaturedBrandNew()
         setupClickListener()
 
 
@@ -64,6 +74,8 @@ class MyMemoriesFragment : Fragment(), KodeinAware, MemorieClickListener,
     private fun setupClickListener() {
         binding!!.userImage.setOnClickListener{
             val intent = Intent(requireContext(), CameraActivity::class.java)
+            intent.putExtra(ConstantLib.FROM_ACTIVITY, ConstantLib.MYMEMORY)
+            intent.putExtra(ConstantLib.OURSTORYID, "")
             intent.putExtra(ConstantLib.USERNAME,prefs.getValueString(ConstantLib.NAME))
             startActivity(intent)
         }
@@ -75,11 +87,11 @@ class MyMemoriesFragment : Fragment(), KodeinAware, MemorieClickListener,
     }
 
     private fun observeMemorieLiveData() {
-        val memorieAdapter = NewMemorieAdapter(this)
+
 
         //observe live data emitted by view model
         viewModel.getMemorieProducts().observe(viewLifecycleOwner, Observer {
-            memorieAdapter.submitList(it)
+            memorieAdapter!!.submitList(it)
             onLoadedMemorie()
         })
 
@@ -98,10 +110,10 @@ class MyMemoriesFragment : Fragment(), KodeinAware, MemorieClickListener,
     }
 
     private fun observeLiveData() {
-        val featuredbrandAdapter = NewFeaturedBrandAdapter(this)
+        featuredbrandAdapter = NewFeaturedBrandAdapter(this)
         //observe live data emitted by view model
         viewModel.getFeaturedBrandProducts().observe(viewLifecycleOwner, Observer {
-            featuredbrandAdapter.submitList(it)
+            featuredbrandAdapter!!.submitList(it)
             onLoaded()
         })
 
@@ -114,12 +126,27 @@ class MyMemoriesFragment : Fragment(), KodeinAware, MemorieClickListener,
     }
 
 
-    override fun onItemClicked(itemData: MemorieResponse.Data.Memories) {
+    override fun onItemClicked(itemData: MemorieResponse.Data.Memories, adapterPosition: Int) {
+
         if(itemData.memory.isNotEmpty()){
+            val showMemoryList: ArrayList<MemorieResponse.Data.Memories> = ArrayList()
+            for(position in memorieAdapter!!.currentList!!.toList().indices){
+                if(position>=adapterPosition){
+                    if(memorieAdapter!!.currentList!![position]!!.memory.size>0){
+                        showMemoryList.add(memorieAdapter!!.currentList!!.toList()[position])
+                    }
+
+                }
+            }
+
             val intent = Intent(requireContext(), StorieViewNew::class.java)
             intent.putExtra(ConstantLib.MEMORIE_DATA,itemData)
+            intent.putExtra(ConstantLib.COMPLETE_MEMORY,showMemoryList)
             intent.putExtra(ConstantLib.FROM,ConstantLib.MEMORIES)
-            prefs.save(ConstantLib.FROM,ConstantLib.MEMORIES)
+            prefs.save(ConstantLib.TYPEFROM,ConstantLib.MEMORIES)
+            intent.putExtra(ConstantLib.BACKFROM,"")
+            intent.putExtra(ConstantLib.DELETED_POSITION, 0)
+            intent.putExtra(ConstantLib.POSITION, adapterPosition)
             startActivity(intent)
         }
 
@@ -145,16 +172,35 @@ class MyMemoriesFragment : Fragment(), KodeinAware, MemorieClickListener,
         binding!!.reyclerviewMemorie.visibility = View.VISIBLE
     }
 
-    override fun onItemClickedBrand(itemData: MemorieResponse.Data.Memories) {
+    override fun onItemClickedBrand(itemData: MemorieResponse.Data.Memories, adapterPosition: Int) {
         if(itemData.memory.isNotEmpty()){
+            val showMemoryList: ArrayList<MemorieResponse.Data.Memories> = ArrayList()
+            for(position in featuredbrandAdapter!!.currentList!!.toList().indices){
+                if(position>=adapterPosition){
+                    if(featuredbrandAdapter!!.currentList!![position]!!.memory.size>0){
+                        showMemoryList.add(featuredbrandAdapter!!.currentList!!.toList()[position])
+                    }
+                }
+            }
             val intent = Intent(requireContext(),StorieViewNew::class.java)
             intent.putExtra(ConstantLib.MEMORIE_DATA,itemData)
             intent.putExtra(ConstantLib.FROM,ConstantLib.MEMORIES)
-            prefs.save(ConstantLib.FROM,ConstantLib.MEMORIES)
+            intent.putExtra(ConstantLib.COMPLETE_MEMORY,showMemoryList)
+            prefs.save(ConstantLib.TYPEFROM,ConstantLib.MEMORIES)
+            intent.putExtra(ConstantLib.DELETED_POSITION, 0)
+            intent.putExtra(ConstantLib.BACKFROM,"")
             startActivity(intent)
         }
 
     }
 
+    override fun onResume() {
+
+        Log.e("Onresume is called","-----------------")
+        memorieAdapter = NewMemorieAdapter(this)
+        setupMemorieAdapter()
+        setupFeaturedBrandNew()
+        super.onResume()
+    }
 
 }

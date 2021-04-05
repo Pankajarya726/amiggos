@@ -30,7 +30,9 @@ class MyBookingPresenterImplementation(private var mainView: MyBookingPresenter.
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

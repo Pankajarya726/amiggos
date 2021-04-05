@@ -108,6 +108,10 @@ class GuestListActivity: BaseActivity(), GuestListPresenter.GuestListMainView {
         Toast.makeText(applicationContext,message,Toast.LENGTH_SHORT).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
     override fun onGuestListSuccess(responseData: GuestListResponse?) {
         items.clear()
         adapter.notifyDataSetChanged()

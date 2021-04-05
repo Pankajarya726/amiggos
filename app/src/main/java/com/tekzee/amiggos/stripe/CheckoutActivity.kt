@@ -283,6 +283,10 @@ class CheckoutActivity : BaseActivity(),
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
 
 //    private fun displayAlert(
 //        activity: Activity?,

@@ -15,6 +15,7 @@ import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.util.Utility
 
 class PartyDetailsActivity: BaseActivity() {
 
@@ -55,7 +56,11 @@ class PartyDetailsActivity: BaseActivity() {
 
     }
 
-        private fun setupAdapter() {
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
+    private fun setupAdapter() {
 
         val adapter = ViewPagerAdapter(supportFragmentManager)
         adapter.addFragment(PartyInvitesFragment(),languageData!!.klpartyInvites)

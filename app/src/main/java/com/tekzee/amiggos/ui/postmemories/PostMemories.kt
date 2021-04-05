@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.work.*
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.github.florent37.runtimepermission.kotlin.askPermission
+import com.google.gson.JsonArray
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.databinding.PostMemoriesBinding
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
@@ -21,6 +22,7 @@ import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.enums.FriendsAction
 import com.tekzee.amiggos.services.UploadWorkService
+import com.tekzee.amiggos.util.Utility
 
 
 class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView {
@@ -66,40 +68,87 @@ class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView 
     }
 
     private fun setupClickListerner() {
+
         binding.layoutmymemories.setOnClickListener {
-            val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-            pDialog.titleText = languageData!!.yourmemorywillbeuploadedinbackgroud
-            pDialog.setCancelable(false)
-            pDialog.setCancelButton(languageData!!.klCancel) {
-                pDialog.dismiss()
-            }
-            pDialog.setConfirmButton(languageData!!.klOk) {
-                pDialog.dismiss()
+            if(sharedPreference!!.getValueBoolean(ConstantLib.UPLOAD_BACKGROUDMEMORY_POPUP,false)){
                 callUploadImageToMyMemories()
+            }else{
+                val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                pDialog.titleText = languageData!!.yourmemorywillbeuploadedinbackgroud
+                pDialog.setCancelable(false)
+                pDialog.setCancelButton(languageData!!.klCancel) {
+                    pDialog.dismiss()
+                }
+                pDialog.setConfirmButton(languageData!!.klOk) {
+                    pDialog.dismiss()
+                    sharedPreference!!.save(ConstantLib.UPLOAD_BACKGROUDMEMORY_POPUP,true)
+                    callUploadImageToMyMemories()
+                }
+                pDialog.show()
             }
-            pDialog.show()
+
 
         }
 
         binding.layoutourmemories.setOnClickListener {
 
-            if (intent.getStringExtra(ConstantLib.FROM).equals("VIDEO", true)) {
-                val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
-                val intent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
-                intent.putExtra(ConstantLib.FILEURI, imageUri)
-                intent.putExtra(ConstantLib.OURSTORYID, "");
-                intent.putExtra(ConstantLib.TAGGED_ARRAY, getIntent().getStringExtra(ConstantLib.TAGGED_ARRAY))
-                intent.putExtra(ConstantLib.FROM, "VIDEO")
-                startActivity(intent)
-            } else {
-                val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
-                val intent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
-                intent.putExtra(ConstantLib.FILEURI, imageUri)
-                intent.putExtra(ConstantLib.TAGGED_ARRAY, getIntent().getStringExtra(ConstantLib.TAGGED_ARRAY))
-                intent.putExtra(ConstantLib.OURSTORYID, "");
-                intent.putExtra(ConstantLib.FROM, "IMAGE")
-                startActivity(intent)
+            val pDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+            if(getIntent().getStringExtra(ConstantLib.TAGGED_ARRAY).equals("[]")){
+                if (intent.getStringExtra(ConstantLib.FROM).equals("VIDEO", true)) {
+                    val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
+                    val inviteFriendAfterCreateMemoryIntent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FILEURI, imageUri)
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, JsonArray().toString())
+//                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, getIntent().getStringExtra(ConstantLib.TAGGED_ARRAY))
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM, "VIDEO")
+                    startActivity(inviteFriendAfterCreateMemoryIntent)
+                } else {
+                    val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
+                    val inviteFriendAfterCreateMemoryIntent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FILEURI, imageUri)
+//                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, getIntent().getStringExtra(ConstantLib.TAGGED_ARRAY))
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, JsonArray().toString())
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM, "IMAGE")
+                    startActivity(inviteFriendAfterCreateMemoryIntent)
+                }
+            }else{
+
+                pDialog.titleText = languageData!!.tagging_will_not_work
+                pDialog.setCancelable(false)
+                pDialog.setCancelButton(languageData!!.klCancel) {
+                    pDialog.dismiss()
+                }
+                pDialog.setConfirmButton(languageData!!.klOk) {
+                    pDialog.dismiss()
+                    if (intent.getStringExtra(ConstantLib.FROM).equals("VIDEO", true)) {
+                        val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
+                        val inviteFriendAfterCreateMemoryIntent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
+                        inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FILEURI, imageUri)
+                        inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+                        inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, JsonArray().toString())
+//                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, getIntent().getStringExtra(ConstantLib.TAGGED_ARRAY))
+                        inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM, "VIDEO")
+                        startActivity(inviteFriendAfterCreateMemoryIntent)
+                    } else {
+                        val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
+                        val inviteFriendAfterCreateMemoryIntent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
+                        inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FILEURI, imageUri)
+//                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, getIntent().getStringExtra(ConstantLib.TAGGED_ARRAY))
+                        inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY, JsonArray().toString())
+                        inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+                        inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM, "IMAGE")
+                        startActivity(inviteFriendAfterCreateMemoryIntent)
+                    }
+                }
+                pDialog.show()
             }
+
+
+
+
+
 
         }
 
@@ -108,20 +157,6 @@ class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView 
     private fun callUploadImageToMyMemories() {
         if (intent.getStringExtra(ConstantLib.FROM).equals("VIDEO", true)) {
             val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
-//            val mIntent = Intent(this, FileUploadService::class.java)
-//            mIntent.putExtra(
-//                ConstantLib.USER_ID,
-//                sharedPreference!!.getValueInt(ConstantLib.USER_ID).toString()
-//            )
-//            mIntent.putExtra(ConstantLib.FILEURI, imageUri)
-//            mIntent.putExtra(ConstantLib.FROM, "VIDEO")
-//            FileUploadService.enqueueWork(this, mIntent)
-//
-//
-//            val intent = Intent(applicationContext, AHomeScreen::class.java)
-//            startActivity(intent)
-//            finishAffinity()
-
 
             val data = Data.Builder().putString(ConstantLib.FILEURI, imageUri.toString())
                 .putString(ConstantLib.FROM, "VIDEO")
@@ -135,7 +170,10 @@ class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView 
                 OneTimeWorkRequest.Builder(UploadWorkService::class.java).setInputData(
                     data
                 ).setConstraints(constraints).addTag("Upload").build()
+
             WorkManager.getInstance(this).enqueue(oneTimeWorkRequest)
+
+
             val intent = Intent(applicationContext, AHomeScreen::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 action = FriendsAction.SHOW_MY_MEMORY.action
@@ -206,6 +244,10 @@ class PostMemories : BaseActivity(), PostMemoriesPresenter.PostMemoriesMainView 
 
     override fun validateError(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
     override fun onDestroy() {

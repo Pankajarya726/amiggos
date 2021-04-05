@@ -21,8 +21,8 @@
         android:id="@+id/img_user_firstfragment"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_180sdp"
+        android:scaleType="fitXY"
         android:adjustViewBounds="true"
-        android:src="@drawable/search"
         app:shape="round_rectangle"
         app:sides="4"/>
 

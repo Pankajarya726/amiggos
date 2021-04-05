@@ -16,6 +16,7 @@ import com.tekzee.amiggos.room.entity.Menu
 import com.tekzee.amiggos.ui.menu.commonfragment.CommonClickListener
 import com.tekzee.amiggos.util.Coroutines
 import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import kotlinx.android.synthetic.main.single_common_staff_list.view.*
 
 
@@ -42,6 +43,15 @@ class CommonAdapter(
     override fun onBindViewHolder(holder: CommonStaffViewHolder, position: Int) {
         getItem(position).let { listItem ->
             holder.bind(listItem, context)
+            if(listItem.price.toFloat()>0.0){
+                holder.listitembinding.txtAmout.text = Utility.formatCurrency(listItem.price.toFloat())
+                holder.listitembinding.txtAmout.setTextColor(context!!.resources.getColor(R.color.black))
+            }else{
+                holder.listitembinding.txtAmout.text = "Free"
+                holder.listitembinding.txtAmout.setTextColor(context!!.resources.getColor(R.color.green))
+            }
+
+
             Coroutines.main {
                 val dataResponse = repository!!.getItemDetail(listItem!!.id.toString())
                 if (dataResponse != null) {
@@ -52,18 +62,32 @@ class CommonAdapter(
                 }
             }
             holder.listitembinding.txtPlus.setOnClickListener {
-                if(prefs.getValueBoolean(ConstantLib.MYID,false)){
-                    val quantity =
-                        Integer.parseInt(holder.listitembinding.txtQty.text.toString()) + 1
-                    holder.listitembinding.txtQty.setText(quantity.toString())
-                    listItem.quantity = quantity
-                    listener.onItemClicked(position, listItem, quantity.toString())
-                    return@setOnClickListener
-                }
+//                if(prefs.getValueBoolean(ConstantLib.MYID,false)){
+//                    val quantity =
+//                        Integer.parseInt(holder.listitembinding.txtQty.text.toString()) + 1
+//                    holder.listitembinding.txtQty.setText(quantity.toString())
+//                    listItem.quantity = quantity
+//                    listener.onItemClicked(position, listItem, quantity.toString())
+//                    return@setOnClickListener
+//                }
 
 
-                if (listItem.ageRestriction.isNotEmpty() && Integer.parseInt(prefs.getValueString(ConstantLib.USER_AGE)!!)<= Integer.parseInt(listItem.ageRestriction) ) {
-                    listener.showAgeRestrictionPopup(holder.listitembinding.txtPlus)
+                if (listItem.ageRestriction.equals("1",true) ) {
+                    if(listItem.is_idproof_uploaded.equals("0")){
+                        listener.showAgeRestrictionPopup(holder.listitembinding.txtPlus)
+                    }else if(listItem.is_idproof_verified.equals("0")){
+                        listener.showNotVerifiedMessage(listItem.is_idproof_notverified_message)
+                    }else{
+
+                        if(Integer.parseInt(holder.listitembinding.txtQty.text.toString())==0 && listItem.ageRestriction.equals("1",true)){
+                            listener.showAlertForAgeRestriction(listItem.warning_age_restriction)
+                        }
+                        val quantity =
+                            Integer.parseInt(holder.listitembinding.txtQty.text.toString()) + 1
+                        holder.listitembinding.txtQty.setText(quantity.toString())
+                        listItem.quantity = quantity
+                        listener.onItemClicked(position, listItem, quantity.toString())
+                    }
                 } else {
                     val quantity =
                         Integer.parseInt(holder.listitembinding.txtQty.text.toString()) + 1
@@ -88,7 +112,7 @@ class CommonAdapter(
                     }
                     return@setOnClickListener
                 }
-                if (listItem.ageRestriction.isNotEmpty() && Integer.parseInt(prefs.getValueString(ConstantLib.USER_AGE)!!)<= Integer.parseInt(listItem.ageRestriction) ) {
+                if (listItem.ageRestriction.isNotEmpty() && prefs.getValueInt(ConstantLib.USER_AGE)<= Integer.parseInt(listItem.ageRestriction) ) {
                     listener.showAgeRestrictionPopup(holder.listitembinding.txtMinus)
                 } else {
                     val quantity =

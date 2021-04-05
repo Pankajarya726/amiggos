@@ -9,8 +9,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
-import com.braintreepayments.cardform.view.ErrorEditText
 import com.google.gson.JsonObject
+import com.stripe.android.model.PaymentMethod
+import com.stripe.android.view.PaymentMethodsActivity
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
@@ -19,11 +20,14 @@ import com.tekzee.amiggos.ui.stripepayment.model.CardListResponse
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.PaymentActivityBinding
 import com.tekzee.amiggos.room.database.AmiggoRoomDatabase
-import com.tekzee.amiggos.ui.friendinviteconfirmation.FriendInviteConfirmation
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.invitefriendnew.InviteFriendNewActivity
+import com.tekzee.amiggos.ui.stripepayment.APaymentMethod
+import com.tekzee.amiggos.ui.stripepayment.addnewcard.AAddCard
 import com.tekzee.amiggos.ui.stripepayment.paymentactivity.adapter.PaymentActivityAdapter
 import com.tekzee.amiggos.ui.stripepayment.paymentactivity.model.BookingPaymentResponse
 import com.tekzee.amiggos.util.*
+import java.text.DecimalFormat
 import java.util.*
 
 class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodPresenterMainView {
@@ -36,14 +40,15 @@ class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodP
     private var aPaymentMehtodImplementation: PaymentActivityImplementation? = null
     private val data = ArrayList<CardListResponse.Data.Card>()
     private var repository: ItemRepository? = null
-
+    private var isCardAvailable = false;
+//    private val df2: DecimalFormat = DecimalFormat("#.##")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.payment_activity)
         sharedPreferences = SharedPreference(this)
         languageData = sharedPreferences!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         aPaymentMehtodImplementation = PaymentActivityImplementation(this, this)
-        setupToolBar()
+//        setupToolBar()
         setupRepository()
         setupClickListener()
         setupLanguage()
@@ -59,7 +64,7 @@ class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodP
     private fun setupLanguage() {
         binding!!.paynow.text = languageData!!.pay
         binding!!.headertitle.text = languageData!!.ppaymentmethod
-        binding!!.headerAmount.text = "$ " + intent.getStringExtra(ConstantLib.PURCHASE_AMOUNT)
+        binding!!.headerAmount.text = Utility.formatCurrency(intent.getStringExtra(ConstantLib.PURCHASE_AMOUNT).toFloat())
         binding!!.savedCards.text = languageData!!.savedcards
     }
 
@@ -113,12 +118,24 @@ class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodP
     }
 
     private fun setupClickListener() {
+
+        binding!!.imgClose.setOnClickListener {
+            onBackPressed()
+        }
+
         binding!!.paynow.setOnClickListener {
-            if(intent.getStringExtra(ConstantLib.PURCHASE_AMOUNT).toFloat()>0){
-                setDefaultCard()
+            if(isCardAvailable){
+                if(intent.getStringExtra(ConstantLib.PURCHASE_AMOUNT).toFloat()>0){
+                    setDefaultCard()
+                }else{
+                    Errortoast("Amount can not be zero")
+                }
             }else{
-                Errortoast("Amount can not be zero")
+                val intent = Intent(this, AAddCard ::class.java)
+                startActivity(intent)
+                Animatoo.animateSlideLeft(this)
             }
+
         }
     }
 
@@ -145,13 +162,13 @@ class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodP
        return cardSeleted!!
     }
 
-    private fun setupToolBar() {
-        val toolbar: Toolbar = binding!!.toolbar
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-    }
+//    private fun setupToolBar() {
+//        val toolbar: Toolbar = binding!!.toolbar
+//        setSupportActionBar(toolbar)
+//        supportActionBar?.setDisplayShowTitleEnabled(true)
+//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//        supportActionBar?.setDisplayShowHomeEnabled(true)
+//    }
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -177,11 +194,25 @@ class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodP
         responseData: List<CardListResponse.Data.Card>,
         customerStripId: String
     ) {
+        isCardAvailable = true
         customStripeId = customerStripId;
         data.clear()
         adapter!!.notifyDataSetChanged()
         data.addAll(responseData)
         adapter!!.notifyDataSetChanged()
+        binding!!.paynow.visibility = View.GONE
+        binding!!.paynow.text = languageData!!.pay
+    }
+
+    override fun onCardListFailure(responseData: CardListResponse?) {
+        if(responseData!!.data.cards.isEmpty()){
+            binding!!.paynow.visibility = View.VISIBLE
+            binding!!.paynow.text = languageData!!.addcard
+            isCardAvailable = false
+        }else{
+            isCardAvailable = false
+            Toast.makeText(applicationContext,responseData.message,Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun onBookingSuccess(response: BookingPaymentResponse?) {
@@ -189,11 +220,20 @@ class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodP
         Coroutines.main {
             repository!!.clearCart()
         }
-        val intent = Intent(applicationContext, InviteFriendNewActivity::class.java)
-        intent.putExtra(ConstantLib.MESSAGE,response.message)
-        intent.putExtra(ConstantLib.FROM,ConstantLib.FINALBASKET)
-        intent.putExtra(ConstantLib.BOOKING_ID,getIntent().getStringExtra(ConstantLib.BOOKING_ID))
-        startActivity(intent)
+        if(intent.getStringExtra(ConstantLib.ALLOW_INVITE).equals("1")){
+            val intentInviteFriendNewActivity = Intent(applicationContext, InviteFriendNewActivity::class.java)
+            intentInviteFriendNewActivity.putExtra(ConstantLib.MESSAGE,response.message)
+            intentInviteFriendNewActivity.putExtra(ConstantLib.FROM,ConstantLib.FINALBASKET)
+            intentInviteFriendNewActivity.putExtra(ConstantLib.BOOKING_ID, intent.getStringExtra(ConstantLib.BOOKING_ID))
+            startActivity(intentInviteFriendNewActivity)
+        }else{
+            val intent = Intent(applicationContext, AHomeScreen::class.java)
+            startActivity(intent)
+            InviteFriendNewActivity.selectUserIds.clear()
+            InviteFriendNewActivity.undoUserIds.clear()
+            finishAffinity()
+        }
+
     }
 
     override fun onBookingFailure(message: String) {
@@ -213,4 +253,9 @@ class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodP
     override fun validateError(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
 }
+

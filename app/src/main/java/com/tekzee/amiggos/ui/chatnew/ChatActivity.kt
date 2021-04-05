@@ -1,12 +1,8 @@
 package com.tekzee.amiggos.ui.chatnew
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -15,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.JsonObject
 import com.shreyaspatil.MaterialDialog.MaterialDialog
-import com.tapadoo.alerter.Alerter
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
@@ -26,15 +21,16 @@ import com.tekzee.amiggos.ui.chatnew.model.ChatMessage
 import com.tekzee.amiggos.ui.message.model.MyFriendChatModel
 import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.util.hideKeyboard
-import com.tekzee.amiggosvenueapp.ui.chat.*
+import com.tekzee.amiggosvenueapp.ui.chat.ChatActivityListener
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
 import org.kodein.di.generic.instance
 
 class ChatActivity : AppCompatActivity(), ChatEvent, KodeinAware, ChatActivityListener {
-    private lateinit var listener: BroadcastReceiver
+//    private lateinit var listener: BroadcastReceiver
     override val kodein: Kodein by closestKodein()
     val languageConstant: LanguageData by instance()
     val prefs: SharedPreference by instance()
@@ -49,15 +45,21 @@ class ChatActivity : AppCompatActivity(), ChatEvent, KodeinAware, ChatActivityLi
 
 
     companion object {
+        var iamActiveOnChat = false
+        var talkingUser:String = ""
         fun newInstance() = ChatActivity()
     }
 
-
-
+    override fun onPause() {
+        super.onPause()
+        iamActiveOnChat = false
+        talkingUser = ""
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        iamActiveOnChat = true
         binding = DataBindingUtil.setContentView(this, R.layout.chat_fragment)
         setUpClickListener()
         setupRecyclerview()
@@ -66,36 +68,38 @@ class ChatActivity : AppCompatActivity(), ChatEvent, KodeinAware, ChatActivityLi
         viewModel.chatEvent = this
         myFirebaseUserid = FirebaseAuth.getInstance().currentUser!!.uid
         callGetChat()
-        listener = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent){
-                when (intent.action) {
-                    ConstantLib.CHAT_NOTIFICATION -> {
-                        val title = intent.getStringExtra("title")
-                        val body = intent.getStringExtra("body")
-                        Alerter.create(this@ChatActivity)
-                            .setTitle(title)
-                            .setText(body)
-                            .show()
-                    }
-                    else -> Toast.makeText(context, "Action Not Found", Toast.LENGTH_LONG).show()
-                }
-
-            }
-        }
+//        listener = object : BroadcastReceiver() {
+//            override fun onReceive(context: Context, intent: Intent) {
+//                when (intent.action) {
+//                    ConstantLib.CHAT_NOTIFICATION -> {
+//                        val title = intent.getStringExtra("title")
+//                        val body = intent.getStringExtra("body")
+//                        Alerter.create(this@ChatActivity)
+//                            .setTitle(title)
+//                            .setText(body)
+//                            .show()
+//                    }
+//                    else -> Toast.makeText(context, "Action Not Found", Toast.LENGTH_LONG).show()
+//                }
+//
+//            }
+//        }
     }
 
     private fun callGetChat() {
         friendId = intent.getStringExtra(ConstantLib.FRIEND_ID)
+        talkingUser = friendId.toString()
         chatdata = intent.getSerializableExtra(ConstantLib.CHAT_DATA) as MyFriendChatModel?
         binding!!.headertitle.text = chatdata!!.name
 
         var conversationId = ""
-        if (prefs.getValueInt(ConstantLib.USER_ID) > Integer.parseInt(friendId!!)) {
-            conversationId = friendId + "_" + prefs.getValueInt(ConstantLib.USER_ID).toString()
+        if (prefs.getValueString(ConstantLib.UNIQUE_TIMESTAMP)!!.toLong() > friendId!!.toLong()) {
+            conversationId = friendId + "_" + prefs.getValueString(ConstantLib.UNIQUE_TIMESTAMP).toString()
         } else {
-            conversationId = prefs.getValueInt(ConstantLib.USER_ID).toString() + "_" + friendId
+            conversationId = prefs.getValueString(ConstantLib.UNIQUE_TIMESTAMP).toString() + "_" + friendId
         }
-        Log.e("Chat between--->", conversationId)
+        Log.e("Chat for conversation id--->",conversationId)
+
         viewModel.doGetChatBetweenSenderAndReceiver(conversationId).observe(this, Observer {
             val listOfChat = ArrayList<ChatMessage>()
             for (item in it) {
@@ -130,42 +134,26 @@ class ChatActivity : AppCompatActivity(), ChatEvent, KodeinAware, ChatActivityLi
             if (binding!!.etChat.text.trim().isEmpty()) {
                 Errortoast(languageConstant.entermessage)
             } else {
-                ChatHelper.getReceiverFirebaseId(friendId!!,
-                    object : ReceiverIdInterface {
-                        override fun getReceiverId(
-                            receiverId: String,
-                            reciverUser: User
-                        ) {
-                            if (binding!!.etChat.text.trim().toString().isNotEmpty()) {
-
-                                ChatHelper.sendMessage(
-                                    myFirebaseUserid!!,
-                                    receiverId,
-                                    binding!!.etChat.text.trim().toString(),
-                                    false,
-                                    System.currentTimeMillis(),
-                                    reciverUser,
-                                    prefs.getValueInt(ConstantLib.USER_ID).toString()
-                                )
-//                                sendNotification(
-//                                    binding!!.etChat.text.trim().toString(),
-//                                    friendId!!
-//                                )
-                                binding!!.etChat.setText("")
-                            }
-
-                        }
-                    })
+                checkUserIsBlocked(friendId!!)
             }
 
         }
 
     }
 
+    private fun checkUserIsBlocked(receiverId: String) {
+        val input = JsonObject()
+        input.addProperty("userid", prefs.getValueInt(ConstantLib.USER_ID).toString())
+        input.addProperty("freind_id", receiverId)
+//        input.addProperty("type", "1")
+        viewModel.checkUserisBlocked(input)
+    }
+
     private fun sendNotification(message: String, receiverId: String) {
         val input = JsonObject()
         input.addProperty("userid", prefs.getValueInt(ConstantLib.USER_ID).toString())
         input.addProperty("receiveramiggosid", receiverId)
+        input.addProperty("type", "1")
         input.addProperty("message", message)
         viewModel.sendNotification(input)
     }
@@ -195,6 +183,47 @@ class ChatActivity : AppCompatActivity(), ChatEvent, KodeinAware, ChatActivityLi
     override fun onBackButtonPressed() {
         onBackPressed()
         hideKeyboard(binding!!.drawerIcon)
+    }
+
+    override fun isBlockedUserSuccess() {
+        ChatHelper.getReceiverFirebaseId(friendId!!,
+            object : ReceiverIdInterface {
+                override fun getReceiverId(
+                    receiverId: String,
+                    reciverUser: User
+                ) {
+                    if (binding!!.etChat.text.trim().toString().isNotEmpty()) {
+
+                        ChatHelper.sendMessage(
+                            myFirebaseUserid!!,
+                            receiverId,
+                            binding!!.etChat.text.trim().toString(),
+                            false,
+                            System.currentTimeMillis(),
+                            reciverUser,
+                            prefs.getValueString(ConstantLib.UNIQUE_TIMESTAMP).toString()
+                        )
+                        sendNotification(
+                            binding!!.etChat.text.trim().toString(),
+                            friendId!!
+                        )
+                        binding!!.etChat.setText("")
+                    }
+
+                }
+            })
+    }
+
+    override fun isBlockedUserFailure(message: String) {
+        Errortoast(message)
+    }
+
+    override fun onFailure(message: String) {
+        Errortoast(message)
+    }
+
+    override fun sessionExpired(message: String) {
+        Utility.logOut(applicationContext, message)
     }
 
 

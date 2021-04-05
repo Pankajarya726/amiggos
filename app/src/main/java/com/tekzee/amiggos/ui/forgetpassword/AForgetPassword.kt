@@ -90,4 +90,8 @@ class AForgetPassword : BaseActivity(), AForgetPasswordPresenter.AForgetPassword
             }
             .show()
     }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
 }

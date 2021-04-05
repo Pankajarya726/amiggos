@@ -1,4 +1,4 @@
-package com.tekzee.amiggosvenueapp.ui.addusers.model
+package com.tekzee.amiggos.ui.addusers.model
 
 
 import com.google.gson.annotations.SerializedName
@@ -20,6 +20,8 @@ data class AddUserResponse(
             val firstName: String = "",
             @SerializedName("userid")
             val id: Int = 0,
+            @SerializedName("unique_user_id")
+            val unique_user_id: String = "0",
             @SerializedName("last_name")
             val lastName: String = "",
             @SerializedName("profile_image")

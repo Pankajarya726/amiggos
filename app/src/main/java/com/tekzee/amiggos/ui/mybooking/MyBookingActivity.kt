@@ -20,7 +20,7 @@ import com.tekzee.amiggos.constant.ConstantLib
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.bookingqrcode.GetBookingQrCodeActivity
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 
 
 class MyBookingActivity : BaseFragment(), MyBookingPresenter.MyBookingMainView {
@@ -92,6 +92,10 @@ class MyBookingActivity : BaseFragment(), MyBookingPresenter.MyBookingMainView {
 
     override fun validateError(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
     }
 
 

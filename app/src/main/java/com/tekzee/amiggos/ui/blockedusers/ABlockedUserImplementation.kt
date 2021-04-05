@@ -33,7 +33,9 @@ class ABlockedUserImplementation(private var mainView: ABlockedUserPresenter.ABl
                             } else {
                                 mainView.onblockuserfailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -62,7 +64,9 @@ class ABlockedUserImplementation(private var mainView: ABlockedUserPresenter.ABl
                             } else {
                                 mainView.onunblockfailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

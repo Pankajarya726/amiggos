@@ -7,6 +7,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.core.app.JobIntentService
 import androidx.core.app.NotificationCompat
+import com.tekzee.amiggos.FileProgressReceiver
 import com.tekzee.amiggos.base.repository.MemorieRepository
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
@@ -240,11 +241,11 @@ class FileUploadService : JobIntentService(),KodeinAware {
         emitter: FlowableEmitter<Double>
     ): RequestBody {
         val requestBody = createRequestBodyFromFile(file, mimeType)
-        return CountingRequestBody(requestBody,
-            CountingRequestBody.Listener { bytesWritten, contentLength ->
-                val progress = 1.0 * bytesWritten / contentLength
-                emitter.onNext(progress)
-            })
+        return CountingRequestBody(requestBody
+        ) { bytesWritten, contentLength ->
+            val progress = 1.0 * bytesWritten / contentLength
+            emitter.onNext(progress)
+        }
     }
 
     companion object {

@@ -34,12 +34,14 @@ data class ALoginResponse(
         var typeoflogin: String = "",
         @SerializedName("userid")
         var userid: Int = 0,
+        @SerializedName("unique_timestamp")
+        var unique_timestamp: Long = 0,
         @SerializedName("username")
         var username: String = "",
         @SerializedName("is_profile_complete")
         var is_profile_complete: Int = 0,
         @SerializedName("age")
-        var age: String = "",
+        var age: Int = 0,
         @SerializedName("myid")
         var myid: Boolean = false,
         @SerializedName("type")

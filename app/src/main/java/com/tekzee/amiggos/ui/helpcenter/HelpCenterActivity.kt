@@ -91,6 +91,9 @@ class HelpCenterActivity: BaseActivity(), HelpCenterPresenter.HelpCenterMainView
         Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
 
 
     override fun onHelpCenterSuccess(responseData: HelpCenterResponse?) {

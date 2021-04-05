@@ -1,4 +1,5 @@
 package com.tekzee.amiggos.ui.invitefriendnew.adapter
+
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,7 @@ import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.invitefriendnew.InviteFriendNewActivity
-import com.tekzee.amiggos.ui.ourmemories.model.InviteFriendResponse
+import com.tekzee.amiggos.ui.invitefriendnew.model.GetUserForInviteResponse
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import kotlinx.android.synthetic.main.single_invite_friend.view.*
 
@@ -20,25 +21,35 @@ class InviteFriendBookingAdapter(
     mRecyclerView: RecyclerView,
     val mLayoutManager: LinearLayoutManager,
     mRecyclerViewAdapterCallback: InfiniteScrollRecyclerView.RecyclerViewAdapterCallback,
-    var mDataList: ArrayList<InviteFriendResponse.Data.RealFreind>,
+    var mDataList: ArrayList<GetUserForInviteResponse.Data.User>,
     val mItemClickCallback: InviteFriendClick?,
     val languageData: LanguageData?
-)
-    : RecyclerView.Adapter<InviteFriendBookingAdapter.ViewHolder>(){
+) : RecyclerView.Adapter<InviteFriendBookingAdapter.ViewHolder>() {
 
     private val holderLoading: Int = 0
     private val holderRow: Int = 1
     private var mInfiniteScrollRecyclerView: InfiniteScrollRecyclerView? = null
 
     init {
-        mInfiniteScrollRecyclerView = InfiniteScrollRecyclerView(mContext, mRecyclerView, mLayoutManager, mRecyclerViewAdapterCallback)
+        mInfiniteScrollRecyclerView = InfiniteScrollRecyclerView(
+            mContext,
+            mRecyclerView,
+            mLayoutManager,
+            mRecyclerViewAdapterCallback
+        )
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         if (viewType == holderRow) {
-            return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.single_invite_friend, parent, false))
+            return ViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.single_invite_friend, parent, false)
+            )
         }
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.infinite_loading_progress_bar_layout, parent, false))
+        return ViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.infinite_loading_progress_bar_layout, parent, false)
+        )
     }
 
     override fun getItemCount(): Int = mDataList.size
@@ -57,21 +68,42 @@ class InviteFriendBookingAdapter(
         }
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind() {
-            Glide.with(itemView.context).load(mDataList[adapterPosition].profile).placeholder(R.drawable.noimage).into(itemView.img_flag)
+            Glide.with(itemView.context).load(mDataList[adapterPosition].profile)
+                .placeholder(R.drawable.noimage).into(itemView.img_flag)
             itemView.txt_name.text = mDataList[adapterPosition].name
-            if(InviteFriendNewActivity.selectUserIds.contains(mDataList[adapterPosition].userid)){
+
+            if (InviteFriendNewActivity.selectUserIds.contains(mDataList[adapterPosition].userid)) {
                 itemView.txt_invite.text = languageData!!.undo
-            }else{
-                itemView.txt_invite.text = languageData!!.invite
+            } else {
+                if (mDataList[adapterPosition].isInvited == 1) {
+                    if (InviteFriendNewActivity.undoUserIds.contains(mDataList[adapterPosition].userid)) {
+                        itemView.txt_invite.text = languageData!!.invite
+                    } else {
+                        itemView.txt_invite.text = languageData!!.undo
+                    }
+                } else {
+                    itemView.txt_invite.text = languageData!!.invite
+                }
+
             }
+
+
             itemView.setOnClickListener {
                 mItemClickCallback?.let {
-                    if (itemView.txt_invite.text.equals(languageData.invite)){
-                        mItemClickCallback.itemClickCallback(adapterPosition,mDataList[adapterPosition],0)
-                    }else{
-                        mItemClickCallback.itemClickCallback(adapterPosition,mDataList[adapterPosition],1)
+                    if (itemView.txt_invite.text.equals(languageData.invite)) {
+                        mItemClickCallback.itemClickCallback(
+                            adapterPosition,
+                            mDataList[adapterPosition],
+                            0
+                        )
+                    } else {
+                        mItemClickCallback.itemClickCallback(
+                            adapterPosition,
+                            mDataList[adapterPosition],
+                            1
+                        )
                     }
 
                 }
@@ -83,7 +115,7 @@ class InviteFriendBookingAdapter(
     interface InviteFriendClick {
         fun itemClickCallback(
             position: Int,
-            realFreind: InviteFriendResponse.Data.RealFreind,
+            realFreind: GetUserForInviteResponse.Data.User,
             i: Int
         )
 

@@ -11,4 +11,8 @@ data class User(
     var image: String? = "",
     var name: String? = "",
     var timestamp: Long? = 0
-)
+) {
+    override fun toString(): String {
+        return "User(amiggosID=$amiggosID, deviceToken=$deviceToken, email=$email, fcmToken=$fcmToken, image=$image, name=$name, timestamp=$timestamp)"
+    }
+}

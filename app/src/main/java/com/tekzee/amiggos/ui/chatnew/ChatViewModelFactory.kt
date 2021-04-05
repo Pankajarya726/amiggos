@@ -7,7 +7,6 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.base.repository.ChatRepository
 import com.tekzee.amiggos.base.repository.NotificationRepository
 import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.amiggosvenueapp.ui.chat.ChatViewModel
 
 
 @Suppress("UNCHECKED_CAST")

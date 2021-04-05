@@ -9,6 +9,7 @@ import androidx.core.app.NotificationCompat
 import androidx.work.Data
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.tekzee.amiggos.FileProgressReceiver
 import com.tekzee.amiggos.base.repository.MemorieRepository
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
@@ -59,12 +60,6 @@ class UploadWorkService(context: Context, workerParams: WorkerParameters) : Work
 
     fun uploadFileToServer(inputData: Data) {
 
-        Log.d(TAG, "inputData ----> "+inputData.toString())
-        /**
-         * Download/Upload of file
-         * The system or framework is already holding a wake lock for us at this point
-         */
-        // get file file here
         if (inputData.getString(ConstantLib.FROM).equals("VIDEO", true)) {
             type = 2
             val uri: String = inputData.getString(ConstantLib.FILEURI).toString()
@@ -116,12 +111,12 @@ class UploadWorkService(context: Context, workerParams: WorkerParameters) : Work
             }, BackpressureStrategy.LATEST)
         mDisposable = fileObservable.subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ progress -> // call onProgress()
+            .subscribe({ progress ->
                 onProgress(progress)
-            }, { throwable -> // call onErrors() if error occurred during file upload
+            }, { throwable ->
                 onErrors(throwable)
-            }) { // call onSuccess() while file upload successful
-                this@UploadWorkService.onSuccess()
+            }) {
+                this@UploadWorkService.onSuccess(type!!)
             }
 
     }
@@ -166,7 +161,9 @@ class UploadWorkService(context: Context, workerParams: WorkerParameters) : Work
     /**
      * Send Broadcast to FileProgressReceiver while file upload successful
      */
-    private fun onSuccess() {
+    private fun onSuccess(type: Int) {
+        BitmapUtils.deleteFolder()
+        BitmapUtils.deleteVideoFolder()
         val successIntent = Intent(applicationContext, FileProgressReceiver::class.java)
         successIntent.action = "com.wave.ACTION_UPLOADED"
         successIntent.putExtra("notificationId", FileUploadService.NOTIFICATION_ID)

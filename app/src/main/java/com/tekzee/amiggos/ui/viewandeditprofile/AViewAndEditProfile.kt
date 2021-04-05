@@ -2,11 +2,15 @@ package com.tekzee.amiggos.ui.viewandeditprofile
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.telephony.PhoneNumberFormattingTextWatcher
+import android.telephony.PhoneNumberUtils
 import android.view.MotionEvent
 import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
@@ -16,7 +20,7 @@ import com.ajithvgiri.searchdialog.SearchListItem
 import com.ajithvgiri.searchdialog.SearchableDialog
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.bumptech.glide.Glide
-import com.github.florent37.runtimepermission.RuntimePermission.askPermission
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -31,14 +35,10 @@ import com.tekzee.amiggos.databinding.ViewAndEditLayoutBinding
 import com.tekzee.amiggos.ui.signup.steptwo.model.CityResponse
 import com.tekzee.amiggos.ui.signup.steptwo.model.StateResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.adapter.PhotoAdapter
+import com.tekzee.amiggos.ui.viewandeditprofile.model.AddImageResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.GetUserProfileResponse
 import com.tekzee.amiggos.ui.viewandeditprofile.model.UpdateProfileResponse
-import com.tekzee.amiggos.util.GetFilePath
-import com.tekzee.amiggos.util.ImagePickerUtils
-import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.amiggos.util.Utility
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
+import com.tekzee.amiggos.util.*
 import com.tsongkha.spinnerdatepicker.DatePicker
 import com.tsongkha.spinnerdatepicker.DatePickerDialog
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder
@@ -48,8 +48,10 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
+import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPresenterMainView,
     DatePickerDialog.OnDateSetListener, PhotoDeleteClickListener {
@@ -71,6 +73,7 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
     private var pickImageFor = 0 //1-profile 2-uploadphoto
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var database: DatabaseReference
+    private var data: ArrayList<GetUserProfileResponse.Data.OtherImage> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +87,7 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
         callGetProfile()
         setupClickListener()
         setupLanguage()
-        setupAdapter(arrayListOf())
+        setupAdapter(data)
     }
 
     private fun setupLanguage() {
@@ -103,6 +106,8 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setupClickListener() {
+
+
         binding!!.eState.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
                 callStateApi()
@@ -211,12 +216,14 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
                         pickImageFor = 2
                         FilePickerBuilder.instance
                             .setMaxCount(5) //optional
+                            .showFolderView(false)
+                            .enableCameraSupport(false)
 //                        .setSelectedFiles(filePaths) //optional
                             .setActivityTheme(R.style.LibAppTheme) //optional
                             .pickPhoto(this)
                     } else {
                         pickImageFor = 2
-                        pickImage()
+                        pickNewImage()
                     }
 
                 }
@@ -240,38 +247,94 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
             }
 
 
-
         }
+    }
+
+    private fun pickNewImage() {
+        ImagePicker.with(this)
+            .cameraOnly()
+            .crop(1f, 1f)
+            .compress(1024)
+            .maxResultSize(1080, 1080)
+            .start()
+
     }
 
     private fun validateFields(): Boolean {
         if (binding!!.eFirstname.text.toString().trim().isEmpty()) {
-            Toast.makeText(applicationContext, "First name can not be blank..", Toast.LENGTH_LONG)
-                .show()
+            Errortoast(languageData!!.firstname_can_not_be_blank)
+            return false
+        } else if (!Utility.checkFirstName_lastname_phone_CharacterCount(
+                binding!!.eFirstname.text.toString().trim()
+            )
+        ) {
+            Errortoast(languageData!!.firstname_should_not_be_15_characters)
             return false
         } else if (binding!!.eLastname.text.toString().trim().isEmpty()) {
-            Toast.makeText(applicationContext, "Last name can not be blank..", Toast.LENGTH_LONG)
-                .show()
+            Errortoast(languageData!!.last_can_not_be_blank)
+            return false
+        } else if (!Utility.checkFirstName_lastname_phone_CharacterCount(
+                binding!!.eLastname.text.toString().trim()
+            )
+        ) {
+            Errortoast(languageData!!.lastname_should_not_be_15_characters)
             return false
         } else if (binding!!.eDateofbirth.text.toString().trim().isEmpty()) {
-            Toast.makeText(
-                applicationContext,
-                "Date of birth can not be blank..",
-                Toast.LENGTH_LONG
-            ).show()
+            Errortoast(languageData!!.date_of_birth_can_not_be_blank)
             return false
         } else if (stateId!!.isEmpty()) {
-            Toast.makeText(applicationContext, "State can not be blank..", Toast.LENGTH_LONG).show()
+            Errortoast(languageData!!.please_select_state)
             return false
         } else if (cityId!!.isEmpty()) {
-            Toast.makeText(applicationContext, "City can not be blank..", Toast.LENGTH_LONG).show()
+            Errortoast(languageData!!.please_select_city)
             return false
-        } else if (binding!!.ePhone.text.toString().trim().isEmpty()) {
-            Toast.makeText(applicationContext, "Phone number can not be blank..", Toast.LENGTH_LONG)
-                .show()
+        } /*else if (binding!!.ePhone.text.toString().trim().isEmpty()) {
+            Errortoast(languageData!!.phone_number_can_not_be_blank)
             return false
-        }
+        } else if (!Utility.checkFirstName_lastname_phone_CharacterCount(
+                binding!!.ePhone.text.toString().trim()
+            )
+        ) {
+            Errortoast(languageData!!.phone_number_should_not_be_15_characters)
+            return false
+        }*/
         return true
+    }
+
+
+    private fun uploadSingleProfileImage() {
+        var file: File? = null
+        if (imagePath != null) {
+            file = File(imagePath)
+        }
+        var requestFile: RequestBody? = null
+        var fileMultipartBody: MultipartBody.Part? = null
+        if (file != null) {
+            requestFile = RequestBody.create(
+                "image/*".toMediaTypeOrNull(),
+                file!!
+            )
+
+            fileMultipartBody =
+                MultipartBody.Part.createFormData("image", file!!.name, requestFile)
+
+        }
+
+        val useridRequestBody = RequestBody.create(
+            MultipartBody.FORM,
+            "" + sharedPreferences!!.getValueInt(ConstantLib.USER_ID)
+        )
+
+
+
+        aViewAndEditImplementation!!.doUploadSingleProfileApi(
+            fileMultipartBody,
+            useridRequestBody,
+            Utility.createHeaders(
+                sharedPreferences
+            )
+        )
+
     }
 
     private fun callUpdateProfile() {
@@ -373,11 +436,19 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
     }
 
     private fun setupView() {
-        if (intent.getStringExtra(ConstantLib.FROM).equals("EDIT", true)) {
-            setupEditProfile()
-        } else {
-            setupViewProfile()
-        }
+//        if (intent.getStringExtra(ConstantLib.FROM).equals("EDIT", true)) {
+//            setupEditProfile()
+//        } else {
+//            setupViewProfile()
+//        }
+        setupEditProfile()
+
+
+
+        val addLineNumberFormatter = UsPhoneNumberFormatter(
+            WeakReference(binding!!.ePhone)
+        )
+        binding!!.ePhone.addTextChangedListener(addLineNumberFormatter)
     }
 
     private fun setupViewProfile() {
@@ -495,7 +566,19 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
         callGetProfile()
     }
 
-    override fun onUploadImageSuccess(message: String) {
+    override fun onSingleProfileUploadSuccess(message: String) {
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onUploadImageSuccess(message: String, responseData: AddImageResponse?) {
+
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+        adapter.submitList(responseData!!.data.otherImages)
+
+
+    }
+
+    override fun onUploadImageSingleSuccess(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
         callGetProfile()
     }
@@ -533,9 +616,9 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
-    override fun onPhotoDeleted(message: String) {
+    override fun onPhotoDeleted(message: String, responseData: AddImageResponse) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
-        callGetProfile()
+        adapter.submitList(responseData!!.data.otherImages)
     }
 
     private fun setupProfileData(data: GetUserProfileResponse.Data) {
@@ -586,10 +669,17 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
     private fun pickImage() {
-        CropImage.activity()
-            .setCropShape(CropImageView.CropShape.RECTANGLE)
-            .start(this)
+        ImagePicker.with(this)
+            .crop(1f, 1f)
+            .compress(1024)
+            .maxResultSize(1080, 1080)
+            .start()
+
     }
 
 
@@ -601,28 +691,21 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == FilePickerConst.REQUEST_CODE_PHOTO) {
-            val photoPaths = ArrayList<Uri>()
-            photoPaths.addAll(data!!.getParcelableArrayListExtra<Uri>(FilePickerConst.KEY_SELECTED_MEDIA));
-            uploadMultipleUserImage(photoPaths)
+            if (data != null && data!!.getParcelableArrayListExtra<Uri>(FilePickerConst.KEY_SELECTED_MEDIA).size > 0) {
+                val photoPaths = ArrayList<Uri>()
+                photoPaths.addAll(data!!.getParcelableArrayListExtra<Uri>(FilePickerConst.KEY_SELECTED_MEDIA))
+                uploadMultipleUserImage(photoPaths)
+            }
+
         } else
-            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-                val result =
-                    CropImage.getActivityResult(data)
-                if (resultCode == RESULT_OK) {
-                    imagePath = ImagePickerUtils.getPath(this, result.uri)
-                    if (pickImageFor == 1) {
-                        binding!!.imgUser.setImageURI(Uri.parse(imagePath))
-                    } else {
-                        uploadUserImage()
-                    }
-
-
-                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                    Toast.makeText(
-                        this,
-                        "Cropping failed: " + result.error,
-                        Toast.LENGTH_LONG
-                    ).show()
+            if (resultCode == Activity.RESULT_OK) {
+                val fileUri = data?.data
+                imagePath = ImagePickerUtils.getPath(this, fileUri)
+                if (pickImageFor == 1) {
+                    binding!!.imgUser.setImageURI(Uri.parse(imagePath))
+                    uploadSingleProfileImage()
+                } else {
+                    uploadUserImage()
                 }
             }
     }
@@ -683,11 +766,10 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
             )
             surveyImagesParts[x] = MultipartBody.Part.createFormData(
                 "image[]",
-                file.name+System.currentTimeMillis(),
+                file.name + System.currentTimeMillis(),
                 imagearray
             )
         }
-
 
 
         val useridRequestBody = RequestBody.create(
@@ -703,6 +785,7 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
             )
         )
     }
+
     override fun onDateSet(view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
 
         val month = monthOfYear + 1

@@ -44,7 +44,9 @@ class AVenueTypeImplementation(
                             } else {
                                 mainView.onVenueTypeFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

@@ -15,7 +15,7 @@
             android:keepScreenOn="true"
             app:cameraAudio="on"
             app:cameraAutoFocusMarker="@string/cameraview_default_autofocus_marker"
-            app:cameraEngine="camera1"
+            app:cameraEngine="camera2"
             app:cameraExperimental="true"
             app:cameraFacing="back"
             app:cameraFlash="auto"
@@ -30,6 +30,7 @@
             app:cameraPlaySounds="true"
             app:cameraPreviewFrameRate="30"
             app:cameraRequestPermissions="true"
+            app:cameraUseDeviceOrientation="false"
             app:cameraWhiteBalance="auto"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,35 +39,46 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0">
 
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|end"
-                android:background="#60000000"
-                android:orientation="vertical"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 app:layout_drawOnPictureSnapshot="true"
                 app:layout_drawOnPreview="true"
                 app:layout_drawOnVideoSnapshot="true">
 
-                <TextView
-                    android:id="@+id/username"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/opensans_semibolditalic"
-                    android:gravity="center"
+                    android:layout_gravity="right|bottom"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.75">
 
-                    android:textColor="@color/colorAccent"
-                    android:textSize="@dimen/_15sdp"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/username"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/opensans_semibolditalic"
+                        android:gravity="center"
+                        android:inputType="textMultiLine"
+                        android:maxLines="2"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_15sdp"
+                        android:textStyle="bold" />
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/watermark"
-                    android:visibility="visible" />
 
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_30sdp"
+                        android:src="@drawable/watermark"
+                        android:visibility="visible" />
+
+
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </com.otaliastudios.cameraview.CameraView>
@@ -78,16 +90,16 @@
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="20dp">
 
-            <com.iammert.library.cameravideobuttonlib.CameraVideoButton
+            <com.jackandphantom.instagramvideobutton.InstagramVideoButton
                 android:id="@+id/videobutton"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_gravity="bottom|center"
-                app:cvb_recording_color="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:progressColor="#000000" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -100,11 +112,11 @@
 
             <ImageView
                 android:id="@+id/img_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_gravity="top"
                 android:layout_margin="15dp"
-                android:src="@drawable/ic_arrow_back_black_24dp" />
+                android:src="@drawable/myback" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -123,6 +135,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
+                        android:padding="@dimen/_5sdp"
                         android:id="@+id/img_camera_front"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
@@ -132,6 +145,7 @@
                         android:src="@drawable/ic_camera_front" />
 
                     <ImageView
+                        android:padding="@dimen/_5sdp"
                         android:id="@+id/img_camera_back"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
@@ -154,6 +168,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
+                        android:padding="@dimen/_5sdp"
                         android:id="@+id/flash_on"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
@@ -163,6 +178,7 @@
                         android:src="@drawable/ic_flash_off" />
 
                     <ImageView
+                        android:padding="@dimen/_5sdp"
                         android:id="@+id/flash_off"
                         android:layout_width="45dp"
                         android:layout_height="45dp"

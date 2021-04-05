@@ -23,6 +23,7 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.ui.invitefriendnew.InviteFriendNewActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -122,6 +123,7 @@ class FriendListActivity: BaseActivity(), FriendListPresenter.FriendListMainView
         input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("booking_id", intent.getStringExtra(ConstantLib.BOOKING_ID))
         input.addProperty("friend_id", userid.toString())
+        input.addProperty("unfriend_id", toUndoCommaSeparated())
         friendListPresenterImplementation!!.doInviteFriend(
             input,
             Utility.createHeaders(sharedPreferences)
@@ -144,6 +146,10 @@ class FriendListActivity: BaseActivity(), FriendListPresenter.FriendListMainView
         Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
 
     override fun onFriendListSuccess(responseData: FriendListResponse?) {
         data.clear()
@@ -163,4 +169,15 @@ class FriendListActivity: BaseActivity(), FriendListPresenter.FriendListMainView
 
     }
 
+    fun toUndoCommaSeparated(): String? {
+        var result = ""
+        if (InviteFriendNewActivity.undoUserIds.size > 0) {
+            val sb = StringBuilder()
+            for (s in InviteFriendNewActivity.undoUserIds) {
+                sb.append(s).append(",")
+            }
+            result = sb.deleteCharAt(sb.length - 1).toString()
+        }
+        return result
+    }
 }

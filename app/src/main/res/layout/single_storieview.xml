@@ -11,35 +11,34 @@
 
 
         <de.hdodenhof.circleimageview.CircleImageView
-
             android:id="@+id/img_flag"
-            android:layout_width="@dimen/_60sdp"
-            android:layout_height="@dimen/_60sdp"
-            android:layout_marginLeft="@dimen/_8sdp"
-            android:layout_marginRight="@dimen/_8sdp"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
             android:layout_marginTop="@dimen/_3sdp"
             android:layout_marginBottom="@dimen/_3sdp"
-            android:contentDescription="@string/nav_header_desc"
             android:src="@drawable/attachid"
-
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/spread" />
+            app:srcCompat="@drawable/active" />
 
 
         <TextView
+            android:fontFamily="@font/opensans_semibold"
             android:id="@+id/txt_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_8sdp"
-            android:layout_marginEnd="@dimen/_8sdp"
-            android:fontFamily="@font/opensans_semibold"
-            android:textSize="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/_12sdp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txt_invite"
             app:layout_constraintStart_toEndOf="@+id/img_flag"
             app:layout_constraintTop_toTopOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

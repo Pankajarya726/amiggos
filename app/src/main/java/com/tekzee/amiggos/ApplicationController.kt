@@ -1,7 +1,12 @@
 package com.tekzee.amiggos
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
+import android.util.Log
+import android.widget.Toast
 import androidx.multidex.MultiDex
 import com.devs.acr.AutoErrorReporter
 
@@ -11,12 +16,15 @@ import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvicto
 import com.google.android.exoplayer2.upstream.cache.SimpleCache
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.orhanobut.logger.Logger
+import com.google.gson.JsonObject
 import com.stripe.android.PaymentConfiguration
+import com.takwolf.android.foreback.Foreback
+import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.base.repository.*
+import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.network.ApiClient
 import com.tekzee.amiggos.network.ApiService
-import com.tekzee.amiggos.room.dao.ItemDao
 import com.tekzee.amiggos.ui.chatnew.ChatViewModelFactory
 import com.tekzee.amiggos.ui.message.MessagesViewModelFactory
 import com.tekzee.amiggos.ui.storieviewnew.StorieViewModelFactory
@@ -25,12 +33,17 @@ import com.tekzee.amiggos.ui.taggingvideo.TaggingVideoViewModelFactory
 import com.tekzee.amiggos.util.NetworkConnectionInterceptor
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.ui.addusers.AddUserViewModelFactory
+import com.tekzee.amiggos.ui.bookingdetailnew.model.BookingDetailsNewResponse
 import com.tekzee.amiggos.ui.finalbasket.FinalBasketViewModelFactory
+import com.tekzee.amiggos.ui.invitationlist.InvitationListViewModelFactory
 import com.tekzee.amiggos.ui.memories.mymemories.MyMemorieViewModelFactory
 import com.tekzee.amiggos.ui.menu.MenuModelFactory
 import com.tekzee.amiggos.ui.menu.commonfragment.CommonFragmentViewModelFactory
+import com.tekzee.amiggos.util.Utility
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.plugins.RxJavaPlugins
+import io.reactivex.schedulers.Schedulers
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
@@ -39,7 +52,9 @@ import org.kodein.di.generic.instance
 import org.kodein.di.generic.singleton
 
 
-class ApplicationController : Application(), KodeinAware {
+class ApplicationController : Application(), KodeinAware, Foreback.Listener {
+
+    var sharedPreferences: SharedPreference? = null
 
     companion object {
         var simpleCache: SimpleCache? = null
@@ -60,7 +75,6 @@ class ApplicationController : Application(), KodeinAware {
         bind() from singleton { CompositeDisposable() }
 
 
-
         //bind repository
 
         bind() from singleton { TaggingRepository(instance()) }
@@ -72,6 +86,7 @@ class ApplicationController : Application(), KodeinAware {
         bind() from singleton { MemorieFeaturedBrandRepository(instance()) }
         bind() from singleton { MenuRepository(instance()) }
         bind() from singleton { FinalBasketRepository(instance()) }
+        bind() from singleton { InvitationListRepository(instance()) }
 
 
 //        bind() from singleton { ValidateAppVersionRespository(instance()) }
@@ -171,6 +186,7 @@ class ApplicationController : Application(), KodeinAware {
                 instance(),
                 instance(),
                 instance(),
+                instance(),
                 instance()
             )
         }
@@ -193,205 +209,21 @@ class ApplicationController : Application(), KodeinAware {
             )
         }
 
-
-//        bind() from singleton {
-//            LoginViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//        bind() from singleton {
-//            VenueDashboardViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//        bind() from singleton {
-//            BrandDashboardViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//        bind() from singleton { SplashViewModelFactory(instance(), instance()) }
-//        bind() from singleton { ForgetPasswordFactory(instance(), instance(), instance()) }
-//        bind() from singleton {
-//            SettingsViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//        bind() from singleton {
-//            PromotersViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//        bind() from singleton {
-//            AddUserViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//        bind() from singleton {
-//            BookingDetailsViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//        bind() from singleton {
-//            StaffViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//        bind() from singleton {
-//            CommonFragmentViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//
-//
-//        bind() from singleton {
-//            CommonViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//        bind() from singleton {
-//            MyMemorieViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//        bind() from singleton {
-//            DashboardCommonViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//        bind() from singleton {
-//            ApprovalViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//
-
-//
-//        bind() from singleton {
-//            ChatViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-
-//        bind() from singleton {
-//            CityViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//        bind() from singleton {
-//            SettingsMemorieViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//        bind() from singleton {
-//            LocationViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//        bind() from singleton {
-//            BrandViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//        bind() from singleton {
-//            BlockedViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//        bind() from singleton {
-//            LanguageViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//        bind() from singleton {
-//            StripeViewModelFactory(
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
-//
-//        bind() from singleton {
-//            AddCardModelFactory(
-//                instance(),
-//                instance(),
-//                instance()
-//            )
-//        }
+        bind() from singleton {
+            InvitationListViewModelFactory(
+                instance(),
+                instance(),
+                instance()
+            )
+        }
     }
 
 
     override fun onCreate() {
         super.onCreate()
+        Foreback.init(this)
+        Foreback.registerListener(this)
+        sharedPreferences = SharedPreference(applicationContext)
         RxJavaPlugins.setErrorHandler { throwable: Throwable? -> System.out.println("Exception" + throwable!!.localizedMessage) }
 //        AppEventsLogger.activateApp(this);
 //        FacebookSdk.setIsDebugEnabled(true)
@@ -401,10 +233,10 @@ class ApplicationController : Application(), KodeinAware {
             "pk_test_E5sEgimoA8T4SexAo1GnNPkJ00sG6jBcdG"
         );
 
-//        AutoErrorReporter.get(this)
-//            .setEmailAddresses("himanshu.verma@tekzee.com")
-//            .setEmailSubject("Auto Crash Report")
-//            .start()
+        AutoErrorReporter.get(this)
+            .setEmailAddresses("himanshu.verma@tekzee.com")
+            .setEmailSubject("Auto Crash Report")
+            .start()
 
 
         val leastRecentlyUsedCacheEvictor = LeastRecentlyUsedCacheEvictor(90 * 1024 * 1024)
@@ -423,8 +255,45 @@ class ApplicationController : Application(), KodeinAware {
 
 
     override fun onTerminate() {
+        Toast.makeText(applicationContext, "onTerminate", Toast.LENGTH_LONG).show()
         super.onTerminate()
-        Logger.d("called logged out")
+
     }
 
+    override fun onApplicationEnterForeground(activity: Activity?) {
+        callUpdateTimeApi("1")
+    }
+
+    override fun onApplicationEnterBackground(activity: Activity?) {
+        callUpdateTimeApi("2")
+        sharedPreferences!!.save(ConstantLib.CALLBATCHCOUNT,true)
+    }
+
+    @SuppressLint("CheckResult")
+    fun callUpdateTimeApi(actiontime: String) {
+        val input = JsonObject()
+        input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
+        input.addProperty("actiontype", actiontime)
+        ApiClient.instance.doUpdateAppTimeApi(input, Utility.createHeaders(sharedPreferences))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ response ->
+                when (response.code()) {
+                    200 -> {
+                        val responseData: CommonResponse? = response.body()
+                        if (responseData!!.status) {
+                            Log.e("successfully send---->", "Uptime")
+                        } else {
+                            Log.e("error occured in ---->", "Uptime")
+                        }
+                    }
+                    404 -> {
+                        Log.e("error occured---->", "Logout")
+                    }
+                }
+            }, { error ->
+                Log.e("error occured---->", error.message)
+            })
+
+    }
 }

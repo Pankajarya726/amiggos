@@ -1,56 +1,71 @@
 package com.tekzee.amiggos.ui.cameranew
 
 import android.content.Intent
+import android.gesture.Gesture
 import android.graphics.PointF
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
-import com.iammert.library.cameravideobuttonlib.CameraVideoButton
+import com.jackandphantom.instagramvideobutton.InstagramVideoButton
 import com.otaliastudios.cameraview.*
 import com.otaliastudios.cameraview.controls.Facing
 import com.otaliastudios.cameraview.controls.Flash
-import com.otaliastudios.cameraview.controls.Preview
 import com.otaliastudios.cameraview.size.AspectRatio
 import com.otaliastudios.cameraview.size.SizeSelectors
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.NewCameraActivityBinding
 import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.amiggosvenueapp.ui.tagging.TaggingFragment
+import com.tekzee.amiggos.ui.tagging.TaggingFragment
 import com.tekzee.amiggos.ui.taggingvideo.TaggingVideoActivity
+import com.tekzee.amiggos.util.MoveViewTouchListener
 import java.io.File
 
 
-class CameraActivity : AppCompatActivity(),
-    CameraVideoButton.ActionListener {
+class CameraActivity : AppCompatActivity()
+/*InstagramVideoButton.ActionListener*/ {
     private lateinit var sharedPreferences: SharedPreference
     private var binding: NewCameraActivityBinding? = null
     private var mCaptureTime: Long = 0
-    protected var cameraWidth = 1280
-    protected var cameraHeight = 720
     protected var videoWidth = 578
     protected var videoHeight = 1152
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.new_camera_activity)
+        binding = DataBindingUtil.setContentView(this, R.layout.new_camera_activity)
         sharedPreferences = SharedPreference(this)
         CameraLogger.setLogLevel(CameraLogger.LEVEL_VERBOSE)
         setupView()
         setupClickListener()
+
+        NotificationManagerCompat.from(applicationContext!!).cancel(
+            intent!!.getIntExtra(
+                ConstantLib.EXTRA_NOTIFICATION_ID,
+                0
+            )
+        )
+
+//        binding!!.watermark.setOnTouchListener(MoveViewTouchListener(binding!!.watermark))
+
+
     }
 
 
     private fun setupClickListener() {
+
+
         binding!!.imgCameraFront.setOnClickListener { v: View? ->
+            checkFlashAvailability()
             binding!!.cameraFlipper.animate()
             binding!!.cameraFlipper.showPrevious()
             binding!!.camera.facing = Facing.FRONT
         }
         binding!!.imgCameraBack.setOnClickListener { v: View? ->
+            checkFlashAvailability()
             binding!!.cameraFlipper.animate()
             binding!!.cameraFlipper.showNext()
             binding!!.camera.facing = Facing.BACK
@@ -58,7 +73,7 @@ class CameraActivity : AppCompatActivity(),
         binding!!.flashOn.setOnClickListener { v: View? ->
             binding!!.imgFlashControl.animate()
             binding!!.imgFlashControl.showPrevious()
-            binding!!.camera.flash = Flash.ON
+            binding!!.camera.flash = Flash.TORCH
         }
         binding!!.flashOff.setOnClickListener { v: View? ->
             binding!!.imgFlashControl.animate()
@@ -67,7 +82,6 @@ class CameraActivity : AppCompatActivity(),
         }
         binding!!.imgBack.setOnClickListener { v: View? -> onBackPressed() }
     }
-
 
 
     private fun setupView() {
@@ -99,25 +113,93 @@ class CameraActivity : AppCompatActivity(),
 
         binding!!.camera.setVideoSize(result)
         binding!!.camera.setPictureSize(image_result)
-        binding!!.videobutton.setVideoDuration(5000)
-        binding!!.videobutton.actionListener = this
-        binding!!.camera.addCameraListener(Listener())
-        binding!!.username.text = "@"+sharedPreferences.getValueString(ConstantLib.USER_NAME)
-    }
 
-    override fun onDurationTooShortError() {}
-    override fun onEndRecord() {
-        binding!!.videobutton.enableVideoRecording(false)
-    }
 
-    override fun onSingleTap() {
-        capturePictureSnapshot()
-    }
-
-    override fun onStartRecord() {
-        captureVideoSnapshot()
+        binding!!.videobutton.enablePhotoTaking(true)
         binding!!.videobutton.enableVideoRecording(true)
+        binding!!.videobutton.setVideoDuration(5000L)
+        binding!!.videobutton.setMinimumVideoDuration(0)
+
+
+//        binding!!.videobutton.actionListener = this
+
+
+        binding!!.videobutton.actionListener = object : InstagramVideoButton.ActionListener {
+            override fun onStartRecord() {
+                Log.e("MY TAG", "CALL the on start record ")
+                captureVideoSnapshot()
+                binding!!.videobutton.enableVideoRecording(true)
+
+            }
+
+            override fun onEndRecord() {
+                binding!!.camera.stopVideo()
+                Log.e("MY TAG", "CALL the on end record ")
+            }
+
+            override fun onSingleTap() {
+                Log.e("MY TAG", "CALL the on single tap record ")
+                capturePictureSnapshot()
+            }
+
+            override fun onDurationTooShortError() {
+                Log.e("MY TAG", "CALL the on on duration record ")
+
+            }
+
+            override fun onCancelled() {
+                Log.e("MY TAG", "CALL the on on cancel record ")
+                binding!!.camera.stopVideo()
+            }
+
+
+        }
+
+
+
+
+        binding!!.camera.addCameraListener(Listener())
+        binding!!.username.text = "@" + sharedPreferences.getValueString(ConstantLib.USER_NAME)
+
     }
+
+    fun checkFlashAvailability() {
+        val isFlashSupported: List<Flash> =
+            binding!!.camera.cameraOptions!!.supportedFlash.toList()
+        Log.e("supportedFlash", isFlashSupported.toString())
+        for (item in isFlashSupported) {
+            if (item == Flash.TORCH || item == Flash.ON) {
+                binding!!.flashOn.visibility = View.GONE
+                binding!!.flashOff.visibility = View.GONE
+                break
+            } else {
+                binding!!.flashOn.visibility = View.VISIBLE
+            }
+        }
+    }
+
+//    override fun onCancelled() {
+//        Log.e("MY TAG", "CALL the on on cancel record ")
+//        binding!!.camera.stopVideo()
+//    }
+//
+//    override fun onDurationTooShortError() {
+//        Log.e("MY TAG", "CALL the on on duration record ")
+//    }
+//    override fun onEndRecord() {
+//        Log.e("MY TAG", "CALL the on end record ")
+//    }
+//
+//    override fun onSingleTap() {
+//        Log.e("MY TAG", "CALL the on single tap record ")
+//        capturePictureSnapshot()
+//    }
+//
+//    override fun onStartRecord() {
+//        Log.e("MY TAG", "CALL the on start record ")
+//        captureVideoSnapshot()
+//        binding!!.videobutton.enableVideoRecording(true)
+//    }
 
     private inner class Listener : CameraListener() {
         override fun onCameraOpened(options: CameraOptions) {}
@@ -131,6 +213,7 @@ class CameraActivity : AppCompatActivity(),
 
         override fun onPictureTaken(result: PictureResult) {
             super.onPictureTaken(result)
+            Log.e("Rotation----->", result.rotation.toString())
             if (binding!!.camera.isTakingVideo) {
                 Log.d(
                     TAG,
@@ -145,13 +228,35 @@ class CameraActivity : AppCompatActivity(),
             if (mCaptureTime == 0L) mCaptureTime = callbackTime - 300
             TaggingFragment.setPictureResult(result)
             mCaptureTime = 0
-            startActivity(Intent(applicationContext, TaggingFragment::class.java))
-
+            val tagIntent = Intent(applicationContext, TaggingFragment::class.java)
+            tagIntent.putExtra(ConstantLib.SENDER_ID, intent.getStringExtra(ConstantLib.SENDER_ID))
+            tagIntent.putExtra(
+                ConstantLib.FROM_ACTIVITY,
+                intent.getStringExtra(ConstantLib.FROM_ACTIVITY)
+            )
+            tagIntent.putExtra(
+                ConstantLib.OURSTORYID,
+                intent.getStringExtra(ConstantLib.OURSTORYID)
+            )
+            startActivity(tagIntent)
         }
 
         override fun onVideoTaken(result: VideoResult) {
             TaggingVideoActivity.setVideoResult(result)
-            startActivity(Intent(applicationContext, TaggingVideoActivity::class.java))
+            val tagVideoIntent = Intent(applicationContext, TaggingVideoActivity::class.java)
+            tagVideoIntent.putExtra(
+                ConstantLib.SENDER_ID,
+                intent.getStringExtra(ConstantLib.SENDER_ID)
+            )
+            tagVideoIntent.putExtra(
+                ConstantLib.FROM_ACTIVITY,
+                intent.getStringExtra(ConstantLib.FROM_ACTIVITY)
+            )
+            tagVideoIntent.putExtra(
+                ConstantLib.OURSTORYID,
+                intent.getStringExtra(ConstantLib.OURSTORYID)
+            )
+            startActivity(tagVideoIntent)
             super.onVideoTaken(result)
         }
 

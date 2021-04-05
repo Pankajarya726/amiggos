@@ -19,7 +19,7 @@ import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.ActivityOurMemoriesBinding
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.invitefriendnew.adapter.InviteFriendBookingAdapter
-import com.tekzee.amiggos.ui.ourmemories.model.InviteFriendResponse
+import com.tekzee.amiggos.ui.invitefriendnew.model.GetUserForInviteResponse
 import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Successtoast
@@ -41,18 +41,20 @@ class InviteFriendNewActivity : BaseActivity(),
     private var languageData: LanguageData? = null
     private var selectedIds: String = ""
     private var inviteFriendImplementation: InviteFriendNewImplementation? = null
-    private var mydataList = ArrayList<InviteFriendResponse.Data.RealFreind>()
-    private val mLoadingData = InviteFriendResponse.Data.RealFreind(loadingStatus = true)
+    private var mydataList = ArrayList<GetUserForInviteResponse.Data.User>()
+    private val mLoadingData = GetUserForInviteResponse.Data.User(loadingStatus = true)
     private var onlineFriendPageNo = 0
 
     companion object {
         var selectUserIds: HashSet<Int> = HashSet()
+        var undoUserIds: HashSet<Int> = HashSet()
         var ourMemoryId: String = ""
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_our_memories)
+        Log.e("TAG--->",InviteFriendNewActivity::class.java.simpleName)
         sharedPreference = SharedPreference(this)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         inviteFriendImplementation = InviteFriendNewImplementation(this, this)
@@ -78,7 +80,7 @@ class InviteFriendNewActivity : BaseActivity(),
             languageData
         )
         onlineFriendRecyclerview.adapter = adapter
-        adapter.setLoadingStatus(true)
+//        adapter.setLoadingStatus(true)
     }
 
     private fun doCallGetFriends(requestDatFromServer: Boolean, searchvalue: String) {
@@ -86,7 +88,7 @@ class InviteFriendNewActivity : BaseActivity(),
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("page_no", onlineFriendPageNo)
-        input.addProperty("search", searchvalue)
+        input.addProperty("name", searchvalue)
         input.addProperty("booking_id", intent.getStringExtra(ConstantLib.BOOKING_ID))
         inviteFriendImplementation!!.doCallGetFriends(
             input,
@@ -151,6 +153,7 @@ class InviteFriendNewActivity : BaseActivity(),
         val input: JsonObject = JsonObject()
         input.addProperty("booking_id", intent.getStringExtra(ConstantLib.BOOKING_ID))
         input.addProperty("friend_id", toCommaSeparated)
+        input.addProperty("unfriend_id", toUndoCommaSeparated())
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
         inviteFriendImplementation!!.doCallInviteFriendApi(
             input,
@@ -183,12 +186,6 @@ class InviteFriendNewActivity : BaseActivity(),
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onOurMemoriesSuccess(responseData: InviteFriendResponse?) {
-        onlineFriendPageNo++
-        mydataList =
-            responseData!!.data.realFreind as ArrayList<InviteFriendResponse.Data.RealFreind>
-        setupRecyclerView()
-    }
 
 
     override fun onBackPressed() {
@@ -196,6 +193,7 @@ class InviteFriendNewActivity : BaseActivity(),
             val intent = Intent(applicationContext, AHomeScreen::class.java)
             startActivity(intent)
             selectUserIds.clear()
+            undoUserIds.clear()
             finishAffinity()
         } else {
             super.onBackPressed()
@@ -205,18 +203,23 @@ class InviteFriendNewActivity : BaseActivity(),
     }
 
 
-    override fun onOurMemoriesSuccessInfinite(responseData: InviteFriendResponse?) {
+    override fun onOurMemoriesSuccess(responseData: GetUserForInviteResponse?) {
+        onlineFriendPageNo++
+        mydataList.addAll(responseData!!.data.user)
+        adapter.setLoadingStatus(true)
+        adapter.notifyDataSetChanged()
+    }
 
+    override fun onOurMemoriesSuccessInfinite(responseData: GetUserForInviteResponse?) {
         onlineFriendPageNo++
         adapter.setLoadingStatus(true)
         mydataList.removeAt(mydataList.size - 1)
-        mydataList.addAll(responseData!!.data.realFreind)
+        mydataList.addAll(responseData!!.data.user)
         adapter.notifyDataSetChanged()
     }
 
 
     override fun onOurMemoriesFailure(message: String) {
-
         if (mydataList.size > 0) {
             adapter.setLoadingStatus(false)
             mydataList.removeAt(mydataList.size - 1)
@@ -230,6 +233,7 @@ class InviteFriendNewActivity : BaseActivity(),
         val intent = Intent(applicationContext, AHomeScreen::class.java)
         startActivity(intent)
         selectUserIds.clear()
+        undoUserIds.clear()
         finishAffinity()
     }
 
@@ -242,10 +246,15 @@ class InviteFriendNewActivity : BaseActivity(),
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()
         selectUserIds.clear()
+        undoUserIds.clear()
     }
 
 
@@ -258,24 +267,52 @@ class InviteFriendNewActivity : BaseActivity(),
 
     override fun itemClickCallback(
         position: Int,
-        realFreind: InviteFriendResponse.Data.RealFreind,
+        realFreind: GetUserForInviteResponse.Data.User,
         type: Int
     ) {
+
+        if(realFreind.isInvited==1){
+            if (type == 1) {
+                undoUserIds.add(realFreind.userid)
+            } else {
+                undoUserIds.remove(realFreind.userid)
+
+            }
+        }
         if (type == 1) {
             selectUserIds.remove(realFreind.userid)
         } else {
-            selectUserIds.add(realFreind.userid)
+            if(realFreind.isInvited == 0)
+            addToSelectedUserid(realFreind.userid)
         }
         adapter.notifyItemChanged(position)
 
+        Log.e("Selected userids--->","---"+toCommaSeparated())
+        Log.e("undo userids","---"+toUndoCommaSeparated())
+
     }
 
+
+    fun addToSelectedUserid(userid: Int) {
+        selectUserIds.add(userid)
+    }
 
     fun toCommaSeparated(): String? {
         var result = ""
         if (selectUserIds.size > 0) {
             val sb = StringBuilder()
             for (s in selectUserIds) {
+                sb.append(s).append(",")
+            }
+            result = sb.deleteCharAt(sb.length - 1).toString()
+        }
+        return result
+    }
+    fun toUndoCommaSeparated(): String? {
+        var result = ""
+        if (undoUserIds.size > 0) {
+            val sb = StringBuilder()
+            for (s in undoUserIds) {
                 sb.append(s).append(",")
             }
             result = sb.deleteCharAt(sb.length - 1).toString()

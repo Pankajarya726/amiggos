@@ -1,6 +1,8 @@
 package com.tekzee.amiggos.ui.stripepayment.addnewcard
 
 import android.os.Bundle
+import android.text.InputType
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
@@ -36,7 +38,6 @@ class AAddCard : BaseActivity(), AAddCardPresenter.AAddCardPresenterMainView {
         sharedPreferences = SharedPreference(this)
         languageData = sharedPreferences!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         implementation = AAddCardImplementation(this, this)
-        setupToolBar()
         setupLanguage()
         setupClickListener()
     }
@@ -49,6 +50,11 @@ class AAddCard : BaseActivity(), AAddCardPresenter.AAddCardPresenterMainView {
 
     private fun setupClickListener() {
 
+        binding!!.imgClose.setOnClickListener {
+            onBackPressed()
+        }
+
+
         binding!!.cardForm.cardRequired(true)
             .expirationRequired(true)
             .cvvRequired(true)
@@ -56,6 +62,7 @@ class AAddCard : BaseActivity(), AAddCardPresenter.AAddCardPresenterMainView {
             .postalCodeRequired(false)
             .mobileNumberRequired(false)
             .actionLabel("Done")
+            .maskCvv(true)
             .setup(this)
 
 
@@ -130,7 +137,7 @@ class AAddCard : BaseActivity(), AAddCardPresenter.AAddCardPresenterMainView {
     }
 
     override fun onChooseWeekSuccess(responseData: ChooseWeekResponse?) {
-        TODO("Not yet implemented")
+        Log.e("data",responseData!!.message)
     }
 
     override fun onSaveCardSuccess(responseData: CommonResponse?) {
@@ -146,13 +153,8 @@ class AAddCard : BaseActivity(), AAddCardPresenter.AAddCardPresenterMainView {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
-
-    private fun setupToolBar() {
-        val toolbar: Toolbar = binding!!.toolbar
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
 

@@ -28,6 +28,8 @@ data class FriendListData(
     val profile: String = "",
     @SerializedName("status")
     val status: Int = 0,
+    @SerializedName("allow_invite")
+    val allow_invite : String = "0",
     @SerializedName("userid")
     val userid: Int = 0
 )

@@ -2,6 +2,7 @@ package com.tekzee.amiggos.ui.venuedetailsnew.model
 
 
 import com.google.gson.annotations.SerializedName
+import com.tekzee.amiggos.ui.venuedetails.vne
 import java.io.Serializable
 
 data class VenueDetails(
@@ -11,14 +12,16 @@ data class VenueDetails(
     val message: String = "",
     @SerializedName("status")
     val status: Boolean = false
-):Serializable {
+) : Serializable {
     data class Data(
         @SerializedName("club_data")
         val clubData: ClubData = ClubData()
-    ):Serializable {
+    ) : Serializable {
         data class ClubData(
             @SerializedName("address")
             val address: String = "",
+            @SerializedName("calendar")
+            val mcalendar:calendar = calendar(),
             @SerializedName("agelimit")
             val agelimit: String = "",
             @SerializedName("club_city")
@@ -41,6 +44,8 @@ data class VenueDetails(
             val homeImage: List<String> = listOf(),
             @SerializedName("is_favorite")
             val isFavorite: Int = 0,
+            @SerializedName("is_booking_available")
+            val isBookingAvailable: String = "0",
             @SerializedName("latitude")
             val latitude: String = "",
             @SerializedName("longitude")
@@ -48,12 +53,12 @@ data class VenueDetails(
             @SerializedName("mask_req")
             val maskReq: Int = 0,
             @SerializedName("menu_type")
-            val menuType: Int = 0,
+            val menuType: String = "0",
             @SerializedName("menu_type_name")
             val menuTypeName: String = "",
             @SerializedName("name")
             val name: String = "",
-            @SerializedName("phone_number")
+            @SerializedName("phone")
             val phoneNumber: String = "",
             @SerializedName("price_category")
             val priceCategory: String = "",
@@ -72,10 +77,27 @@ data class VenueDetails(
             @SerializedName("mask_image")
             val maskimage: String = "",
             @SerializedName("timeslot")
-            val timeslot: Int =0,
+            val timeslot: Int = 0,
             @SerializedName("isclock")
             val isclock: Int = 0
-        ):Serializable {
+        ) : Serializable {
+            data class calendar(
+                @SerializedName("fri")
+                val fri: Int = 0,
+                @SerializedName("mon")
+                val mon: Int = 0,
+                @SerializedName("sat")
+                val sat: Int = 0,
+                @SerializedName("sun")
+                val sun: Int = 0,
+                @SerializedName("thu")
+                val thu: Int = 0,
+                @SerializedName("tue")
+                val tue: Int = 0,
+                @SerializedName("wed")
+                val wed: Int = 0
+            ): Serializable
+
             data class WorkingDay(
                 @SerializedName("is_open")
                 val isOpen: Int = 0,
@@ -83,7 +105,7 @@ data class VenueDetails(
                 val name: String = "",
                 @SerializedName("timing")
                 val timing: String = ""
-            ):Serializable
+            ) : Serializable
         }
     }
 }

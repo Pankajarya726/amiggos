@@ -1,4 +1,4 @@
-package com.tekzee.amiggos.ui.referalcode.model
-
-class Data(
-)
+//package com.tekzee.amiggos.ui.referalcode.model
+//
+//class Data(
+//)

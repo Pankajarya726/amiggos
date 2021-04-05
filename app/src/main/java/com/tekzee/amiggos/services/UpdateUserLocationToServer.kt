@@ -36,7 +36,9 @@ class UpdateUserLocationToServer : Service() {
     private var disposable: Disposable? = null
     private var sharedPreferences: SharedPreference? = null
 
-    var handler = Handler()
+    var handler:Handler? = null
+
+
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -45,13 +47,14 @@ class UpdateUserLocationToServer : Service() {
 
     private val periodicUpdate: Runnable = object : Runnable {
         override fun run() {
-            handler.postDelayed(
+            handler!!.postDelayed(
                 this,
                 30000
             )
 
             SmartLocation.with(applicationContext).location().oneFix()
                 .start { locationData ->
+
                     getAddressFromLocation(locationData)
                     callLocationUpdateService(locationData)
                 }
@@ -76,11 +79,12 @@ class UpdateUserLocationToServer : Service() {
     }
 
     fun startService() {
-
-        handler.post(periodicUpdate);
+        handler!!.post(periodicUpdate);
     }
 
     private fun callLocationUpdateService(location: Location?) {
+        sharedPreferences!!.save(ConstantLib.CURRENTLAT,location!!.latitude.toString())
+        sharedPreferences!!.save(ConstantLib.CURRENTLNG,location!!.longitude.toString())
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("latitude", location!!.latitude.toString())
@@ -117,7 +121,7 @@ class UpdateUserLocationToServer : Service() {
     override fun onCreate() {
         super.onCreate()
         sharedPreferences = SharedPreference(this)
-
+        handler = Handler()
         // val notification = createNotification()
         // startForeground(1, notification)
     }

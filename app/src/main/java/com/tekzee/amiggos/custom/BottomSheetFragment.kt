@@ -42,7 +42,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             val intent = Intent(requireContext(), CalendarViewActivity::class.java)
             intent.putExtra(ConstantLib.VENUE_ID, venueid)
             intent.putExtra(ConstantLib.CALENDAR_DATA, responseData)
-            intent.putExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO, "To-Go")
+            intent.putExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO, ConstantLib.TOGOTEXT)
             startActivity(intent)
         }
         contentView.findViewById<View>(R.id.dinin).setOnClickListener { dialog.dismiss()
@@ -50,7 +50,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             val intent = Intent(requireContext(), CalendarViewActivity::class.java)
             intent.putExtra(ConstantLib.CALENDAR_DATA, responseData)
             intent.putExtra(ConstantLib.VENUE_ID, venueid)
-            intent.putExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO, "Dine-In")
+            intent.putExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO, ConstantLib.DINEIN)
             startActivity(intent)}
     }
 

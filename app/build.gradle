@@ -152,11 +152,12 @@ dependencies {
 
     //image picker and cropper
     //api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
-    api project(':cropper')
+//    api project(':cropper')
 
     api project(':autocompleteplace')
 //    api project(':hiddensearchwithrecyclerview')
     api project(':customimage')
+    api project(':instagramvideobutton')
 
     //circular image view
     implementation 'com.library.tangxiaolv:effectiveshapeview:1.0.1'
@@ -224,12 +225,12 @@ dependencies {
 
 
 
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.2.1'
+//    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.2.1'
 
 
 
 
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v8:0.7.0'
+//    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v8:0.7.0'
 
 
     implementation 'com.github.mohammadatif:Animatoo:master'
@@ -238,7 +239,7 @@ dependencies {
     implementation 'com.github.drawers:SpinnerDatePicker:2.0.1'
 
     implementation 'com.github.ajithvgiri:search-dialog:v1.3'
-    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
+//    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
 
     implementation 'ru.alexbykov:nopaginate:0.9.9'
 
@@ -307,4 +308,13 @@ dependencies {
     kapt "androidx.room:room-compiler:$rootProject.roomVersion"
     implementation "androidx.room:room-ktx:$rootProject.roomVersion"
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
+    implementation 'com.github.dhaval2404:imagepicker-support:1.7.1'
+    implementation 'com.beloo.widget:ChipsLayoutManager:0.3.7@aar'
+    implementation 'com.github.ravindu1024:android-keyboardlistener:1.0.0'
+    implementation 'com.github.vipulasri.layouttoimage:library:1.0.0'
+
+
+
+    implementation 'com.takwolf.android:foreback:0.1.1'
+
 }

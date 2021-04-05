@@ -13,6 +13,7 @@ import com.tekzee.amiggos.ui.newpreferences.amusictypefragment.AMusicTypeFragmen
 import com.tekzee.amiggos.ui.newpreferences.avenuetypefragment.AVenueTypeFragment
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.util.Utility
 
 
 class ANewPreferences : BaseActivity() {
@@ -63,6 +64,10 @@ class ANewPreferences : BaseActivity() {
 
     override fun validateError(message: String) {
        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
     private fun setupViews() {

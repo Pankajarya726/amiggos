@@ -16,7 +16,8 @@
         android:id="@+id/storyDisplayImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY" />
 
     <ProgressBar
         android:id="@+id/storyDisplayVideoProgress"
@@ -103,7 +104,7 @@
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:src="@drawable/header_logo"
-
+                app:civ_circle_background_color="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/header_logo" />
@@ -175,7 +176,7 @@
         android:layout_marginBottom="@dimen/_20sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_delete" />
+        app:srcCompat="@drawable/ic_delete_icon" />
 
     <LinearLayout
         android:id="@+id/layout_approve_decline"
@@ -215,6 +216,66 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/txt_decline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/_7sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:layout_weight="1"
+            android:fontFamily="@font/opensans_semibold"
+            android:padding="@dimen/_3sdp"
+            android:text="Decline"
+            android:textAllCaps="false"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/_10sdp"
+            app:backgroundTint="@android:color/white"
+            app:cornerRadius="0sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:rippleColor="@android:color/black"
+            app:strokeColor="@color/black"
+            app:strokeWidth="@dimen/_1sdp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout_join_memory"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_80sdp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:weightSum="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/txt_join"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_7sdp"
+            android:layout_weight="1"
+            android:fontFamily="@font/opensans_semibold"
+            android:padding="@dimen/_3sdp"
+            android:text="Join"
+            android:textAllCaps="false"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/_10sdp"
+            app:backgroundTint="@android:color/white"
+            app:cornerRadius="0sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:rippleColor="@android:color/black"
+            app:strokeColor="@color/black"
+            app:strokeWidth="@dimen/_1sdp" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/txt_memory_decline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

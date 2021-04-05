@@ -35,9 +35,9 @@ class FirstFragmentPresenterImplementation(
         requestDatFromServer: Boolean,
         fragmentVisible: Boolean
     ) {
-        if (!requestDatFromServer && fragmentVisible) {
-            mainView.showProgressbar()
-        }
+//        if (!requestDatFromServer && fragmentVisible) {
+//            mainView.showProgressbar()
+//        }
         if (mainView.checkInternet()) {
             disposable = ApiClient.instance.getNearByUserv2(input, createHeaders)
                 .subscribeOn(Schedulers.io())
@@ -49,9 +49,9 @@ class FirstFragmentPresenterImplementation(
                             val responseData: NearByV2Response? = response.body()
                             if (responseData!!.data.nearestFreind.isNotEmpty()) {
                                 if (requestDatFromServer) {
-                                    mainView.onOnlineFriendInfiniteSuccess(responseData.data.nearestFreind)
+                                    mainView.onOnlineFriendInfiniteSuccess(responseData.data.nearestFreind,responseData)
                                 } else {
-                                    mainView.onOnlineFriendSuccess(responseData.data.nearestFreind)
+                                    mainView.onOnlineFriendSuccess(responseData.data.nearestFreind,responseData.data.total_count,responseData)
                                 }
                             } else {
                                 mainView.onOnlineFriendFailure(responseData.message)
@@ -65,11 +65,11 @@ class FirstFragmentPresenterImplementation(
                         }
                     }
                 }, { error ->
-                    mainView.hideProgressbar()
+//                    mainView.hideProgressbar()
                     mainView.onOnlineFriendFailure(error.message.toString())
                 })
         } else {
-            mainView.hideProgressbar()
+//            mainView.hideProgressbar()
             mainView.validateError(context!!.getString(R.string.check_internet))
         }
     }

@@ -119,9 +119,18 @@ class SettingsActivity: BaseActivity(), SettingsPresenter.SettingsMainView {
         Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
 
     override fun onUpdateSettingsSuccess(responseData: UpdateSettingsResponse) {
         Toast.makeText(applicationContext,responseData.message,Toast.LENGTH_LONG).show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        settingsPresenterImplementation!!.onStop()
     }
 
 }

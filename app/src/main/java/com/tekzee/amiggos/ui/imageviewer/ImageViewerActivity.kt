@@ -12,6 +12,7 @@ import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.util.Utility
 
 class ImageViewerActivity: BaseActivity() {
 
@@ -49,5 +50,9 @@ class ImageViewerActivity: BaseActivity() {
 
     override fun validateError(message: String) {
         Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 }

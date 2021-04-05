@@ -13,12 +13,11 @@ import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.ABookingFragmentBinding
-import com.tekzee.amiggos.ui.bookingdetails.ABookingDetails
 import com.tekzee.amiggos.ui.bookings_new.bookings.adapter.BookingAdapter
 import com.tekzee.amiggos.ui.bookings_new.bookings.model.ABookingResponse
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.ui.bookingdetailnew.BookingDetailNewActivity
 import com.tekzee.amiggos.ui.homescreen_new.NotifyNotification
@@ -36,12 +35,18 @@ class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
     private var adapter: BookingAdapter?=null
 
     companion object {
+        private val aBooking: ABooking? = null
+
 
         fun newInstance(): ABooking {
-            return ABooking()
+
+            if(aBooking == null){
+                return ABooking()
+            }
+            return aBooking
+
         }
     }
-
 
 
     override fun onCreateView(
@@ -50,7 +55,6 @@ class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater,R.layout.a_booking_fragment, container, false)
-
         return binding.root
     }
 
@@ -65,7 +69,7 @@ class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
     }
 
     private fun setupClickListener() {
-        binding.error.errorLayout.setOnClickListener {
+        binding.errorLayout.setOnClickListener {
             data.clear()
             adapter!!.notifyDataSetChanged()
             callGetBookings()
@@ -104,23 +108,37 @@ class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
         )
     }
 
+    override fun showProgress() {
+        binding.progressbar.visibility=View.VISIBLE
+    }
+
+    override fun hideProgress() {
+        binding.progressbar.visibility=View.GONE
+    }
 
 
-    override fun onBookingSuccess(taggedVenue: List<ABookingResponse.Data.BookingData>) {
+    override fun onBookingSuccess(
+        taggedVenue: List<ABookingResponse.Data.BookingData>,
+        responseData: ABookingResponse
+    ) {
         data.clear()
         adapter!!.notifyDataSetChanged()
         data.addAll(taggedVenue)
         adapter!!.notifyDataSetChanged()
-        setupErrorVisibility()
+        setupErrorVisibility(responseData.message)
     }
 
     override fun onBookingFailure(message: String) {
-        setupErrorVisibility()
+        setupErrorVisibility(message)
     }
 
 
     override fun validateError(message: String) {
-        setupErrorVisibility()
+        setupErrorVisibility(message)
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
     }
 
     override fun onStop() {
@@ -130,13 +148,15 @@ class ABooking : BaseFragment(), ABookingPresenter.ABookingPresenterMainView
 
 
 
-    fun setupErrorVisibility(){
+    fun setupErrorVisibility(message: String) {
         if(data.size == 0){
-            binding.error.errorLayout.visibility = View.VISIBLE
+            binding.errorLayout.visibility = View.VISIBLE
+            binding.errortext.text = message
             binding.aBookingRecyclerview.visibility = View.GONE
         }else{
             binding.aBookingRecyclerview.visibility = View.VISIBLE
-            binding.error.errorLayout.visibility = View.GONE
+            binding.errortext.text = ""
+            binding.errorLayout.visibility = View.GONE
         }
     }
 

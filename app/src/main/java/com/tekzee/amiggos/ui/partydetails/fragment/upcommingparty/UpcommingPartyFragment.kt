@@ -17,7 +17,7 @@ import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.adapter.PastPartyAd
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.interfaces.PastPartyInterface
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyData
 import com.tekzee.amiggos.ui.partydetails.fragment.pastparty.model.PastPartyResponse
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
@@ -87,6 +87,10 @@ class UpcommingPartyFragment: BaseFragment(), UpcommingPartyPresenter.UpcomingPa
         items.clear()
         adapter.notifyDataSetChanged()
         Toast.makeText(activity,message,Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
     }
 
     override fun onUpcomingPartySuccess(responseData: PastPartyResponse) {

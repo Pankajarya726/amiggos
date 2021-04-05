@@ -12,6 +12,8 @@ data class HomeResponse(
     val status: Boolean = false
 ) {
     data class Data(
+        @SerializedName("default_zoom_value")
+        val defaulzoomvalue:String ="12.0",
         @SerializedName("venue")
         val venue: ArrayList<Venue> = ArrayList()
     ) {
@@ -37,7 +39,9 @@ data class HomeResponse(
             @SerializedName("state")
             val state: String = "",
             @SerializedName("type")
-            val type: String = ""
+            val type: String = "",
+            @SerializedName("is_google_venue")
+            val is_google_venue: String = "0"
         )
     }
 }

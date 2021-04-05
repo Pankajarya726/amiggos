@@ -16,10 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.tekzee.amiggos.ui.storieviewnew.customview.StoriesProgressView
-import com.tekzee.amiggos.ui.storieviewnew.data.Story
-import com.tekzee.amiggosvenueapp.ui.storieviewnew.data.StoryUser
-import com.tekzee.amiggos.ui.storieviewnew.utils.OnSwipeTouchListener
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
@@ -29,15 +25,24 @@ import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import com.google.gson.JsonObject
 import com.nicolettilu.scrolldowntosearchrecyclerview.utils.hide
 import com.tekzee.amiggos.ApplicationController
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.enums.FriendsAction
+import com.tekzee.amiggos.ui.cameranew.CameraActivity
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
 import com.tekzee.amiggos.ui.storieview.StorieEvent
 import com.tekzee.amiggos.ui.storieviewnew.*
+import com.tekzee.amiggos.ui.storieviewnew.customview.StoriesProgressView
+import com.tekzee.amiggos.ui.storieviewnew.data.Story
+import com.tekzee.amiggos.ui.storieviewnew.data.StoryUser
+import com.tekzee.amiggos.ui.storieviewnew.utils.OnSwipeTouchListener
 import com.tekzee.amiggos.ui.storieviewnew.utils.show
+import com.tekzee.amiggos.ui.viewfriends.ViewFriendsActivity
 import com.tekzee.amiggos.util.*
 import kotlinx.android.synthetic.main.fragment_story_display.*
 import org.kodein.di.Kodein
@@ -45,10 +50,11 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
 import java.util.*
-import kotlin.collections.ArrayList
 
 class StoryDisplayFragment : Fragment(),
     StoriesProgressView.StoriesListener, BannerClickListener, KodeinAware, StorieEvent {
+    private var storieId: String? = null
+    private var fileid: String? = null
     val prefs: SharedPreference by instance<SharedPreference>()
     override val kodein: Kodein by closestKodein()
     private val position: Int by
@@ -73,7 +79,7 @@ class StoryDisplayFragment : Fragment(),
     private var onResumeCalled = false
     private var onVideoPrepared = false
     private var adapter: BannerAdapter? = null
-    val languageConstant: LanguageData by instance<LanguageData>()
+    private var languageConstant: LanguageData? = null
     private lateinit var viewModel: StorieViewModel
     val factory: StorieViewModelFactory by instance<StorieViewModelFactory>()
 
@@ -91,14 +97,61 @@ class StoryDisplayFragment : Fragment(),
 
         viewModel = ViewModelProvider(this, factory).get(StorieViewModel::class.java)
         viewModel.storieEvent = this
-
+        languageConstant = prefs.getLanguageData(ConstantLib.LANGUAGE_DATA)
         storyDisplayVideo.useController = false
         updateStory()
         setUpUi()
         setupAdapter()
         setupLanguge()
+        setupClickListener()
         img_cancel.setOnClickListener {
             requireActivity().onBackPressed()
+        }
+
+        txt_view.setOnClickListener {
+            val intent = Intent(requireActivity(), ViewFriendsActivity::class.java)
+            intent.putExtra(ConstantLib.STORY, storieId)
+            intent.putExtra(ConstantLib.FILEID, fileid)
+            startActivity(intent)
+        }
+
+    }
+
+    private fun setupClickListener() {
+        txt_join.setOnClickListener {
+            val intent = Intent(requireContext(), CameraActivity::class.java)
+            intent.putExtra(ConstantLib.FROM_ACTIVITY, ConstantLib.OURSTORYINVITE)
+            intent.putExtra(
+                ConstantLib.SENDER_ID,
+                prefs.getValueString(ConstantLib.SENDER_ID_MEMORY_NOTIFICATION)
+            )
+            intent.putExtra(
+                ConstantLib.OURSTORYID,
+                prefs.getValueString(ConstantLib.OUR_STORY_ID)
+            )
+            requireContext().startActivity(intent)
+            requireActivity().finish()
+        }
+
+        txt_memory_decline.setOnClickListener {
+
+            val input = JsonObject()
+            input.addProperty(
+                "userid",
+                prefs!!.getValueInt(ConstantLib.USER_ID)
+            )
+            input.addProperty(
+                "sender_id",
+                prefs.getValueString(ConstantLib.SENDER_ID_MEMORY_NOTIFICATION)
+            )
+            input.addProperty(
+                "our_story_id",
+                prefs.getValueString(ConstantLib.OUR_STORY_ID)
+            )
+            viewModel.callRejectPartyInviteApi(
+                input,
+            )
+
         }
 
     }
@@ -106,12 +159,20 @@ class StoryDisplayFragment : Fragment(),
 
     private fun setupLanguge() {
         if (prefs.getValueString(ConstantLib.FROM).equals(ConstantLib.APPROVAL, true)) {
-            layout_approve_decline.visibility = View.VISIBLE
+            layout_approve_decline.visibility = View.GONE
         } else {
             layout_approve_decline.visibility = View.GONE
         }
-        txt_accept.text = languageConstant.approve
-        txt_decline.text = languageConstant.decline
+        txt_accept.text = languageConstant!!.approve
+        txt_decline.text = languageConstant!!.decline
+
+        if (prefs.getValueString(ConstantLib.FROM).equals(ConstantLib.JOIN, true)) {
+            layout_join_memory.visibility = View.VISIBLE
+        } else {
+            layout_join_memory.visibility = View.GONE
+        }
+        txt_join.text = languageConstant!!.klJoin
+        txt_memory_decline.text = languageConstant!!.decline
     }
 
     private fun setupAdapter() {
@@ -122,14 +183,18 @@ class StoryDisplayFragment : Fragment(),
             false
         )
         banner_recyclerview.adapter = adapter
-        observeList(stories[0].banners)
+        if (stories.size > 0) {
+            stories[0].banners
+            observeList(stories[0].banners)
+        }
+
     }
 
     private fun observeList(tagged: List<MemorieResponse.Data.Memories.Memory.Tagged>) {
         if (tagged.isNotEmpty() && adapter != null) {
             banner_recyclerview.visibility = View.VISIBLE
             adapter!!.submitList(tagged)
-        }else{
+        } else {
             banner_recyclerview.visibility = View.GONE
         }
     }
@@ -146,21 +211,24 @@ class StoryDisplayFragment : Fragment(),
 
     override fun onResume() {
         super.onResume()
-        onResumeCalled = true
-        if (stories[counter].isVideo() && !onVideoPrepared) {
-            simpleExoPlayer?.playWhenReady = false
-            return
+        if (stories.size > 0) {
+            onResumeCalled = true
+            if (stories[counter].isVideo() && !onVideoPrepared) {
+                simpleExoPlayer?.playWhenReady = false
+                return
+            }
+
+            simpleExoPlayer?.seekTo(5)
+            simpleExoPlayer?.playWhenReady = true
+            if (counter == 0) {
+                storiesProgressView?.startStories()
+            } else {
+                // restart animation
+                counter = StorieViewNew.progressState.get(arguments?.getInt(EXTRA_POSITION) ?: 0)
+                storiesProgressView?.startStories(counter)
+            }
         }
 
-        simpleExoPlayer?.seekTo(5)
-        simpleExoPlayer?.playWhenReady = true
-        if (counter == 0) {
-            storiesProgressView?.startStories()
-        } else {
-            // restart animation
-            counter = StorieViewNew.progressState.get(arguments?.getInt(EXTRA_POSITION) ?: 0)
-            storiesProgressView?.startStories(counter)
-        }
     }
 
     override fun onPause() {
@@ -196,45 +264,85 @@ class StoryDisplayFragment : Fragment(),
     }
 
     private fun updateStory() {
-        observeList(stories[counter].banners)
-        Log.e("Url---->",stories[counter].url)
+        if (stories.size > 0) {
+            observeList(stories[counter].banners)
+            Log.e("Url---->", stories[counter].toString())
+            if (stories[counter].from.equals(ConstantLib.OURMEMORIES)) {
+                fileid = stories[counter].storyData.id.toString()
+                storieId = stories[counter].ourstorieid
+            } else {
+                fileid = ""
+                storieId = stories[counter].storyData.id.toString()
+            }
+
+
+//            if (stories[counter].storyData.user_id == prefs.getValueInt(ConstantLib.USER_ID)) {
+//                txt_view.visibility = View.VISIBLE
+//            } else {
+//                txt_view.visibility = View.GONE
+//            }
+            txt_view.text = stories[counter].storyData.viewCount.toString()
+            /*if (stories[counter].storyData.type.equals("4") || stories[counter].storyData.type.equals("4"))
+            {
+                txt_view.visibility = View.VISIBLE
+            } else {
+                txt_view.visibility = View.GONE
+            }
+            txt_view.text = stories[counter].storyData.type.toString()*/
+
+            Glide.with(this).load(stories[counter].storyData.profile)
+                .placeholder(R.drawable.user).into(storyDisplayProfilePicture)
+            storyDisplayNick.text = stories[counter].storyData.name
+
+
+
+
+
+            simpleExoPlayer?.stop()
+            if (stories[counter].isVideo()) {
+                storyDisplayVideo.show()
+                storyDisplayImage.hide()
+                storyDisplayVideoProgress.show()
+                initializePlayer()
+            } else {
+                storyDisplayVideo.hide()
+                storyDisplayVideoProgress.hide()
+                storyDisplayImage.show()
+                Glide.with(this).load(stories[counter].url).placeholder(R.drawable.noimage)
+                    .into(storyDisplayImage)
+            }
+
+            val cal: Calendar = Calendar.getInstance(Locale.ENGLISH).apply {
+                timeInMillis = 0
+            }
+            storyDisplayTime.text = DateFormat.format("MM-dd-yyyy HH:mm:ss", cal).toString()
+
+            if (prefs.getValueInt(ConstantLib.USER_ID) == stories[counter].storyData.user_id && prefs.getValueString(
+                    ConstantLib.USER_TYPE
+                ) == stories[counter].storyData.story_user_type.toString()
+            ) {
+                img_delete.visibility = View.VISIBLE
+            } else {
+                img_delete.visibility = View.GONE
+            }
+        }
+
+
+
+
+
         txt_accept.setOnClickListener {
-            viewModel.callAcceptDeclineApi(stories[counter].storieId, 1)
+            viewModel.callAcceptDeclineApi(stories[counter].storyData.id.toString(), 1)
         }
 
 
         txt_decline.setOnClickListener {
-            viewModel.callAcceptDeclineApi(stories[counter].storieId, 2)
+            viewModel.callAcceptDeclineApi(stories[counter].storyData.id.toString(), 2)
         }
 
 
         img_delete.setOnClickListener {
-            viewModel.callDeleteApi(stories[counter].storieId)
-        }
-
-
-        simpleExoPlayer?.stop()
-        if (stories[counter].isVideo()) {
-            storyDisplayVideo.show()
-            storyDisplayImage.hide()
-            storyDisplayVideoProgress.show()
-            initializePlayer()
-        } else {
-            storyDisplayVideo.hide()
-            storyDisplayVideoProgress.hide()
-            storyDisplayImage.show()
-            Glide.with(this).load(stories[counter].url).placeholder(R.drawable.noimage).into(storyDisplayImage)
-        }
-
-        val cal: Calendar = Calendar.getInstance(Locale.ENGLISH).apply {
-            timeInMillis = stories[counter].storyDate
-        }
-        storyDisplayTime.text = DateFormat.format("MM-dd-yyyy HH:mm:ss", cal).toString()
-
-        if(prefs.getValueInt(ConstantLib.USER_ID) == stories[counter].creater_id){
-            img_delete.visibility = View.VISIBLE
-        }else{
-            img_delete.visibility = View.GONE
+            viewModel.callDeleteApi(stories[counter].storyData.id.toString(), counter)
         }
     }
 
@@ -298,11 +406,11 @@ class StoryDisplayFragment : Fragment(),
     private fun setUpUi() {
         val touchListener = object : OnSwipeTouchListener(requireActivity()) {
             override fun onSwipeTop() {
-               // Toast.makeText(activity, "onSwipeTop", Toast.LENGTH_LONG).show()
+                // Toast.makeText(activity, "onSwipeTop", Toast.LENGTH_LONG).show()
             }
 
             override fun onSwipeBottom() {
-               // Toast.makeText(activity, "onSwipeBottom", Toast.LENGTH_LONG).show()
+                // Toast.makeText(activity, "onSwipeBottom", Toast.LENGTH_LONG).show()
             }
 
             override fun onClick(view: View) {
@@ -354,8 +462,7 @@ class StoryDisplayFragment : Fragment(),
         storiesProgressView?.setAllStoryDuration(4000L)
         storiesProgressView?.setStoriesListener(this)
 
-        Glide.with(this).load(storyUser.profilePicUrl).circleCrop().into(storyDisplayProfilePicture)
-        storyDisplayNick.text = storyUser.username
+
     }
 
     private fun showStoryOverlay() {
@@ -414,18 +521,23 @@ class StoryDisplayFragment : Fragment(),
         position: Int,
         listItem: MemorieResponse.Data.Memories.Memory.Tagged
     ) {
-        try {
-            var websiteUrl=""
-            if(listItem.website.contains("http://")){
-               websiteUrl =  listItem.website
-            }else{
-                websiteUrl ="http://"+listItem.website
-            }
-            val openUrlIntent = Intent(Intent.ACTION_VIEW, Uri.parse(websiteUrl))
-            startActivity(openUrlIntent)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+
+
+        callBannercountApi(listItem, stories[counter].storyData.featured_brand_id.toString())
+
+
+    }
+
+    private fun callBannercountApi(
+        listItem: MemorieResponse.Data.Memories.Memory.Tagged,
+        featured_brand_id: String
+    ) {
+        pauseCurrentStory()
+        viewModel.callBannerCountApi(
+            stories[counter].storyData.id.toString(),
+            listItem,
+            featured_brand_id
+        )
     }
 
     override fun onAcceptDeclineCalled() {
@@ -438,19 +550,73 @@ class StoryDisplayFragment : Fragment(),
         requireActivity().onBackPressed()
     }
 
-    override fun onDeleteResponse(message: String) {
-        Toast.makeText(requireContext(),message,Toast.LENGTH_LONG).show()
+    override fun onDeleteResponse(message: String, counter: Int) {
+        requireActivity().hideProgressBar()
+//        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+//        val intent = Intent(requireContext(), AHomeScreen::class.java).apply {
+//            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//            action = FriendsAction.SHOW_MY_MEMORY.action
+//        }
+//        requireActivity().startActivity(intent)
+//        storiesProgressView?.skip()
+
+
+//        StorieViewNew.memorieData!!.memory.removeAt(counter)
+//        if(StorieViewNew.memorieData!!.memory.size>0){
+//            val intent = Intent(requireContext(), StorieViewNew::class.java)
+//            intent.putExtra(ConstantLib.MEMORIE_DATA, StorieViewNew.memorieData)
+//            intent.putExtra(ConstantLib.FROM, ConstantLib.MEMORIES)
+//            intent.putExtra(ConstantLib.BACKFROM, ConstantLib.DISPLAYFRAGMENT)
+//            prefs.save(ConstantLib.TYPEFROM, ConstantLib.MEMORIES)
+//            intent.putExtra(ConstantLib.BACKFROM, "")
+//            intent.putExtra(ConstantLib.DELETED_POSITION, counter+1)
+//            startActivity(intent)
+//            requireActivity().finish()
+//        }else{
+//            requireActivity().onBackPressed()
+//        }
+
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+        val intent = Intent(requireContext(), AHomeScreen::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            action = FriendsAction.SHOW_MY_MEMORY.action
+        }
+        requireActivity().startActivity(intent)
+    }
+
+    override fun onJoinMemoryRejectedSuccess(message: String) {
+        requireActivity().hideProgressBar()
         requireActivity().finish()
     }
 
     override fun onFailure(message: String) {
+        resumeCurrentStory()
         requireActivity().hideProgressBar()
         requireActivity().Errortoast(message)
     }
 
     override fun sessionExpired(message: String) {
         requireActivity().Errortoast(message)
-//        Utility.logoutUser(prefs, requireActivity())
+    }
+
+    override fun onBannerCountSuccess(
+        message: String,
+        listItem: MemorieResponse.Data.Memories.Memory.Tagged
+    ) {
+        resumeCurrentStory()
+        requireActivity().hideProgressBar()
+        try {
+            var websiteUrl = ""
+            if (listItem.website.contains("http://")) {
+                websiteUrl = listItem.website
+            } else {
+                websiteUrl = "http://" + listItem.website
+            }
+            val openUrlIntent = Intent(Intent.ACTION_VIEW, Uri.parse(websiteUrl))
+            startActivity(openUrlIntent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 

@@ -67,7 +67,7 @@ class ABlockedUser : BaseActivity(), ABlockedUserPresenter.ABlockedUserPresenter
             override fun onItemClicked(blockedUser: BlockedUserResponse.Data.BlockedUser) {
                 if (Utility.checkProfileComplete(sharedPreferences)) {
                     val intent = Intent(applicationContext, AProfileDetails::class.java)
-                    intent.putExtra(ConstantLib.FRIEND_ID, blockedUser.userid.toString())
+                    intent.putExtra(ConstantLib.FRIEND_ID, blockedUser.blocked_user_id.toString())
                     intent.putExtra(ConstantLib.IS_MY_FRIEND, blockedUser.isMyFriend)
                     intent.putExtra(ConstantLib.IS_MY_FRIEND_BLOCKED, blockedUser.isMyFriend)
                     intent.putExtra(ConstantLib.PROFILE_IMAGE, blockedUser.profile)
@@ -138,6 +138,10 @@ class ABlockedUser : BaseActivity(), ABlockedUserPresenter.ABlockedUserPresenter
 
     override fun validateError(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
 

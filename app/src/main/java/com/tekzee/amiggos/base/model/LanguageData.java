@@ -5,13 +5,98 @@ import com.google.gson.annotations.SerializedName;
 
 public class LanguageData {
 
+    @SerializedName("firstname_should_not_be_15_characters")
+    @Expose
+    private String firstname_should_not_be_15_characters;
+    @SerializedName("bookingunavailable")
+    @Expose
+    private String bookingunavailable;
+    @SerializedName("session_error")
+    @Expose
+    private String session_error;
+
+    @SerializedName("confirm_password_should_be_greater_than_6_and_smaller_than_16")
+    @Expose
+    private String confirm_password_should_be_greater_than_6_and_smaller_than_16;
+
+
+    @SerializedName("last_can_not_be_blank")
+    @Expose
+    private String last_can_not_be_blank;
+
+
+    @SerializedName("phone_number_should_not_be_15_characters")
+    @Expose
+    private String phone_number_should_not_be_15_characters;
+
+
+    @SerializedName("lastname_should_not_be_15_characters")
+    @Expose
+    private String lastname_should_not_be_15_characters;
+
+
+    @SerializedName("phone_number_can_not_be_blank")
+    @Expose
+    private String phone_number_can_not_be_blank;
+
+
+    @SerializedName("please_select_city")
+    @Expose
+    private String please_select_city;
+
+    @SerializedName("please_select_state")
+    @Expose
+    private String please_select_state;
+    @SerializedName("password_should_be_greater_than_6_and_smaller_than_16")
+    @Expose
+    private String password_should_be_greater_than_6_and_smaller_than_16;
+    @SerializedName("firstname_can_not_be_blank")
+    @Expose
+    private String firstname_can_not_be_blank;
+    @SerializedName("username_should_be_between_4_to_12_characters")
+    @Expose
+    private String username_should_be_between_4_to_12_characters;
     @SerializedName("klDone")
     @Expose
     private String klDone;
 
+    @SerializedName("email_can_not_be_blank")
+    @Expose
+    private String email_can_not_be_blank = "Email can not be blank";
+
+    @SerializedName("password_can_not_blank")
+    @Expose
+    private String password_can_not_blank = "Password can not be blank..";
+
+    @SerializedName("date_of_birth_can_not_be_blank")
+    @Expose
+    private String date_of_birth_can_not_be_blank = "Date of birth can not be blank..";
+
+    @SerializedName("confirm_password_can_not_be_blank")
+    @Expose
+    private String confirm_password_can_not_be_blank = "Confirm password can not be blank..";
+
+    @SerializedName("password_and_confirm_password_can_not_be_blank")
+    @Expose
+    private String password_and_confirm_password_can_not_be_blank = "Password and Confirm password should be same..";
+
+    @SerializedName("username_can_not_be_blank")
+    @Expose
+    private String username_can_not_be_blank = "Username can not be blank";
+
+    @SerializedName("please_provide_valid_email")
+    @Expose
+    private String please_provide_valid_email = "Please provide valid email..";
+    @SerializedName("callmessage")
+    @Expose
+    private String callmessage = "Would you like to call ";
+
     @SerializedName("yourmemorywillbeuploadedinbackgroud")
     @Expose
     private String yourmemorywillbeuploadedinbackgroud = "Your memory will be uploaded in backgroud and will take few moments to get updated";
+    @SerializedName("tagging_will_not_work")
+    @Expose
+    private String tagging_will_not_work = "Tagging will not work in our memory";
     @SerializedName("time")
     @Expose
     private String time = "Time";
@@ -27,6 +112,9 @@ public class LanguageData {
     @SerializedName("quantity")
     @Expose
     private String quantity = "Quantity: ";
+    @SerializedName("price")
+    @Expose
+    private String price = "Price: ";
     @SerializedName("referencenumber")
     @Expose
     private String referencenumber = "Referenced Number : ";
@@ -789,6 +877,9 @@ public class LanguageData {
     @SerializedName("Qr_code_screen_title")
     @Expose
     private String qrCodeScreenTitle;
+    @SerializedName("booking_qr_code")
+    @Expose
+    private String booking_qr_code ="Qr Code Id: ";
     @SerializedName("Qr_code_screen_sub_title")
     @Expose
     private String qrCodeScreenSubTitle;
@@ -798,6 +889,9 @@ public class LanguageData {
     @SerializedName("You_already_send_party_invitaion_to_user")
     @Expose
     private String youAlreadySendPartyInvitaionToUser;
+    @SerializedName("operating_hours")
+    @Expose
+    private String OperationHours;
     @SerializedName("User_accepted_your_party_invitation")
     @Expose
     private String userAcceptedYourPartyInvitation;
@@ -1378,6 +1472,9 @@ public class LanguageData {
     @SerializedName("locationpermission")
     @Expose
     private String locationpermission = "Please provide location persmission";
+    @SerializedName("callpermission")
+    @Expose
+    private String callpermission = "Please provide call phone permission";
 
 
     @SerializedName("videosaved")
@@ -1400,7 +1497,6 @@ public class LanguageData {
     @SerializedName("selectyourpacakge")
     @Expose
     private String selectyourpacakge = "Select Your Package";
-
 
 
     @SerializedName("max_venue_brand_limit")
@@ -1455,7 +1551,7 @@ public class LanguageData {
     private String upload = "Upload";
 
     @SerializedName("agerestrictionmessage")
-    private String agerestrictionmessage = "To buy this product must \n upload your id";
+    private String agerestrictionmessage = "To buy this product must upload your id";
 
     @SerializedName("checkout")
     private String checkout = "Checkout";
@@ -1477,6 +1573,96 @@ public class LanguageData {
 
     @SerializedName("specialinstruction")
     private String specialinstruction = "Special Instructions";
+
+    @SerializedName("closed")
+    private String closed = "Closed";
+
+    @SerializedName("not_currenty_booking")
+    private String not_currenty_booking = "Not Currently Booking";
+
+    @SerializedName("booknow")
+    private String booknow = "Book Now";
+
+    @SerializedName("google_venue_warning")
+    private String google_venue_warning = "Not yet partnering with Amiggos. Suggest our app to this location";
+
+    @SerializedName("exit_warning")
+    private String exitwarning = "Are you sure you want to exit?";
+
+    @SerializedName("memory")
+    private String memory = "Memories";
+    @SerializedName("my_purchases")
+    private String my_purchases = "My Purchases";
+
+    @SerializedName("add_items")
+    private String add_items = "Add Items";
+
+    @SerializedName("guest")
+    private String guest = "Guest";
+
+    public String getGuest() {
+        return guest;
+    }
+
+    public void setGuest(String guest) {
+        this.guest = guest;
+    }
+
+    public String getMy_purchases() {
+        return my_purchases;
+    }
+
+    public void setMy_purchases(String my_purchases) {
+        this.my_purchases = my_purchases;
+    }
+
+    public String getAdd_items() {
+        return add_items;
+    }
+
+    public void setAdd_items(String add_items) {
+        this.add_items = add_items;
+    }
+
+    public String getMemory() {
+        return memory;
+    }
+
+    public void setMemory(String memory) {
+        this.memory = memory;
+    }
+
+    public String getExitwarning() {
+        return exitwarning;
+    }
+
+    public void setExitwarning(String exitwarning) {
+        this.exitwarning = exitwarning;
+    }
+
+    public String getGoogle_venue_warning() {
+        return google_venue_warning;
+    }
+
+    public void setGoogle_venue_warning(String google_venue_warning) {
+        this.google_venue_warning = google_venue_warning;
+    }
+
+    public String getBooknow() {
+        return booknow;
+    }
+
+    public void setBooknow(String booknow) {
+        this.booknow = booknow;
+    }
+
+    public String getClosed() {
+        return closed;
+    }
+
+    public void setClosed(String closed) {
+        this.closed = closed;
+    }
 
     public String getSubtotal() {
         return subtotal;
@@ -5666,6 +5852,7 @@ public class LanguageData {
     public void setStaffListFetchedSuccessfully(String staffListFetchedSuccessfully) {
         this.staffListFetchedSuccessfully = staffListFetchedSuccessfully;
     }
+
     public String getSelectyourpacakge() {
         return selectyourpacakge;
     }
@@ -5704,5 +5891,222 @@ public class LanguageData {
 
     public void setImagesaved(String imagesaved) {
         this.imagesaved = imagesaved;
+    }
+
+    public String getEmail_can_not_be_blank() {
+        return email_can_not_be_blank;
+    }
+
+    public void setEmail_can_not_be_blank(String email_can_not_be_blank) {
+        this.email_can_not_be_blank = email_can_not_be_blank;
+    }
+
+    public String getPlease_provide_valid_email() {
+        return please_provide_valid_email;
+    }
+
+    public void setPlease_provide_valid_email(String please_provide_valid_email) {
+        this.please_provide_valid_email = please_provide_valid_email;
+    }
+
+    public String getPassword_can_not_blank() {
+        return password_can_not_blank;
+    }
+
+    public void setPassword_can_not_blank(String password_can_not_blank) {
+        this.password_can_not_blank = password_can_not_blank;
+    }
+
+    public String getDate_of_birth_can_not_be_blank() {
+        return date_of_birth_can_not_be_blank;
+    }
+
+    public void setDate_of_birth_can_not_be_blank(String date_of_birth_can_not_be_blank) {
+        this.date_of_birth_can_not_be_blank = date_of_birth_can_not_be_blank;
+    }
+
+    public String getConfirm_password_can_not_be_blank() {
+        return confirm_password_can_not_be_blank;
+    }
+
+    public void setConfirm_password_can_not_be_blank(String confirm_password_can_not_be_blank) {
+        this.confirm_password_can_not_be_blank = confirm_password_can_not_be_blank;
+    }
+
+    public String getPassword_and_confirm_password_can_not_be_blank() {
+        return password_and_confirm_password_can_not_be_blank;
+    }
+
+    public void setPassword_and_confirm_password_can_not_be_blank(String password_and_confirm_password_can_not_be_blank) {
+        this.password_and_confirm_password_can_not_be_blank = password_and_confirm_password_can_not_be_blank;
+    }
+
+    public String getUsername_can_not_be_blank() {
+        return username_can_not_be_blank;
+    }
+
+    public void setUsername_can_not_be_blank(String username_can_not_be_blank) {
+        this.username_can_not_be_blank = username_can_not_be_blank;
+    }
+
+    public String getPassword_should_be_greater_than_6_and_smaller_than_16() {
+        return password_should_be_greater_than_6_and_smaller_than_16;
+    }
+
+    public void setPassword_should_be_greater_than_6_and_smaller_than_16(String password_should_be_greater_than_6_and_smaller_than_16) {
+        this.password_should_be_greater_than_6_and_smaller_than_16 = password_should_be_greater_than_6_and_smaller_than_16;
+    }
+
+    public String getUsername_should_be_between_4_to_12_characters() {
+        return username_should_be_between_4_to_12_characters;
+    }
+
+    public void setUsername_should_be_between_4_to_12_characters(String username_should_be_between_4_to_12_characters) {
+        this.username_should_be_between_4_to_12_characters = username_should_be_between_4_to_12_characters;
+    }
+
+
+    public String getPhone_number_can_not_be_blank() {
+        return phone_number_can_not_be_blank;
+    }
+
+    public void setPhone_number_can_not_be_blank(String phone_number_can_not_be_blank) {
+        this.phone_number_can_not_be_blank = phone_number_can_not_be_blank;
+    }
+
+    public String getPlease_select_city() {
+        return please_select_city;
+    }
+
+    public void setPlease_select_city(String please_select_city) {
+        this.please_select_city = please_select_city;
+    }
+
+    public String getPlease_select_state() {
+        return please_select_state;
+    }
+
+    public void setPlease_select_state(String please_select_state) {
+        this.please_select_state = please_select_state;
+    }
+
+    public String getFirstname_can_not_be_blank() {
+        return firstname_can_not_be_blank;
+    }
+
+    public void setFirstname_can_not_be_blank(String firstname_can_not_be_blank) {
+        this.firstname_can_not_be_blank = firstname_can_not_be_blank;
+    }
+
+    public String getFirstname_should_not_be_15_characters() {
+        return firstname_should_not_be_15_characters;
+    }
+
+    public void setFirstname_should_not_be_15_characters(String firstname_should_not_be_15_characters) {
+        this.firstname_should_not_be_15_characters = firstname_should_not_be_15_characters;
+    }
+
+    public String getLast_can_not_be_blank() {
+        return last_can_not_be_blank;
+    }
+
+    public void setLast_can_not_be_blank(String last_can_not_be_blank) {
+        this.last_can_not_be_blank = last_can_not_be_blank;
+    }
+
+    public String getPhone_number_should_not_be_15_characters() {
+        return phone_number_should_not_be_15_characters;
+    }
+
+    public void setPhone_number_should_not_be_15_characters(String phone_number_should_not_be_15_characters) {
+        this.phone_number_should_not_be_15_characters = phone_number_should_not_be_15_characters;
+    }
+
+    public String getLastname_should_not_be_15_characters() {
+        return lastname_should_not_be_15_characters;
+    }
+
+    public void setLastname_should_not_be_15_characters(String lastname_should_not_be_15_characters) {
+        this.lastname_should_not_be_15_characters = lastname_should_not_be_15_characters;
+    }
+
+    public String getConfirm_password_should_be_greater_than_6_and_smaller_than_16() {
+        return confirm_password_should_be_greater_than_6_and_smaller_than_16;
+    }
+
+    public void setConfirm_password_should_be_greater_than_6_and_smaller_than_16(String confirm_password_should_be_greater_than_6_and_smaller_than_16) {
+        this.confirm_password_should_be_greater_than_6_and_smaller_than_16 = confirm_password_should_be_greater_than_6_and_smaller_than_16;
+    }
+
+    public String getSession_error() {
+        return session_error;
+    }
+
+    public void setSession_error(String session_error) {
+        this.session_error = session_error;
+    }
+
+    public String getBookingunavailable() {
+        return bookingunavailable;
+    }
+
+    public void setBookingunavailable(String bookingunavailable) {
+        this.bookingunavailable = bookingunavailable;
+    }
+
+    public String getTagging_will_not_work() {
+        return tagging_will_not_work;
+    }
+
+    public void setTagging_will_not_work(String tagging_will_not_work) {
+        this.tagging_will_not_work = tagging_will_not_work;
+    }
+
+    public String getCallpermission() {
+        return callpermission;
+    }
+
+    public void setCallpermission(String callpermission) {
+        this.callpermission = callpermission;
+    }
+
+    public String getCallmessage() {
+        return callmessage;
+    }
+
+    public void setCallmessage(String callmessage) {
+        this.callmessage = callmessage;
+    }
+
+    public String getBooking_qr_code() {
+        return booking_qr_code;
+    }
+
+    public void setBooking_qr_code(String booking_qr_code) {
+        this.booking_qr_code = booking_qr_code;
+    }
+
+    public String getNot_currenty_booking() {
+        return not_currenty_booking;
+    }
+
+    public void setNot_currenty_booking(String not_currenty_booking) {
+        this.not_currenty_booking = not_currenty_booking;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getOperationHours() {
+        return OperationHours;
+    }
+
+    public void setOperationHours(String operationHours) {
+        OperationHours = operationHours;
     }
 }

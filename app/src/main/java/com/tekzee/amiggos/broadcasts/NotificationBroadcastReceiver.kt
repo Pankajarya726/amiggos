@@ -5,17 +5,20 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
+import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.enums.FriendsAction
 import com.tekzee.amiggos.network.ApiClient
+import com.tekzee.amiggos.ui.cameranew.CameraActivity
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.amiggos.constant.ConstantLib
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
@@ -30,16 +33,38 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         mContext = context
         sharedPreference = SharedPreference(mContext!!)
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        NotificationManagerCompat.from(mContext!!).cancel(intent!!.getIntExtra(ConstantLib.EXTRA_NOTIFICATION_ID,0))
-        if (intent.action == FriendsAction.ACCEPT.action) {
+
+        NotificationManagerCompat.from(mContext!!).cancel(
+            intent!!.getIntExtra(
+                ConstantLib.EXTRA_NOTIFICATION_ID,
+                0
+            )
+        )
+
+
+        if (intent!!.action == FriendsAction.ACCEPT.action) {
             callAcceptApi(intent.getStringExtra(ConstantLib.FRIEND_ID))
-        } else if (intent.action == FriendsAction.REJECT.action) {
+        } else if (intent!!.action == FriendsAction.REJECT.action) {
             callRejectApi(intent.getStringExtra(ConstantLib.FRIEND_ID))
+        } else if (intent!!.action == FriendsAction.ACCEPT_PARTY_INVITATIONS.action) {
+            callAcceptPartyInviteApi(intent.getStringExtra(ConstantLib.BOOKING_ID))
+        } else if (intent!!.action == FriendsAction.REJECT_PARTY_INVITATIONS.action) {
+            callRejectPartyInviteApi(intent.getStringExtra(ConstantLib.BOOKING_ID))
+        } else if (intent!!.action == FriendsAction.ACCEPT_CREATE_MEMORY_INVITATIONS.action) {
+            callAcceptCreateInviteApi(
+                intent.getStringExtra(ConstantLib.SENDER_ID),
+                intent.getStringExtra(ConstantLib.OURSTORYID)
+            )
+        } else if (intent!!.action == FriendsAction.REJECT_CREATE_MEMORY_INVITATIONS.action) {
+            callRejectCreateMemoryInviteApi(
+                intent.getStringExtra(ConstantLib.SENDER_ID),
+                intent.getStringExtra(ConstantLib.OURSTORYID)
+            )
         }
     }
 
     @SuppressLint("CheckResult")
-    private fun callRejectApi(friendId: String?) {                                                  
+    private fun callRejectApi(friendId: String?) {
         val input = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("friend_id", friendId)
@@ -50,7 +75,70 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             .subscribe { response ->
                 callResponseCode(response)
             }
+    }
 
+    @SuppressLint("CheckResult")
+    private fun callRejectCreateMemoryInviteApi(senderid: String?, ourstoryid: String?) {
+        val input = JsonObject()
+
+        input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
+        input.addProperty("sender_id", senderid)
+        input.addProperty("our_story_id", ourstoryid)
+
+        ApiClient.instance.doRejectCreateMemoryInvitationApi(
+            input,
+            Utility.createHeaders(sharedPreference)
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { response ->
+                callResponseCode(response)
+            }
+    }
+
+    @SuppressLint("CheckResult")
+    private fun callRejectPartyInviteApi(bookingId: String?) {
+        val input = JsonObject()
+
+        input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
+        input.addProperty("booking_id", bookingId)
+
+        ApiClient.instance.doRejectBookingInvitationApi(
+            input,
+            Utility.createHeaders(sharedPreference)
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { response ->
+                callResponseCode(response)
+            }
+    }
+
+    @SuppressLint("CheckResult")
+    private fun callAcceptCreateInviteApi(senderid: String?, ourstoryid: String?) {
+        val intent = Intent(mContext, CameraActivity::class.java)
+        intent.putExtra(ConstantLib.FROM_ACTIVITY, ConstantLib.OURSTORYINVITE)
+        intent.putExtra(ConstantLib.SENDER_ID, senderid)
+        intent.putExtra(ConstantLib.OURSTORYID, ourstoryid)
+        mContext!!.startActivity(intent)
+    }
+
+    @SuppressLint("CheckResult")
+    private fun callAcceptPartyInviteApi(bookingId: String?) {
+        val input = JsonObject()
+
+        input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
+        input.addProperty("booking_id", bookingId)
+
+        ApiClient.instance.doAcceptBookingInvitationApi(
+            input,
+            Utility.createHeaders(sharedPreference)
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { response ->
+                callResponseCode(response)
+            }
     }
 
     private fun callResponseCode(response: Response<CommonResponse>?) {
@@ -80,7 +168,5 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             }, { error ->
                 Toast.makeText(mContext, error.message.toString(), Toast.LENGTH_LONG).show()
             })
-
-
     }
 }

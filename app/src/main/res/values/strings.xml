@@ -49,8 +49,8 @@
 
     <string name="in_progress">In Progress</string>
     <string name="uploading">Uploading</string>
-    <string name="message_upload_success">Upload Success</string>
-    <string name="file_upload_successful">File upload success</string>
+    <string name="message_upload_success">Memory Uploaded</string>
+    <string name="file_upload_successful">Memory uploaded successfully</string>
     <string name="noti_channel_default">default</string>
 
 </resources>

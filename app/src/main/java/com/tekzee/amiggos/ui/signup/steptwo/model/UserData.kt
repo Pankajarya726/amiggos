@@ -36,8 +36,10 @@ data class UserData(
         val type: String = "",
         @SerializedName("userid")
         val userid: Int = 0,
+        @SerializedName("unique_timestamp")
+        val unique_timestamp: Long = 0,
         @SerializedName("age")
-        val age: String = "",
+        val age: Int = 0,
         @SerializedName("myid")
         var myid: Boolean = false,
         @SerializedName("username")

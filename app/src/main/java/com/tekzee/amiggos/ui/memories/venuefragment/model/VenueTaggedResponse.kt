@@ -2,6 +2,8 @@ package com.tekzee.amiggos.ui.memories.venuefragment.model
 
 
 import com.google.gson.annotations.SerializedName
+import com.tekzee.amiggos.ui.memories.ourmemories.model.MemorieResponse
+import java.io.Serializable
 
 data class VenueTaggedResponse(
     @SerializedName("data")
@@ -10,18 +12,9 @@ data class VenueTaggedResponse(
     var message: String = "",
     @SerializedName("status")
     var status: Boolean = false
-) {
+): Serializable {
     data class Data(
         @SerializedName("venue_detail")
-        var taggedVenue: List<TaggedVenue> = listOf()
-    ) {
-        data class TaggedVenue(
-            @SerializedName("venue_id")
-            var clubId: Int = 0,
-            @SerializedName("image")
-            var image: String = "",
-            @SerializedName("name")
-            var name: String = ""
-        )
-    }
+        var taggedVenue: List<MemorieResponse.Data.Memories> = listOf()
+    ): Serializable
 }

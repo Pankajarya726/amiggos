@@ -14,6 +14,7 @@ import com.tekzee.amiggos.ui.bookingdetailnew.model.BookingDetailsNewResponse
 import com.tekzee.amiggos.ui.viewmenu.adapter.ViewMenuAdapter
 import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.SharedPreference
+import com.tekzee.amiggos.util.Utility
 
 class ViewMenuActivity : BaseActivity(){
 
@@ -62,5 +63,9 @@ class ViewMenuActivity : BaseActivity(){
 
     override fun validateError(message: String) {
         Errortoast(message)
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 }

@@ -25,7 +25,7 @@ class ChatHelper {
             map["msg"] = message
             map["receiver"] = receiver
             map["sender"] = sender
-            map["timeSpam"] = timestamp
+            map["timestamp"] = timestamp
 
             var conversationId = ""
             if (Integer.parseInt(reciverUser.amiggosID!!) > Integer.parseInt(currentUserAmigoId!!)) {

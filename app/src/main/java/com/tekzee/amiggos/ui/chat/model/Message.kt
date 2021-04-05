@@ -12,6 +12,6 @@ data class Message(
     val `receiver`: String = "",
     @SerializedName("sender")
     val sender: String = "",
-    @SerializedName("timeSpam")
+    @SerializedName("timestamp")
     val timeSpam: Long = 0
 )

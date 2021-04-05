@@ -1,4 +1,4 @@
-package com.tekzee.mallortaxi.base
+package com.tekzee.amiggos.base
 
 import android.content.Context
 import android.os.Bundle
@@ -6,7 +6,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import com.kaopiz.kprogresshud.KProgressHUD
-import com.tekzee.amiggos.base.BaseMainView
 import com.tekzee.amiggos.util.NetWorkConection
 
 abstract class BaseFragment : Fragment(), BaseMainView {
@@ -32,13 +31,13 @@ abstract class BaseFragment : Fragment(), BaseMainView {
     }
 
     override fun checkInternet(): Boolean {
-        return NetWorkConection.isNEtworkConnected(activity!!.baseContext)
+        return NetWorkConection.isNEtworkConnected(requireActivity().baseContext)
     }
 
     override fun hideKeyboard(){
         if(activity!=null){
-            val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            var view = activity!!.currentFocus
+            val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            var view = requireActivity().currentFocus
             if (view == null) {
                 view = View(activity)
             }

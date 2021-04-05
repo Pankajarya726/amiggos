@@ -41,7 +41,9 @@ class APaymentMehtodImplementation(private var mainView: APaymentMethodPresenter
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -69,7 +71,9 @@ class APaymentMehtodImplementation(private var mainView: APaymentMethodPresenter
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

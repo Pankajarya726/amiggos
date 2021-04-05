@@ -82,8 +82,9 @@ class ChatRepository(
         return unreadMessageList
     }
 
-    private val mutalbeChatbetweenUser = MutableLiveData<ArrayList<Message>>()
+
     fun getChatBetweenSenderAndReceiver(roomId: String): MutableLiveData<ArrayList<Message>> {
+        val mutalbeChatbetweenUser = MutableLiveData<ArrayList<Message>>()
         val listOfmessages = ArrayList<Message>()
         firebaseDatabase.reference.child(ConstantLib.MESSAGE).orderByChild("roomid").equalTo(roomId)
             .addValueEventListener(
@@ -91,6 +92,7 @@ class ChatRepository(
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         listOfmessages.clear()
                         for (value in dataSnapshot.children) {
+                            Log.e("Room id--->",roomId)
                             val messageData = value.getValue(Message::class.java)
                             listOfmessages.add(messageData!!)
                         }

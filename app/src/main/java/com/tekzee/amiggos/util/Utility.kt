@@ -11,10 +11,9 @@ import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.ui.mainsplash.MainSplashActivity
 import org.json.JSONArray
-import java.math.RoundingMode
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -50,8 +49,6 @@ class Utility {
 //        }
 
 
-
-
         fun isEmailValid(email: String): Boolean {
             return Pattern.compile(
                 "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]|[\\w-]{2,}))@"
@@ -64,16 +61,39 @@ class Utility {
         }
 
 
+        fun checkMinimumAndMaximumPasswordCharacter(password: String): Boolean {
+            return password.length in 7..15
+        }
+
+        fun checkFirstName_lastname_phone_CharacterCount(email: String): Boolean {
+            return email.length <= 15
+        }
+
+        fun checkMinimumAndMaximumUsernameCharacter(username: String): Boolean {
+            return username.length in 4..13
+        }
+
+        fun checkEmailCharacter(email: String): Boolean {
+            return email.length <= 255
+        }
+
+
         fun createHeaders(sharedPreferences: SharedPreference?): HashMap<String, String?> {
+            val tz = TimeZone.getDefault()
             val headers = HashMap<String, String?>()
-            headers["language-code"] = if(sharedPreferences!!.getValueString(ConstantLib.LANGUAGE_CODE).isNullOrEmpty()){"en"}else{
-                sharedPreferences.getValueString(ConstantLib.LANGUAGE_CODE)}
+            headers["language-code"] =
+                if (sharedPreferences!!.getValueString(ConstantLib.LANGUAGE_CODE).isNullOrEmpty()) {
+                    "en"
+                } else {
+                    sharedPreferences.getValueString(ConstantLib.LANGUAGE_CODE)
+                }
             headers["api-key"] = sharedPreferences.getValueString(ConstantLib.API_TOKEN)
             headers["device_type"] = ConstantLib.DEVICETYPE
+            headers["time_zone"] = tz.id.toString()
             return headers
         }
 
-        fun getShaKey(context: Context){
+        fun getShaKey(context: Context) {
             try {
                 val info = context.packageManager.getPackageInfo(
                     "com.tekzee.amiggos",
@@ -93,15 +113,14 @@ class Utility {
 
         fun getCurrentLanguageCode(sharedPreferences: SharedPreference?): String {
             var languageCode = "en"
-            if(sharedPreferences!!.getValueString(ConstantLib.LANGUAGE_CODE).isNullOrEmpty()){
+            if (sharedPreferences!!.getValueString(ConstantLib.LANGUAGE_CODE).isNullOrEmpty()) {
                 languageCode = "en"
-            }else{
-                languageCode = sharedPreferences.getValueString(ConstantLib.LANGUAGE_CODE).toString()
+            } else {
+                languageCode =
+                    sharedPreferences.getValueString(ConstantLib.LANGUAGE_CODE).toString()
             }
             return languageCode
         }
-
-
 
 
 //        fun createSampleData(applicationContext: Context): ArrayList<CountryCodeModel> {
@@ -136,65 +155,81 @@ class Utility {
 
 
         fun roundOffDecimal(number: Double): Double? {
-            val df = DecimalFormat("#.##")
-            df.roundingMode = RoundingMode.CEILING
-            return df.format(number).toDouble()
+//            val df = DecimalFormat("#.##")
+
+//            df.roundingMode = RoundingMode.FLOOR
+//            df.roundingMode = RoundingMode.CEILING
+            var newNumber: String = ""
+            if (number.toString().contains(".")) {
+                newNumber = number.toString().split(".")[1]
+                if (newNumber.length > 2) {
+                    newNumber = newNumber.substring(0, 2)
+                } else if (newNumber.length == 1) {
+                    newNumber += "0";
+                } else if (newNumber.isEmpty()) {
+                    newNumber = "00"
+                }
+
+            }
+            newNumber = number.toString().split(".")[0] + "." + newNumber
+            return newNumber.toDouble()
         }
 
-        fun logOut(context: Context, message: String){
+        fun logOut(context: Context, message: String) {
             Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             val sharedPreference = SharedPreference(context)
             FirebaseAuth.getInstance().signOut()
             sharedPreference.clearSharedPreference()
             val intent = Intent(context, MainSplashActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
+
+        }
+
+        fun showErrorDialog(context: Context, message: String) {
+            val pDialog = SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+            pDialog.titleText = message
+            pDialog.setCancelable(false)
+            pDialog.show()
+
         }
 
         fun showLogoutPopup(context: Context, message: String) {
-
             val sharedPreference = SharedPreference(context)
-            val languageData = sharedPreference.getLanguageData(ConstantLib.LANGUAGE_DATA)
-            SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
-                .setTitleText(message)
-                .setConfirmText(languageData!!.klOk)
-                .setConfirmClickListener { sDialog ->
-                    sDialog.dismissWithAnimation()
-                    FirebaseAuth.getInstance().signOut()
-                    sharedPreference.clearSharedPreference()
-                    val intent = Intent(context, MainSplashActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent)
-                }
-                .show()
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+            FirebaseAuth.getInstance().signOut()
+            sharedPreference.clearSharedPreference()
+            val intent = Intent(context, MainSplashActivity::class.java)
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            context.startActivity(intent)
         }
 
         fun checkNullorEmptyData(data: String?): String {
             return data ?: ""
         }
 
-        fun addSelectedId(id: Int, isChecked: Boolean){
-            if(!idExist(id)){
+        fun addSelectedId(id: Int, isChecked: Boolean) {
+            if (!idExist(id)) {
                 jsonArray.put(id)
-            }else if(isChecked){
+            } else if (isChecked) {
                 jsonArray.remove(id)
-            }else{
+            } else {
                 jsonArray.put(id)
             }
 
         }
 
         fun idExist(id: Int): Boolean {
-            if (jsonArray.length()>0){
-                for(i in 0..jsonArray.length()){
+            if (jsonArray.length() > 0) {
+                for (i in 0..jsonArray.length()) {
                     return id == jsonArray.get(i)
                 }
             }
 
             return false
         }
+
         fun expiryMonthValidator(expiryMonth: String): Boolean {
             return try {
                 val month = expiryMonth.toInt()
@@ -230,10 +265,37 @@ class Utility {
         }
 
         fun checkProfileComplete(sharedPreference: SharedPreference?): Boolean {
-            return sharedPreference!!.getValueInt(ConstantLib.ISPROFILECOMPLETE)==1
+            return sharedPreference!!.getValueInt(ConstantLib.ISPROFILECOMPLETE) == 1
         }
+
+        private const val CURRENCY_US_DOLLARS: String = "USD"
+        private const val LANGUAGE_ENGLISH: String = "EN"
+        private const val COUNTRY_US: String = "US"
+
+        fun formatCurrency(amount: Float) =
+            currencyInLocale(CURRENCY_US_DOLLARS, LANGUAGE_ENGLISH, COUNTRY_US).format(amount)
+
+        private fun currencyInLocale(
+            currencyCode: String,
+            language: String,
+            country: String = "",
+            variant: String = ""): NumberFormat =
+            Locale(language, country, variant).let {
+                NumberFormat.getCurrencyInstance(it).apply {
+                    currency = Currency.getInstance(currencyCode)
+                }
+            }
+
     }
 
 
 
+
 }
+
+
+
+
+
+
+

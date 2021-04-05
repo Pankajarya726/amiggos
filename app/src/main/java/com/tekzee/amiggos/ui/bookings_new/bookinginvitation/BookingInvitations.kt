@@ -15,7 +15,7 @@ import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.adapter.BookingInvitationAdapter
 import com.tekzee.amiggos.ui.bookings_new.bookinginvitation.interfaces.BookingInvitationInterfaces
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
@@ -38,15 +38,19 @@ class BookingInvitations : BaseFragment(), BookingInvitationPresenter.BookingInv
     private val items: ArrayList<BookingInvitationResponse.Data.BookingDetail> = ArrayList()
     private var isFragmentVisible = false
 
+
+
     companion object {
-        private val INVITATION: BookingInvitations? = null
+        private val bookingInvitations: BookingInvitations? = null
 
 
         fun newInstance(): BookingInvitations {
-            if(INVITATION == null){
+
+            if(bookingInvitations == null){
                 return BookingInvitations()
             }
-            return INVITATION
+            return bookingInvitations
+
         }
     }
 
@@ -77,7 +81,7 @@ class BookingInvitations : BaseFragment(), BookingInvitationPresenter.BookingInv
     }
 
     private fun setupClickListener() {
-        binding.error.errorLayout.setOnClickListener {
+        binding.errorLayout.setOnClickListener {
             items.clear()
             adapter.notifyDataSetChanged()
             callBookingApi()
@@ -157,12 +161,16 @@ class BookingInvitations : BaseFragment(), BookingInvitationPresenter.BookingInv
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
+    }
+
     override fun onInvitaionSuccess(responseData: BookingInvitationResponse?) {
         items.clear()
         adapter.notifyDataSetChanged()
         items.addAll(responseData!!.data.bookingDetails)
         adapter.notifyDataSetChanged()
-        setupErrorVisibility()
+        setupErrorVisibility(responseData.message)
     }
 
 
@@ -176,10 +184,10 @@ class BookingInvitations : BaseFragment(), BookingInvitationPresenter.BookingInv
         callBookingApi()
     }
 
-    override fun onInvitationFailure(responseData: String) {
+    override fun onInvitationFailure(message: String) {
         items.clear()
         adapter.notifyDataSetChanged()
-        setupErrorVisibility()
+        setupErrorVisibility(message)
     }
 
 
@@ -190,13 +198,15 @@ class BookingInvitations : BaseFragment(), BookingInvitationPresenter.BookingInv
 
 
 
-    fun setupErrorVisibility(){
+    fun setupErrorVisibility(message: String) {
         if(items.size == 0){
-            binding.error.errorLayout.visibility = View.VISIBLE
+            binding.errorLayout.visibility = View.VISIBLE
+            binding.errortext.text = message
             binding.invitationRecyclerview.visibility = View.GONE
         }else{
             binding.invitationRecyclerview.visibility = View.VISIBLE
-            binding.error.errorLayout.visibility = View.GONE
+            binding.errortext.text = ""
+            binding.errorLayout.visibility = View.GONE
         }
     }
 }

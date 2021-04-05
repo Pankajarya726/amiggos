@@ -31,7 +31,9 @@ class BookingDetailNewPresenterImplementation(private var mainView: BookingDetai
                             } else {
                                 mainView.onBookingDetailFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

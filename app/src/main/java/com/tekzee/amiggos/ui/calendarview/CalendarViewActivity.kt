@@ -6,18 +6,25 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.TimePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
+import cn.pedant.SweetAlert.SweetAlertDialog
+import com.applandeo.materialcalendarview.EventDay
 import com.google.gson.JsonObject
+import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
 import com.tekzee.amiggos.base.model.LanguageData
+import com.tekzee.amiggos.base.repository.ItemRepository
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.ActivityCalendarBinding
+import com.tekzee.amiggos.room.database.AmiggoRoomDatabase
 import com.tekzee.amiggos.ui.calendarview.adapter.TimeAdapter
 import com.tekzee.amiggos.ui.calendarview.model.TimeSlotResponse
+import com.tekzee.amiggos.ui.choosepackage.ChoosePackageActivity
 import com.tekzee.amiggos.ui.menu.MenuActivity
 import com.tekzee.amiggos.ui.venuedetailsnew.model.VenueDetails
 import com.tekzee.amiggos.util.Coroutines
@@ -31,9 +38,10 @@ import kotlin.collections.ArrayList
 
 class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainView {
 
+    private var meventDay: EventDay?=null
     private lateinit var dataVenue: VenueDetails.Data
     private lateinit var adapter: TimeAdapter
-
+    var fmt: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
     //    private lateinit var data: ChooseWeekResponse
     private lateinit var binding: ActivityCalendarBinding
     private var sharedPreferences: SharedPreference? = null
@@ -43,7 +51,7 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
     var selectedDate = ""
     var seletctedTime = ""
     private var calendarviewpresenterimplementation: CalendarViewPresenterImplementation? = null
-
+    private var repository: ItemRepository? = null
     var displayFormat = SimpleDateFormat("HH:mm")
     var parseFormat = SimpleDateFormat("hh:mm a")
 
@@ -58,11 +66,93 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
         setupClickListener()
         setupAdapter()
         setupLangauge()
-
+        setupRepository()
         dataVenue = intent.getSerializableExtra(ConstantLib.CALENDAR_DATA) as VenueDetails.Data
         binding.timepicker.setIs24HourView(false)
-        checkTimeSlot()
 
+
+
+        binding.timepicker.setOnTimeChangedListener{ view, hourOfDay, minute ->
+            val currenthour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+            val currentminute = Calendar.getInstance().get(Calendar.MINUTE)
+            Log.e("currenthour----->","currenthour----"+currenthour)
+            Log.e("currentminute----->","currentminute---"+currentminute)
+
+            Log.e("CurrentHOur----->","----"+hourOfDay)
+            Log.e("CurrentMinute----->","---"+minute)
+            if(meventDay!!.calendar.timeInMillis<Calendar.getInstance().timeInMillis){
+                if (hourOfDay < currenthour) {
+                    binding.timepicker.currentMinute = currentminute
+                    binding.timepicker.currentHour = currenthour
+                }else if(hourOfDay == currenthour){
+                    if(minute<currentminute){
+                        binding.timepicker.currentMinute = currentminute
+                        binding.timepicker.currentHour = hourOfDay
+                    }
+                }
+            }
+
+        }
+
+
+        checkTimeSlot()
+        val day: Calendar = Calendar.getInstance()
+        for (i in 1..365) {
+
+
+
+            if (dataVenue.clubData.workingDays[0].isOpen == 0) {
+                if (day.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
+                    val d = day.clone()
+                    disabledDates.add(d as Calendar)
+                }
+            }
+            if (dataVenue.clubData.workingDays[1].isOpen == 0) {
+                if (day.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY) {
+                    val d = day.clone()
+                    disabledDates.add(d as Calendar)
+                }
+            }
+            if (dataVenue.clubData.workingDays[2].isOpen == 0) {
+                if (day.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY) {
+                    val d = day.clone()
+                    disabledDates.add(d as Calendar)
+                }
+            }
+            if (dataVenue.clubData.workingDays[3].isOpen == 0) {
+                if (day.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY) {
+                    val d = day.clone()
+                    disabledDates.add(d as Calendar)
+                }
+            }
+            if (dataVenue.clubData.workingDays[4].isOpen == 0) {
+                if (day.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) {
+                    val d = day.clone()
+                    disabledDates.add(d as Calendar)
+                }
+            }
+
+            if (dataVenue.clubData.workingDays[5].isOpen == 0) {
+                if (day.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                    val d = day.clone()
+                    disabledDates.add(d as Calendar)
+                }
+            }
+
+            if (dataVenue.clubData.workingDays[6].isOpen == 0) {
+                if (day.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                    val d = day.clone()
+                    disabledDates.add(d as Calendar)
+                }
+            }
+
+            day.add(Calendar.DATE, 1)
+        }
+        binding.calendarView.setDisabledDays(disabledDates)
+    }
+    private fun setupRepository() {
+        val itemDao = AmiggoRoomDatabase.getDatabase(this).itemDao()
+        repository = ItemRepository(itemDao)
     }
 
     private fun setupCalendar() {
@@ -75,7 +165,9 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
         val month = (calTodayDate.get(Calendar.MONTH) + 1).toString()
         val year = calTodayDate.get(Calendar.YEAR).toString()
 
+        meventDay = EventDay(Calendar.getInstance())
         selectedDate = "$year-$month-$day"
+        selectedDate = fmt.format(meventDay!!.calendar.time).toString()
     }
 
     private fun setupLangauge() {
@@ -123,79 +215,161 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
         }
         binding.btnNext.setOnClickListener {
 
-            if (dataVenue.clubData.isclock == 0 && dataVenue.clubData.timeslot == 0) {
-                val intent = Intent(applicationContext, MenuActivity::class.java)
-                intent.putExtra(
-                    ConstantLib.VENUE_ID,
-                    getIntent().getStringExtra(ConstantLib.VENUE_ID)
-                )
-                intent.putExtra(
-                    ConstantLib.SELECTED_VENUE_DIN_TOGO,
-                    getIntent().getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
-                )
-                intent.putExtra(ConstantLib.DATE, selectedDate)
-                intent.putExtra(
-                    ConstantLib.TIME,
-                    ""
-                )
-                startActivity(intent)
-            } else if (dataVenue.clubData.isclock == 1) {
-                val intent = Intent(applicationContext, MenuActivity::class.java)
-                intent.putExtra(
-                    ConstantLib.VENUE_ID,
-                    getIntent().getStringExtra(ConstantLib.VENUE_ID)
-                )
-                intent.putExtra(
-                    ConstantLib.SELECTED_VENUE_DIN_TOGO,
-                    getIntent().getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
-                )
-                intent.putExtra(ConstantLib.DATE, selectedDate)
-                seletctedTime =
-                    "" + binding.timepicker.hour + ":" + binding.timepicker.minute + ":00"
-                intent.putExtra(
-                    ConstantLib.TIME,
-                    seletctedTime
-                )
-                startActivity(intent)
-            } else if (dataVenue.clubData.timeslot == 1) {
-                if (adapter.selected != null) {
-                    val intent = Intent(applicationContext, MenuActivity::class.java)
-                    intent.putExtra(
+            val cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_MONTH,-1)
+            if (!checkDisabledDate(meventDay!!.calendar) && meventDay!!.calendar.after(cal)) {
+                if (dataVenue.clubData.isclock == 0 && dataVenue.clubData.timeslot == 0) {
+                    Coroutines.main {
+                        repository!!.clearCart()
+                    }
+                    val menuIntent = Intent(applicationContext, MenuActivity::class.java)
+                    menuIntent.putExtra(ConstantLib.ALLOW_INVITE,"1")
+                    menuIntent.putExtra(
                         ConstantLib.VENUE_ID,
-                        getIntent().getStringExtra(ConstantLib.VENUE_ID)
+                        intent.getStringExtra(ConstantLib.VENUE_ID)
                     )
-                    intent.putExtra(
+                    menuIntent.putExtra(
                         ConstantLib.SELECTED_VENUE_DIN_TOGO,
-                        getIntent().getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
+                        intent.getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
                     )
-                    intent.putExtra(ConstantLib.DATE, selectedDate)
-
-                    intent.putExtra(
+                    menuIntent.putExtra(
+                        ConstantLib.FROM,
+                        ConstantLib.MENUACTIVITY
+                    )
+                    menuIntent.putExtra(ConstantLib.DATE, selectedDate)
+                    menuIntent.putExtra(
                         ConstantLib.TIME,
-                        adapter.selected
+                        ""
                     )
-                    startActivity(intent)
-                } else {
-                    binding.timeRecycler.requestFocus()
-                    Errortoast("Please select any slot or select different date")
-                }
+                    startActivity(menuIntent)
+                } else if (dataVenue.clubData.isclock == 1) {
+                    Coroutines.main {
+                        repository!!.clearCart()
+                    }
+                    val menuIntent = Intent(applicationContext, MenuActivity::class.java)
+                    menuIntent.putExtra(ConstantLib.ALLOW_INVITE,"1")
+                    menuIntent.putExtra(
+                        ConstantLib.FROM,
+                        ConstantLib.MENUACTIVITY
+                    )
+                    menuIntent.putExtra(
+                        ConstantLib.VENUE_ID,
+                        intent.getStringExtra(ConstantLib.VENUE_ID)
+                    )
+                    menuIntent.putExtra(
+                        ConstantLib.SELECTED_VENUE_DIN_TOGO,
+                        intent.getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
+                    )
+                    menuIntent.putExtra(ConstantLib.DATE, selectedDate)
 
+                    var sminute: Int = binding.timepicker.minute
+                    var selectedMinute =""
+                    if(sminute.toString().length==1){
+                        selectedMinute = "0"+sminute.toString()
+                    }   else{
+                        selectedMinute = sminute.toString()
+                    }
+                    seletctedTime =
+                        "" + binding.timepicker.hour + ":" + selectedMinute + ":00"
+                    menuIntent.putExtra(
+                        ConstantLib.TIME,
+                        seletctedTime
+                    )
+                    startActivity(menuIntent)
+                } else if (dataVenue.clubData.timeslot == 1) {
+                    Coroutines.main {
+                        repository!!.clearCart()
+                    }
+                    if (adapter.selected != null) {
+                        val menuIntent = Intent(applicationContext, MenuActivity::class.java)
+                        menuIntent.putExtra(ConstantLib.ALLOW_INVITE,"1")
+                        menuIntent.putExtra(
+                            ConstantLib.FROM,
+                            ConstantLib.MENUACTIVITY
+                        )
+                        menuIntent.putExtra(
+                            ConstantLib.VENUE_ID,
+                            intent.getStringExtra(ConstantLib.VENUE_ID)
+                        )
+                        menuIntent.putExtra(
+                            ConstantLib.SELECTED_VENUE_DIN_TOGO,
+                            intent.getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
+                        )
+                        menuIntent.putExtra(ConstantLib.DATE, selectedDate)
+
+                        menuIntent.putExtra(
+                            ConstantLib.TIME,
+                            adapter.selected
+                        )
+                        startActivity(menuIntent)
+                    } else {
+                        binding.timeRecycler.requestFocus()
+                        Utility.showErrorDialog(this,languageData!!.bookingunavailable)
+                    }
+
+                }
+            }else{
+                val pDialog =
+                    SweetAlertDialog(this@CalendarViewActivity, SweetAlertDialog.ERROR_TYPE)
+                pDialog.titleText = languageData!!.bookingunavailable
+                pDialog.setCancelable(false)
+                pDialog.setConfirmButton(languageData!!.klDismiss) {
+                    pDialog.dismiss()
+                }
+                pDialog.show()
             }
+
         }
 
-        binding.calendarView.setOnDayClickListener { eventDay ->
 
-            val day = eventDay.calendar.get(Calendar.DAY_OF_MONTH).toString()
-            val month = (eventDay.calendar.get(Calendar.MONTH) + 1).toString()
-            val year = eventDay.calendar.get(Calendar.YEAR).toString()
-            selectedDate = "$year-$month-$day"
+        binding.calendarView.setOnDayClickListener { eventDay: EventDay ->
 
+            Log.e("meventdat---",""+eventDay!!.calendar.get(Calendar.DAY_OF_WEEK))
+            val currenthour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+            val currentminute = Calendar.getInstance().get(Calendar.MINUTE)
+            binding.timepicker.currentMinute = currentminute
+            binding.timepicker.currentHour = currenthour
+
+//            val day = eventDay.calendar.get(Calendar.DAY_OF_MONTH).toString()
+//            val month = (eventDay.calendar.get(Calendar.MONTH) + 1).toString()
+//            val year = eventDay.calendar.get(Calendar.YEAR).toString()
+            val checkDate = Calendar.getInstance()
+            checkDate.add(Calendar.DAY_OF_MONTH,-1)
+            if(!eventDay.calendar.after(checkDate)){
+                val pDialog =
+                    SweetAlertDialog(this@CalendarViewActivity, SweetAlertDialog.ERROR_TYPE)
+                pDialog.titleText = languageData!!.bookingunavailable
+                pDialog.setCancelable(false)
+                pDialog.setConfirmButton(languageData!!.klDismiss) {
+                    pDialog.dismiss()
+                }
+                pDialog.show()
+                return@setOnDayClickListener
+            }
+            meventDay = eventDay
+//            selectedDate = "$year-$month-$day"
+            selectedDate = fmt.format(eventDay!!.calendar.time).toString()
             val cal: Calendar = Calendar.getInstance()
             cal.set(Calendar.YEAR, eventDay.calendar.get(Calendar.YEAR))
             cal.set(Calendar.MONTH, eventDay.calendar.get(Calendar.MONTH))
             cal.set(Calendar.DAY_OF_MONTH, eventDay.calendar.get(Calendar.DAY_OF_MONTH))
+
             binding.calendarView.setDate(cal)
-            checkTimeSlot()
+
+
+            if (!checkDisabledDate(eventDay.calendar)) {
+                checkTimeSlot()
+            } else {
+                val pDialog =
+                    SweetAlertDialog(this@CalendarViewActivity, SweetAlertDialog.ERROR_TYPE)
+                pDialog.titleText = languageData!!.bookingunavailable
+                pDialog.setCancelable(false)
+                pDialog.setConfirmButton(languageData!!.klDismiss) {
+                    pDialog.dismiss()
+                }
+                pDialog.show()
+            }
+
 
         }
     }
@@ -230,12 +404,34 @@ class CalendarViewActivity : BaseActivity(), CalendarViewPresenter.CalendarMainV
         }
         timedata.clear()
         adapter.notifyDataSetChanged()
-        Errortoast(message)
         binding.timeslotlayout.visibility = View.GONE
+
+        Utility.showErrorDialog(this,message)
     }
 
 
     override fun validateError(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
+
+    private fun checkDisabledDate(eventDay: Calendar): Boolean {
+        var flag = false
+        for (items in disabledDates) {
+            val itemeventdate =
+                items.get(Calendar.DAY_OF_MONTH).toString()+ items.get(Calendar.MONTH).toString() + items.get(Calendar.YEAR).toString()
+            val meventdaydate =
+                eventDay.get(Calendar.DAY_OF_MONTH).toString() + eventDay.get(Calendar.MONTH).toString() + eventDay.get(Calendar.YEAR).toString()
+
+            if (itemeventdate.equals(meventdaydate,false)) {
+                flag = true
+            }
+        }
+        return flag
+
     }
 }

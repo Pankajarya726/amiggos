@@ -15,11 +15,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
+import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.LoginNewBinding
 import com.tekzee.amiggos.firebasemodel.User
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
-import com.tekzee.amiggos.ui.login.model.LoginResponse
 import com.tekzee.amiggos.ui.signup.login_new.model.ALoginResponse
 import com.tekzee.amiggos.ui.signup.stepone.StepOne
 import com.tekzee.amiggos.util.SharedPreference
@@ -66,6 +66,7 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
 
         binding!!.btnSignin.setOnClickListener{
             if(validateFields()){
+                binding!!.btnSignin.isEnabled = false
                 callLoginApi()
             }
         }
@@ -94,7 +95,6 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
     override fun OnLoginSuccess(responseData: ALoginResponse.Data) {
 
         checkIfFirebaseUserExist(responseData)
-
     }
 
     private fun checkIfFirebaseUserExist(responseData: ALoginResponse.Data) {
@@ -102,21 +102,21 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
         val email = responseData.userid.toString().toLowerCase()+"_1" + "@amiggos.com"
         auth.signInWithEmailAndPassword(email, "amiggos@123")
             .addOnCompleteListener(this) { task: Task<AuthResult> ->
-
                 if(task.isSuccessful){
                     val firebaseUser = FirebaseAuth.getInstance().currentUser
                     if (firebaseUser != null) {
                         updateFirebaseUser(responseData)
-                        callUpdateFirebaseApi(responseData.userid)
                         callHomePage(responseData)
+                        callUpdateFirebaseApi(responseData.userid)
                     }else{
                         auth.createUserWithEmailAndPassword(email, "amiggos@123")
                             .addOnCompleteListener(this) { task ->
                                 if (task.isSuccessful) {
                                     createFirebaseUser(responseData)
-                                    callUpdateFirebaseApi(responseData.userid)
                                     callHomePage(responseData)
+                                    callUpdateFirebaseApi(responseData.userid)
                                 }else{
+                                    binding!!.btnSignin.isEnabled = true
                                     SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                                         .setTitleText("Error login for chat module")
                                         .setConfirmText(languageData!!.klOk)
@@ -132,9 +132,10 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
                         .addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
                                 createFirebaseUser(responseData)
-                                callUpdateFirebaseApi(responseData.userid)
                                 callHomePage(responseData)
+                                callUpdateFirebaseApi(responseData.userid)
                             }else{
+                                binding!!.btnSignin.isEnabled = true
                                 SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                                     .setTitleText("Error login for chat module")
                                     .setConfirmText(languageData!!.klOk)
@@ -162,14 +163,17 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
         database.child(ConstantLib.USER).child(firebaseUser!!.uid).child("name").setValue(responseData.name)
         database.child(ConstantLib.USER).child(firebaseUser.uid).child("image").setValue(responseData.profile)
         database.child(ConstantLib.USER).child(firebaseUser.uid).child("deviceToken").setValue(responseData.apiToken)
-        database.child(ConstantLib.USER).child(firebaseUser.uid).child("amiggosID").setValue(responseData.userid.toString())
+        database.child(ConstantLib.USER).child(firebaseUser.uid).child("amiggosID").setValue(responseData.unique_timestamp.toString())
         database.child(ConstantLib.USER).child(firebaseUser.uid).child("email").setValue(responseData.email)
         database.child(ConstantLib.USER).child(firebaseUser.uid).child("fcmToken").setValue(sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN))
+        database.child(ConstantLib.USER).child(firebaseUser.uid).child("timestamp").setValue(System.currentTimeMillis())
 
     }
 
     private fun callHomePage(responseData: ALoginResponse.Data) {
+        binding!!.btnSignin.isEnabled = true
         sharedPreferences!!.save(ConstantLib.USER_ID, responseData.userid.toInt())
+        sharedPreferences!!.save(ConstantLib.UNIQUE_TIMESTAMP, responseData.unique_timestamp.toString())
         sharedPreferences!!.save(ConstantLib.USER_NAME, responseData.username)
         sharedPreferences!!.save(ConstantLib.USER_EMAIL, responseData.email)
         sharedPreferences!!.save(ConstantLib.USER_DOB, responseData.dob)
@@ -184,7 +188,7 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
         finishAffinity()
     }
 
-    override fun onFirebaseUpdateSuccess(responseData: LoginResponse) {
+    override fun onFirebaseUpdateSuccess(responseData: CommonResponse?) {
         Log.d("Firebase id updated","Updated")
     }
 
@@ -203,7 +207,7 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
     private fun createFirebaseUser(responseData: ALoginResponse.Data) {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
         val user = User()
-        user.amiggosID = responseData.userid.toString()
+        user.amiggosID = responseData.unique_timestamp.toString()
         user.deviceToken = responseData.apiToken
         user.email = responseData.email
         user.fcmToken = sharedPreferences!!.getValueString(ConstantLib.FCMTOKEN).toString()
@@ -214,6 +218,18 @@ class ALogin: BaseActivity(), ALoginPresenter.ALoginPresenterMainView {
 
 
     override fun validateError(message: String) {
+        binding!!.btnSignin.isEnabled = true
         Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        binding!!.btnSignin.isEnabled = true
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
+    override fun onDestroy() {
+        binding!!.btnSignin.isEnabled = true
+        aLoginImplementation!!.onStop()
+        super.onDestroy()
     }
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 500 500"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:bx="https://boxy-svg.com">
+    <path
+        d="M 243.166 39.705 L 309.113 161.902 L 177.219 161.902 L 243.166 39.705 Z"
+        style=""
+        transform="matrix(0.5, 0.866025, -0.866025, 0.5, 240.083008, 126.390045)"
+        />
+    <circle
+        style=""
+        cx="251.208"
+        cy="190.016"
+        r="184.466" />
+</svg>

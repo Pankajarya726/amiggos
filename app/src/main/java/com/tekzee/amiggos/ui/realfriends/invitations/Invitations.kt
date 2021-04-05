@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.JsonObject
-import com.orhanobut.logger.Logger
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.CommonResponse
 import com.tekzee.amiggos.base.model.LanguageData
@@ -18,7 +17,7 @@ import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.ui.realfriends.invitations.adapter.InvitationAdapter
 import com.tekzee.amiggos.ui.realfriends.invitations.interfaces.InvitationInterfaces
 import com.tekzee.amiggos.ui.realfriends.invitations.model.InvitationResponseV2
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tekzee.amiggos.constant.ConstantLib
@@ -50,6 +49,7 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
 
 
         fun newInstance(): Invitations {
+
             if(invitation == null){
                 return Invitations()
             }
@@ -96,7 +96,7 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
 
     override fun onResume() {
         super.onResume()
-        Logger.d("Onresume---> Invitation")
+
     }
 
     override fun onCreateView(
@@ -115,15 +115,15 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         invitationPresenterImplementation = InvitationPresenterImplementation(this, requireContext())
         setupRecyclerView()
-        setupClickListener()
         setupView()
         callInvitationApi()
         setupRefreshLayout()
+
     }
 
     private fun setupRefreshLayout() {
-        binding!!.refreshlayout.setOnRefreshListener {
-            binding!!.refreshlayout.isRefreshing = false
+        binding.refreshlayout.setOnRefreshListener {
+            binding.refreshlayout.isRefreshing = false
             pageNo = 0
             items.clear()
             adapter.notifyDataSetChanged()
@@ -131,14 +131,7 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
         }
     }
 
-    private fun setupClickListener() {
-        binding.error.errorLayout.setOnClickListener {
-            pageNo = 0
-            items.clear()
-            adapter.notifyDataSetChanged()
-            callInvitationApi()
-        }
-    }
+
 
     private fun setupRecyclerView() {
 
@@ -240,12 +233,17 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
+    }
+
     override fun onInvitaionSuccess(responseData: InvitationResponseV2?) {
+//        NearMeFragment.setInvitationBadge(responseData!!.data.total_count)
         items.clear()
         adapter.notifyDataSetChanged()
         items.addAll(responseData!!.data.freindRequest)
         adapter.notifyDataSetChanged()
-//        setupErrorVisibility()
+        setupErrorVisibility(responseData.message)
     }
 
 
@@ -259,10 +257,10 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
         callInvitationApi()
     }
 
-    override fun onInvitationFailure(responseData: String) {
+    override fun onInvitationFailure(message: String) {
         items.clear()
         adapter.notifyDataSetChanged()
-//        setupErrorVisibility()
+        setupErrorVisibility(message)
     }
 
 
@@ -272,13 +270,18 @@ class Invitations : BaseFragment(), InvitationPresenter.InvitationMainView {
     }
 
 
-    fun setupErrorVisibility(){
-        if(items.size == 0){
-            binding.error.errorLayout.visibility = View.VISIBLE
-            binding.invitationRecyclerview.visibility = View.GONE
-        }else{
+    fun setupErrorVisibility(message: String) {
+        if (items.size == 0) {
+            binding.errorLayout.visibility = View.VISIBLE
+            binding.errortext.text = message
             binding.invitationRecyclerview.visibility = View.VISIBLE
-            binding.error.errorLayout.visibility = View.GONE
+        } else {
+            binding.invitationRecyclerview.visibility = View.VISIBLE
+            binding.errortext.text = ""
+            binding.errorLayout.visibility = View.GONE
         }
     }
+
+
+
 }

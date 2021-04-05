@@ -17,8 +17,15 @@ class RealFriendPresenter {
     }
 
     interface RealFriendMainView : BaseMainView {
-        fun onRealFriendSuccess(responseData: List<RealFriendV2Response.Data.RealFreind>)
-        fun onRealFriendInfiniteSuccess(responseData: List<RealFriendV2Response.Data.RealFreind>)
+        fun onRealFriendSuccess(
+            responseData: List<RealFriendV2Response.Data.RealFreind>,
+            totalCount: Int,
+            responseData1: RealFriendV2Response
+        )
+        fun onRealFriendInfiniteSuccess(
+            responseData: List<RealFriendV2Response.Data.RealFreind>,
+            responseData1: RealFriendV2Response
+        )
         fun onRealFriendFailure(message: String)
     }
 

@@ -71,7 +71,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.MyViewHo
 //            @Override
 //            public void onClick(View view) {
 //
-//                listener.onRowClick(model);
+//                listenerFragment.onRowClick(model);
 //
 //            }
 //        });

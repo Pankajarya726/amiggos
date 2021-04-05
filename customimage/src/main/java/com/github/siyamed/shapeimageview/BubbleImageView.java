@@ -25,6 +25,6 @@ public class BubbleImageView extends ShaderImageView {
 
     @Override
     public ShaderHelper createImageViewHelper() {
-        return new SvgShader(R.raw.img_circular_chat);
+        return new SvgShader(R.raw.rectangle);
     }
 }

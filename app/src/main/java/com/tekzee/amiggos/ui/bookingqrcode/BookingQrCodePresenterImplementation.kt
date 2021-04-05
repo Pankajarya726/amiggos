@@ -32,7 +32,9 @@ class BookingQrCodePresenterImplementation(private var  mainView: BookingQrCodeP
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

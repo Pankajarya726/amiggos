@@ -9,6 +9,7 @@ import androidx.core.app.NotificationCompat
 import androidx.work.Data
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.tekzee.amiggos.FileProgressReceiver
 import com.tekzee.amiggos.base.repository.MemorieRepository
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
@@ -135,6 +136,7 @@ class UploadWorkOurMemoryService(context: Context, workerParams: WorkerParameter
             }, { throwable -> // call onErrors() if error occurred during file upload
                 onErrors(throwable)
             }) { // call onSuccess() while file upload successful
+
                 this@UploadWorkOurMemoryService.onSuccess()
             }
 
@@ -181,6 +183,8 @@ class UploadWorkOurMemoryService(context: Context, workerParams: WorkerParameter
      * Send Broadcast to FileProgressReceiver while file upload successful
      */
     private fun onSuccess() {
+        BitmapUtils.deleteFolder()
+        BitmapUtils.deleteVideoFolder()
         val successIntent = Intent(applicationContext, FileProgressReceiver::class.java)
         successIntent.action = "com.wave.ACTION_UPLOADED"
         successIntent.putExtra("notificationId", FileUploadService.NOTIFICATION_ID)

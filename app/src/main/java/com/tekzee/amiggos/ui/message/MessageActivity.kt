@@ -18,6 +18,8 @@ import com.tekzee.amiggos.ui.message.adapter.MessageAdapter
 import com.tekzee.amiggos.ui.message.model.MyConversation
 import com.tekzee.amiggos.ui.message.model.MyFriendChatModel
 import com.tekzee.amiggos.ui.addusers.AddUserFragment
+import com.tekzee.amiggos.util.Errortoast
+import com.tekzee.amiggos.util.Utility
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
@@ -66,7 +68,7 @@ class MessageActivity : BaseActivity(), MessageEvent, KodeinAware,
     private fun getAllConversation() {
         onStarted()
         viewModel.getAllMyConversation(
-            prefs.getValueInt(ConstantLib.USER_ID).toString()
+            prefs.getValueString(ConstantLib.UNIQUE_TIMESTAMP).toString()
         ).observe(this,
             Observer {
                 val newlist = ArrayList<MyConversation>()
@@ -88,7 +90,7 @@ class MessageActivity : BaseActivity(), MessageEvent, KodeinAware,
     }
 
     private fun setupAdapter() {
-        adapter = MessageAdapter(this,prefs.getValueInt(ConstantLib.USER_ID).toString(),applicationContext)
+        adapter = MessageAdapter(this, applicationContext)
         binding!!.messageRecyclerview.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.VERTICAL,
@@ -108,7 +110,6 @@ class MessageActivity : BaseActivity(), MessageEvent, KodeinAware,
 //        }else{
 //            findNavController().navigate(R.id.addUserActivity)
 //        }
-
     }
 
     override fun onItemClicked(
@@ -132,7 +133,11 @@ class MessageActivity : BaseActivity(), MessageEvent, KodeinAware,
     }
 
     override fun validateError(message: String) {
+        Errortoast(message)
+    }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageConstant.session_error)
     }
 
 }

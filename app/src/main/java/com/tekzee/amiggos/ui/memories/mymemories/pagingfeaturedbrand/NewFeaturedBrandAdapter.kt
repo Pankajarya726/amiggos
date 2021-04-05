@@ -25,11 +25,9 @@ class NewFeaturedBrandAdapter(private val listener: FeaturedBrandClickListener):
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
         getItem(position)?.let { itemData->
-            holder.bindPost(itemData)
+            holder.bindPost(itemData,listener)
 
-            holder.itemView.img_layout.setOnClickListener {
-                listener.onItemClickedBrand(itemData)
-            }
+
         }
     }
 
@@ -37,11 +35,18 @@ class NewFeaturedBrandAdapter(private val listener: FeaturedBrandClickListener):
     class MyViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         val img_user = itemView.img_user_firstfragment
 
-        fun bindPost(featuredbranditems : MemorieResponse.Data.Memories){
+        fun bindPost(
+            featuredbranditems: MemorieResponse.Data.Memories,
+            listener: FeaturedBrandClickListener
+        ){
             Glide.with(itemView.context)
                 .load(featuredbranditems.profile)
                 .placeholder(R.drawable.noimage)
                 .into(img_user)
+
+            itemView.img_layout.setOnClickListener {
+                listener.onItemClickedBrand(featuredbranditems,adapterPosition)
+            }
         }
     }
 

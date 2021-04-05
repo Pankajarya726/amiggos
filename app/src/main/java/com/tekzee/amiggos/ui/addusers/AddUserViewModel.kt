@@ -9,8 +9,7 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.base.repository.AddUserRepository
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.util.*
-import com.tekzee.amiggosvenueapp.ui.addusers.AddUserEvent
-import com.tekzee.amiggosvenueapp.ui.addusers.model.AddUserResponse
+import com.tekzee.amiggos.ui.addusers.model.AddUserResponse
 
 class AddUserViewModel(private val context: Context,
                        private val repository: AddUserRepository,

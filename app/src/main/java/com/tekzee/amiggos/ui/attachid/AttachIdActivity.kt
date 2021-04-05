@@ -1,5 +1,6 @@
 package com.tekzee.amiggos.ui.attachid
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -7,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.gson.JsonObject
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.BaseActivity
@@ -18,8 +20,6 @@ import com.tekzee.amiggos.ui.attachid.model.MyIdResponse
 import com.tekzee.amiggos.util.ImagePickerUtils
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -85,9 +85,12 @@ class AttachIdActivity : BaseActivity(), AttachIdActivityPresenter.AttachIdMainV
 
 
     private fun pickImage() {
-        CropImage.activity()
-            .setCropShape(CropImageView.CropShape.RECTANGLE)
-            .start(this)
+        ImagePicker.with(this)
+            .crop(16f, 9f)
+            .compress(1024)
+            .maxResultSize(1080, 1080)
+            .start()
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -129,6 +132,10 @@ class AttachIdActivity : BaseActivity(), AttachIdActivityPresenter.AttachIdMainV
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
+    }
+
 
     override fun onActivityResult(
         requestCode: Int,
@@ -136,19 +143,10 @@ class AttachIdActivity : BaseActivity(), AttachIdActivityPresenter.AttachIdMainV
         data: Intent?
     ) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            val result =
-                CropImage.getActivityResult(data)
-            if (resultCode == RESULT_OK) {
-                imagePath = ImagePickerUtils.getPath(this, result.uri)
-                uploadUserImage("1")
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(
-                    this,
-                    "Cropping failed: " + result.error,
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+        if (resultCode == Activity.RESULT_OK) {
+            val fileUri = data?.data
+            imagePath = ImagePickerUtils.getPath(this, fileUri)
+            uploadUserImage("1")
         }
     }
 

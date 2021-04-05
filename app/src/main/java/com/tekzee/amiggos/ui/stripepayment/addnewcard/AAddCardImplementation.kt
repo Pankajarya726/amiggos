@@ -41,7 +41,9 @@ class AAddCardImplementation(private var mainView: AAddCardPresenter.AAddCardPre
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -70,7 +72,9 @@ class AAddCardImplementation(private var mainView: AAddCardPresenter.AAddCardPre
                             } else {
                                 mainView.onSaveCardFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

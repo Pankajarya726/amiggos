@@ -9,6 +9,7 @@ interface BaseMainView{
 
   fun checkInternet(): Boolean
   fun validateError(message: String)
+  fun logoutUser()
 
 
 

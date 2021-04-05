@@ -13,11 +13,21 @@ class FriendRequestFragmentPresenter {
             createHeaders: HashMap<String, String?>,
             requestDatFromServer: Boolean
         )
+        fun doAcceptInvitationApi(
+            input: JsonObject,
+            createHeaders: HashMap<String, String?>
+        )
+        fun callRejectApi(
+            input: JsonObject,
+            createHeaders: HashMap<String, String?>
+        )
     }
 
     interface FriendRequestFragmentPresenterMainView: BaseMainView {
         fun onNotificationSuccess(responseData: List<ANotificationResponse.Data.UserNotification>)
         fun onNotificationInfiniteSuccess(responseData: List<ANotificationResponse.Data.UserNotification>)
         fun onNotificationFailure(responseData: String)
+        fun onAcceptRequestSuccess(responseData: String)
+        fun onRejectRequestSuccess(responseData: String)
     }
 }

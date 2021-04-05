@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
+import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.JsonObject
@@ -30,14 +31,16 @@ import com.tekzee.amiggos.custom.BottomDialog
 import com.tekzee.amiggos.databinding.ProfileDetailsBinding
 import com.tekzee.amiggos.ui.chatnew.ChatActivity
 import com.tekzee.amiggos.ui.favoritevenues.AFavoriteVenues
-import com.tekzee.amiggos.ui.friendprofile.FriendProfilePresenter
-import com.tekzee.amiggos.ui.friendprofile.FriendProfilePresenterImplementation
-import com.tekzee.amiggos.ui.friendprofile.model.FriendProfileResponse
+//import com.tekzee.amiggos.ui.profiledetails.FriendProfilePresenter
+//import com.tekzee.amiggos.ui.profiledetails.FriendProfilePresenterImplementation
+//import com.tekzee.amiggos.ui.profiledetails.model.FriendProfileResponse
 import com.tekzee.amiggos.ui.homescreen_new.nearmefragment.adapter.ViewPagerAdapter
 import com.tekzee.amiggos.ui.message.model.MyFriendChatModel
-import com.tekzee.amiggos.ui.notification.model.StorieResponse
+import com.tekzee.amiggos.ui.profiledetails.model.FriendProfileResponse
+//import com.tekzee.amiggos.ui.profiledetails.model.StorieResponse
 import com.tekzee.amiggos.ui.profiledetails.model.GetFriendProfileDetailsResponse
 import com.tekzee.amiggos.ui.profiledetails.model.SliderAdapterExample
+import com.tekzee.amiggos.ui.profiledetails.model.StorieResponse
 import com.tekzee.amiggos.ui.realamiggos.RealAmiggos
 import com.tekzee.amiggos.util.AppBarStateChangedListener
 import com.tekzee.amiggos.util.SharedPreference
@@ -124,6 +127,11 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
 
 
     private fun setupClickListener() {
+
+        binding!!.imgLike.setOnClickListener {
+            callSendFriendRequest()
+        }
+
         binding!!.imgBack.setOnClickListener {
             onBackPressed()
         }
@@ -144,7 +152,7 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
         binding!!.imageoptions.setOnClickListener {
 
 
-            if (!isMyFriend) {
+            if (!isMyFriend && !isMyFriendBlocked) {
                 val dialog: BottomDialog = BottomDialog.newInstance(
                     "",
                     arrayOf(
@@ -168,7 +176,7 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
 
                     }
                 }
-            } else if (isMyFriend && !isMyFriendBlocked) {
+            }else if (isMyFriend && !isMyFriendBlocked) {
                 val dialog: BottomDialog = BottomDialog.newInstance(
                     "",
                     arrayOf(
@@ -255,7 +263,7 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
 
     private fun setupViews(data: GetFriendProfileDetailsResponse.Data) {
 
-        friendId = data.userid.toString()
+        friendId = data.unique_user_id
         friendName = data.name
         friendImage = data.profile[0]
 
@@ -266,11 +274,11 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
             binding!!.imageoptions.visibility = View.GONE
             binding!!.imgLike.visibility = View.GONE
         }else{
-            if(isMyFriend && !isMyFriendBlocked){
+           /* if(isMyFriend && !isMyFriendBlocked){
                 binding!!.imgChat.visibility = View.VISIBLE
             }else{
                 binding!!.imgChat.visibility = View.GONE
-            }
+            }*/
 
             binding!!.imageoptions.visibility = View.VISIBLE
             binding!!.imgLike.visibility = View.VISIBLE
@@ -312,9 +320,18 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
         isMyFriend = responseData!!.data.isMyFriend.toBoolean()
         isMyFriendBlocked = responseData.data.isMyFriendBlocked.toBoolean()
 
-//        Glide.with(applicationContext).load(responseData.data.profile).placeholder(R.drawable.blackbg).into(
-//            binding!!.htabHeader
-//        )
+
+        if(isMyFriend){
+            Glide.with(applicationContext).load(responseData.data.profile).placeholder(R.drawable.heart_selected).into(
+                binding!!.imgLike
+            )
+        }else {
+            Glide.with(applicationContext).load(responseData.data.profile).placeholder(R.drawable.heart_unliked).into(
+                binding!!.imgLike
+            )
+        }
+
+
         list = ArrayList()
         list.addAll(responseData.data.profile)
         adapter.renewItems(list)
@@ -360,6 +377,10 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
     override fun validateError(message: String) {
         binding!!.htabMaincontent.visibility = View.VISIBLE
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
 
@@ -447,8 +468,8 @@ class AProfileDetails : BaseActivity(), FriendProfilePresenter.FriendProfileMain
         )
     }
 
-    override fun onSliderClicked() {
-        GalleryView.show(this, list)
+    override fun onSliderClicked(position: Int) {
+        GalleryView.show(this, list,position)
     }
 
 

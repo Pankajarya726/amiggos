@@ -13,6 +13,7 @@ import com.tekzee.amiggos.ui.friendlist.FriendListActivity
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.constant.ConstantLib
+import com.tekzee.amiggos.util.Utility
 
 class FriendInviteConfirmation : BaseActivity() {
 
@@ -58,6 +59,10 @@ class FriendInviteConfirmation : BaseActivity() {
 
     override fun validateError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
     override fun onBackPressed() {

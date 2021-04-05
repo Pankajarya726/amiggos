@@ -22,6 +22,7 @@ import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.ui.message.MessageActivity
+import com.tekzee.amiggos.util.Utility
 
 class MyFriendChatActivity : BaseActivity() {
 
@@ -80,21 +81,6 @@ class MyFriendChatActivity : BaseActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val messageData: Message? = snapshot.getValue(Message::class.java)
                     if (messageData!=null) {
-
-//                        if(messageData.sender.equals(FirebaseAuth.getInstance().currentUser!!.uid)){
-//                            if(!listOfSenders.contains(messageData.receiver))
-//                            listOfSenders.add(messageData.receiver)
-//                            getAllLastConversationBetweenSenderAndReceiver(messageData.receiver)
-//                        }
-//
-//                        if(messageData.receiver.equals(FirebaseAuth.getInstance().currentUser!!.uid)){
-//                            if(!listOfSenders.contains(messageData.sender))
-//                            listOfSenders.add(messageData.sender)
-//                            getAllLastConversationBetweenSenderAndReceiver(messageData.sender)
-//                        }
-
-//                        Logger.d("listof senders ---->"+listOfSenders.size.toString())
-
                         if (!listOfSenders.contains(messageData.sender) && !messageData.sender.equals(FirebaseAuth.getInstance().uid.toString())){
                             listOfSenders.add(messageData.sender)
                             getAllLastConversationBetweenSenderAndReceiver(messageData.sender)
@@ -119,12 +105,11 @@ class MyFriendChatActivity : BaseActivity() {
                     messageBetweenSenderAndReceiver.clear()
 
                     for(messages in snapshot.children){
-//                        Logger.d("messages---->"+messages.toString())
                         val data = messages.value as HashMap<String,Any>
                         val messageData = Message(
                             data["isSeen"]!!.toString().toBoolean(),
                             data["msg"].toString(), data["receiver"].toString(), data["sender"].toString(),
-                            data["timeSpam"]!!.toString().toLong())
+                            data["timestamp"]!!.toString().toLong())
                         if (messageData!=null) {
                             if (messageData.sender.equals(sender)&& messageData.receiver.equals(FirebaseAuth.getInstance().uid.toString()) || messageData.sender.equals(FirebaseAuth.getInstance().uid.toString())&& messageData.receiver.equals(sender) ){
                                 messageBetweenSenderAndReceiver.add(messageData)
@@ -264,5 +249,9 @@ class MyFriendChatActivity : BaseActivity() {
 
     override fun validateError(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 }

@@ -1,8 +1,10 @@
 package com.tekzee.amiggos.ui.bookingdetailnew
 
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
@@ -15,15 +17,23 @@ import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.databinding.BookingdetailnewActivityBinding
 import com.tekzee.amiggos.ui.bookingdetailnew.model.BookingDetailsNewResponse
 import com.tekzee.amiggos.ui.friendlist.model.FriendListResponse
+import com.tekzee.amiggos.ui.invitationlist.ViewGuestListActivity
 import com.tekzee.amiggos.ui.invitefriendnew.InviteFriendNewActivity
+import com.tekzee.amiggos.ui.menu.MenuActivity
 import com.tekzee.amiggos.ui.viewmenu.ViewMenuActivity
 import com.tekzee.amiggos.util.Errortoast
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
+import kotlinx.android.synthetic.main.bookingdetailnew_activity.*
 
 class BookingDetailNewActivity : BaseActivity(),
     BookingDetailsNewPresenter.ABookingDetailsPresenterMainView {
 
+    private var allowinvite: String ="1"
+    private var bookingmethod: String = ""
+    private var bookingTime: String = ""
+    private var bookingDate: String = ""
+    private var selectedVenueid: Int = 0
     private var bookingData: BookingDetailsNewResponse? = null
     private lateinit var bookingdetailnewpresenterimplementation: BookingDetailNewPresenterImplementation
     private lateinit var binding: BookingdetailnewActivityBinding
@@ -39,18 +49,51 @@ class BookingDetailNewActivity : BaseActivity(),
             BookingDetailNewPresenterImplementation(this, this)
         getBookingDetailsApi()
         setupClickListener()
-        if (intent.getStringExtra(ConstantLib.FROM).equals(ConstantLib.BOOKING_INVITATION)) {
-            binding.viewmenu.visibility = View.GONE
-            binding.inviteFriend.visibility = View.GONE
-        } else {
-            binding.viewmenu.visibility = View.VISIBLE
-            binding.inviteFriend.visibility = View.VISIBLE
-        }
+        setupLanguageData()
+
+        binding.txtLink.paintFlags = binding.txtLink.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+    }
+
+    private fun setupLanguageData() {
+        txt_link.text = languageData!!.add_items
+        viewmenu.text = languageData!!.my_purchases
     }
 
     private fun setupClickListener() {
         binding.imgClose.setOnClickListener {
             onBackPressed()
+        }
+
+        binding.txtLink.setOnClickListener {
+            val menuIntent = Intent(applicationContext, MenuActivity::class.java)
+
+            menuIntent.putExtra(
+                ConstantLib.ALLOW_INVITE,
+                allowinvite
+            )
+            menuIntent.putExtra(
+                ConstantLib.VENUE_ID,
+                selectedVenueid.toString()
+            )
+            menuIntent.putExtra(
+                ConstantLib.SELECTED_VENUE_DIN_TOGO,
+                bookingmethod
+            )
+            menuIntent.putExtra(ConstantLib.DATE, bookingDate)
+
+            menuIntent.putExtra(
+                ConstantLib.TIME,
+                bookingTime
+            )
+            menuIntent.putExtra(
+                ConstantLib.FROM,
+                ConstantLib.ADDITEMS
+            )
+            menuIntent.putExtra(
+                ConstantLib.BOOKING_ID,
+                bookingData!!.data.booking.bookingId
+            )
+            startActivity(menuIntent)
         }
 
         binding.viewmenu.setOnClickListener {
@@ -67,6 +110,13 @@ class BookingDetailNewActivity : BaseActivity(),
             startActivity(intent)
 
         }
+
+        binding.txtGuestList.setOnClickListener {
+            val intent = Intent(this, ViewGuestListActivity::class.java)
+            intent.putExtra(ConstantLib.BOOKING_ID, bookingData!!.data.booking.bookingId)
+            startActivity(intent)
+        }
+
     }
 
     private fun getBookingDetailsApi() {
@@ -96,44 +146,77 @@ class BookingDetailNewActivity : BaseActivity(),
 
     private fun setupViewData(responseData: BookingDetailsNewResponse?) {
         bookingData = responseData
-        binding.venueName.text = responseData!!.data.booking.name
+        allowinvite =responseData!!.data.booking.allow_invite
+        selectedVenueid = responseData!!.data.booking.venueId.toInt()
+        bookingDate = responseData.data.booking.booking_date_txt
+        bookingTime = responseData.data.booking.booking_time_txt
+        bookingmethod = responseData.data.booking.bookingMethod
+        booking_qr_code.text =
+            languageData!!.booking_qr_code + responseData.data.booking.bookingCode
+        if (responseData.data.booking.bookingMethod.equals("To-Go")) {
+            sharedPreferences!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO, ConstantLib.TOGO)
+        } else if (responseData.data.booking.bookingMethod.equals("Dine-in")) {
+            sharedPreferences!!.save(ConstantLib.SELECTED_VENUE_DIN_TOGO, ConstantLib.RESERVATION)
+        }
+        binding.venueName.text = responseData.data.booking.name
         binding.venueAddress.text = responseData.data.booking.address
         Glide.with(this).load(responseData.data.booking.venueHomeImage)
             .placeholder(R.drawable.noimage).into(binding.imgVenue)
         binding.txtTime.text = responseData.data.booking.bookingTime
         binding.txtDate.text = responseData.data.booking.bookingDate
-        if (responseData.data.booking.totalInvitedGuest > 0) {
+        if (responseData.data.booking.totalInvitedGuest.toInt() > 0) {
             binding.txtGuestList.visibility = View.VISIBLE
         } else {
             binding.txtGuestList.visibility = View.GONE
         }
         binding.txtGuestList.text =
-            languageData!!.klGuestList + responseData.data.booking.totalInvitedGuest.toString()
+            languageData!!.klGuestList + ": " + responseData.data.booking.totalInvitedGuest
         binding.txtPurchaseDescriptionTitle.text = languageData!!.purchasedescription
-        binding.txtPurchaseDescription.text = Html.fromHtml(responseData.data.booking.description)
-        binding.txtPurchaseAmount.text = "$ " + responseData.data.booking.totalAmount.toString()
-        binding.txtTicketinfo.text = responseData.data.booking.totalAmount.toString()
+        binding.txtPurchaseDescription.text = Html.fromHtml(responseData.data.booking.instructions)
+
+//        binding.txtPurchaseAmount.text = Utility.formatCurrency(responseData.data.booking.totalAmount.toFloat())
+        binding.txtPurchaseAmount.text = "$" + responseData.data.booking.totalAmount.toString()
+
+        binding.txtTicketinfo.text = responseData.data.booking.totalAmount
         binding.txtReferenceNo.text =
-            languageData!!.referencenumber + responseData.data.booking.bookingId.toString()
+            languageData!!.referencenumber + responseData.data.booking.bookingId
         binding.txtPuchasedBy.text =
             languageData!!.purchasedby + responseData.data.booking.purchasedBy
-        Glide.with(this).load(responseData.data.booking.qrCode).placeholder(R.drawable.noimage)
+        Glide.with(this).load(responseData.data.booking.qrCode)
             .into(binding.imgBarcode)
-        if(intent.getStringExtra(ConstantLib.FROM).equals(ConstantLib.BOOKING_INVITATION)){
+        if (intent.getStringExtra(ConstantLib.FROM).equals(ConstantLib.BOOKING_INVITATION)) {
             binding.viewmenu.visibility = View.GONE
-        }else if (responseData.data.booking.menus.isNotEmpty()) {
+        } else if (responseData.data.booking.menus.isNotEmpty()) {
             binding.viewmenu.visibility = View.VISIBLE
         } else {
             binding.viewmenu.visibility = View.GONE
         }
+
+
+        if (responseData.data.booking.allow_invite.equals("0", true)) {
+            binding.inviteFriend.visibility = View.GONE
+        } else {
+            binding.inviteFriend.visibility = View.VISIBLE
+        }
+
+        if (responseData.data.booking.allow_add_on.equals("0", true)) {
+            binding.txtLink.visibility = View.GONE
+        } else {
+            binding.txtLink.visibility = View.VISIBLE
+        }
+
     }
 
     override fun onFriendInviteSuccess(responseData: CommonResponse?) {
-        TODO("Not yet implemented")
+        Log.e("on ", "friend invite success");
     }
 
     override fun validateError(message: String) {
         Errortoast(message)
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
 }

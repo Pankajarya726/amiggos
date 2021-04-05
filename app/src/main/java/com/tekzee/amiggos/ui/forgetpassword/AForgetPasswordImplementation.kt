@@ -42,7 +42,9 @@ class AForgetPasswordImplementation(private var mainView: AForgetPasswordPresent
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

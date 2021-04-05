@@ -1,5 +1,6 @@
 package com.tekzee.amiggos.ui.chatnew
 
+import android.util.Log
 import com.google.firebase.database.*
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.firebasemodel.User
@@ -25,7 +26,7 @@ class ChatHelper {
             map["msg"] = message
             map["receiver"] = receiver
             map["sender"] = sender
-            map["timeSpam"] = timestamp
+            map["timestamp"] = timestamp
 
             var conversationId = ""
             if (Integer.parseInt(reciverUser.amiggosID!!) > Integer.parseInt(currentUserAmigoId!!)) {

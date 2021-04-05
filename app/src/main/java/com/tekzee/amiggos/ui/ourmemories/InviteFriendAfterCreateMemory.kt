@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,22 +21,28 @@ import com.tekzee.amiggos.enums.FriendsAction
 import com.tekzee.amiggos.services.UploadWorkOurMemoryService
 import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.ourmemories.adapter.InviteFriendAdapter
-import com.tekzee.amiggos.ui.ourmemories.model.InviteFriendResponse
-import com.tekzee.amiggos.util.RxSearchObservable
+import com.tekzee.amiggos.ui.ourmemories.model.GetFriendForInviteAfterCreateMemoryResponse
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
 import com.tuonbondol.recyclerviewinfinitescroll.InfiniteScrollRecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
-import io.reactivex.functions.Predicate
 import io.reactivex.schedulers.Schedulers
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.closestKodein
+import org.kodein.di.android.x.closestKodein
+import org.kodein.di.generic.instance
 import java.util.concurrent.TimeUnit
 
 
 class InviteFriendAfterCreateMemory : BaseActivity(),
     InviteFriendPresenter.InviteFriendPresenterMainView,
     InfiniteScrollRecyclerView.RecyclerViewAdapterCallback,
-    InviteFriendAdapter.InviteFriendClick {
+    InviteFriendAdapter.InviteFriendClick ,
+    KodeinAware {
+
+    override val kodein: Kodein by closestKodein()
+    val languageConstant: LanguageData by instance()
 
     private lateinit var adapter: InviteFriendAdapter
     private lateinit var binding: ActivityOurMemoriesBinding
@@ -45,8 +50,8 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
     private var languageData: LanguageData? = null
     private var selectedIds: String = ""
     private var inviteFriendImplementation: InviteFriendImplementation? = null
-    private var mydataList = ArrayList<InviteFriendResponse.Data.RealFreind>()
-    private val mLoadingData = InviteFriendResponse.Data.RealFreind(loadingStatus = true)
+    private var mydataList = ArrayList<GetFriendForInviteAfterCreateMemoryResponse.Data.RealFreind>()
+    private val mLoadingData = GetFriendForInviteAfterCreateMemoryResponse.Data.RealFreind(loadingStatus = true)
     private var onlineFriendPageNo = 0
 
     companion object {
@@ -62,8 +67,8 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
         inviteFriendImplementation = InviteFriendImplementation(this, this)
         setupLanguage()
         setupclickListener()
-        doCallGetFriends(false, "")
         ourMemoryId = intent.getStringExtra(ConstantLib.OURSTORYID)!!
+        doCallGetFriends(false, "")
         hideKeyboard()
 
     }
@@ -91,6 +96,7 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
         val input: JsonObject = JsonObject()
         input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("page_no", onlineFriendPageNo)
+        input.addProperty("our_story_id", ourMemoryId)
         input.addProperty("search", searchvalue)
         inviteFriendImplementation!!.doCallGetFriends(
             input,
@@ -124,33 +130,6 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
             }
         }
 
-//        RxSearchObservable.fromView(binding.searchfriend)
-//            .debounce(1000, TimeUnit.MILLISECONDS)
-//            .filter(Predicate { t ->
-//                t.isNotEmpty()
-//            })
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe(Consumer<String>() { t ->
-//                onlineFriendPageNo = 0
-//                mydataList.clear()
-//                adapter!!.notifyDataSetChanged()
-//                doCallGetFriends(false, t.toString())
-//            })
-
-//        val closeButton: View? =
-//            binding.hiddenSearchWithRecycler.findViewById(androidx.appcompat.R.id.search_close_btn)
-//        closeButton?.setOnClickListener {
-//
-//            binding.hiddenSearchWithRecycler.searchBarSearchView.clearFocus()
-//            binding.hiddenSearchWithRecycler.searchBarSearchView.isIconified = false
-//            binding.hiddenSearchWithRecycler.clearSearchview()
-//            onlineFriendPageNo = 0
-//            mydataList.clear()
-//            adapter!!.notifyDataSetChanged()
-//            doCallGetFriends(false, "")
-//        }
-
         binding.btnInviteFriend.setOnClickListener {
             callUploadImageToMyMemories(toCommaSeparated()!!)
         }
@@ -179,17 +158,17 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onOurMemoriesSuccess(responseData: InviteFriendResponse?) {
+    override fun onOurMemoriesSuccess(responseData: GetFriendForInviteAfterCreateMemoryResponse?) {
         binding.profileImage.requestFocus()
         onlineFriendPageNo++
         mydataList =
-            responseData!!.data.realFreind as ArrayList<InviteFriendResponse.Data.RealFreind>
+            responseData!!.data.realFreind as ArrayList<GetFriendForInviteAfterCreateMemoryResponse.Data.RealFreind>
         setupRecyclerView()
     }
 
 
 
-    override fun onOurMemoriesSuccessInfinite(responseData: InviteFriendResponse?) {
+    override fun onOurMemoriesSuccessInfinite(responseData: GetFriendForInviteAfterCreateMemoryResponse?) {
         binding.profileImage.requestFocus()
         onlineFriendPageNo++
         adapter.setLoadingStatus(true)
@@ -212,6 +191,10 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
 
     override fun validateError(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageConstant.session_error)
     }
 
 
@@ -290,7 +273,7 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
 
     override fun itemClickCallback(
         position: Int,
-        realFreind: InviteFriendResponse.Data.RealFreind,
+        realFreind: GetFriendForInviteAfterCreateMemoryResponse.Data.RealFreind,
         type: Int
     ) {
         if(type ==1){
@@ -299,6 +282,7 @@ class InviteFriendAfterCreateMemory : BaseActivity(),
             selectUserIds.add(realFreind.userid)
         }
         adapter.notifyItemChanged(position)
+        binding.realFriendFragment.scrollToPosition(position)
 
     }
 

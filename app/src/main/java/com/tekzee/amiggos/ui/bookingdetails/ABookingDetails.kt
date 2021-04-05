@@ -81,6 +81,7 @@ class ABookingDetails : BaseActivity(), ABookingDetailsPresenter.ABookingDetails
         input.addProperty("userid", sharedPreferences!!.getValueInt(ConstantLib.USER_ID))
         input.addProperty("booking_id", dataFromIntent!!.id.toString())
         input.addProperty("friend_id", userid.toString())
+        input.addProperty("unfriend_id", "")
         aBookingDetailPresenterImplementation!!.doInviteFriend(
             input,
             Utility.createHeaders(sharedPreferences)
@@ -184,6 +185,12 @@ class ABookingDetails : BaseActivity(), ABookingDetailsPresenter.ABookingDetails
         adapter.notifyDataSetChanged()
         data.addAll(responseData!!.data)
         adapter.notifyDataSetChanged()
+        if(responseData.data[0].allow_invite.equals("0")){
+            binding!!.txtInviteFriend.visibility = View.GONE
+        }else{
+            binding!!.txtInviteFriend.visibility = View.VISIBLE
+        }
+
 
     }
 
@@ -195,6 +202,10 @@ class ABookingDetails : BaseActivity(), ABookingDetailsPresenter.ABookingDetails
 
     override fun validateError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
     override fun onBackPressed() {

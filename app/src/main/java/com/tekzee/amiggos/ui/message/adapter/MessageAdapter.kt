@@ -28,7 +28,6 @@ import java.lang.Exception
 
 class MessageAdapter(
     private val listener: MessageClickListener,
-    private val currenLoggedinUserId: String?,
     private val applicationContext: Context
 ) :
     ListAdapter<MyConversation, MessageAdapter.ChatListViewHolder>(
@@ -53,7 +52,7 @@ class MessageAdapter(
 
     override fun onBindViewHolder(holder: ChatListViewHolder, position: Int) {
         getItem(position).let { listItem ->
-            Log.e("listitem--->", listItem.toString())
+
             holder.bind(listItem)
             holder.itemView.setOnClickListener {
                 listener.onItemClicked(position, listItem)
@@ -98,9 +97,7 @@ class MessageAdapter(
                 } else {
                     finalUserId = listItem.recevieramiggosid!! + "_" + listItem.senderamiggosid!!
                 }
-//
-//                Log.e("finaluser id---->",finalUserId)
-//
+
                 ref.child(ConstantLib.MESSAGE).orderByChild("roomid").equalTo(finalUserId)
                     .addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
@@ -132,7 +129,6 @@ class MessageAdapter(
 
                 ref.child(ConstantLib.MESSAGE).orderByChild("roomid").equalTo(finalUserId).limitToLast(1).addValueEventListener(object: ValueEventListener{
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        Log.e("data-------->",snapshot.toString())
                         for(item in snapshot.children){
                             val messageData = item.getValue(Message::class.java)
                             holder.itemView.txt_message.setText(messageData!!.msg)

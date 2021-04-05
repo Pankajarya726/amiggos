@@ -29,7 +29,9 @@ class FriendListPresenterImplementation(private var mainView: FriendListPresente
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -59,7 +61,9 @@ class FriendListPresenterImplementation(private var mainView: FriendListPresente
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

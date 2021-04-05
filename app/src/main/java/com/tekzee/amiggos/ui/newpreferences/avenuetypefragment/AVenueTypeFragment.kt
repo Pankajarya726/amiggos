@@ -17,7 +17,7 @@ import com.tekzee.amiggos.ui.newpreferences.avenuetypefragment.adapter.VenueType
 import com.tekzee.amiggos.ui.newpreferences.avenuetypefragment.model.AVenueTypeResponse
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
 
 class AVenueTypeFragment : BaseFragment(), AVenueTypePresenter.AVenueTypePresenterMainView {
@@ -84,6 +84,10 @@ class AVenueTypeFragment : BaseFragment(), AVenueTypePresenter.AVenueTypePresent
 
     override fun validateError(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
     }
 
     fun getWidth(): Int {

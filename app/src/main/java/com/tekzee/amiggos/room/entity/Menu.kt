@@ -11,7 +11,7 @@ class Menu(
     @SerializedName("age_restriction")
     val ageRestriction: String = "",
     @SerializedName("cost")
-    val cost: Int = 0,
+    val cost: Double = 0.0,
     @SerializedName("description")
     val description: String = "",
     @PrimaryKey @ColumnInfo(name = "id") val id: Int = 0,
@@ -23,6 +23,14 @@ class Menu(
     val method: String = "",
     @SerializedName("name")
     val name: String = "",
+    @SerializedName("is_idproof_verified")
+    val is_idproof_verified: String = "",
+    @SerializedName("is_idproof_uploaded")
+    val is_idproof_uploaded: String = "",
+    @SerializedName("is_idproof_notverified_message")
+    val is_idproof_notverified_message: String = "",
+    @SerializedName("warning_age_restriction")
+    val warning_age_restriction: String = "",
     @SerializedName("offer_type")
     val offerType: Int = 0,
     var quantity: Int = 0,

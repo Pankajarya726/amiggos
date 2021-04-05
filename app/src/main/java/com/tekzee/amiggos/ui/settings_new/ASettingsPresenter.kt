@@ -13,10 +13,16 @@ class ASettingsPresenter {
             input: JsonObject,
             createHeaders: HashMap<String, String?>
         )
+        fun doLogoutUser(
+            input: JsonObject,
+            createHeaders: HashMap<String, String?>
+        )
     }
 
     interface ASettingsPresenterMainView: BaseMainView {
         fun onUserProfileSuccess(data: GetUserProfileResponse.Data)
         fun onUserProfileFailure(message: String)
+        fun onUserLogoutSuccess(message: String)
+        fun onUserLogoutFailure(message: String)
     }
 }

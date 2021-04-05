@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -30,22 +31,29 @@ import co.lujun.androidtagview.TagView
 import com.abedelazizshe.lightcompressorlibrary.CompressionListener
 import com.abedelazizshe.lightcompressorlibrary.VideoCompressor
 import com.abedelazizshe.lightcompressorlibrary.VideoQuality
+import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager
+import com.beloo.widget.chipslayoutmanager.SpacingItemDecoration
+import com.bumptech.glide.Glide
 import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.otaliastudios.cameraview.VideoResult
 import com.otaliastudios.cameraview.size.AspectRatio
+import com.rw.keyboardlistener.KeyboardUtils
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
 import com.tekzee.amiggos.databinding.TaggingVideoFragmentBinding
+import com.tekzee.amiggos.ui.ourmemories.InviteFriendAfterCreateMemory
 import com.tekzee.amiggos.ui.postmemories.PostMemories
 import com.tekzee.amiggos.util.*
 import com.tekzee.amiggosvenueapp.ui.tagging.TaggingClickListener
 import com.tekzee.amiggosvenueapp.ui.tagging.TaggingEvent
+import com.tekzee.amiggosvenueapp.ui.tagging.TaggingRecyclerviewClickListener
 import com.tekzee.amiggosvenueapp.ui.tagging.adapter.TaggingAdapter
+import com.tekzee.amiggosvenueapp.ui.tagging.adapter.TaggingRecyclerAdapter
 import com.tekzee.amiggosvenueapp.ui.tagging.model.TaggingResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -62,7 +70,8 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
-class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickListener, KodeinAware {
+class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickListener, KodeinAware,
+    TaggingRecyclerviewClickListener {
 
     override val kodein: Kodein by closestKodein()
     val languageConstant: LanguageData by instance<LanguageData>()
@@ -80,6 +89,7 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
     private var imageUri: Uri? = null
     private lateinit var mAppExcutor: AppExecutor
     private var mbitmap: Bitmap? = null
+    private lateinit var adapterTaggingRecycler:TaggingRecyclerAdapter
 
     companion object {
         fun newInstance() = TaggingVideoActivity()
@@ -99,15 +109,43 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
         viewModel.taggingEvent = this
         setupLanguage()
         setupClickListener()
-        callTaggingApi("")
 
+        callTaggingApi("")
+        setupTaggingReyclerViewAdapter()
 
         taglist.observe(this, Observer {
             binding!!.tagcontainerlayout.setTags(it)
         })
         setupVideoView()
-    }
+        if(intent.getStringExtra(ConstantLib.FROM_ACTIVITY)!!.equals(ConstantLib.OURSTORYINVITE)){
+            binding!!.touchText.visibility = View.GONE
+        }else{
+            binding!!.touchText.visibility = View.VISIBLE
+        }
 
+        KeyboardUtils.addKeyboardToggleListener(
+            this
+        ) { isVisible ->
+            if (!isVisible) {
+                setvisibilityofViews()
+            }
+        }
+    }
+    private fun setupTaggingReyclerViewAdapter() {
+        adapterTaggingRecycler = TaggingRecyclerAdapter(this)
+        val chipsLayoutManager =
+            ChipsLayoutManager.newBuilder(this)
+                .setChildGravity(Gravity.TOP)
+                .setScrollingEnabled(true)
+                .setGravityResolver { Gravity.START }
+                .setOrientation(ChipsLayoutManager.HORIZONTAL)
+                .setRowStrategy(ChipsLayoutManager.STRATEGY_DEFAULT) // whether strategy is applied to last row. FALSE by default
+                .withLastRow(true)
+                .build()
+        binding!!.taggingrecyclerview.addItemDecoration(SpacingItemDecoration(resources.getDimensionPixelOffset(R.dimen.chipmargin),resources.getDimensionPixelOffset(R.dimen.chipmargin)))
+        binding!!.taggingrecyclerview.layoutManager = chipsLayoutManager
+        binding!!.taggingrecyclerview.adapter = adapterTaggingRecycler
+    }
     private fun setupVideoView() {
         val result = videoResult
         if (result == null) {
@@ -147,9 +185,9 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
 
 
 
-        binding!!.videoview.setOnPreparedListener(MediaPlayer.OnPreparedListener { mp ->
+        binding!!.videoview.setOnPreparedListener { mp ->
             mp.isLooping = true
-            val lp = binding!!.videoview.getLayoutParams()
+            val lp = binding!!.videoview.layoutParams
             val videoWidth = mp.videoWidth.toFloat()
             val videoHeight = mp.videoHeight.toFloat()
             val viewWidth = binding!!.videoview.getWidth().toFloat()
@@ -163,7 +201,7 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
                     "The video full size is " + videoWidth + "x" + videoHeight
                 )
             }
-        })
+        }
     }
 
     private fun setupLanguage() {
@@ -181,6 +219,7 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
             binding!!.go.visibility = View.GONE
             binding!!.bottomLayout.visibility = View.GONE
             binding!!.save.visibility = View.GONE
+            Glide.with(this).load(R.drawable.text).placeholder(R.drawable.noimage).into(binding!!.touchText)
             showKeyboard(binding!!.tagSearch)
         }
 
@@ -210,12 +249,8 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
         binding!!.tagSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    hideKeyboard(binding!!.tagSearch)
-                    binding!!.recyclerViewTagging.visibility = View.GONE
-                    binding!!.tagSearch.visibility = View.GONE
-                    binding!!.go.visibility = View.VISIBLE
-                    binding!!.bottomLayout.visibility = View.VISIBLE
-                    binding!!.save.visibility = View.VISIBLE
+                    setvisibilityofViews()
+
                     return true
                 }
                 return false
@@ -224,7 +259,7 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
         })
 
 
-        RxTextView.textChanges(binding!!.tagSearch).filter { it.length > 2 }
+        RxTextView.textChanges(binding!!.tagSearch).filter { it.isNotEmpty() }
             .debounce(500, TimeUnit.MILLISECONDS).subscribeOn(
                 Schedulers.io()
             ).observeOn(AndroidSchedulers.mainThread()).subscribe {
@@ -248,6 +283,80 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
 //                val intent = Intent(applicationContext, VenueDashboard::class.java)
 //                startActivity(intent)
 //                finishAffinity()
+
+
+
+
+//                val desFile = saveVideoFile(filename)
+//                VideoCompressor.start(
+//                    filename,
+//                    desFile!!.path,
+//                    object : CompressionListener {
+//                        override fun onProgress(percent: Float) {
+//                            // Update UI with progress value
+//                            runOnUiThread {
+//                                binding!!.saveProgressBar.visibility = View.VISIBLE
+//                                binding!!.go.visibility = View.GONE
+//                            }
+//                        }
+//
+//                        override fun onStart() {
+//                            runOnUiThread {
+//                                binding!!.saveProgressBar.visibility = View.GONE
+//                                binding!!.go.visibility = View.VISIBLE
+//                            }
+//                        }
+//
+//                        override fun onSuccess() {
+//
+//                            runOnUiThread {
+//                                binding!!.saveProgressBar.visibility = View.GONE
+//                                binding!!.go.visibility = View.VISIBLE
+//                            }
+//
+//                            if(intent.getStringExtra(ConstantLib.FROM_ACTIVITY).equals(ConstantLib.OURSTORYINVITE)){
+//                                val inviteFriendAfterCreateMemoryIntent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
+//                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FILEURI, desFile.path)
+//                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY,  getTaggedArrayJson(finaltaggedarray))
+//                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.SENDER_ID, intent.getStringExtra(ConstantLib.SENDER_ID))
+//                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+//                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM, "VIDEO")
+//                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM_ACTIVITY, intent.getStringExtra(ConstantLib.FROM_ACTIVITY))
+//                                startActivity(inviteFriendAfterCreateMemoryIntent)
+//                            }else{
+//                                val intentPostMemory = Intent(applicationContext, PostMemories::class.java)
+//                                intentPostMemory.putExtra(ConstantLib.FILEURI, desFile.path)
+//                                intentPostMemory.putExtra(ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(finaltaggedarray))
+//                                intentPostMemory.putExtra(ConstantLib.SENDER_ID, intent.getStringExtra(ConstantLib.SENDER_ID))
+//                                intentPostMemory.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+//                                intentPostMemory.putExtra(ConstantLib.FROM_ACTIVITY, intent.getStringExtra(ConstantLib.FROM_ACTIVITY))
+//                                intentPostMemory.putExtra(ConstantLib.FROM, "VIDEO")
+//                                startActivity(intentPostMemory)
+//                            }
+//
+//
+//                        }
+//
+//                        override fun onFailure(failureMessage: String) {
+//                            runOnUiThread {
+//                                binding!!.saveProgressBar.visibility = View.VISIBLE
+//                                binding!!.go.visibility = View.GONE
+//                            }
+//                        }
+//
+//                        override fun onCancelled() {
+//                            runOnUiThread {
+//                                binding!!.saveProgressBar.visibility = View.GONE
+//                                binding!!.go.visibility = View.VISIBLE
+//                            }
+//                        }
+//
+//                    },
+//                    VideoQuality.MEDIUM,
+//                    isMinBitRateEnabled = false,
+//                    keepOriginalResolution = true
+//                )
+
 
                 val desFile = saveVideoFile(filename)
                 VideoCompressor.start(
@@ -276,26 +385,27 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
                                 binding!!.go.visibility = View.VISIBLE
                             }
 
-//                            val mIntent = Intent(applicationContext, FileUploadService::class.java)
-//                            mIntent.putExtra(ConstantLib.FILEURI, desFile.path)
-//                            mIntent.putExtra(ConstantLib.FROM, "VIDEO")
-//                            mIntent.putExtra(
-//                                ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(
-//                                    finaltaggedarray
-//                                )
-//                            )
-//                            FileUploadService.enqueueWork(applicationContext, mIntent)
-//
-//                            val intent = Intent(applicationContext, PostMemories::class.java)
-//                            startActivity(intent)
-//                            finishAffinity()
+                            if(intent.getStringExtra(ConstantLib.FROM_ACTIVITY).equals(ConstantLib.OURSTORYINVITE)){
+                                val inviteFriendAfterCreateMemoryIntent = Intent(applicationContext, InviteFriendAfterCreateMemory::class.java)
+                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FILEURI, desFile.path)
+                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.TAGGED_ARRAY,  getTaggedArrayJson(finaltaggedarray))
+                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.SENDER_ID, intent.getStringExtra(ConstantLib.SENDER_ID))
+                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM, "VIDEO")
+                                inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM_ACTIVITY, intent.getStringExtra(ConstantLib.FROM_ACTIVITY))
+                                startActivity(inviteFriendAfterCreateMemoryIntent)
+                            }else{
+                                val intentPostMemory = Intent(applicationContext, PostMemories::class.java)
+                                intentPostMemory.putExtra(ConstantLib.FILEURI, desFile.path)
+                                intentPostMemory.putExtra(ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(finaltaggedarray))
+                                intentPostMemory.putExtra(ConstantLib.SENDER_ID, intent.getStringExtra(ConstantLib.SENDER_ID))
+                                intentPostMemory.putExtra(ConstantLib.OURSTORYID, intent.getStringExtra(ConstantLib.OURSTORYID))
+                                intentPostMemory.putExtra(ConstantLib.FROM_ACTIVITY, intent.getStringExtra(ConstantLib.FROM_ACTIVITY))
+                                intentPostMemory.putExtra(ConstantLib.FROM, "VIDEO")
+                                startActivity(intentPostMemory)
+                            }
 
 
-                            val intent = Intent(applicationContext, PostMemories::class.java)
-                            intent.putExtra(ConstantLib.FILEURI, desFile.path)
-                            intent.putExtra(ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(finaltaggedarray))
-                            intent.putExtra(ConstantLib.FROM, "VIDEO")
-                            startActivity(intent)
 
                         }
 
@@ -316,15 +426,8 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
                     },
                     VideoQuality.MEDIUM,
                     isMinBitRateEnabled = false,
-                    keepOriginalResolution = false
+                    keepOriginalResolution = true
                 )
-
-
-
-
-
-
-
 
 
             }.onDeclined { e ->
@@ -351,6 +454,7 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
 
         binding!!.save.setOnClickListener {
             saveVideo(filename)
+
         }
 
 
@@ -359,12 +463,22 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
         }
     }
 
+    private fun setvisibilityofViews() {
+        hideKeyboard(binding!!.tagSearch)
+        binding!!.recyclerViewTagging.visibility = View.GONE
+        binding!!.tagSearch.visibility = View.GONE
+        binding!!.go.visibility = View.VISIBLE
+        binding!!.bottomLayout.visibility = View.VISIBLE
+        binding!!.save.visibility = View.VISIBLE
+        Glide.with(this).load(R.drawable.ic_t).placeholder(R.drawable.noimage).into(binding!!.touchText)
+    }
+
 
     private fun saveVideoFile(filePath: String?): File? {
         filePath?.let {
             val videoFile = File(filePath)
             val videoFileName = "${System.currentTimeMillis()}_${videoFile.name}"
-            val folderName = Environment.DIRECTORY_MOVIES
+            val folderName = Environment.DIRECTORY_MOVIES+"/AmiggosMovies"
             if (Build.VERSION.SDK_INT >= 29) {
 
                 val values = ContentValues().apply {
@@ -473,7 +587,7 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
             val timeStamp = SimpleDateFormat("ddMMyyHHmm").format(Date())
             val VideoFile = "ammigos-$timeStamp.mp4"
             val sdCard =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)
                     .toString()
             val dir = File(sdCard + "/ammigos/")
             if (!dir.exists()) {
@@ -592,12 +706,15 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
         listItem: TaggingResponse.Data.Search
     ) {
 
-        if(getCountCombination(finaltaggedarray)){
+        if(listItem.type !="3" && getCountCombination(finaltaggedarray)){
             Errortoast(languageConstant.max_venue_brand_limit);
         }else{
+            binding!!.tagSearch.setText("")
             tagArraylist.add(listItem.name)
             taglist.postValue(tagArraylist)
             finaltaggedarray.add(listItem)
+            adapterTaggingRecycler.submitList(finaltaggedarray)
+            adapterTaggingRecycler.notifyDataSetChanged()
         }
 
     }
@@ -621,11 +738,20 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
     private fun getCountCombination(finaltaggedarray: java.util.ArrayList<TaggingResponse.Data.Search>): Boolean {
         var count:Int = 0
         for(items in finaltaggedarray){
-            if(items.type.equals("2") || items.type.equals("3")){
+            if(items.type == "1" || items.type == "2"){
                 count++
             }
         }
         return count>1
+    }
+
+    override fun onItemCloseClicked(position: Int, listItem: TaggingResponse.Data.Search) {
+        if(finaltaggedarray.size>0){
+            finaltaggedarray.removeAt(position)
+            adapterTaggingRecycler.submitList(finaltaggedarray)
+            adapterTaggingRecycler.notifyItemRemoved(position)
+            adapterTaggingRecycler.notifyItemRangeChanged(position,adapterTaggingRecycler.itemCount -position)
+        }
     }
 
 }

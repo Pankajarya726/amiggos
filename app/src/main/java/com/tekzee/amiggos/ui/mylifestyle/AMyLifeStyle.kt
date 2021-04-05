@@ -13,7 +13,7 @@ import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.databinding.MyLifestyleFragmentBinding
 import com.tekzee.amiggos.util.SharedPreference
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.ui.mylifestyle.adapter.MyLifestyleAdapter
 import com.tekzee.amiggos.ui.mylifestyle.model.MyLifestyleResponse
@@ -103,6 +103,10 @@ class AMyLifeStyle : BaseFragment(), MyLifestylePresenter.MyLifestylePresenterMa
 
     override fun validateError(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
     }
 
     override fun onPause() {

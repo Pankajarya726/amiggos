@@ -48,7 +48,9 @@ class CalendarViewPresenterImplementation(private var mainView: CalendarViewPres
                             } else {
                                 mainView.onTimeSlotFailure(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

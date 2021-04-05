@@ -1,12 +1,17 @@
 package com.tekzee.amiggos.ui.finalbasket
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -28,16 +33,17 @@ import com.tekzee.amiggos.room.entity.Menu
 import com.tekzee.amiggos.ui.finalbasket.adapter.FinalBasketAdapter
 import com.tekzee.amiggos.ui.finalbasket.model.CreateBookingResponse
 import com.tekzee.amiggos.ui.menu.model.MenuResponse
-import com.tekzee.amiggos.ui.stripepayment.APaymentMethod
 import com.tekzee.amiggos.ui.stripepayment.paymentactivity.PaymentActivity
 import com.tekzee.amiggos.util.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
 import org.kodein.di.generic.instance
+import java.text.DecimalFormat
 
 
-class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware, FinalBasketClickListener {
+class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware,
+    FinalBasketClickListener {
 
     private lateinit var taxinfo: MenuResponse.Tax
     private lateinit var newlist: java.util.ArrayList<Menu>
@@ -49,10 +55,11 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware, Final
     private var binding: FinalCartBinding? = null
     private lateinit var viewModel: FinalBasketViewModel
     private var repository: ItemRepository? = null
-    var totalamout=0.0f
-    var subtotalamout=0.0f
-    var tax=0.0f
-    var mtip=0.0f
+    var totalamout = 0.0f
+    var subtotalamout = 0.0f
+    var tax = 0.0f
+    var mtip = 0.0f
+//    private val df2: DecimalFormat = DecimalFormat("#.##")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,17 +85,23 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware, Final
         Errortoast(message)
     }
 
-    private fun getCartItems(tip:Float) {
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageConstant!!.session_error)
+    }
+
+    private fun getCartItems(tip: Float) {
         Coroutines.main {
-            repository!!.getItemCount(intent.getStringExtra(ConstantLib.VENUE_ID)!!).observe(this, Observer {
-                Log.e("item list count-->",it.size.toString())
-                newlist = ArrayList<Menu>()
-                newlist.addAll(it)
-                adapter.submitList(newlist)
-                binding!!.progressCircular.visibility = View.GONE
-                binding!!.recyclerCommon.visibility = View.VISIBLE
-                calcualteAmount(tip,it)
-            })
+            repository!!.getItemCount(intent.getStringExtra(ConstantLib.VENUE_ID)!!).observe(
+                this,
+                Observer {
+                    Log.e("item list count-->", it.size.toString())
+                    newlist = ArrayList<Menu>()
+                    newlist.addAll(it)
+                    adapter.submitList(newlist)
+                    binding!!.progressCircular.visibility = View.GONE
+                    binding!!.recyclerCommon.visibility = View.VISIBLE
+                    calcualteAmount(tip, it)
+                })
         }
     }
 
@@ -96,10 +109,59 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware, Final
         binding!!.headertitle.text = languageConstant.checkout
         binding!!.title.text = languageConstant.itemordered
         binding!!.headingSubtotal.text = languageConstant.subtotal
-        binding!!.headingFee.text = languageConstant.feeandestimatedtax +" @ "+taxinfo.value+"%"
+        binding!!.headingFee.text =
+            languageConstant.feeandestimatedtax + " @ " + taxinfo.value + "%"
         binding!!.headingTip.text = languageConstant.tip
         binding!!.headingTotal.text = languageConstant.total
         binding!!.specialInstructions.hint = languageConstant.specialinstruction
+
+        binding!!.specialInstructions.setRawInputType(InputType.TYPE_CLASS_TEXT)
+        binding!!.specialInstructions.setImeActionLabel(
+            resources.getString(R.string.done),
+            EditorInfo.IME_ACTION_DONE
+        )
+        binding!!.specialInstructions.setImeOptions(EditorInfo.IME_ACTION_DONE)
+
+        binding!!.specialInstructions.setOnEditorActionListener(object :
+            TextView.OnEditorActionListener {
+            override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
+                if (event == null) {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        // Capture soft enters in a singleLine EditText that is the last EditText
+                        // This one is useful for the new list case, when there are no existing ListItems
+                        binding!!.specialInstructions.clearFocus()
+                        val inputMethodManager: InputMethodManager =
+                            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        inputMethodManager.hideSoftInputFromWindow(
+                            v.getWindowToken(),
+                            InputMethodManager.RESULT_UNCHANGED_SHOWN
+                        )
+                    } else if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                        // Capture soft enters in other singleLine EditTexts
+                    } else if (actionId == EditorInfo.IME_ACTION_GO) {
+                    } else {
+                        // Let the system handle all other null KeyEvents
+                        return false
+                    }
+                } else if (actionId == EditorInfo.IME_NULL) {
+                    // Capture most soft enters in multi-line EditTexts and all hard enters;
+                    // They supply a zero actionId and a valid keyEvent rather than
+                    // a non-zero actionId and a null event like the previous cases.
+                    if (event.getAction() === KeyEvent.ACTION_DOWN) {
+                        // We capture the event when the key is first pressed.
+                    } else {
+                        // We consume the event when the key is released.
+                        return true
+                    }
+                } else {
+                    // We let the system handle it when the listener is triggered by something that
+                    // wasn't an enter.
+                    return false
+                }
+                return true
+            }
+        })
+
     }
 
     private fun setupClickListener() {
@@ -112,10 +174,14 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware, Final
         }
 
         binding!!.payButton.setOnClickListener {
-            if(totalamout>0){
+            if (totalamout > 0) {
                 callCreateBookingApi()
-            }else{
-                Toast.makeText(applicationContext,"Total amount can not be zero",Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(
+                    applicationContext,
+                    "Total amount can not be zero",
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
         }
@@ -125,40 +191,51 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware, Final
         val input = JsonObject()
         input.addProperty("userid", prefs.getValueInt(ConstantLib.USER_ID))
         input.addProperty("venue_id", intent.getStringExtra(ConstantLib.VENUE_ID))
-        input.addProperty("sub_total", subtotalamout)
+        input.addProperty("sub_total", Utility.roundOffDecimal(subtotalamout.toDouble()))
         input.addProperty("booking_date", intent.getStringExtra(ConstantLib.DATE))
-        input.addProperty("booking_method", intent.getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO))
+        input.addProperty(
+            "booking_method",
+            intent.getStringExtra(ConstantLib.SELECTED_VENUE_DIN_TOGO)
+        )
         input.addProperty("booking_time", intent.getStringExtra(ConstantLib.TIME))
         input.addProperty("instruction", binding!!.specialInstructions.text.toString())
         input.add("menu_item", createMenuItems())
-        input.addProperty("price_category","$$$")
-        input.addProperty("tax", tax)
-        input.addProperty("tip", mtip)
-        input.addProperty("total_amount", totalamout)
+        input.addProperty("price_category", "$$$")
+        input.addProperty("tax", Utility.roundOffDecimal(tax.toDouble()))
+        input.addProperty("tip", Utility.roundOffDecimal(mtip.toDouble()))
+        input.addProperty("total_amount", Utility.roundOffDecimal(totalamout.toDouble()))
+
+        if(intent.getStringExtra(ConstantLib.FROM).equals(ConstantLib.ADDITEMS)){
+            input.addProperty("bookingid", intent.getStringExtra(ConstantLib.BOOKING_ID))
+        }else{
+            input.addProperty("bookingid", "")
+        }
+
         viewModel.callCreateBookingApi(input)
     }
 
     private fun createMenuItems(): JsonArray {
         val jsonArray = JsonArray()
-        for(item in newlist){
+        for (item in newlist) {
             val jsonobject = JsonObject()
-            jsonobject.addProperty("item_id",item.id)
-            jsonobject.addProperty("name",item.name)
-            jsonobject.addProperty("price",item.price)
-            jsonobject.addProperty("qty",item.quantity)
+            jsonobject.addProperty("item_id", item.id)
+            jsonobject.addProperty("name", item.name)
+            jsonobject.addProperty("price", item.price)
+            jsonobject.addProperty("qty", item.quantity)
             jsonArray.add(jsonobject)
         }
         return jsonArray
     }
 
-    fun showCustomTipDialog(view: View){
-        val bottomSheetDialog: TipSheetFragment = TipSheetFragment.newInstance(object : onTipListener{
+    fun showCustomTipDialog(view: View) {
+        val bottomSheetDialog: TipSheetFragment = TipSheetFragment.newInstance(object :
+            onTipListener {
             override fun onTipPicked(tipamout: String) {
-                if(tipamout.isEmpty()){
+                if (tipamout.isEmpty()) {
                     binding!!.imgAddTip.visibility = View.VISIBLE
                     binding!!.tipamout.visibility = View.GONE
                     binding!!.tipamout.visibility = View.GONE
-                }else{
+                } else {
                     getCartItems(tipamout.toFloat())
                     binding!!.imgAddTip.visibility = View.GONE
                     binding!!.tipamout.visibility = View.VISIBLE
@@ -174,7 +251,7 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware, Final
     private fun setupAdapter() {
         binding!!.progressCircular.visibility = View.VISIBLE
         binding!!.recyclerCommon.visibility = View.GONE
-        adapter = FinalBasketAdapter(this, repository,prefs)
+        adapter = FinalBasketAdapter(this, repository, prefs)
         binding!!.recyclerCommon.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.VERTICAL,
@@ -186,29 +263,31 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware, Final
 
     override fun onItemClicked(position: Int, listItem: Menu, quantity: String) {
         Coroutines.main {
-           repository!!.deleteitem(listItem.id)
-         }
+            repository!!.deleteitem(listItem.id)
+        }
 
     }
 
     @SuppressLint("LongLogTag")
     private fun calcualteAmount(tip: Float, list: List<Menu>) {
-        totalamout=0.0f
-        subtotalamout=0.0f
-        tax=0.0f
+        totalamout = 0.0f
+        subtotalamout = 0.0f
+        tax = 0.0f
         Coroutines.main {
-            for (item in list){
+            for (item in list) {
                 subtotalamout += (item.price.toFloat() * item.quantity)
             }
-            tax = ((subtotalamout * taxinfo.value.toFloat())/100)
+            tax = ((subtotalamout * taxinfo.value.toFloat()) / 100)
             mtip = tip
             totalamout = subtotalamout + tax + mtip
 
-            binding!!.txtFee.text = "$ "+Utility.roundOffDecimal(tax.toDouble())
-            binding!!.txtSubtotal.text = "$ "+Utility.roundOffDecimal(subtotalamout.toDouble())
-            binding!!.txtTotal.text = "$ "+Utility.roundOffDecimal(totalamout.toDouble())
-            binding!!.tipamout.text = "$ "+Utility.roundOffDecimal(tip.toDouble())
-            binding!!.txtTip.text = "$ "+Utility.roundOffDecimal(tip.toDouble())
+            binding!!.txtFee.text = Utility.formatCurrency(tax)
+            binding!!.txtSubtotal.text =
+                Utility.formatCurrency(subtotalamout)
+            binding!!.txtTotal.text =
+             Utility.formatCurrency(totalamout)
+            binding!!.tipamout.text =Utility.formatCurrency(tip)
+            binding!!.txtTip.text = Utility.formatCurrency(tip)
 
         }
 
@@ -220,7 +299,7 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware, Final
     }
 
     override fun viewImage(listItem: Menu?) {
-        if(listItem!!.menuImage.isNotEmpty()){
+        if (listItem!!.menuImage.isNotEmpty()) {
             val paths: ArrayList<String> = ArrayList()
             paths.add(listItem.menuImage)
             GalleryView.show(this, paths)
@@ -228,12 +307,12 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware, Final
 
     }
 
-    fun showCustomDialog(view: View){
+    fun showCustomDialog(view: View) {
         val bottomSheetDialog: MenuAgeSheetFragment = MenuAgeSheetFragment.newInstance()
         bottomSheetDialog.show(supportFragmentManager, "finalbasket fragment")
     }
 
-    interface onTipListener{
+    interface onTipListener {
         fun onTipPicked(tipamout: String)
     }
 
@@ -243,12 +322,13 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware, Final
 
     override fun onCreateBookingSuccess(response: CreateBookingResponse) {
         hideProgressBar()
-        Successtoast(response.message)
-        val intent = Intent(this, PaymentActivity::class.java)
-        intent.putExtra(ConstantLib.FROM,ConstantLib.FINALBASKET)
-        intent.putExtra(ConstantLib.PURCHASE_AMOUNT,response.data.booking.amount.toString())
-        intent.putExtra(ConstantLib.BOOKING_ID,response.data.booking.bookingId.toString())
-        startActivity(intent)
+//        Successtoast(response.message)
+        val intentPaymentActivity = Intent(this, PaymentActivity::class.java)
+        intentPaymentActivity.putExtra(ConstantLib.ALLOW_INVITE, intent.getStringExtra(ConstantLib.ALLOW_INVITE))
+        intentPaymentActivity.putExtra(ConstantLib.FROM, ConstantLib.FINALBASKET)
+        intentPaymentActivity.putExtra(ConstantLib.PURCHASE_AMOUNT, response.data.booking.amount.toString())
+        intentPaymentActivity.putExtra(ConstantLib.BOOKING_ID, response.data.booking.bookingId)
+        startActivity(intentPaymentActivity)
         Animatoo.animateSlideLeft(this)
     }
 
@@ -264,6 +344,6 @@ class FinalBasketActivity : BaseActivity(), FinalBasketEvent, KodeinAware, Final
 
     override fun sessionExpired(message: String) {
         hideProgressBar()
-        Utility.logOut(applicationContext,message)
+        Utility.logOut(applicationContext, message)
     }
 }

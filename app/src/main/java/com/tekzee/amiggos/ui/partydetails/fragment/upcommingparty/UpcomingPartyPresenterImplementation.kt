@@ -48,7 +48,9 @@ class UpcomingPartyPresenterImplementation(private var mainView: UpcommingPartyP
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

@@ -15,14 +15,18 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_60sdp"
-        android:layout_margin="@dimen/_8sdp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:padding="@dimen/_3sdp"
+        android:layout_marginRight="10dp"
         app:cardBackgroundColor="@color/transparent"
         app:cardCornerRadius="@dimen/_5sdp"
         app:cardElevation="@dimen/_5sdp">
 
 
         <LinearLayout
+
             android:id="@+id/mainlayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -33,13 +37,14 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_60sdp"
+
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/ivCardlayout"
-                    android:layout_width="@dimen/_50sdp"
-                    android:layout_height="@dimen/_50sdp"
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="@dimen/_35sdp"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/_5sdp"
                     android:elevation="@dimen/_5sdp"
@@ -50,8 +55,8 @@
 
                     <ImageView
                         android:id="@+id/ivCard"
-                        android:layout_width="@dimen/_50sdp"
-                        android:layout_height="@dimen/_50sdp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:scaleType="fitXY"
                         app:srcCompat="@drawable/message" />
 
@@ -63,20 +68,22 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginEnd="5dp"
                     android:layout_toRightOf="@+id/ivCardlayout"
                     android:fontFamily="@font/opensans_semibold"
                     android:gravity="center_vertical"
                     android:text='@{BannerRowResponse.name}'
                     android:textColor="@android:color/black"
-                    android:textSize="@dimen/_15sdp"
+                    android:textSize="@dimen/_13sdp"
                     app:layout_constraintBottom_toTopOf="@+id/guideline"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/txt_price"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/ivCardlayout"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="1.0" />
 
                 <TextView
+                    android:id="@+id/textView4"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -85,9 +92,11 @@
                     android:layout_toRightOf="@+id/ivCardlayout"
                     android:fontFamily="@font/opensans_regular"
                     android:gravity="center_vertical"
-                    android:text='@{BannerRowResponse.name}'
+                    android:maxLines="2"
+                    android:text='@{BannerRowResponse.description}'
                     android:textColor="@android:color/black"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_3sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/ivCardlayout"
@@ -100,6 +109,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintGuide_percent="0.50" />
+
+                <TextView
+                    android:id="@+id/txt_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text='@{BannerRowResponse.price}'
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,11 +24,7 @@ class NewMemorieAdapter(private val listener: MemorieClickListener) :
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         getItem(position)?.let { itemData->
-            holder.bindPost(itemData)
-
-            holder.itemView.img_layout.setOnClickListener {
-                listener.onItemClicked(itemData)
-            }
+            holder.bindPost(itemData,listener)
         }
     }
 
@@ -37,13 +33,17 @@ class NewMemorieAdapter(private val listener: MemorieClickListener) :
         val user_image = itemView.user_image
         val s_text_name = itemView.s_text_name
 
-        fun bindPost(memorieitem: MemorieResponse.Data.Memories) {
+        fun bindPost(memorieitem: MemorieResponse.Data.Memories, listener: MemorieClickListener) {
             with(memorieitem) {
                 s_text_name.text = memorieitem.name
                 Glide.with(itemView.context)
                     .load(memorieitem.thumb_image)
                     .placeholder(R.drawable.noimage)
                     .into(user_image)
+
+                itemView.img_layout.setOnClickListener {
+                    listener.onItemClicked(memorieitem,adapterPosition)
+                }
             }
         }
     }

@@ -1,6 +1,6 @@
-package com.tekzee.amiggos.ui.notification.interfaces
-
-interface NotificationInterface {
-
-    fun onItemClicked()
-}
+//package com.tekzee.amiggos.ui.notification.interfaces
+//
+//interface NotificationInterface {
+//
+//    fun onItemClicked()
+//}

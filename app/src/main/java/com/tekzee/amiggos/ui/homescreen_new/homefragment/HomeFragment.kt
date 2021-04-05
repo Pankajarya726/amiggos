@@ -1,5 +1,3 @@
-package com.tekzee.amiggos.ui.homescreen_new.homefragment
-
 import `in`.madapps.placesautocomplete.PlaceAPI
 import `in`.madapps.placesautocomplete.adapter.PlacesAutoCompleteAdapter
 import `in`.madapps.placesautocomplete.listener.OnPlacesDetailsListener
@@ -16,17 +14,16 @@ import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.allenliu.badgeview.BadgeFactory
-import com.allenliu.badgeview.BadgeView
+import androidx.databinding.DataBindingUtil
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.example.easywaylocation.EasyWayLocation
+import com.example.easywaylocation.EasyWayLocation.LOCATION_SETTING_REQUEST_CODE
 import com.example.easywaylocation.Listener
 import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -35,35 +32,39 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.gson.JsonObject
 import com.jakewharton.rxbinding2.widget.RxTextView
-import com.mapbox.android.core.permissions.PermissionsListener
-import com.mapbox.android.core.permissions.PermissionsManager
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
-import com.orhanobut.logger.Logger
+import com.kaopiz.kprogresshud.KProgressHUD
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
+import com.tekzee.amiggos.databinding.HomeFragmentBinding
 import com.tekzee.amiggos.ui.cameranew.CameraActivity
+import com.tekzee.amiggos.ui.homescreen_new.AHomeScreen
 import com.tekzee.amiggos.ui.homescreen_new.CustomInfoWindowAdapter
 import com.tekzee.amiggos.ui.homescreen_new.NotifyNotification
-import com.tekzee.amiggos.ui.homescreen_new.homefragment.adapter.AutoCompleteAdapter
+import com.tekzee.amiggos.ui.homescreen_new.homefragment.HomePresenter
+import com.tekzee.amiggos.ui.homescreen_new.homefragment.HomePresenterImplementation
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.adapter.AutoSuggestAdapter
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse
 import com.tekzee.amiggos.ui.homescreen_new.homefragment.model.HomeResponse.Data.Venue
+import com.tekzee.amiggos.ui.homescreen_new.model.BadgeCountResponse
 import com.tekzee.amiggos.ui.profiledetails.AProfileDetails
 import com.tekzee.amiggos.ui.venuedetailsnew.AVenueDetails
 import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
 import com.tekzee.amiggos.util.OnSwipeTouchListener
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.mallortaxi.base.BaseFragment
+import com.tekzee.amiggos.base.BaseFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 
 class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
-    PermissionsListener, Listener, com.google.android.gms.maps.OnMapReadyCallback {
+    /*Listener,*/ com.google.android.gms.maps.OnMapReadyCallback, Listener {
+
+    private var progressDialog: KProgressHUD? = null
+    private var binding: HomeFragmentBinding? = null
     private var mMap: GoogleMap? = null
     private lateinit var notifylistner: NotifyNotification
     private var finalDataList = ArrayList<Venue>()
@@ -71,22 +72,25 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     private var autoSuggestAdapter: AutoSuggestAdapter? = null
     private var searchText: AutoCompleteTextView? = null
     private var placesApi: PlaceAPI? = null
-    private var symbolManager: SymbolManager? = null
     private var dataResponse = ArrayList<Venue>()
     private var longitude: String? = " 0.0"
     private var latitude: String? = "0.0"
     private lateinit var homepresenterImplementation: HomePresenterImplementation
 
-    private var permissionsManager: PermissionsManager? = null
+
     private var sharedPreference: SharedPreference? = null
     private var categoryId: String = ""
     private var searchkeyword: String = ""
     private var languageData: LanguageData? = null
     private var easyWayLocation: EasyWayLocation? = null
-    private lateinit var arrayAdapter: AutoCompleteAdapter
+    private var defaultZoomValue =17.0f
+
 
     companion object {
         private val homefragment: HomeFragment? = null
+        var staticRequestBadgeCount: Int = 0
+        var staticReaFriendBadgeCount: Int = 0
+        var staticNearMeBadgeCount: Int = 0
 
         fun newInstance(): HomeFragment {
             if (homefragment == null) {
@@ -101,31 +105,60 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         easyWayLocation!!.endUpdates()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-//        mapView!!.onSaveInstanceState(outState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.home_fragment, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.home_fragment, container, false)
+        homepresenterImplementation = HomePresenterImplementation(this, requireContext())
+        try{
+            sharedPreference = SharedPreference(requireContext())
+            languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+
+        setupProgressBar()
+        showProgressbarNew()
         val mapFragment: SupportMapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        return view
+        return binding!!.root
+    }
+
+    private fun setupProgressBar() {
+        progressDialog = KProgressHUD.create(context)
+            .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+            .setLabel("Please wait")
+            .setCancellable(false)
+
+    }
+
+    private fun callBadgeApi() {
+        val input = JsonObject()
+        input.addProperty("userid", sharedPreference!!.getValueInt(ConstantLib.USER_ID))
+        input.addProperty("latitude", latitude)
+        input.addProperty("longitude", longitude)
+        homepresenterImplementation.doCallBadgeApi(
+            input,
+            Utility.createHeaders(sharedPreference),
+            languageData
+        )
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        homepresenterImplementation = HomePresenterImplementation(this, requireContext())
-        sharedPreference = SharedPreference(requireContext())
-        languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        easyWayLocation = EasyWayLocation(activity, false, this)
-        easyWayLocation!!.startLocation()
+        easyWayLocation = EasyWayLocation(requireContext(), false, this)
+
+    }
+
+    private fun showProgressbarNew() {
+        binding!!.headerlayout.visibility = View.GONE
+        binding!!.maplayout.visibility = View.GONE
+//        binding!!.homeprogressbar.visibility = View.VISIBLE
+        progressDialog!!.show()
     }
 
 
@@ -139,7 +172,8 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
                 override fun onSwipeRight() {
                     val intent = Intent(activity, CameraActivity::class.java)
-                    intent.putExtra(ConstantLib.FROM_ACTIVITY, "HOMEACTIVITY")
+                    intent.putExtra(ConstantLib.FROM_ACTIVITY, ConstantLib.HOMEACTIVITY)
+                    intent.putExtra(ConstantLib.OURSTORYID, "")
                     intent.putExtra(
                         ConstantLib.PROFILE_IMAGE, sharedPreference!!.getValueString(
                             ConstantLib.PROFILE_IMAGE
@@ -180,29 +214,42 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
     private fun setupClickListener(view: View) {
 
+        view.findViewById<RadioButton>(R.id.img_icon_four).setOnClickListener {
+            categoryId = "186"
+            callHomeApi(0)
+        }
+
+
+
+        view.findViewById<RadioButton>(R.id.img_icon_five).setOnClickListener {
+            categoryId = "194"
+            callHomeApi(0)
+        }
+
+
+        view.findViewById<RadioButton>(R.id.img_icon_three).setOnClickListener {
+            categoryId = "195"
+            callHomeApi(0)
+        }
+
         view.findViewById<RadioButton>(R.id.img_icon_two).setOnClickListener {
-            categoryId = "12"
+            categoryId = "196"
             callHomeApi(0)
             setupRadioButton(R.id.img_icon_two)
         }
 
+
         view.findViewById<RadioButton>(R.id.img_icon_one).setOnClickListener {
-            categoryId = "15"
+            categoryId = "193"
             callHomeApi(0)
         }
 
-        view.findViewById<RadioButton>(R.id.img_icon_three).setOnClickListener {
-            categoryId = "14"
+        view.findViewById<RadioButton>(R.id.img_icon_six).setOnClickListener {
+            categoryId = "197"
             callHomeApi(0)
         }
-
-        view.findViewById<RadioButton>(R.id.img_icon_four).setOnClickListener {
-            categoryId = "13"
-            callHomeApi(0)
-        }
-
-        view.findViewById<RadioButton>(R.id.img_icon_five).setOnClickListener {
-            categoryId = "16"
+        view.findViewById<RadioButton>(R.id.img_icon_seven).setOnClickListener {
+            categoryId = "198"
             callHomeApi(0)
         }
     }
@@ -250,9 +297,15 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                 longitude = placeDetails.lng.toString()
                 requireActivity().runOnUiThread(Runnable {
                     hideKeyboard()
-//                    val position = CameraPosition.Builder()
-//                        .target(LatLng(latitude!!.toDouble(), longitude!!.toDouble())).zoom(12.0)
-//                        .bearing(0.0).tilt(30.0).build()
+                    mMap!!.moveCamera(
+                        CameraUpdateFactory.newLatLng(
+                            LatLng(
+                                latitude!!.toDouble(),
+                                longitude!!.toDouble()
+                            )
+                        )
+                    )
+                    mMap!!.animateCamera(CameraUpdateFactory.zoomTo(defaultZoomValue));
                     callHomeApi(0)
                 })
 
@@ -283,26 +336,51 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         homepresenterImplementation.onStop()
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        homepresenterImplementation.onStop()
+    }
+
     override fun onLowMemory() {
         super.onLowMemory()
 
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
+        hideProgressbarNew()
+    }
+
+    private fun hideProgressbarNew() {
+        binding!!.headerlayout.visibility = View.VISIBLE
+        binding!!.maplayout.visibility = View.VISIBLE
+        binding!!.homeprogressbar.visibility = View.GONE
+        progressDialog!!.dismiss()
     }
 
     override fun onHomeApiSuccess(responseData: HomeResponse) {
+        /*val cameraPosition =
+            CameraPosition.Builder().target(LatLng(
+                latitude!!.toDouble(),
+                longitude!!.toDouble()
+            )).tilt(30f).zoom(defaultZoomValue)
+                .build()
+
+        val cu: CameraUpdate = CameraUpdateFactory.newCameraPosition(
+            cameraPosition
+        )
+        mMap!!.animateCamera(cu)*/
 
         if (dataResponse.isNotEmpty()) {
             mMap!!.clear()
             dataResponse.clear()
         }
-//        ConstantLib.NOTIFICATIONCOUNT = responseData!!.data.notificationcount
+
         dataResponse.addAll(responseData.data.venue)
+
         if (dataResponse.isNotEmpty()) {
             setMarkersOnMap(dataResponse)
-
             val latLngBounds = LatLngBounds.Builder()
                 .include(
                     LatLng(
@@ -317,13 +395,11 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                     )
                 )
                 .build()
-            val padding = 20 // offset from edges of the map in pixels
+            val padding = 200 // offset from edges of the map in pixels
             val cu: CameraUpdate = CameraUpdateFactory.newLatLngBounds(latLngBounds, padding)
-            mMap!!.moveCamera(cu)
-
-
+            mMap!!.animateCamera(cu)
         }
-        notifylistner.onNotify()
+
     }
 
     private fun setMarkersOnMap(nearestClubs: java.util.ArrayList<Venue>) {
@@ -334,23 +410,21 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
             if (items.type.equals("venue")) {
                 marker = layoutInflater.inflate(R.layout.custom_marker_circular, null)
                 imageview = marker.findViewById(R.id.marker_image) as ImageView
+
+                val countnearby = marker.findViewById(R.id.countnearby) as TextView
+
+                if (items.nearByCount.toInt() > 0) {
+                    countnearby.text = items.nearByCount
+                    countnearby.visibility = View.VISIBLE
+                } else {
+                    countnearby.visibility = View.GONE
+                }
+
+
             } else {
                 marker = layoutInflater.inflate(R.layout.custom_marker_circular_user, null)
                 imageview = marker.findViewById(R.id.marker_image) as ImageView
-
-                BadgeFactory.create(requireContext())
-                    .setTextColor(resources.getColor(R.color.white))
-                    .setWidthAndHeight(20, 20)
-                    .setBadgeBackground(resources.getColor(R.color.red))
-                    .setTextSize(8)
-                    .setBadgeGravity(Gravity.RIGHT)
-                    .setBadgeCount(items.nearByCount)
-                    .setShape(BadgeView.SHAPE_CIRCLE)
-                    .setSpace(10, 10)
-                    .bind(imageview)
             }
-
-
 
             Glide.with(this)
                 .asBitmap()
@@ -409,6 +483,22 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         drawable?.draw(canvas)
         view.draw(canvas)
         return returnedBitmap
+
+
+//        mMarkerImageView.setImageBitmap(bitmap)
+//        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+//        view.layout(0, 0, view.measuredWidth, view.measuredHeight)
+//        view.buildDrawingCache()
+//        val returnedBitmap = Bitmap.createBitmap(
+//            view.measuredWidth, view.measuredHeight,
+//            Bitmap.Config.ARGB_8888
+//        )
+//        val canvas = Canvas(returnedBitmap)
+//        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN)
+//        val drawable = view.background
+//        drawable?.draw(canvas)
+//        view.draw(canvas)
+//        return returnedBitmap
     }
 
 
@@ -416,9 +506,28 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun onBadgeApiSuccess(responseData: BadgeCountResponse) {
+        val bottomNearMeBatchCount =
+            responseData.data.nearByCountBatch.toInt()/* + responseData.data.realFreind.toInt() + responseData.data.request.toInt()*/
+        AHomeScreen.setupNearByCountBadge(bottomNearMeBatchCount)
+        AHomeScreen.setupMemoryCountBadge(responseData.data.memoryCountBatch.toInt())
+        AHomeScreen.setupBookingCountBadge(responseData.data.bookingCountBatch.toInt())
+       
+        staticRequestBadgeCount = responseData.data.request.toInt()
+        staticReaFriendBadgeCount = responseData.data.realFreind.toInt()
+        staticNearMeBadgeCount = responseData.data.nearByCountBatch.toInt()
+        ConstantLib.NOTIFICATIONCOUNT = responseData.data.notificationCountBatch
+        notifylistner.onNotify()
+    }
 
     override fun validateError(message: String) {
+
+
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
     }
 
 
@@ -430,17 +539,13 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
             .debounce(500, TimeUnit.MILLISECONDS).subscribeOn(
                 Schedulers.io()
             ).observeOn(AndroidSchedulers.mainThread()).subscribe {
-                callApi("")
                 if (it.isEmpty()) {
                     requireView().findViewById<AutoCompleteTextView>(R.id.search_txt).hint =
                         languageData!!.pWhatWouldYouLikeToDo
                 } else {
-                    if (it.toString().length != 0)
-                        callApi("")
-//                it.toString()
+                    callApi(it.toString())
                 }
             }
-
         autoSuggestAdapter = AutoSuggestAdapter(
             requireContext(),
             android.R.layout.simple_dropdown_item_1line
@@ -463,52 +568,44 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                     )
                 )
                 .build()
-            val padding = 20 // offset from edges of the map in pixels
-            val cu: CameraUpdate = CameraUpdateFactory.newLatLngBounds(latLngBounds, padding)
+            val padding = 50 // offset from edges of the map in pixels
+            val cu: CameraUpdate =
+                CameraUpdateFactory.newLatLngBounds(latLngBounds, padding)
             mMap!!.moveCamera(cu)
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
 
-        permissionsManager!!.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
+//    override fun locationCancelled() {
+//        hideProgressbarNew()
+//        Logger.d("Location cancelled called")
+//    }
+
+//    override fun locationOn() {
+//        Logger.d("Location on called")
+//    }
 
 
-    override fun onExplanationNeeded(permissionsToExplain: MutableList<String>?) {
-        Toast.makeText(activity, "user_location_permission_explanation", Toast.LENGTH_LONG).show();
-    }
-
-    override fun onPermissionResult(granted: Boolean) {
-
-//        if (granted) {
-//            mmapboxMap!!.getStyle { style -> enableLocationComponent(style) }
-//        } else {
-//            Toast.makeText(activity, "user_location_permission_not_granted", Toast.LENGTH_LONG)
-//                .show()
-//            requireActivity().finish()
-//        }
-    }
-
-    override fun locationCancelled() {
-        Logger.d("Location cancelled called")
-    }
-
-    override fun locationOn() {
-        Logger.d("Location on called")
-    }
-
-    override fun currentLocation(location: Location?) {
-        latitude = location!!.latitude.toString()
-        longitude = location.longitude.toString()
-        easyWayLocation!!.endUpdates()
-        Logger.d("Location updates--->$latitude----$longitude")
-        callHomeApi(0)
-    }
+//    override fun currentLocation(location: Location?) {
+//        latitude = location!!.latitude.toString()
+//        longitude = location.longitude.toString()
+//        easyWayLocation!!.endUpdates()
+//        hideProgressbarNew()
+//        requireActivity().runOnUiThread(Runnable {
+//            hideKeyboard()
+//            mMap!!.moveCamera(
+//                CameraUpdateFactory.newLatLng(
+//                    LatLng(
+//                        latitude!!.toDouble(),
+//                        longitude!!.toDouble()
+//                    )
+//                )
+//            )
+//            mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15.0f))
+//            callHomeApi(0)
+//        })
+//        callBadgeApi()
+//    }
 
     override fun onSearchApiSuccess(responseData: HomeResponse) {
         finalDataList.clear()
@@ -532,6 +629,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     override fun onMapReady(map: GoogleMap?) {
         mMap = map
 
+//        mMap!!.isMyLocationEnabled = true
         mMap!!.setMapStyle(
             MapStyleOptions.loadRawResourceStyle(
                 context, R.raw.style_json
@@ -547,13 +645,14 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         mMap!!.setInfoWindowAdapter(adapter)
 
         mMap!!.setOnInfoWindowClickListener {
-            val venueData = it.getTag() as Venue
+            val venueData = it.tag as Venue
             if (venueData.type.equals("user", true)) {
                 if (Utility.checkProfileComplete(sharedPreference)) {
                     val intent = Intent(activity, AProfileDetails::class.java)
                     intent.putExtra(ConstantLib.FRIEND_ID, venueData.id.toString())
                     intent.putExtra(ConstantLib.PROFILE_IMAGE, venueData.image)
-                    startActivity(intent)
+//                    startActivity(intent)
+                    startActivityForResult(intent, 111)
                     Animatoo.animateSlideRight(activity)
                 } else {
                     val dialog: BottomDialogExtended =
@@ -567,21 +666,130 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                             requireContext(),
                             AViewAndEditProfile::class.java
                         )
-                        startActivity(intent)
+//                        startActivity(intent)
+                        startActivityForResult(intent, 111)
                     }
                 }
 
             } else {
-                val intent = Intent(activity, AVenueDetails::class.java)
-                intent.putExtra(ConstantLib.VENUE_ID, venueData.id.toString())
-                startActivity(intent)
+                if (Utility.checkProfileComplete(sharedPreference)) {
+                    val intent = Intent(activity, AVenueDetails::class.java)
+                    intent.putExtra(ConstantLib.VENUE_ID, venueData.id.toString())
+                    intent.putExtra(ConstantLib.IS_GOOGLE_VENUE, venueData.is_google_venue.toInt())
+//                startActivity(intent)
+                    startActivityForResult(intent, 111)
+                } else {
+                    val dialog: BottomDialogExtended =
+                        BottomDialogExtended.newInstance(
+                            languageData!!.profilecompletedata,
+                            arrayOf(languageData!!.yes)
+                        )
+                    dialog.show(childFragmentManager, "dialog")
+                    dialog.setListener { position ->
+                        val intent = Intent(
+                            requireContext(),
+                            AViewAndEditProfile::class.java
+                        )
+//                        startActivity(intent)
+                        startActivityForResult(intent, 111)
+                    }
+                }
             }
         }
 
     }
 
-}
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            LOCATION_SETTING_REQUEST_CODE -> easyWayLocation!!.onActivityResult(resultCode)
+        }
+        if (resultCode == 2) {
+            searchkeyword = ""
+            categoryId = ""
+            binding!!.radiogroup.clearCheck()
+            requireView().findViewById<AutoCompleteTextView>(R.id.autoCompleteEditText).setText("")
+            requireView().findViewById<AutoCompleteTextView>(R.id.search_txt).setText("")
+            callHomeApi(0)
+        }
+    }
 
-interface onInfoWindowItemClicked{
-    fun onItemClicked(venueData: Venue)
+    override fun locationOn() {
+        Log.d("test", "location on")
+    }
+
+    override fun currentLocation(location: Location?) {
+        try {
+            if (location != null) {
+                easyWayLocation!!.endUpdates()
+                latitude = location.latitude.toString()
+                longitude = location.longitude.toString()
+                hideProgressbarNew()
+                requireActivity().runOnUiThread(Runnable {
+                    hideKeyboard()
+                    mMap!!.moveCamera(
+                        CameraUpdateFactory.newLatLng(
+                            LatLng(
+                                latitude!!.toDouble(),
+                                longitude!!.toDouble()
+                            )
+                        )
+                    )
+                    mMap!!.animateCamera(CameraUpdateFactory.zoomTo(defaultZoomValue))
+                    callHomeApi(0)
+                })
+                if (sharedPreference!!.getValueBoolean(ConstantLib.CALLBATCHCOUNT, false)) {
+                    sharedPreference!!.save(ConstantLib.CALLBATCHCOUNT, false)
+                    callBadgeApi()
+                }
+            } else {
+                easyWayLocation!!.startLocation()
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            hideProgressbarNew()
+        }
+
+        /*try {
+            SmartLocation.with(requireActivity()).location().oneFix()
+                .start { locationData ->
+                    Log.e(
+                        "location Data----->",
+                        locationData.altitude.toString() + "---" + locationData.longitude
+                    )
+                    SmartLocation.with(requireActivity()).location().stop()
+                    latitude = locationData!!.latitude.toString()
+                    longitude = locationData.longitude.toString()
+                    hideProgressbarNew()
+                    requireActivity().runOnUiThread(Runnable {
+                        hideKeyboard()
+                        mMap!!.moveCamera(
+                            CameraUpdateFactory.newLatLng(
+                                LatLng(
+                                    latitude!!.toDouble(),
+                                    longitude!!.toDouble()
+                                )
+                            )
+                        )
+                        mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15.0f))
+                        callHomeApi(0)
+                    })
+                    callBadgeApi()
+                }
+        }catch (e: Exception){
+            e.printStackTrace()
+        }*/
+    }
+
+    override fun locationCancelled() {
+        Log.d("test", "current location cancelled")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        easyWayLocation!!.startLocation()
+    }
+
+
 }

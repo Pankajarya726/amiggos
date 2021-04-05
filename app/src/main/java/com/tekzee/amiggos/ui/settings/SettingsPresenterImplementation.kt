@@ -45,7 +45,9 @@ class SettingsPresenterImplementation(private var mainView: SettingsPresenter.Se
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()
@@ -79,7 +81,9 @@ class SettingsPresenterImplementation(private var mainView: SettingsPresenter.Se
                             } else {
                                 mainView.validateError(responseData.message)
                             }
-                        }
+                        } 404 -> {
+                        mainView.logoutUser()
+                    }
                     }
                 }, { error ->
                     mainView.hideProgressbar()

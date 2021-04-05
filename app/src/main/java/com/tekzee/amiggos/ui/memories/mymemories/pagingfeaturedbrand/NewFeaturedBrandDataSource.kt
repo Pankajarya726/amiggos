@@ -26,7 +26,6 @@ class NewFeaturedBrandDataSource(private val scope:CoroutineScope, private val r
             try {
                 val jsoninput = JsonObject()
                 jsoninput.addProperty("userid", prefs.getValueInt(ConstantLib.USER_ID))
-                jsoninput.addProperty("club_id", prefs.getValueInt(ConstantLib.USER_ID))
                 jsoninput.addProperty("page_no",page)
 
 
@@ -51,7 +50,6 @@ class NewFeaturedBrandDataSource(private val scope:CoroutineScope, private val r
                 val jsoninput = JsonObject()
 
                 jsoninput.addProperty("userid", prefs.getValueInt(ConstantLib.USER_ID))
-                jsoninput.addProperty("club_id", prefs.getValueInt(ConstantLib.USER_ID))
                 jsoninput.addProperty("page_no", params.key)
 
                 val response  = repository.doGetFeaturedBrands(jsoninput,Utility.createHeaders(prefs))

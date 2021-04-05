@@ -8,22 +8,43 @@
         android:background="@android:color/white"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/img_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_15sdp"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:srcCompat="@drawable/ic_back_black" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/header_layout"
+            android:layout_width="match_parent"
+            android:layout_margin="@dimen/_12sdp"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:padding="@dimen/_5sdp"
+                android:id="@+id/img_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_back_black" />
+
+                <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:src="@drawable/logo_header"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
         <LinearLayout
             android:id="@+id/headinglayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/img_close"
-            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_below="@+id/header_layout"
+            android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginBottom="@dimen/_15sdp"
             android:orientation="horizontal">
 
@@ -37,7 +58,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/opensans_semibold"
                     android:padding="@dimen/_2sdp"
                     android:text="Customize your package"
@@ -58,9 +79,9 @@
             android:background="@android:color/black" />
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/scrollview"
             android:layout_above="@+id/btn_next"
             android:layout_below="@+id/viewbetweendateandtime">
 
@@ -77,8 +98,8 @@
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_8sdp"
                     android:layout_marginRight="@dimen/_10sdp"
-                    android:layout_marginBottom="@dimen/_8sdp"
                     android:fontFamily="@font/opensans_bold"
+                    android:padding="@dimen/_2sdp"
                     android:text="Date"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/_15sdp" />
@@ -86,7 +107,10 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:layout_marginBottom="5dp"
                     app:cardUseCompatPadding="true">
 
                     <com.applandeo.materialcalendarview.CalendarView
@@ -98,6 +122,9 @@
                         app:daysLabelsColor="@android:color/black"
                         app:forwardButtonSrc="@drawable/ic_right_arrow_black"
                         app:headerColor="#e6e6e6"
+                        app:type="one_day_picker"
+                        app:selectionColor="@color/black"
+                        app:selectionLabelColor="@color/white"
                         app:headerLabelColor="@color/colorPrimary"
                         app:previousButtonSrc="@drawable/ic_left_arrow_black"
                         app:todayLabelColor="@color/black" />
@@ -118,9 +145,11 @@
                         android:id="@+id/time_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_8sdp"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
                         android:fontFamily="@font/opensans_bold"
                         android:gravity="center|left"
+                        android:padding="@dimen/_2sdp"
                         android:text="Time"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/_15sdp" />
@@ -128,9 +157,13 @@
                     <TimePicker
                         android:id="@+id/timepicker"
                         android:layout_width="match_parent"
+
                         android:layout_height="wrap_content"
                         android:timePickerMode="spinner" />
+
+
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/timeslotlayout"
                     android:layout_width="match_parent"
@@ -141,10 +174,12 @@
                         android:id="@+id/time_slot"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_8sdp"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
                         android:fontFamily="@font/opensans_bold"
                         android:gravity="center|left"
                         android:text="Time"
+                        android:padding="@dimen/_2sdp"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/_15sdp" />
 
@@ -152,12 +187,8 @@
                         android:id="@+id/time_recycler"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_8sdp"
-                        />
+                        android:layout_margin="@dimen/_8sdp" />
                 </LinearLayout>
-
-
-
 
 
             </LinearLayout>

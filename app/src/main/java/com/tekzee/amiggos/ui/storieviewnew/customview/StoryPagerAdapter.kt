@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
-import com.tekzee.amiggosvenueapp.ui.storieviewnew.data.StoryUser
+import com.tekzee.amiggos.ui.storieviewnew.data.StoryUser
 import com.tekzee.amiggos.ui.storieviewnew.screen.StoryDisplayFragment
 
 class StoryPagerAdapter constructor(fragmentManager: FragmentManager, private val storyList: ArrayList<StoryUser>)

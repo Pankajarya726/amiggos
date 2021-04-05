@@ -89,7 +89,9 @@ class ChooseLanguageActivity: BaseActivity(),ChooseLanguagePresenter.ChooseLangu
                 selectedData: Language
             ) {
                 sharedPreferences!!.save(ConstantLib.LANGUAGE_CODE,selectedData.iso2_code)
-                chooseLanguagePresenterImplementation!!.doLanguageConstantApi(Utility.createHeaders(sharedPreferences))
+                val json = JsonObject()
+                json.addProperty("type","1")
+                chooseLanguagePresenterImplementation!!.doLanguageConstantApi(Utility.createHeaders(sharedPreferences),json)
             }
         })
         binding.languageRecyclerview.adapter = languageAdapter
@@ -103,6 +105,10 @@ class ChooseLanguageActivity: BaseActivity(),ChooseLanguagePresenter.ChooseLangu
 
     override fun validateError(message: String) {
         Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+    }
+
+    override fun logoutUser() {
+        Utility.showLogoutPopup(applicationContext, languageData!!.session_error)
     }
 
     override fun onLanguageSuccess(responseData: LanguageResponse) {

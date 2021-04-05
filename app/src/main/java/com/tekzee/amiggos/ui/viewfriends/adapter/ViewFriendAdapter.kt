@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.ui.viewfriends.ViewFriendInterface
 import com.tekzee.amiggos.ui.viewfriends.model.StorieViewData
@@ -31,9 +32,9 @@ class ViewFriendAdapter(
 
     override fun onBindViewHolder(holder: PendingJobViewHolder, position: Int) {
         holder.bindingdata.txt_name.text = items[position].name
+        Glide.with(context!!).load(items[position].profile).placeholder(R.drawable.noimage).into( holder.bindingdata.img_flag)
         holder.bindingdata.mainlayout.setOnClickListener{
             listener.onFriendClicked(position,items[position])
-
         }
 
     }

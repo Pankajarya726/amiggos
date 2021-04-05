@@ -13,7 +13,9 @@ data class RealFriendV2Response(
 ) {
     data class Data(
         @SerializedName("real_freind")
-        var realFreind: List<RealFreind> = listOf()
+        var realFreind: List<RealFreind> = listOf(),
+        @SerializedName("total_count")
+        var total_count: Int = 0
     ) {
         data class RealFreind(
             @SerializedName("name")
@@ -26,6 +28,8 @@ data class RealFriendV2Response(
             var address: String = "",
             @SerializedName("userid")
             var userid: Int = 0,
+            @SerializedName("unique_user_id")
+            var unique_user_id: String = "0",
             @SerializedName("isMyFriend")
             var isMyFriend: Boolean = false,
             @SerializedName("isMyFriendBlocked")

@@ -1,4 +1,4 @@
-package com.tekzee.amiggosvenueapp.ui.tagging
+package com.tekzee.amiggos.ui.tagging
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -8,38 +8,45 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.work.*
-import androidx.work.WorkManager
 import cn.pedant.SweetAlert.SweetAlertDialog
 import co.lujun.androidtagview.TagView
+import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager
+import com.beloo.widget.chipslayoutmanager.SpacingItemDecoration
+import com.bumptech.glide.Glide
 import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.otaliastudios.cameraview.BitmapCallback
 import com.otaliastudios.cameraview.PictureResult
+import com.rw.keyboardlistener.KeyboardUtils
 import com.tekzee.amiggos.R
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
 import com.tekzee.amiggos.databinding.TaggingFragmentBinding
-import com.tekzee.amiggos.services.UploadWorkService
+import com.tekzee.amiggos.ui.ourmemories.InviteFriendAfterCreateMemory
 import com.tekzee.amiggos.ui.postmemories.PostMemories
-import com.tekzee.amiggos.ui.tagging.TaggingViewModelFactory
 import com.tekzee.amiggos.util.*
+import com.tekzee.amiggosvenueapp.ui.tagging.TaggingClickListener
+import com.tekzee.amiggosvenueapp.ui.tagging.TaggingEvent
+import com.tekzee.amiggosvenueapp.ui.tagging.TaggingRecyclerviewClickListener
+import com.tekzee.amiggosvenueapp.ui.tagging.TaggingViewModel
 import com.tekzee.amiggosvenueapp.ui.tagging.adapter.TaggingAdapter
+import com.tekzee.amiggosvenueapp.ui.tagging.adapter.TaggingRecyclerAdapter
 import com.tekzee.amiggosvenueapp.ui.tagging.model.TaggingResponse
+import com.vipul.hp_hp.library.Layout_to_Image
 import id.zelory.compressor.Compressor
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -50,7 +57,10 @@ import org.kodein.di.generic.instance
 import java.io.File
 import java.util.concurrent.TimeUnit
 
-class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener, KodeinAware {
+
+class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener, KodeinAware,
+    TaggingRecyclerviewClickListener {
+
 
 
     override val kodein: Kodein by closestKodein()
@@ -63,6 +73,7 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
     private var taglist = MutableLiveData<List<String>>()
     private var tagArraylist = ArrayList<String>()
     private var finaltaggedarray = ArrayList<TaggingResponse.Data.Search>()
+    private lateinit var adapterTaggingRecycler:TaggingRecyclerAdapter
 
 
     private lateinit var adapter: TaggingAdapter
@@ -72,6 +83,7 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
 
     companion object {
         private var picture: PictureResult? = null
+        var imagefile: File?=null
         fun newInstance() = TaggingFragment()
         fun setPictureResult(result: PictureResult) {
             picture = result
@@ -85,6 +97,7 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
         viewModel = ViewModelProvider(this, factory).get(TaggingViewModel::class.java)
         viewModel.taggingEvent = this
         setupLanguage()
+        setupTaggingReyclerViewAdapter()
         setupClickListener()
         callTaggingApi("")
 
@@ -103,7 +116,15 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
 
         try {
             result.toBitmap(
+
                 BitmapCallback { bitmap: Bitmap? ->
+                   /* var layout_to_image = Layout_to_Image(this, binding!!.watermark)
+                    var b:Bitmap=layout_to_image.convert_layout();
+                    val finalbitmap: Bitmap = addWatermark(
+                        b,
+                        bitmap!!,
+                        "@Himanshu Verma \n Amiggos"
+                    )*/
                     binding!!.imgPicture.setImageBitmap(bitmap)
                     mbitmap = bitmap
                     getimageUri(bitmap)
@@ -113,6 +134,46 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
         } catch (e: UnsupportedOperationException) {
             binding!!.imgPicture.setImageDrawable(ColorDrawable(Color.GREEN))
         }
+
+        if(intent.getStringExtra(ConstantLib.FROM_ACTIVITY)!!.equals(ConstantLib.OURSTORYINVITE)){
+            binding!!.touchText.visibility = View.GONE
+        }else{
+            binding!!.touchText.visibility = View.VISIBLE
+        }
+
+        KeyboardUtils.addKeyboardToggleListener(
+            this
+        ) { isVisible ->
+            if (!isVisible) {
+                setvisibilityofViews()
+            }
+        }
+
+//        binding!!.taggingrecyclerview.setOnTouchListener(MoveViewTouchListener(binding!!.taggingrecyclerview))
+
+                binding!!.watermark.setOnTouchListener(MoveViewTouchListener(binding!!.watermark))
+    }
+
+    private fun setupTaggingReyclerViewAdapter() {
+        adapterTaggingRecycler = TaggingRecyclerAdapter(this)
+        val chipsLayoutManager =
+            ChipsLayoutManager.newBuilder(this)
+                .setChildGravity(Gravity.TOP)
+                .setScrollingEnabled(true)
+                .setGravityResolver { Gravity.START }
+                .setOrientation(ChipsLayoutManager.HORIZONTAL)
+                .setRowStrategy(ChipsLayoutManager.STRATEGY_DEFAULT) // whether strategy is applied to last row. FALSE by default
+                .withLastRow(true)
+                .build()
+        binding!!.taggingrecyclerview.addItemDecoration(
+            SpacingItemDecoration(
+                resources.getDimensionPixelOffset(
+                    R.dimen.chipmargin
+                ), resources.getDimensionPixelOffset(R.dimen.chipmargin)
+            )
+        )
+        binding!!.taggingrecyclerview.layoutManager = chipsLayoutManager
+        binding!!.taggingrecyclerview.adapter = adapterTaggingRecycler
     }
 
     private fun getimageUri(bitmap: Bitmap?) {
@@ -120,8 +181,8 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) {
-            val imagefile = BitmapUtils.saveImageAndReturnFile(applicationContext, bitmap)
-            getimageUrifrombitmap( Compressor.getDefault(this).compressToBitmap(imagefile))
+            imagefile = BitmapUtils.saveImageAndReturnFile(applicationContext, bitmap)
+            getimageUrifrombitmap(Compressor.getDefault(this).compressToBitmap(imagefile))
         }.onDeclined { e ->
             if (e.hasDenied()) {
 
@@ -136,7 +197,6 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
                     e.askAgain()
                 }
             }
-
             if (e.hasForeverDenied()) {
                 e.goToSettings()
             }
@@ -184,6 +244,7 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
             binding!!.go.visibility = View.GONE
             binding!!.bottomLayout.visibility = View.GONE
             binding!!.save.visibility = View.GONE
+            Glide.with(this).load(R.drawable.text).placeholder(R.drawable.noimage).into(binding!!.touchText)
             showKeyboard(binding!!.tagSearch)
         }
 
@@ -213,12 +274,7 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
         binding!!.tagSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    hideKeyboard(binding!!.tagSearch)
-                    binding!!.recyclerViewTagging.visibility = View.GONE
-                    binding!!.tagSearch.visibility = View.GONE
-                    binding!!.go.visibility = View.VISIBLE
-                    binding!!.bottomLayout.visibility = View.VISIBLE
-                    binding!!.save.visibility = View.VISIBLE
+                    setvisibilityofViews()
                     return true
                 }
                 return false
@@ -227,7 +283,7 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
         })
 
 
-        RxTextView.textChanges(binding!!.tagSearch).filter { it.length > 2 }
+        RxTextView.textChanges(binding!!.tagSearch).filter { it.isNotEmpty() }
             .debounce(500, TimeUnit.MILLISECONDS).subscribeOn(
                 Schedulers.io()
             ).observeOn(AndroidSchedulers.mainThread()).subscribe {
@@ -244,47 +300,51 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ) {
-//                val mIntent = Intent(this, CreateMemorieService::class.java)
-//                mIntent.putExtra(ConstantLib.FILEURI, imageUri)
-//                mIntent.putExtra(ConstantLib.FROM, "IMAGE")
-//                mIntent.putExtra(ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(finaltaggedarray))
-//                CreateMemorieService.enqueueWork(this, mIntent)
-//                val intent = Intent(applicationContext, VenueDashboard::class.java)
-//                startActivity(intent)
 
-
-//                val mIntent = Intent(this, FileUploadService::class.java)
-//                mIntent.putExtra(ConstantLib.FILEURI, imageUri)
-//                mIntent.putExtra(ConstantLib.FROM, "IMAGE")
-//                mIntent.putExtra(ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(finaltaggedarray))
-//                FileUploadService.enqueueWork(this, mIntent)
-//                val intent = Intent(applicationContext, VenueDashboard::class.java)
-//                startActivity(intent)
-//                finishAffinity()
-
-//                val data = Data.Builder().putString(ConstantLib.FILEURI, imageUri.toString())
-//                    .putString(ConstantLib.FROM, "IMAGE")
-//                    .putString(ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(finaltaggedarray)).build()
-//
-//                val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
-//
-//
-//                val oneTimeWorkRequest = OneTimeWorkRequest.Builder(UploadWorkService::class.java).setInputData(
-//                    data
-//                ).setConstraints(constraints).addTag("Upload").build()
-//                WorkManager.getInstance(this).enqueue(oneTimeWorkRequest)
-//                val intent = Intent(applicationContext, HomeActivity::class.java)
-//                startActivity(intent)
-//                finishAffinity()
-
-                val intent = Intent(applicationContext, PostMemories::class.java)
-                intent.putExtra(ConstantLib.FILEURI, imageUri.toString())
-                intent.putExtra(ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(finaltaggedarray))
-                intent.putExtra(ConstantLib.FROM, "IMAGE")
-                startActivity(intent)
-
-
-
+                if(intent.getStringExtra(ConstantLib.FROM_ACTIVITY).equals(ConstantLib.OURSTORYINVITE)){
+//                    val imageUri = intent.getStringExtra(ConstantLib.FILEURI)
+                    val inviteFriendAfterCreateMemoryIntent = Intent(
+                        applicationContext,
+                        InviteFriendAfterCreateMemory::class.java
+                    )
+                    inviteFriendAfterCreateMemoryIntent.putExtra(
+                        ConstantLib.FILEURI,
+                        imageUri.toString()
+                    )
+                    inviteFriendAfterCreateMemoryIntent.putExtra(
+                        ConstantLib.TAGGED_ARRAY, getTaggedArrayJson(
+                            finaltaggedarray
+                        )
+                    )
+                    inviteFriendAfterCreateMemoryIntent.putExtra(
+                        ConstantLib.OURSTORYID, intent.getStringExtra(
+                            ConstantLib.OURSTORYID
+                        )
+                    )
+                    inviteFriendAfterCreateMemoryIntent.putExtra(ConstantLib.FROM, "IMAGE")
+                    startActivity(inviteFriendAfterCreateMemoryIntent)
+                }else {
+                    val intentPostMemory = Intent(applicationContext, PostMemories::class.java)
+                    intentPostMemory.putExtra(ConstantLib.FILEURI, imageUri.toString())
+                    intentPostMemory.putExtra(
+                        ConstantLib.TAGGED_ARRAY,
+                        getTaggedArrayJson(finaltaggedarray)
+                    )
+                    intentPostMemory.putExtra(
+                        ConstantLib.SENDER_ID,
+                        intent.getStringExtra(ConstantLib.SENDER_ID)
+                    )
+                    intentPostMemory.putExtra(
+                        ConstantLib.OURSTORYID,
+                        intent.getStringExtra(ConstantLib.OURSTORYID)
+                    )
+                    intentPostMemory.putExtra(
+                        ConstantLib.FROM_ACTIVITY,
+                        intent.getStringExtra(ConstantLib.FROM_ACTIVITY)
+                    )
+                    intentPostMemory.putExtra(ConstantLib.FROM, "IMAGE")
+                    startActivity(intentPostMemory)
+                }
             }.onDeclined { e ->
                 if (e.hasDenied()) {
 
@@ -341,6 +401,16 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
         }
     }
 
+    private fun setvisibilityofViews() {
+        hideKeyboard(binding!!.tagSearch)
+        binding!!.recyclerViewTagging.visibility = View.GONE
+        binding!!.tagSearch.visibility = View.GONE
+        binding!!.go.visibility = View.VISIBLE
+        Glide.with(this).load(R.drawable.ic_t).placeholder(R.drawable.noimage).into(binding!!.touchText)
+        binding!!.bottomLayout.visibility = View.VISIBLE
+        binding!!.save.visibility = View.VISIBLE
+    }
+
 
     private fun saveImageToDisk() {
         mAppExcutor.diskIO().execute {
@@ -352,7 +422,7 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
     private fun showImageSaveDialog() {
 
         val pDialog = SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-        pDialog.titleText =languageConstant.imagesaved
+        pDialog.titleText = languageConstant.imagesaved
         pDialog.setCancelable(false)
         pDialog.setConfirmButton(languageConstant.klOk) {
             pDialog.dismiss()
@@ -421,24 +491,45 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
         position: Int,
         listItem: TaggingResponse.Data.Search
     ) {
-        if(getCountCombination(finaltaggedarray)){
+        if (listItem.type !="3" && getCountCombination(finaltaggedarray)) {
             Errortoast(languageConstant.max_venue_brand_limit);
-        }else{
+        } else {
+            binding!!.tagSearch.setText("")
             tagArraylist.add(listItem.name)
             taglist.postValue(tagArraylist)
             finaltaggedarray.add(listItem)
+            adapterTaggingRecycler.submitList(finaltaggedarray)
+            adapterTaggingRecycler.notifyDataSetChanged()
         }
     }
 
     private fun getCountCombination(finaltaggedarray: java.util.ArrayList<TaggingResponse.Data.Search>): Boolean {
-        var count:Int = 0
-        for(items in finaltaggedarray){
-            if(items.type.equals("2") || items.type.equals("3")){
+        var count: Int = 0
+        for (items in finaltaggedarray) {
+            if (items.type == "1" || items.type == "2") {
                 count++
             }
         }
-        return count>1
+        return count > 1
     }
 
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+    }
+
+    override fun onItemCloseClicked(position: Int, listItem: TaggingResponse.Data.Search) {
+        if(finaltaggedarray.size>0){
+            finaltaggedarray.removeAt(position)
+            adapterTaggingRecycler.submitList(finaltaggedarray)
+            adapterTaggingRecycler.notifyItemRemoved(position)
+            adapterTaggingRecycler.notifyItemRangeChanged(
+                position,
+                adapterTaggingRecycler.itemCount - position
+            )
+        }
+
+    }
 
 }

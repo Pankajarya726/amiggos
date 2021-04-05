@@ -18,9 +18,7 @@ import com.tekzee.amiggos.ui.chatnew.ChatActivity
 import com.tekzee.amiggos.ui.message.model.MyFriendChatModel
 import com.tekzee.amiggos.util.*
 import com.tekzee.amiggos.ui.addusers.adapter.AddUserAdapter
-import com.tekzee.amiggosvenueapp.ui.addusers.AddUserClickListener
-import com.tekzee.amiggosvenueapp.ui.addusers.AddUserEvent
-import com.tekzee.amiggosvenueapp.ui.addusers.model.AddUserResponse
+import com.tekzee.amiggos.ui.addusers.model.AddUserResponse
 import io.reactivex.Observable
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -142,11 +140,12 @@ class AddUserFragment : AppCompatActivity(), KodeinAware, AddUserEvent, AddUserC
 
     override fun onItemClicked(position: Int, listItem: AddUserResponse.Data.Staff) {
         val myFriendChatModel = MyFriendChatModel()
-        myFriendChatModel.amiggosID = prefs.getValueInt(ConstantLib.USER_ID).toString()
+//        myFriendChatModel.amiggosID = prefs.getValueInt(ConstantLib.USER_ID).toString()
+        myFriendChatModel.amiggosID = listItem.unique_user_id
         myFriendChatModel.name = listItem.firstName + " " + listItem.lastName
         myFriendChatModel.image = listItem.profileImage
         val intent = Intent(this, ChatActivity::class.java)
-        intent.putExtra(ConstantLib.FRIEND_ID, listItem.id.toString())
+        intent.putExtra(ConstantLib.FRIEND_ID, listItem.unique_user_id)
         intent.putExtra(ConstantLib.CHAT_DATA, myFriendChatModel)
         startActivity(intent)
     }

@@ -38,6 +38,9 @@ class MainSplashPresenterImplementation(private var mainView: MainSplashPresente
                                     mainView.validateError(responseData.message)
                                 }
                             }
+                            404 -> {
+                                mainView.logoutUser()
+                            }
                         }
                     }, { error ->
 //                        mainView.hideProgressbar()
@@ -50,11 +53,12 @@ class MainSplashPresenterImplementation(private var mainView: MainSplashPresente
         }
     }
  override fun doLanguageConstantApi(
-        headers: HashMap<String, String?>
-    ) {
+     headers: HashMap<String, String?>,
+     json: JsonObject
+ ) {
 //        mainView.showProgressbar()
         if (mainView.checkInternet()) {
-            disposable = ApiClient.instance.doLanguageConstantApi(headers)
+            disposable = ApiClient.instance.doLanguageConstantApi(headers,json)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ response ->
@@ -68,7 +72,9 @@ class MainSplashPresenterImplementation(private var mainView: MainSplashPresente
                                 } else {
                                     mainView.validateError(responseData.get("message").asString)
                                 }
-                            }
+                            } 404 -> {
+                            mainView.logoutUser()
+                        }
                         }
                     }, { error ->
 //                        mainView.hideProgressbar()
