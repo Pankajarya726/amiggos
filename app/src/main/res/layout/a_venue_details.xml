@@ -296,6 +296,7 @@
                             android:layout_marginTop="@dimen/_3sdp"
                             android:id="@+id/recyclerview_week"
                             android:layout_width="match_parent"
+                            app:fastScrollEnabled="true"
                             android:layout_height="wrap_content"/>
 
                         <TextView

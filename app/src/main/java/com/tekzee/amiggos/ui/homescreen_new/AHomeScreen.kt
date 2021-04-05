@@ -285,7 +285,7 @@ class AHomeScreen : BaseActivity(), AHomeScreenPresenter.AHomeScreenMainView,
             val transaction = supportFragmentManager.beginTransaction().apply {
                 replace(R.id.container, fragment, fragmentName)
             }
-            transaction.commit()
+            transaction.commitAllowingStateLoss()
         }, 200)
     }
 
