@@ -1107,7 +1107,7 @@ interface ApiService {
                 .writeTimeout(5, TimeUnit.MINUTES)
                 .build()
 
-            return Retrofit.Builder().baseUrl(ConstantLib.BASE_URL)
+            return Retrofit.Builder().baseUrl(BuildConfig.BASE_URL)
                 .client(okHttpClient)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .addConverterFactory(GsonConverterFactory.create(gson))

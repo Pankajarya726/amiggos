@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "848468466235",
+    "firebase_url": "https://amiggosvenueapp.firebaseio.com",
+    "project_id": "amiggosvenueapp",
+    "storage_bucket": "amiggosvenueapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:848468466235:android:ec3576b0cf9849f6105a1e",
+        "android_client_info": {
+          "package_name": "com.tekzee.amiggos.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "848468466235-eoq146vra34hq7e1v0ers840quh96cpq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6lZ8DfGwn9ZQUInVY-5Wy0Pje7fD5hqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "848468466235-eoq146vra34hq7e1v0ers840quh96cpq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

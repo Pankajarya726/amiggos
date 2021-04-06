@@ -116,7 +116,7 @@ class ApiClient {
             .build();
 
 
-        val retrofit = Retrofit.Builder().baseUrl(ConstantLib.BASE_URL)
+        val retrofit = Retrofit.Builder().baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .addConverterFactory(GsonConverterFactory.create(gson))

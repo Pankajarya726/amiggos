@@ -46,7 +46,7 @@ object ConstantLib {
     const val CHAT_NOTIFICATION= "CHAT_NOTIFICATION"
 
 //    const val BASE_URL = "http://54.82.207.132/Amiggos/api/"
-    const val BASE_URL = "http://tekdev.tekzee.in/Amiggos/api/"
+//    const val BASE_URL = "http://tekdev.tekzee.in/Amiggos/api/"
     const val DRIVER_ID = "driver_id"
     const val MEMORIE_DATA = "MEMORIE_DATA"
     const val COMPLETE_MEMORY = "COMPLETE_MEMORY"

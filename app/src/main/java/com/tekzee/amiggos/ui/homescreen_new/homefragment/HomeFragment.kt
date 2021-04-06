@@ -738,10 +738,11 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                     mMap!!.animateCamera(CameraUpdateFactory.zoomTo(defaultZoomValue))
                     callHomeApi(0)
                 })
-                if (sharedPreference!!.getValueBoolean(ConstantLib.CALLBATCHCOUNT, false)) {
-                    sharedPreference!!.save(ConstantLib.CALLBATCHCOUNT, false)
-                    callBadgeApi()
-                }
+//                if (sharedPreference!!.getValueBoolean(ConstantLib.CALLBATCHCOUNT, false)) {
+//                    sharedPreference!!.save(ConstantLib.CALLBATCHCOUNT, false)
+//                    callBadgeApi()
+//                }
+                callBadgeApi()
             } else {
                 easyWayLocation!!.startLocation()
             }
