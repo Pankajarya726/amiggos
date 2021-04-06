@@ -110,8 +110,8 @@
 
                         <RadioButton
                             android:id="@+id/img_icon_four"
-                            android:layout_width="@dimen/_35sdp"
-                            android:layout_height="@dimen/_35sdp"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="@dimen/_30sdp"
 
                             android:background="@drawable/img_icon_two_bg"
                             android:button="@null"
@@ -120,9 +120,9 @@
 
                         <RadioButton
                             android:id="@+id/img_icon_five"
-                            android:layout_width="@dimen/_35sdp"
-                            android:layout_height="@dimen/_35sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="@dimen/_30sdp"
+                            android:layout_marginTop="@dimen/_6sdp"
                             android:background="@drawable/img_icon_one_bg"
                             android:button="@null"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -132,9 +132,9 @@
 
                         <RadioButton
                             android:id="@+id/img_icon_three"
-                            android:layout_width="@dimen/_35sdp"
-                            android:layout_height="@dimen/_35sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="@dimen/_30sdp"
+                            android:layout_marginTop="@dimen/_6sdp"
                             android:background="@drawable/img_icon_three_bg"
                             android:button="@null"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -142,9 +142,9 @@
 
                         <RadioButton
                             android:id="@+id/img_icon_one"
-                            android:layout_width="@dimen/_35sdp"
-                            android:layout_height="@dimen/_35sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="@dimen/_30sdp"
+                            android:layout_marginTop="@dimen/_6sdp"
                             android:background="@drawable/img_icon_five_bg"
                             android:button="@null"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -152,9 +152,9 @@
 
                         <RadioButton
                             android:id="@+id/img_icon_two"
-                            android:layout_width="@dimen/_35sdp"
-                            android:layout_height="@dimen/_35sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="@dimen/_30sdp"
+                            android:layout_marginTop="@dimen/_6sdp"
                             android:background="@drawable/gym_drawable"
                             android:button="@null"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -162,9 +162,9 @@
 
                         <RadioButton
                             android:id="@+id/img_icon_six"
-                            android:layout_width="@dimen/_35sdp"
-                            android:layout_height="@dimen/_35sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="@dimen/_30sdp"
+                            android:layout_marginTop="@dimen/_6sdp"
                             android:background="@drawable/scissors_drawable"
                             android:button="@null"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -172,9 +172,9 @@
 
                         <RadioButton
                             android:id="@+id/img_icon_seven"
-                            android:layout_width="@dimen/_35sdp"
-                            android:layout_height="@dimen/_35sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="@dimen/_30sdp"
+                            android:layout_marginTop="@dimen/_6sdp"
                             android:background="@drawable/shopping_drawable"
                             android:button="@null"
                             android:visibility="visible"
