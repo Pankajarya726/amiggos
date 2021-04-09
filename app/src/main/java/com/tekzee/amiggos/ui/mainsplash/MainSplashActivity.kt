@@ -180,28 +180,6 @@ class MainSplashActivity : BaseActivity(), MainSplashPresenter.MainSplashPresent
             ConstantLib.IS_INVITE_FRIEND,
             validateAppVersionResponse.data.isFreindInvities.toInt()
         )
-//        when(validateAppVersionResponse.data.status){
-//            "0"->{
-//                Logger.d("Login failed")
-//                showSplashScreen()
-//            }
-//            "1"->{
-//                showAttachedIDController()
-//            }
-//            "2"->{
-//                showApprovalController()
-//            }
-//            "3"->{
-//                showSelectAgeGroupScreen()
-//            }
-//            "4"->{
-//                showHomeController()
-//            }
-//            "5"->{
-//                showAttachedIDController()
-//            }
-//        }
-
 
                 when(validateAppVersionResponse.data.status){
             "0"->{

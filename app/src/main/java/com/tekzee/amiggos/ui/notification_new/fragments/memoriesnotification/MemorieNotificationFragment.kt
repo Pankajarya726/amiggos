@@ -231,6 +231,7 @@ class MemorieNotificationFragment : BaseFragment(),
                 sharedPreference!!.save(ConstantLib.FROM, ConstantLib.JOIN)
                 if (data[position].memoriesList[0].memory.isNotEmpty()) {
                     val showMemoryList: ArrayList<MemorieResponse.Data.Memories> = ArrayList()
+
                     showMemoryList.addAll(data[position].memoriesList)
 
                     val intent = Intent(activity, StorieViewNew::class.java)

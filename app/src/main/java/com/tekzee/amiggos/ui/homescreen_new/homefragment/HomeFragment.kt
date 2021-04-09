@@ -384,8 +384,8 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
             val latLngBounds = LatLngBounds.Builder()
                 .include(
                     LatLng(
-                        dataResponse[0].latitude.toDouble(),
-                        dataResponse[0].longitude.toDouble()
+                        latitude!!.toDouble(),
+                        longitude!!.toDouble()
                     )
                 )
                 .include(

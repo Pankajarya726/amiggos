@@ -48,10 +48,7 @@ class CameraActivity : AppCompatActivity()
                 0
             )
         )
-
 //        binding!!.watermark.setOnTouchListener(MoveViewTouchListener(binding!!.watermark))
-
-
     }
 
 

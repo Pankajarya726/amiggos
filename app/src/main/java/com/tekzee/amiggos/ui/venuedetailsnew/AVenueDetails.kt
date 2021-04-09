@@ -56,6 +56,7 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
     private lateinit var adapter: SliderAdapterExample
     private lateinit var weekAdapter: WeekAdapter
     private lateinit var list: java.util.ArrayList<String>
+    val workingDays= ArrayList<VenueDetails.Data.ClubData.WorkingDay>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +70,9 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         callVenueDetailsApi()
         setupLangauge()
         setupViewPager()
+        setupRecyclerView(workingDays)
     }
+
 
 
     private fun setupViewPager() {
@@ -294,7 +297,7 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         } else {
             binding!!.maskimage.visibility = View.GONE
         }
-        val workingDays= ArrayList<VenueDetails.Data.ClubData.WorkingDay>()
+
 //        val hoursOpen:StringBuilder = StringBuilder()
         for(item in response.clubData.workingDays){
             if(item.isOpen==1){
@@ -309,7 +312,7 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
 
 //        binding!!.txtHours.text = hoursOpen
         binding!!.hours.text = languageData!!.operationHours
-        setupRecyclerView(workingDays)
+
 
     }
 

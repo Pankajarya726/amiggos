@@ -267,7 +267,10 @@ class StoryDisplayFragment : Fragment(),
         if (stories.size > 0) {
             observeList(stories[counter].banners)
             Log.e("Url---->", stories[counter].toString())
-            if (stories[counter].from.equals(ConstantLib.OURMEMORIES)) {
+            if (stories[counter].from.equals(ConstantLib.OURMEMORIES) ) {
+                fileid = stories[counter].storyData.id.toString()
+                storieId = stories[counter].ourstorieid
+            } else if (stories[counter].from.equals(ConstantLib.JOIN) ) {
                 fileid = stories[counter].storyData.id.toString()
                 storieId = stories[counter].ourstorieid
             } else {
