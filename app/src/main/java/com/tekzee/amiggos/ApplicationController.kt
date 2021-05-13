@@ -230,7 +230,7 @@ class ApplicationController : Application(), KodeinAware, Foreback.Listener {
 //        FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS)
         PaymentConfiguration.init(
             getApplicationContext(),
-            "pk_test_E5sEgimoA8T4SexAo1GnNPkJ00sG6jBcdG"
+            "pk_live_IFrHFd8zwnH3euWEpqbOWpFj00zoNLHD0W"
         );
 
         AutoErrorReporter.get(this)

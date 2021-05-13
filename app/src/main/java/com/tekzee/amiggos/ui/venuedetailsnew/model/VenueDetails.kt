@@ -70,6 +70,8 @@ data class VenueDetails(
             val teamadminId: Int = 0,
             @SerializedName("user_set_time")
             val userSetTime: Int = 0,
+            @SerializedName("operation_working_days")
+            val operationWorkingDays: List<WorkingDay> = listOf(),
             @SerializedName("working_days")
             val workingDays: List<WorkingDay> = listOf(),
             @SerializedName("zipcode")

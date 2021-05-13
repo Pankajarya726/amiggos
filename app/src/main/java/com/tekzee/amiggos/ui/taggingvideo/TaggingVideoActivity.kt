@@ -2,8 +2,10 @@ package com.tekzee.amiggos.ui.taggingvideo
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -166,16 +168,15 @@ class TaggingVideoActivity : AppCompatActivity(), TaggingEvent, TaggingClickList
             filename = result.file.absolutePath
         }.onDeclined { e ->
             if (e.hasDenied()) {
-                val dialog: BottomDialogExtended =
-                    BottomDialogExtended.newInstance(
-                        languageConstant.storagepermission,
-                        arrayOf(languageConstant.yes)
-                    )
-                dialog.show(supportFragmentManager, "dialog")
-                dialog.setListener { position ->
-                    dialog.dismiss()
-                    e.askAgain()
-                }
+                AlertDialog.Builder(this)
+                    .setMessage("Please provide storage permission")
+                    .setPositiveButton(
+                        "yes"
+                    ) { dialog: DialogInterface?, which: Int -> e.askAgain() } // ask again
+                    .setNegativeButton(
+                        "no"
+                    ) { dialog: DialogInterface, which: Int -> dialog.dismiss() }
+                    .show()
             }
 
             if (e.hasForeverDenied()) {

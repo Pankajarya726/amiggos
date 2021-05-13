@@ -2,6 +2,8 @@ package com.tekzee.amiggos.ui.tagging
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -14,6 +16,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -25,6 +28,7 @@ import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager
 import com.beloo.widget.chipslayoutmanager.SpacingItemDecoration
 import com.bumptech.glide.Glide
 import com.github.florent37.runtimepermission.kotlin.askPermission
+import com.github.florent37.runtimepermission.rx.RxPermissions
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.jakewharton.rxbinding2.widget.RxTextView
@@ -186,16 +190,16 @@ class TaggingFragment : AppCompatActivity(), TaggingEvent, TaggingClickListener,
         }.onDeclined { e ->
             if (e.hasDenied()) {
 
-                val dialog: BottomDialogExtended =
-                    BottomDialogExtended.newInstance(
-                        languageConstant.storagepermission,
-                        arrayOf(languageConstant.yes)
-                    )
-                dialog.show(supportFragmentManager, "dialog")
-                dialog.setListener { position ->
-                    dialog.dismiss()
-                    e.askAgain()
-                }
+                AlertDialog.Builder(this)
+                    .setMessage("Please provide storage permission")
+                    .setPositiveButton(
+                        "yes"
+                    ) { dialog: DialogInterface?, which: Int -> e.askAgain() } // ask again
+                    .setNegativeButton(
+                        "no"
+                    ) { dialog: DialogInterface, which: Int -> dialog.dismiss() }
+                    .show()
+
             }
             if (e.hasForeverDenied()) {
                 e.goToSettings()

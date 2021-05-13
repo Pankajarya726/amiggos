@@ -3,9 +3,13 @@ import `in`.madapps.placesautocomplete.adapter.PlacesAutoCompleteAdapter
 import `in`.madapps.placesautocomplete.listener.OnPlacesDetailsListener
 import `in`.madapps.placesautocomplete.model.Place
 import `in`.madapps.placesautocomplete.model.PlaceDetails
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -13,11 +17,13 @@ import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.bumptech.glide.Glide
@@ -25,15 +31,23 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.example.easywaylocation.EasyWayLocation
 import com.example.easywaylocation.EasyWayLocation.LOCATION_SETTING_REQUEST_CODE
 import com.example.easywaylocation.Listener
+import com.github.florent37.runtimepermission.PermissionResult
+import com.github.florent37.runtimepermission.rx.RxPermissions
+import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.JsonObject
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.kaopiz.kprogresshud.KProgressHUD
+import com.patloew.rxlocation.RxLocation
 import com.tekzee.amiggos.R
+import com.tekzee.amiggos.base.BaseFragment
 import com.tekzee.amiggos.base.model.LanguageData
 import com.tekzee.amiggos.constant.ConstantLib
 import com.tekzee.amiggos.custom.BottomDialogExtended
@@ -54,14 +68,15 @@ import com.tekzee.amiggos.ui.viewandeditprofile.AViewAndEditProfile
 import com.tekzee.amiggos.util.OnSwipeTouchListener
 import com.tekzee.amiggos.util.SharedPreference
 import com.tekzee.amiggos.util.Utility
-import com.tekzee.amiggos.base.BaseFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.bottom_lib_item.*
 import java.util.concurrent.TimeUnit
 
 
 class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
-    /*Listener,*/ com.google.android.gms.maps.OnMapReadyCallback, Listener {
+    /*Listener,*/ com.google.android.gms.maps.OnMapReadyCallback /*Listener*/ {
 
     private var progressDialog: KProgressHUD? = null
     private var binding: HomeFragmentBinding? = null
@@ -82,9 +97,10 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     private var categoryId: String = ""
     private var searchkeyword: String = ""
     private var languageData: LanguageData? = null
-    private var easyWayLocation: EasyWayLocation? = null
-    private var defaultZoomValue =17.0f
-
+//    private var easyWayLocation: EasyWayLocation? = null
+    private var defaultZoomValue = 10.0f
+    private var rxLocation: RxLocation? = null
+    private var locationRequest: LocationRequest? = null
 
     companion object {
         private val homefragment: HomeFragment? = null
@@ -100,10 +116,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        easyWayLocation!!.endUpdates()
-    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -112,19 +125,113 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.home_fragment, container, false)
         homepresenterImplementation = HomePresenterImplementation(this, requireContext())
-        try{
+        try {
             sharedPreference = SharedPreference(requireContext())
             languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
         setupProgressBar()
         showProgressbarNew()
+        setupLocationUpdate()
         val mapFragment: SupportMapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         return binding!!.root
+    }
+
+    private fun setupLocationUpdate() {
+        rxLocation = RxLocation(requireContext())
+        rxLocation!!.setDefaultTimeout(15, TimeUnit.SECONDS)
+        locationRequest = LocationRequest.create()
+            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+            .setInterval(3000)
+
+        val rxPermissions = RxPermissions(this)
+        val rxPermissionSubscriber: Disposable = rxPermissions.request(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ).subscribe(
+            { permissionResult: PermissionResult? ->
+                val rxlocationSettingsSubscriber =
+                    rxLocation!!.settings().checkAndHandleResolution(locationRequest!!)
+                        .subscribe(
+                            { aBoolean: Boolean ->
+                                if (aBoolean) {
+                                    if (ActivityCompat.checkSelfPermission(
+                                            requireContext(),
+                                            Manifest.permission.ACCESS_FINE_LOCATION
+                                        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                            requireContext(),
+                                            Manifest.permission.ACCESS_COARSE_LOCATION
+                                        ) != PackageManager.PERMISSION_GRANTED
+                                    ) {
+                                        return@subscribe
+                                    }
+                                    progressDialog!!.show()
+                                    val rxlocationSubscriber =
+                                        rxLocation!!.location().updates(locationRequest!!)
+                                            .firstElement().subscribe(
+                                                { location: Location? ->
+
+//                                                        easyWayLocation!!.endUpdates()
+                                                    latitude = location!!.latitude.toString()
+                                                    longitude = location!!.longitude.toString()
+                                                    hideProgressbarNew()
+                                                    requireActivity().runOnUiThread(Runnable {
+                                                        hideKeyboard()
+                                                        mMap!!.moveCamera(
+                                                            CameraUpdateFactory.newLatLng(
+                                                                LatLng(
+                                                                    latitude!!.toDouble(),
+                                                                    longitude!!.toDouble()
+                                                                )
+                                                            )
+                                                        )
+                                                        mMap!!.animateCamera(
+                                                            CameraUpdateFactory.zoomTo(
+                                                                defaultZoomValue
+                                                            )
+                                                        )
+                                                        callHomeApi(0)
+                                                    })
+                                                    callBadgeApi()
+
+                                                }
+                                            ) { throwable: Throwable ->
+                                                progressDialog!!.dismiss()
+
+                                            }
+                                } else {
+                                    progressDialog!!.dismiss()
+                                }
+                            }
+                        ) { throwable: Throwable ->
+                            progressDialog!!.dismiss()
+                        }
+
+            }
+        ) { throwable: Throwable ->
+            val result =
+                (throwable as RxPermissions.Error).result
+            if (result.hasDenied()) {
+                AlertDialog.Builder(requireContext())
+                    .setMessage("Please provide location permission")
+                    .setPositiveButton(
+                        "yes"
+                    ) { dialog: DialogInterface?, which: Int -> result.askAgain() } // ask again
+                    .setNegativeButton(
+                        "no"
+                    ) { dialog: DialogInterface, which: Int -> dialog.dismiss() }
+                    .show()
+            }
+            if (result.hasForeverDenied()) {
+                result.goToSettings()
+            }
+        }
+
+
     }
 
     private fun setupProgressBar() {
@@ -150,7 +257,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        easyWayLocation = EasyWayLocation(requireContext(), false, this)
+//        easyWayLocation = EasyWayLocation(requireContext(), true, this)
 
     }
 
@@ -308,9 +415,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                     mMap!!.animateCamera(CameraUpdateFactory.zoomTo(defaultZoomValue));
                     callHomeApi(0)
                 })
-
             }
-
         })
     }
 
@@ -360,6 +465,11 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     }
 
     override fun onHomeApiSuccess(responseData: HomeResponse) {
+
+        if(responseData.data.defaulzoomvalue.isNotBlank()){
+            defaultZoomValue = responseData.data.defaulzoomvalue.toFloat()
+        }
+
         /*val cameraPosition =
             CameraPosition.Builder().target(LatLng(
                 latitude!!.toDouble(),
@@ -381,23 +491,36 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
 
         if (dataResponse.isNotEmpty()) {
             setMarkersOnMap(dataResponse)
-            val latLngBounds = LatLngBounds.Builder()
-                .include(
-                    LatLng(
-                        latitude!!.toDouble(),
-                        longitude!!.toDouble()
+            /*    val latLngBounds = LatLngBounds.Builder()
+                    .include(
+                        LatLng(
+                            dataResponse[0].latitude!!.toDouble(),
+                            dataResponse[0].longitude!!.toDouble()
+                        )
                     )
-                )
-                .include(
-                    LatLng(
-                        dataResponse[dataResponse.size - 1].latitude.toDouble(),
-                        dataResponse[dataResponse.size - 1].longitude.toDouble()
+                    .include(
+                        LatLng(
+                            dataResponse[dataResponse.size - 1].latitude.toDouble(),
+                            dataResponse[dataResponse.size - 1].longitude.toDouble()
+                        )
                     )
+                    .build()
+                val padding = 200*/ // offset from edges of the map in pixels
+            val cu: CameraUpdate = CameraUpdateFactory.newLatLng(
+                LatLng(
+                    latitude!!.toDouble(),
+                    longitude!!.toDouble()
                 )
-                .build()
-            val padding = 200 // offset from edges of the map in pixels
-            val cu: CameraUpdate = CameraUpdateFactory.newLatLngBounds(latLngBounds, padding)
-            mMap!!.animateCamera(cu)
+            )
+            mMap!!.moveCamera(
+                cu
+            )
+            mMap!!.animateCamera(
+                CameraUpdateFactory.zoomTo(
+                    defaultZoomValue
+                )
+            )
+//            mMap!!.animateCamera(cu)
         }
 
     }
@@ -439,23 +562,26 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
                         resource: Bitmap,
                         transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
                     ) {
-                        mMap!!.addMarker(
-                            MarkerOptions().position(
-                                LatLng(
-                                    items.latitude.toDouble(),
-                                    items.longitude.toDouble()
-                                )
-                            )
-                                .icon(
-                                    BitmapDescriptorFactory.fromBitmap(
-                                        getMarkerBitmapFromView(
-                                            marker,
-                                            resource,
-                                            imageview
-                                        )
+                        if(items.latitude.isNotEmpty() && items.longitude.isNotEmpty()){
+                            mMap!!.addMarker(
+                                MarkerOptions().position(
+                                    LatLng(
+                                        items.latitude.toDouble(),
+                                        items.longitude.toDouble()
                                     )
                                 )
-                        ).tag = items
+                                    .icon(
+                                        BitmapDescriptorFactory.fromBitmap(
+                                            getMarkerBitmapFromView(
+                                                marker,
+                                                resource,
+                                                imageview
+                                            )
+                                        )
+                                    )
+                            ).tag = items
+                        }
+
                     }
                 })
 
@@ -512,7 +638,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         AHomeScreen.setupNearByCountBadge(bottomNearMeBatchCount)
         AHomeScreen.setupMemoryCountBadge(responseData.data.memoryCountBatch.toInt())
         AHomeScreen.setupBookingCountBadge(responseData.data.bookingCountBatch.toInt())
-       
+
         staticRequestBadgeCount = responseData.data.request.toInt()
         staticReaFriendBadgeCount = responseData.data.realFreind.toInt()
         staticNearMeBadgeCount = responseData.data.nearByCountBatch.toInt()
@@ -560,17 +686,22 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
             val datalist = ArrayList<Venue>()
             datalist.add(finalDataList[position])
             setMarkersOnMap(datalist)
-            val latLngBounds = LatLngBounds.Builder()
-                .include(
+//            val latLngBounds = LatLngBounds.Builder()
+//                .include(
+//                    LatLng(
+//                        finalDataList[position].latitude.toDouble(),
+//                        finalDataList[position].longitude.toDouble()
+//                    )
+//                )
+//                .build()
+//            val padding = 50 // offset from edges of the map in pixels
+            val cu: CameraUpdate =
+                CameraUpdateFactory.newLatLng(
                     LatLng(
                         finalDataList[position].latitude.toDouble(),
                         finalDataList[position].longitude.toDouble()
                     )
                 )
-                .build()
-            val padding = 50 // offset from edges of the map in pixels
-            val cu: CameraUpdate =
-                CameraUpdateFactory.newLatLngBounds(latLngBounds, padding)
             mMap!!.moveCamera(cu)
         }
     }
@@ -702,7 +833,7 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            LOCATION_SETTING_REQUEST_CODE -> easyWayLocation!!.onActivityResult(resultCode)
+            /*LOCATION_SETTING_REQUEST_CODE ->*/ /*easyWayLocation!!.onActivityResult(resultCode)*/
         }
         if (resultCode == 2) {
             searchkeyword = ""
@@ -714,82 +845,83 @@ class HomeFragment : BaseFragment(), HomePresenter.HomeMainView,
         }
     }
 
-    override fun locationOn() {
-        Log.d("test", "location on")
-    }
+//    override fun locationOn() {
+//        Log.d("test", "location on")
+//    }
 
-    override fun currentLocation(location: Location?) {
-        try {
-            if (location != null) {
-                easyWayLocation!!.endUpdates()
-                latitude = location.latitude.toString()
-                longitude = location.longitude.toString()
-                hideProgressbarNew()
-                requireActivity().runOnUiThread(Runnable {
-                    hideKeyboard()
-                    mMap!!.moveCamera(
-                        CameraUpdateFactory.newLatLng(
-                            LatLng(
-                                latitude!!.toDouble(),
-                                longitude!!.toDouble()
-                            )
-                        )
-                    )
-                    mMap!!.animateCamera(CameraUpdateFactory.zoomTo(defaultZoomValue))
-                    callHomeApi(0)
-                })
-//                if (sharedPreference!!.getValueBoolean(ConstantLib.CALLBATCHCOUNT, false)) {
-//                    sharedPreference!!.save(ConstantLib.CALLBATCHCOUNT, false)
+//    override fun currentLocation(location: Location?) {
+//        try {
+//            if (location != null) {
+//                easyWayLocation!!.endUpdates()
+//                latitude = location.latitude.toString()
+//                longitude = location.longitude.toString()
+//                hideProgressbarNew()
+//                requireActivity().runOnUiThread(Runnable {
+//                    hideKeyboard()
+//                    mMap!!.moveCamera(
+//                        CameraUpdateFactory.newLatLng(
+//                            LatLng(
+//                                latitude!!.toDouble(),
+//                                longitude!!.toDouble()
+//                            )
+//                        )
+//                    )
+//                    mMap!!.animateCamera(CameraUpdateFactory.zoomTo(defaultZoomValue))
+//                    callHomeApi(0)
+//                })
+////                if (sharedPreference!!.getValueBoolean(ConstantLib.CALLBATCHCOUNT, false)) {
+////                    sharedPreference!!.save(ConstantLib.CALLBATCHCOUNT, false)
+////                    callBadgeApi()
+////                }
+//                callBadgeApi()
+//            } else {
+//                easyWayLocation!!.startLocation()
+//            }
+//
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            hideProgressbarNew()
+//        }
+//
+//        /*try {
+//            SmartLocation.with(requireActivity()).location().oneFix()
+//                .start { locationData ->
+//                    Log.e(
+//                        "location Data----->",
+//                        locationData.altitude.toString() + "---" + locationData.longitude
+//                    )
+//                    SmartLocation.with(requireActivity()).location().stop()
+//                    latitude = locationData!!.latitude.toString()
+//                    longitude = locationData.longitude.toString()
+//                    hideProgressbarNew()
+//                    requireActivity().runOnUiThread(Runnable {
+//                        hideKeyboard()
+//                        mMap!!.moveCamera(
+//                            CameraUpdateFactory.newLatLng(
+//                                LatLng(
+//                                    latitude!!.toDouble(),
+//                                    longitude!!.toDouble()
+//                                )
+//                            )
+//                        )
+//                        mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15.0f))
+//                        callHomeApi(0)
+//                    })
 //                    callBadgeApi()
 //                }
-                callBadgeApi()
-            } else {
-                easyWayLocation!!.startLocation()
-            }
+//        }catch (e: Exception){
+//            e.printStackTrace()
+//        }*/
+//    }
 
-        } catch (e: Exception) {
-            e.printStackTrace()
-            hideProgressbarNew()
-        }
-
-        /*try {
-            SmartLocation.with(requireActivity()).location().oneFix()
-                .start { locationData ->
-                    Log.e(
-                        "location Data----->",
-                        locationData.altitude.toString() + "---" + locationData.longitude
-                    )
-                    SmartLocation.with(requireActivity()).location().stop()
-                    latitude = locationData!!.latitude.toString()
-                    longitude = locationData.longitude.toString()
-                    hideProgressbarNew()
-                    requireActivity().runOnUiThread(Runnable {
-                        hideKeyboard()
-                        mMap!!.moveCamera(
-                            CameraUpdateFactory.newLatLng(
-                                LatLng(
-                                    latitude!!.toDouble(),
-                                    longitude!!.toDouble()
-                                )
-                            )
-                        )
-                        mMap!!.animateCamera(CameraUpdateFactory.zoomTo(15.0f))
-                        callHomeApi(0)
-                    })
-                    callBadgeApi()
-                }
-        }catch (e: Exception){
-            e.printStackTrace()
-        }*/
-    }
-
-    override fun locationCancelled() {
-        Log.d("test", "current location cancelled")
-    }
+//    override fun locationCancelled() {
+//        hideProgressbarNew()
+//        Log.d("test", "current location cancelled")
+//    }
 
     override fun onResume() {
         super.onResume()
-        easyWayLocation!!.startLocation()
+//        easyWayLocation!!.startLocation()
     }
 
 

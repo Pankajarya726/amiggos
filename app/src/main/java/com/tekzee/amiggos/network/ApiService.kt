@@ -596,7 +596,7 @@ interface ApiService {
         @HeaderMap createHeaders: HashMap<String, String?>
     ): Observable<Response<FavoriteVenueResponse>>
 
-    @POST("guest/dashboard")
+    @POST("guest/dashboard_v1")
     fun docallHomeApi(
         @Body input: JsonObject,
         @HeaderMap createHeaders: HashMap<String, String?>

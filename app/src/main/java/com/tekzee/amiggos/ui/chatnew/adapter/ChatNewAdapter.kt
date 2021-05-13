@@ -69,7 +69,7 @@ class ChatNewAdapter(
 
             } else {
                 holder.bindingdata.show_message_right.text = listItem.msg
-                holder.bindingdata.txt_sender_name.text = listItem.SenderName
+                holder.bindingdata.txt_sender_name.text = listItem.senderImage
                 Glide.with(context!!)
                     .load(prefs.getValueString(ConstantLib.PROFILE_IMAGE))
                     .placeholder(R.drawable.noimage).into(holder.bindingdata.img_sender)

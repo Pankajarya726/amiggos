@@ -127,7 +127,7 @@ class AAddCard : BaseActivity(), AAddCardPresenter.AAddCardPresenterMainView {
 
         }
 
-    }
+}
 
     private fun saveCardInfo(jsonObject: JsonObject) {
         implementation!!.saveCard(

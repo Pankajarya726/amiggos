@@ -299,7 +299,7 @@ class AVenueDetails : BaseActivity(), AVenueDetailsPresenter.AVenueDetailsPresen
         }
 
 //        val hoursOpen:StringBuilder = StringBuilder()
-        for(item in response.clubData.workingDays){
+        for(item in response.clubData.operationWorkingDays){
             if(item.isOpen==1){
                 val workingDay = VenueDetails.Data.ClubData.WorkingDay()
                 workingDay.name = item.name

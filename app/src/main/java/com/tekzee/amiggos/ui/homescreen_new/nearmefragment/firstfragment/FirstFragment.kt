@@ -2,6 +2,7 @@ package com.tekzee.amiggos.ui.homescreen_new.nearmefragment.firstfragment
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
@@ -82,6 +83,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
 
     override fun onPause() {
         super.onPause()
+        firstFragmentPresenterImplementation!!.onStop()
         easyWayLocation!!.endUpdates()
     }
 
@@ -102,12 +104,16 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
     ): View? {
 //        val view = inflater.inflate(R.layout.first_fragment, container, false)
         binding = DataBindingUtil.inflate(inflater, R.layout.first_fragment, container, false)
-        sharedPreference = SharedPreference(requireActivity())
+        sharedPreference = SharedPreference(requireContext())
         languageData = sharedPreference!!.getLanguageData(ConstantLib.LANGUAGE_DATA)
         firstFragmentPresenterImplementation =
-            FirstFragmentPresenterImplementation(this, requireActivity())
-
+            FirstFragmentPresenterImplementation(this, requireContext())
         return binding!!.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -160,14 +166,14 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         val onlineFriendRecyclerview: RecyclerView =
             view.findViewById(R.id.first_fragment_recyclierview)
         val layoutManager = GridLayoutManager(
-            requireActivity(),
+            requireContext(),
             2,
             LinearLayoutManager.VERTICAL,
             false
         )
         onlineFriendRecyclerview.layoutManager = layoutManager
         adapter = FirstFragmentAdapter(
-            mContext = requireActivity(),
+            mContext = requireContext(),
             mRecyclerView = onlineFriendRecyclerview,
             mLayoutManager = layoutManager,
             mRecyclerViewAdapterCallback = this,
@@ -258,7 +264,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
     }
 
     override fun logoutUser() {
-        Utility.showLogoutPopup(requireActivity(), languageData!!.session_error)
+        Utility.showLogoutPopup(requireContext(), languageData!!.session_error)
     }
 
     @SuppressLint("CheckResult")
@@ -394,6 +400,7 @@ class FirstFragment : BaseFragment(), FirstFragmentPresenter.FirstFragmentPresen
         binding!!.firstfragmentprogressbar.visibility = View.GONE
         binding!!.hiddenSearchWithRecycler.visibility = View.VISIBLE
     }
+
 
 
 }

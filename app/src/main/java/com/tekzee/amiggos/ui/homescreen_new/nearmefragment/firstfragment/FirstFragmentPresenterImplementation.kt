@@ -29,6 +29,8 @@ class FirstFragmentPresenterImplementation(
         }
     }
 
+
+
     override fun getNearByUser(
         input: JsonObject,
         createHeaders: HashMap<String, String?>,
@@ -73,4 +75,6 @@ class FirstFragmentPresenterImplementation(
             mainView.validateError(context!!.getString(R.string.check_internet))
         }
     }
+
+
 }
