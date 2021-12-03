@@ -74,7 +74,7 @@ class StorieViewNew : AppCompatActivity(),
                             memoryList[position].memory[i].storyFile,
                             banners,
                             memoryList[position].our_story_id,
-                            intent.getStringExtra(ConstantLib.FROM)
+                            intent.getStringExtra(ConstantLib.FROM).toString()
                         )
                     )
                 }

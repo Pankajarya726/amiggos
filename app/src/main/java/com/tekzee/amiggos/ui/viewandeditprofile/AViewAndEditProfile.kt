@@ -691,9 +691,13 @@ class AViewAndEditProfile : BaseActivity(), AViewAndEditPresenter.AViewAndEditPr
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == FilePickerConst.REQUEST_CODE_PHOTO) {
-            if (data != null && data!!.getParcelableArrayListExtra<Uri>(FilePickerConst.KEY_SELECTED_MEDIA).size > 0) {
+            if (data != null && data!!.getParcelableArrayListExtra<Uri>(FilePickerConst.KEY_SELECTED_MEDIA)!!.size > 0) {
                 val photoPaths = ArrayList<Uri>()
-                photoPaths.addAll(data!!.getParcelableArrayListExtra<Uri>(FilePickerConst.KEY_SELECTED_MEDIA))
+                data!!.getParcelableArrayListExtra<Uri>(FilePickerConst.KEY_SELECTED_MEDIA)?.let {
+                    photoPaths.addAll(
+                        it
+                    )
+                }
                 uploadMultipleUserImage(photoPaths)
             }
 

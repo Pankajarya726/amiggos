@@ -64,7 +64,7 @@ class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodP
     private fun setupLanguage() {
         binding!!.paynow.text = languageData!!.pay
         binding!!.headertitle.text = languageData!!.ppaymentmethod
-        binding!!.headerAmount.text = Utility.formatCurrency(intent.getStringExtra(ConstantLib.PURCHASE_AMOUNT).toFloat())
+        binding!!.headerAmount.text = Utility.formatCurrency(intent.getStringExtra(ConstantLib.PURCHASE_AMOUNT)!!.toFloat())
         binding!!.savedCards.text = languageData!!.savedcards
     }
 
@@ -125,7 +125,7 @@ class PaymentActivity : BaseActivity(), PaymentActivityPresenter.APaymentMethodP
 
         binding!!.paynow.setOnClickListener {
             if(isCardAvailable){
-                if(intent.getStringExtra(ConstantLib.PURCHASE_AMOUNT).toFloat()>0){
+                if(intent.getStringExtra(ConstantLib.PURCHASE_AMOUNT)!!.toFloat()>0){
                     setDefaultCard()
                 }else{
                     Errortoast("Amount can not be zero")

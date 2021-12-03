@@ -292,7 +292,7 @@ class ApplicationController : Application(), KodeinAware, Foreback.Listener {
                     }
                 }
             }, { error ->
-                Log.e("error occured---->", error.message)
+                Log.e("error occured---->", error.message.toString())
             })
 
     }
